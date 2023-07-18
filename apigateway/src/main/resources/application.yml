@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: apigateway-service
+    name: apigateway
   cloud:
     gateway:
       routes:
@@ -11,14 +11,14 @@ spring:
           predicates:
             - Path=/user-service/**
           uri: lb://USER-SERVICE
-        - id: admin-service
-          predicates:
-            - Path=/admin-service/**
-          uri: lb://ADMIN-SERVICE
-        - id: auction-service
-          predicates:
-            - Path=/auction-service/**
-          uri: lb://AUCTION-SERVICE
+#        - id: admin-service
+#          predicates:
+#            - Path=/admin-service/**
+#          uri: lb://ADMIN-SERVICE
+#        - id: auction-service
+#          predicates:
+#            - Path=/auction-service/**
+#          uri: lb://AUCTION-SERVICE
 
 eureka:
   client:
