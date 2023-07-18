@@ -11,10 +11,10 @@ spring:
           predicates:
             - Path=/user-service/**
           uri: lb://USER-SERVICE
-#        - id: admin-service
-#          predicates:
-#            - Path=/admin-service/**
-#          uri: lb://ADMIN-SERVICE
+        - id: admin-service
+          predicates:
+            - Path=/admin-service/**
+          uri: lb://ADMIN-SERVICE
 #        - id: auction-service
 #          predicates:
 #            - Path=/auction-service/**
