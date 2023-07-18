@@ -15,10 +15,10 @@ spring:
           predicates:
             - Path=/admin-service/**
           uri: lb://ADMIN-SERVICE
-#        - id: auction-service
-#          predicates:
-#            - Path=/auction-service/**
-#          uri: lb://AUCTION-SERVICE
+        - id: auction-service
+          predicates:
+            - Path=/auction-service/**
+          uri: lb://AUCTION-SERVICE
 
 eureka:
   client:
