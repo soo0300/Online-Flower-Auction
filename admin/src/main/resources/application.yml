@@ -41,6 +41,9 @@ spring:
         default_batch_fetch_size: 100
     open-in-view: false
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 ---
 #spring local setting
