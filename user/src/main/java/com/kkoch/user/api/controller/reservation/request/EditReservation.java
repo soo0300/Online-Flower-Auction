@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EditReservation {
 
-    private int count, price;
+    private int count;
+    private int price;
 
 }

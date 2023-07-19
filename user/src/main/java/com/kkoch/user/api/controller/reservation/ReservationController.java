@@ -3,7 +3,6 @@ package com.kkoch.user.api.controller.reservation;
 import com.kkoch.user.api.controller.ApiResponse;
 import com.kkoch.user.api.controller.reservation.request.EditReservation;
 import com.kkoch.user.api.controller.reservation.request.MakeReservationRequest;
-import com.kkoch.user.api.controller.reservation.request.RemoveReservationRequest;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +22,7 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 public class ReservationController {
     @ApiOperation(value="거래 예약 등록")
     @PostMapping
-    public ApiResponse<?> joinMember(@RequestBody MakeReservationRequest request){
+    public ApiResponse<?> addReservation(@RequestBody MakeReservationRequest request){
         return null;
     }
 
