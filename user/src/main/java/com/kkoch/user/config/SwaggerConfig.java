@@ -30,7 +30,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).consumes(getConsumeContentTypes()).produces(getProduceContentTypes())
                 .apiInfo(apiInfo()).groupName(version).select()
-                .apis(RequestHandlerSelectors.basePackage("com.kkoch.user.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.kkoch.user.api.controller"))
                 .paths(PathSelectors.any()).build() //requestMapping 적어주기
                 .useDefaultResponseMessages(false);
     }
