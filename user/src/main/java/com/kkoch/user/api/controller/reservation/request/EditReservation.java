@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EditPrice {
-    private int price;
+public class EditReservation {
+
+    private int count, price;
+
 }
