@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MakeReservationRequest {
+public class AddReservationRequest {
     private Long plantId;
     private int count;
     private int price;

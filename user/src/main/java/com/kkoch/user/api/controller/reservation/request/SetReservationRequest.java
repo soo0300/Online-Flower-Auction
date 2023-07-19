@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EditReservation {
+public class SetReservationRequest {
 
     private int count;
     private int price;
