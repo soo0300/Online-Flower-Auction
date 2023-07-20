@@ -19,12 +19,14 @@ public class Stats extends TimeBaseEntity {
     @Column(name = "stats_id")
     private Long id;
 
+    @Column(nullable = false)
     private int priceAvg;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false, length = 20)
     private Grade grade;
 
+    @Column(nullable = false)
     private int count;
 
     @ManyToOne(fetch = FetchType.LAZY)

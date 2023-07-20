@@ -22,8 +22,13 @@ public class Trade extends TimeBaseEntity {
     @Column(name = "trade_id")
     private Long id;
 
+    @Column(nullable = false)
     private int totalPrice;
+
+    @Column(nullable = false)
     private LocalDateTime tradeDate;
+
+    @Column(nullable = false)
     private boolean active;
 
     @ManyToOne(fetch = LAZY)
