@@ -10,25 +10,26 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "reservation")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class Reservation extends TimeBaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id", updatable = false, nullable = false)
+    @Column(name = "member_id")
     private Long id;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private int count;
-    @Column(nullable=false)
+
+    @Column(nullable = false)
     private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", updatable = false, nullable = false)
     private Member member;
 
+    @Column(nullable = false)
     private Long plantId;
 
     @Builder
