@@ -25,6 +25,7 @@ public class Wishlist extends TimeBaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(nullable = false)
     private Long auctionArticleId;
 
     @Builder
