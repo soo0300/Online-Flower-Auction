@@ -20,7 +20,9 @@ public class Reservation extends TimeBaseEntity {
     @Column(name = "member_id", updatable = false, nullable = false)
     private Long id;
 
+    @Column(nullable=false)
     private int count;
+    @Column(nullable=false)
     private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
