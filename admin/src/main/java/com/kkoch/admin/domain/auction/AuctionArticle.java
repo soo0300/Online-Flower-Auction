@@ -21,23 +21,26 @@ import static lombok.AccessLevel.PROTECTED;
 public class AuctionArticle extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "auction_article_id")
     private Long id;
 
     @Column(length = 10, nullable = false)
     private String auctionNumber;
     @Enumerated(STRING)
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private Grade grade;
     @Column(nullable = false)
     private int count;
+    @Column(nullable = false)
     private int price;
+    @Column(nullable = false)
     private LocalDateTime bidTime;
-    @Column(nullable = false)
+    @Column(length = 20, nullable = false)
     private String region;
-    @Column(nullable = false)
+    @Column(length = 20, nullable = false)
     private String shipper;
+    @Column(nullable = false)
     private int startPrice;
 
     @ManyToOne(fetch = LAZY)
@@ -51,8 +54,7 @@ public class AuctionArticle extends TimeBaseEntity {
     private Long tradeId;
 
     @Builder
-    public AuctionArticle(Long id, String auctionNumber, Grade grade, int count, int price, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Long tradeId) {
-        this.id = id;
+    public AuctionArticle(String auctionNumber, Grade grade, int count, int price, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Long tradeId) {
         this.auctionNumber = auctionNumber;
         this.grade = grade;
         this.count = count;

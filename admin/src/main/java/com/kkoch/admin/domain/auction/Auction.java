@@ -20,11 +20,13 @@ import static lombok.AccessLevel.PROTECTED;
 public class Auction extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "auction_id")
     private Long id;
 
+    @Column(nullable = false)
     private int code;
+    @Column(nullable = false)
     private LocalDateTime startTime;
     @Column(nullable = false)
     private boolean active;
@@ -39,8 +41,7 @@ public class Auction extends TimeBaseEntity {
     private Admin admin;
 
     @Builder
-    public Auction(Long id, int code, LocalDateTime startTime, boolean active, String title, Status status, Admin admin) {
-        this.id = id;
+    private Auction(int code, LocalDateTime startTime, boolean active, String title, Status status, Admin admin) {
         this.code = code;
         this.startTime = startTime;
         this.active = active;

@@ -17,7 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class Wishlist extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "wishlist_id")
     private Long id;
 
@@ -29,8 +29,7 @@ public class Wishlist extends TimeBaseEntity {
     private Long auctionArticleId;
 
     @Builder
-    public Wishlist(Long id, Member member, Long auctionArticleId) {
-        this.id = id;
+    private Wishlist(Member member, Long auctionArticleId) {
         this.member = member;
         this.auctionArticleId = auctionArticleId;
     }
