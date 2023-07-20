@@ -34,7 +34,6 @@ public class Category extends TimeBaseEntity {
     private List<Category> children = new ArrayList<>();
 
     @Builder
-
     public Category(String name, boolean active, Category parent, List<Category> children) {
         this.name = name;
         this.active = active;
