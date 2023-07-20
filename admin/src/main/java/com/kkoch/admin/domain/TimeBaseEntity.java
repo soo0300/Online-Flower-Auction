@@ -18,7 +18,7 @@ import static lombok.AccessLevel.*;
 @MappedSuperclass
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class TimeBaseEntity {
+public abstract class TimeBaseEntity {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
