@@ -18,6 +18,9 @@ public class Member extends TimeBaseEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @Column(nullable = false, updatable = false, length = 20)
+    private String name;
+
     @Column(nullable = false, unique = true, updatable = false, length = 100)
     private String email;
 
