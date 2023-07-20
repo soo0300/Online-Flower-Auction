@@ -1,4 +1,42 @@
 package com.kkoch.user.domain.reservation;
 
-public class Reservation {
+import com.kkoch.user.domain.TimeBaseEntity;
+import com.kkoch.user.domain.member.Member;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Reservation extends TimeBaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "reservation_id")
+    private Long id;
+
+    @Column(nullable = false)
+    private int count;
+
+    @Column(nullable = false)
+    private int price;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", updatable = false, nullable = false)
+    private Member member;
+
+    @Column(nullable = false)
+    private Long plantId;
+
+    @Builder
+    private Reservation(int count, int price, Member memeber, Long plantId) {
+        this.count = count;
+        this.price = price;
+        this.member = member;
+        this.plantId = plantId;
+    }
 }
