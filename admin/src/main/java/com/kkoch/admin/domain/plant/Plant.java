@@ -34,7 +34,7 @@ public class Plant extends TimeBaseEntity {
     private boolean active;
 
     @Builder
-    public Plant(Category code, Category name, Category type, boolean active) {
+    private Plant(Category code, Category name, Category type, boolean active) {
         this.code = code;
         this.name = name;
         this.type = type;
