@@ -16,7 +16,7 @@ public class Reservation extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "reservation_id")
     private Long id;
 
     @Column(nullable = false)
