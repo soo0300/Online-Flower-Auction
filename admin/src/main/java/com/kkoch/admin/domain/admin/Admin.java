@@ -37,7 +37,7 @@ public class Admin extends TimeBaseEntity {
     private boolean active;
 
     @Builder
-    public Admin(String loginId, String loginPw, String name, String tel, String position, boolean active) {
+    private Admin(String loginId, String loginPw, String name, String tel, String position, boolean active) {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.name = name;

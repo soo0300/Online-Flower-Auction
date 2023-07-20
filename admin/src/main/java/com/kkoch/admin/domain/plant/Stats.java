@@ -34,7 +34,7 @@ public class Stats extends TimeBaseEntity {
     private Plant plant;
 
     @Builder
-    public Stats(int priceAvg, Grade grade, int count, Plant plant) {
+    private Stats(int priceAvg, Grade grade, int count, Plant plant) {
         this.priceAvg = priceAvg;
         this.grade = grade;
         this.count = count;
