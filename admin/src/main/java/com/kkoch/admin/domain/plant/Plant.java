@@ -1,14 +1,14 @@
 package com.kkoch.admin.domain.plant;
 
 import com.kkoch.admin.domain.TimeBaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class Plant extends TimeBaseEntity {
@@ -30,11 +30,11 @@ public class Plant extends TimeBaseEntity {
     @JoinColumn(name = "type")
     private Category type;
 
+    @Column(nullable = false)
     private boolean active;
 
     @Builder
-    public Plant(Long id, Category code, Category name, Category type, boolean active) {
-        this.id = id;
+    public Plant(Category code, Category name, Category type, boolean active) {
         this.code = code;
         this.name = name;
         this.type = type;

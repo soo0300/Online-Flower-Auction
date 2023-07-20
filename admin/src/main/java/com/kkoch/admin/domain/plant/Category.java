@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.plant;
 
 import com.kkoch.admin.domain.TimeBaseEntity;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class Category extends TimeBaseEntity {
@@ -20,6 +20,7 @@ public class Category extends TimeBaseEntity {
     @Column(name = "category_id")
     private Long id;
 
+    @Column(nullable = false, length = 20)
     private String name;
 
     @Column(name = "parent_id")
@@ -35,8 +36,7 @@ public class Category extends TimeBaseEntity {
     private boolean active;
 
     @Builder
-    public Category(Long id, String name, String parentId, Category parent, List<Category> children, boolean active) {
-        this.id = id;
+    private Category(String name, String parentId, Category parent, List<Category> children, boolean active) {
         this.name = name;
         this.parentId = parentId;
         this.parent = parent;
