@@ -34,10 +34,11 @@ public class Category extends TimeBaseEntity {
     private List<Category> children = new ArrayList<>();
 
     @Builder
-    private Category(String name, Category parent, List<Category> children, boolean active) {
+
+    public Category(String name, boolean active, Category parent, List<Category> children) {
         this.name = name;
+        this.active = active;
         this.parent = parent;
         this.children = children;
-        this.active = active;
     }
 }
