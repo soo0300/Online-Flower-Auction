@@ -5,8 +5,6 @@ import lombok.Data;
 @Data
 public class ReservationResponse {
 
-    //목록 - 식물 식별키, 단수, 가격
-
     private Long plantId;
     private int count;
     private int price;
