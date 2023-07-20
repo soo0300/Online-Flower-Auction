@@ -18,14 +18,14 @@ public class Member extends TimeBaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(nullable = false, updatable = false, length = 20)
-    private String name;
-
     @Column(nullable = false, unique = true, updatable = false, length = 100)
     private String email;
 
     @Column(nullable = false, length = 60)
     private String loginPw;
+
+    @Column(nullable = false, updatable = false, length = 20)
+    private String name;
 
     @Column(nullable = false, unique = true, length = 13)
     private String tel;
@@ -40,9 +40,10 @@ public class Member extends TimeBaseEntity {
     private boolean active;
 
     @Builder
-    private Member(String email, String loginPw, String tel, String businessNumber, int point, boolean active) {
+    private Member(String email, String loginPw, String name, String tel, String businessNumber, int point, boolean active) {
         this.email = email;
         this.loginPw = loginPw;
+        this.name = name;
         this.tel = tel;
         this.businessNumber = businessNumber;
         this.point = point;
