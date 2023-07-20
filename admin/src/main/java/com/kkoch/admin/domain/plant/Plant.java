@@ -18,6 +18,9 @@ public class Plant extends TimeBaseEntity {
     @Column(name = "plant_id")
     private Long id;
 
+    @Column(nullable = false)
+    private boolean active;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "code")
     private Category code;
@@ -30,14 +33,11 @@ public class Plant extends TimeBaseEntity {
     @JoinColumn(name = "type")
     private Category type;
 
-    @Column(nullable = false)
-    private boolean active;
-
     @Builder
-    private Plant(Category code, Category name, Category type, boolean active) {
+    public Plant(boolean active, Category code, Category name, Category type) {
+        this.active = active;
         this.code = code;
         this.name = name;
         this.type = type;
-        this.active = active;
     }
 }

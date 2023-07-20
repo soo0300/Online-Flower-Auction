@@ -23,15 +23,15 @@ public class Category extends TimeBaseEntity {
     @Column(nullable = false, length = 20)
     private String name;
 
+    @Column(nullable = false)
+    private boolean active;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
     private List<Category> children = new ArrayList<>();
-
-    @Column(nullable = false)
-    private boolean active;
 
     @Builder
     private Category(String name, Category parent, List<Category> children, boolean active) {
