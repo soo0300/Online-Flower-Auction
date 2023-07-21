@@ -57,7 +57,7 @@ public class AuctionArticle extends TimeBaseEntity {
     private Trade trade;
 
     @Builder
-    public AuctionArticle(String auctionNumber, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Trade trade) {
+    private AuctionArticle(String auctionNumber, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Trade trade) {
         this.auctionNumber = auctionNumber;
         this.grade = grade;
         this.count = count;
@@ -68,6 +68,16 @@ public class AuctionArticle extends TimeBaseEntity {
         this.startPrice = startPrice;
         this.plant = plant;
         this.auction = auction;
+        this.trade = trade;
+    }
+
+    //== 비즈니스 로직 ==//
+    public void bid(int bidPrice, LocalDateTime bidTime) {
+        this.bidPrice = bidPrice;
+        this.bidTime = bidTime;
+    }
+
+    public void createTrade(Trade trade) {
         this.trade = trade;
     }
 }
