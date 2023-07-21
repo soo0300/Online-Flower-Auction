@@ -25,7 +25,9 @@ public class MemberController {
     @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
     public ApiResponse<?> joinMember(@RequestBody JoinMemberRequest request) {
+
         return null;
+
     }
 
     //회원조회(관계자) SSR
