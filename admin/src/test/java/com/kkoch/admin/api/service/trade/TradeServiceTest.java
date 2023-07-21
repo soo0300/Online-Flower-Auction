@@ -7,7 +7,6 @@ import com.kkoch.admin.domain.auction.AuctionArticle;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.TradeRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,7 @@ class TradeServiceTest extends IntegrationTestSupport {
         assertThat(findTrade.get().getTotalPrice()).isEqualTo(9000);
         assertThat(findTrade.get().getArticles())
                 .hasSize(3)
-                .extracting("tradeId", "bidPrice")
+                .extracting("trade.id", "bidPrice")
                 .containsExactlyInAnyOrder(
                         tuple(findTrade.get().getId(), 2500),
                         tuple(findTrade.get().getId(), 3000),
