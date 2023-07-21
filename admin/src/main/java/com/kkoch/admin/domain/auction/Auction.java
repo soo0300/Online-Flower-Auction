@@ -10,6 +10,7 @@ import javax.persistence.*;
 
 import java.time.LocalDateTime;
 
+import static com.kkoch.admin.domain.auction.Status.READY;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 import static lombok.AccessLevel.PROTECTED;
@@ -43,8 +44,26 @@ public class Auction extends TimeBaseEntity {
         this.code = code;
         this.startTime = startTime;
         this.active = active;
-        this.title = title;
         this.status = status;
         this.admin = admin;
+    }
+
+    //연관관계 편의 메서드
+    public static Auction toEntity(Long id) {
+        Auction auction = Auction.builder().build();
+        auction.id = id;
+        return auction;
+    }
+
+    public static Auction toEntity(int code, LocalDateTime startTime, Admin admin) {
+        Auction auction = Auction.builder()
+                .code(code)
+                .startTime(startTime)
+                .active(true)
+                .status(READY)
+                .admin(admin)
+                .build();
+
+        return auction;
     }
 }
