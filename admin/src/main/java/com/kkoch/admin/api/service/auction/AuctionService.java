@@ -16,6 +16,11 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
 
     public Long addAuction(Long adminId, AddAuctionDto dto) {
+        int code = dto.getCode();
+
+        if (code < 0 || code > 4) {
+            throw new IllegalArgumentException("구분코드 에러");
+        }
 
         Admin admin = Admin.toEntity(adminId);
 
