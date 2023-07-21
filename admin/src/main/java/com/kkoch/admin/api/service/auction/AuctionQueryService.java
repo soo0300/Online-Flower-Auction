@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class AuctionService {
+public class AuctionQueryService {
 
     private final AuctionRepository auctionRepository;
 
-
+    public Long addAuction(AddAuctionDto dto) {
+        return null;
+    }
 }
