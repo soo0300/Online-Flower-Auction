@@ -27,6 +27,24 @@ class AuctionServiceTest extends IntegrationTestSupport {
     @Autowired
     private AdminRepository adminRepository;
 
+    @DisplayName("경매일정 등록시 구분코드 에러를 검증한다.")
+    @Test
+    void addAuctionCodeError() {
+        //given
+        Admin admin = insertAdmin();
+        AddAuctionDto dto = AddAuctionDto.builder()
+                .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
+                .code(-1)
+                .build();
+
+        //when
+
+        //then
+        Assertions.assertThatThrownBy(() -> auctionService.addAuction(admin.getId(), dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("구분코드 에러");
+    }
+
     @DisplayName("경매일정 등록")
     @Test
     void addAuction() {
