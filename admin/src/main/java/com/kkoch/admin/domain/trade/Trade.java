@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.trade;
 
 import com.kkoch.admin.domain.TimeBaseEntity;
+import com.kkoch.admin.domain.auction.AuctionArticle;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,11 +33,15 @@ public class Trade extends TimeBaseEntity {
 
     private Long memberId;
 
+    @OneToMany(mappedBy = "trade", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AuctionArticle> articles = new ArrayList<>();
+
     @Builder
-    public Trade(int totalPrice, LocalDateTime tradeDate, boolean active, Long memberId) {
+    private Trade(int totalPrice, LocalDateTime tradeDate, boolean active, Long memberId, List<AuctionArticle> articles) {
         this.totalPrice = totalPrice;
         this.tradeDate = tradeDate;
         this.active = active;
         this.memberId = memberId;
+        this.articles = articles;
     }
 }
