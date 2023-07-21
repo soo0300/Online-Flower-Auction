@@ -1,4 +1,4 @@
-package com.kkoch.user.api.controller.trade.response;
+package com.kkoch.admin.api.controller.trade.response;
 
 import lombok.Data;
 

@@ -1,8 +1,8 @@
-package com.kkoch.user.api.controller.trade;
+package com.kkoch.admin.api.controller.trade;
 
-import com.kkoch.user.api.controller.ApiResponse;
-import com.kkoch.user.api.controller.trade.response.TradeDetailResponse;
-import com.kkoch.user.api.controller.trade.response.TradeResponse;
+import com.kkoch.admin.api.ApiResponse;
+import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
+import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
 @RequiredArgsConstructor
 @RestController

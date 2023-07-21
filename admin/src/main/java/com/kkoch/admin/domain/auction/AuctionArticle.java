@@ -3,6 +3,7 @@ package com.kkoch.admin.domain.auction;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.TimeBaseEntity;
 import com.kkoch.admin.domain.plant.Plant;
+import com.kkoch.admin.domain.trade.Trade;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,10 +52,12 @@ public class AuctionArticle extends TimeBaseEntity {
     @JoinColumn(name = "auction_id")
     private Auction auction;
 
-    private Long tradeId;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "trade_id")
+    private Trade trade;
 
     @Builder
-    public AuctionArticle(String auctionNumber, Grade grade, int count, int price, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Long tradeId) {
+    public AuctionArticle(String auctionNumber, Grade grade, int count, int price, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Trade trade) {
         this.auctionNumber = auctionNumber;
         this.grade = grade;
         this.count = count;
@@ -65,6 +68,6 @@ public class AuctionArticle extends TimeBaseEntity {
         this.startPrice = startPrice;
         this.plant = plant;
         this.auction = auction;
-        this.tradeId = tradeId;
+        this.trade = trade;
     }
 }
