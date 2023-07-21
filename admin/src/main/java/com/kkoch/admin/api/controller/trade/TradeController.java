@@ -1,8 +1,12 @@
 package com.kkoch.admin.api.controller.trade;
 
 import com.kkoch.admin.api.ApiResponse;
+import com.kkoch.admin.api.controller.trade.request.AddTradeRequest;
+import com.kkoch.admin.api.controller.trade.request.AuctionArticleRequest;
 import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
+import com.kkoch.admin.api.service.trade.TradeService;
+import com.kkoch.admin.api.service.trade.dto.AddTradeDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
@@ -21,7 +26,20 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 @Api(tags = {"낙찰 내역 기능"})
 public class TradeController {
 
+    private final TradeService tradeService;
+
     //낙찰 내역 등록
+    @ApiOperation(value = "낙찰 내역 등록")
+    @PostMapping
+    public ApiResponse<Long> addTrade(@RequestBody AddTradeRequest request) {
+        List<AddTradeDto> dto = request.getArticles().stream()
+                .map(AuctionArticleRequest::toAddTradeDto)
+                .collect(Collectors.toList());
+
+        Long tradeId = tradeService.addTrade(request.getMemberId(), dto);
+        log.debug("tradeId={}", tradeId);
+        return ApiResponse.ok(tradeId);
+    }
 
     //낙찰 내역 조회
     @ApiOperation(value = "낙찰 내역 조회")
