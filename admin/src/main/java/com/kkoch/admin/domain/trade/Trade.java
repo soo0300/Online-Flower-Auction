@@ -49,4 +49,20 @@ public class Trade extends TimeBaseEntity {
         this.memberId = memberId;
         this.articles = articles;
     }
+
+    //== 연관관계 편의 메서드 ==//
+    public static Trade createTrade(int totalPrice, Long memberId, List<AuctionArticle> auctionArticles) {
+        Trade trade = Trade.builder()
+                .totalPrice(totalPrice)
+                .tradeDate(LocalDateTime.now())
+                .pickupStatus(false)
+                .active(true)
+                .memberId(memberId)
+                .articles(auctionArticles)
+                .build();
+
+        auctionArticles.forEach(auctionArticle -> auctionArticle.createTrade(trade));
+
+        return trade;
+    }
 }
