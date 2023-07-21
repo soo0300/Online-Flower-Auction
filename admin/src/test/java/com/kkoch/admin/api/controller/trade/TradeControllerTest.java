@@ -42,7 +42,11 @@ class TradeControllerTest extends ControllerTestSupport {
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value("200"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("OK"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isNumber());
     }
 
     private AuctionArticleRequest createAuctionArticleRequest(Long auctionArticleId, int bidPrice) {
