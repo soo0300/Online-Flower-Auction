@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,7 +32,7 @@ public class TradeController {
     //낙찰 내역 등록
     @ApiOperation(value = "낙찰 내역 등록")
     @PostMapping
-    public ApiResponse<Long> addTrade(@RequestBody AddTradeRequest request) {
+    public ApiResponse<Long> addTrade(@Valid @RequestBody AddTradeRequest request) {
         List<AddTradeDto> dto = request.getArticles().stream()
                 .map(AuctionArticleRequest::toAddTradeDto)
                 .collect(Collectors.toList());

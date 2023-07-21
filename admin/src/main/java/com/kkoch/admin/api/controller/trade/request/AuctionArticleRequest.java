@@ -4,6 +4,7 @@ import com.kkoch.admin.api.service.trade.dto.AddTradeDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -11,12 +12,17 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AuctionArticleRequest {
 
+    @NonNull
     private Long auctionArticleId;
-    private int bidPrice;
+
+    @NonNull
+    private Integer bidPrice;
+
+    @NonNull
     private LocalDateTime bidTime;
 
     @Builder
-    private AuctionArticleRequest(Long auctionArticleId, int bidPrice, LocalDateTime bidTime) {
+    private AuctionArticleRequest(Long auctionArticleId, Integer bidPrice, LocalDateTime bidTime) {
         this.auctionArticleId = auctionArticleId;
         this.bidPrice = bidPrice;
         this.bidTime = bidTime;

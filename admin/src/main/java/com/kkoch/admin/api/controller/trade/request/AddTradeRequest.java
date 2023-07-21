@@ -1,9 +1,9 @@
 package com.kkoch.admin.api.controller.trade.request;
 
-import com.kkoch.admin.api.service.trade.dto.AddTradeDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
@@ -11,7 +11,10 @@ import java.util.List;
 @NoArgsConstructor
 public class AddTradeRequest {
 
+    @NonNull
     private Long memberId;
+
+    @NonNull
     List<AuctionArticleRequest> articles;
 
     @Builder
