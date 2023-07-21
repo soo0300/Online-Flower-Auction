@@ -57,7 +57,7 @@ public class AuctionArticle extends TimeBaseEntity {
     private Trade trade;
 
     @Builder
-    public AuctionArticle(String auctionNumber, Grade grade, int count, int price, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Trade trade) {
+    private AuctionArticle(String auctionNumber, Grade grade, int count, int price, LocalDateTime bidTime, String region, String shipper, int startPrice, Plant plant, Auction auction, Trade trade) {
         this.auctionNumber = auctionNumber;
         this.grade = grade;
         this.count = count;
