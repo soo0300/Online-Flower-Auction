@@ -3,11 +3,15 @@ package com.kkoch.user.api.service.member;
 import com.kkoch.user.IntegrationTestSupport;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Transactional
 public class MemberServiceTest extends IntegrationTestSupport {
 
     @Autowired
@@ -18,7 +22,7 @@ public class MemberServiceTest extends IntegrationTestSupport {
     @Test
     public void join() throws Exception {
         //given
-        final Member member = Member.builder()
+        Member member = Member.builder()
                 .email("test@test.net")
                 .loginPw("1234")
                 .name("hong")
@@ -30,9 +34,9 @@ public class MemberServiceTest extends IntegrationTestSupport {
 
         //when
         Long saveId = memberService.join(member);
+        Member result = memberRepository.findById(saveId).get();
 
         //then
-        assertEquals(member, memberRepository.findById(saveId));
+        Assertions.assertThat(member).isEqualTo(result);
     }
-
 }
