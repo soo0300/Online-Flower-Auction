@@ -16,6 +16,7 @@ public class MemberServiceTest extends IntegrationTestSupport {
 
     @Autowired
     MemberService memberService;
+
     @Autowired
     MemberRepository memberRepository;
 
