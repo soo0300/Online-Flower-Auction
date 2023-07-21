@@ -1,6 +1,6 @@
-package com.kkoch.user.domain.trade.repository;
+package com.kkoch.admin.domain.trade.repository;
 
-import com.kkoch.user.domain.trade.Trade;
+import com.kkoch.admin.domain.trade.Trade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

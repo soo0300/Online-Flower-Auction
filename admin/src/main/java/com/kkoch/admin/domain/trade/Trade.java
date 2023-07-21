@@ -1,7 +1,6 @@
-package com.kkoch.user.domain.trade;
+package com.kkoch.admin.domain.trade;
 
-import com.kkoch.user.domain.TimeBaseEntity;
-import com.kkoch.user.domain.member.Member;
+import com.kkoch.admin.domain.TimeBaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
-import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter
@@ -31,15 +28,13 @@ public class Trade extends TimeBaseEntity {
     @Column(nullable = false)
     private boolean active;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    private Long memberId;
 
     @Builder
-    private Trade(int totalPrice, LocalDateTime tradeDate, boolean active, Member member) {
+    public Trade(int totalPrice, LocalDateTime tradeDate, boolean active, Long memberId) {
         this.totalPrice = totalPrice;
         this.tradeDate = tradeDate;
         this.active = active;
-        this.member = member;
+        this.memberId = memberId;
     }
 }
