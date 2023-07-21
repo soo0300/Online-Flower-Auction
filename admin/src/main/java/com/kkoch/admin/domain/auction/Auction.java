@@ -30,8 +30,6 @@ public class Auction extends TimeBaseEntity {
     private LocalDateTime startTime;
     @Column(nullable = false)
     private boolean active;
-    @Column(length = 100)
-    private String title;
     @Enumerated(STRING)
     @Column(length = 20)
     private Status status;
@@ -41,7 +39,7 @@ public class Auction extends TimeBaseEntity {
     private Admin admin;
 
     @Builder
-    private Auction(int code, LocalDateTime startTime, boolean active, String title, Status status, Admin admin) {
+    private Auction(int code, LocalDateTime startTime, boolean active, Status status, Admin admin) {
         this.code = code;
         this.startTime = startTime;
         this.active = active;
