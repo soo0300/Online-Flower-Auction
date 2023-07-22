@@ -60,7 +60,6 @@ public class TradeController {
         return ApiResponse.ok(data);
     }
 
-    //낙찰 내역 상세 조회
     @ApiOperation(value = "낙찰 내역 상세 조회")
 //    @GetMapping("/{tradeId}")
     public ApiResponse<TradeDetailResponse> getTrade(@PathVariable Long tradeId) {
