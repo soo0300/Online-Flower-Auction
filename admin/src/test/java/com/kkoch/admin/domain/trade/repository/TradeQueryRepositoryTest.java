@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Transactional
 class TradeQueryRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
@@ -49,6 +51,26 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
                         tuple(trade2.getTradeDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0),
                         tuple(trade4.getTradeDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0)
                 );
+    }
+
+    @DisplayName("회원의 삭제되지 않은 낙찰 내역중 조건을 만족하는 데이터의 수를 조회할 수 있다.")
+    @Test
+    void test() {
+        //given
+        LocalDate currentDate = LocalDate.of(2023, 7, 10);
+
+        Trade trade1 = createTrade(LocalDate.of(2023, 7, 3).atStartOfDay(), true);
+        Trade trade2 = createTrade(LocalDate.of(2023, 7, 4).atStartOfDay(), true);
+        Trade trade3 = createTrade(LocalDate.of(2023, 7, 5).atStartOfDay(), false);
+        Trade trade4 = createTrade(LocalDate.of(2023, 7, 10).atStartOfDay(), true);
+
+        TradeSearchCond cond = TradeSearchCond.of(currentDate, 7);
+
+        //when
+        int totalCount = tradeQueryRepository.getTotalCount(1L, cond);
+
+        //then
+        assertThat(totalCount).isEqualTo(2);
     }
 
     private Trade createTrade(LocalDateTime tradeDate, boolean active) {
