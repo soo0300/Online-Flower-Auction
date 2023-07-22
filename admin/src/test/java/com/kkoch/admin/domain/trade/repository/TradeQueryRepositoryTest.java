@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.trade.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +40,14 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
         PageRequest pageRequest = PageRequest.of(0, 20);
 
         //when
-        List<Trade> trades = tradeQueryRepository.findByCondition(1L, cond, pageRequest);
+        List<TradeResponse> responses = tradeQueryRepository.findByCondition(1L, cond, pageRequest);
 
         //then
-        assertThat(trades).hasSize(2)
-                .extracting("memberId", "tradeDate", "active")
+        assertThat(responses).hasSize(2)
+                .extracting("tradeDate", "count")
                 .containsExactlyInAnyOrder(
-                        tuple(1L, trade2.getTradeDate(), true),
-                        tuple(1L, trade4.getTradeDate(), true)
+                        tuple(trade2.getTradeDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0),
+                        tuple(trade4.getTradeDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0)
                 );
     }
 
