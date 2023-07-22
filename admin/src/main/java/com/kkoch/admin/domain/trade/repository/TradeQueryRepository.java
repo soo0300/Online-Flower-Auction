@@ -55,4 +55,17 @@ public class TradeQueryRepository {
                 .orderBy(trade.createdDate.desc())
                 .fetch();
     }
+
+    public int getTotalCount(Long memberId, TradeSearchCond cond) {
+        return queryFactory
+                .select(trade.id)
+                .from(trade)
+                .where(
+                        trade.memberId.eq(memberId),
+                        trade.active.isTrue(),
+                        trade.tradeDate.between(cond.getStartDateTime(), cond.getEndDateTime())
+                )
+                .fetch()
+                .size();
+    }
 }
