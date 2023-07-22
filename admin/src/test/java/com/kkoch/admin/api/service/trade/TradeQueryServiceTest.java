@@ -60,10 +60,10 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
         //then
         List<TradeResponse> responses = result.getContent();
         assertThat(responses).hasSize(2)
-                .extracting("totalPrice", "active", "count")
+                .extracting("totalPrice", "count")
                 .containsExactlyInAnyOrder(
-                        tuple(3000, true, 3),
-                        tuple(2000, true, 2)
+                        tuple(3000, 3),
+                        tuple(2000, 2)
                 );
     }
 
