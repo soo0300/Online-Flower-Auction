@@ -8,6 +8,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.13'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
 }
 
 group = 'com.kkoch'
@@ -21,6 +22,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+    asciidoctorExt
 }
 
 repositories {
@@ -62,6 +64,12 @@ dependencies {
 	//swagger
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 	implementation 'io.springfox:springfox-swagger2:2.9.2'
+
+    // RestDocs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0'
 }
 
 dependencyManagement {
@@ -87,4 +95,31 @@ configurations {
 }
 compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
+}
+
+//rest docs
+ext { // 전역 변수
+    snippetsDir = file('build/generated-snippets')
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+
+    sources { // 특정 파일만 html로 만든다.
+        include("**/index.adoc")
+    }
+    baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
+    dependsOn test
+}
+
+bootJar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}") {
+        into 'static/docs'
+    }
 }
