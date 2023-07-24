@@ -25,7 +25,7 @@ public class AuctionController {
 
     @PostMapping
     public ApiResponse<AuctionTitleResponse> addAuction(@Valid @RequestBody AddAuctionRequest request,
-                                     @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+                                                        @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
         LocalDateTime startTime = request.getStartTime();
         if (!startTime.isAfter(LocalDateTime.now().plusHours(1))) {
             return ApiResponse.of(BAD_REQUEST, "경매 시간 입력 오류", null);
@@ -35,7 +35,7 @@ public class AuctionController {
                 .startTime(request.getStartTime())
                 .build();
         AuctionTitleResponse response = auctionService.addAuction(loginAdmin.getId(), dto);
-        log.debug("[경매 일정 등록 응답] 경매방 제목 = {}",response.getTitle());
+        log.debug("[경매 일정 등록 응답] 경매방 제목 = {}", response.getTitle());
         return ApiResponse.ok(response);
     }
 }
