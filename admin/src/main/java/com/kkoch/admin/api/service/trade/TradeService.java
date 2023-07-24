@@ -42,7 +42,10 @@ public class TradeService {
     }
 
     public Long remove(Long tradeId) {
-        return null;
+        Trade trade = tradeRepository.findById(tradeId)
+                .orElseThrow(NoSuchElementException::new);
+        trade.remove();
+        return trade.getId();
     }
 
     private List<AuctionArticle> getAuctionArticles(List<AddTradeDto> dto) {

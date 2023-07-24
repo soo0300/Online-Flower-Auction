@@ -73,4 +73,8 @@ public class Trade extends TimeBaseEntity {
         }
         this.pickupStatus = true;
     }
+
+    public void remove() {
+        this.active = false;
+    }
 }
