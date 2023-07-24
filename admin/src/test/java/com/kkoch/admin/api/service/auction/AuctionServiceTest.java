@@ -2,6 +2,7 @@ package com.kkoch.admin.api.service.auction;
 
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
@@ -56,10 +57,10 @@ class AuctionServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        Long auctionId = auctionService.addAuction(admin.getId(), dto);
+        AuctionTitleResponse response = auctionService.addAuction(admin.getId(), dto);
 
         //then
-        Optional<Auction> findAuction = auctionRepository.findById(auctionId);
+        Optional<Auction> findAuction = auctionRepository.findById(response.getAuctionId());
         Assertions.assertThat(findAuction).isPresent();
     }
 
