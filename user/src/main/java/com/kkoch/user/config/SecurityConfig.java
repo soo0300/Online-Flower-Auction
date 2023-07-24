@@ -26,7 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
                 .authorizeRequests() // HttpServletRequest를 사용하는 요청들에 대한 접근제한을 설정
-                .antMatchers("/*").permitAll();// 인증
+                .antMatchers("/**").permitAll();// 인증
         return httpSecurity.build();
     }
 

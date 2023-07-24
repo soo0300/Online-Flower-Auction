@@ -6,27 +6,34 @@ import com.kkoch.user.api.controller.member.request.EditTelRequest;
 import com.kkoch.user.api.controller.member.request.JoinMemberRequest;
 import com.kkoch.user.api.controller.member.request.WithdrawalRequest;
 import com.kkoch.user.api.controller.member.response.MemberResponse;
+import com.kkoch.user.api.service.member.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.*;
+import javax.validation.Valid;
+
+import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user-service")
+@RequestMapping("/user-service/user")
 @Slf4j
 @Api(tags = {"회원 기능"})
 public class MemberController {
 
+    private final MemberService memberService;
+
     //회원가입
     @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
-    public ApiResponse<?> joinMember(@RequestBody JoinMemberRequest request) {
+    public ApiResponse<Long> joinMember(@Valid @RequestBody JoinMemberRequest request) {
 
-        return null;
+        Long memberId = memberService.join(request.toJoinMemberDto());
+        log.debug("memberId = {}",memberId);
+        return ApiResponse.ok(memberId);
 
     }
 

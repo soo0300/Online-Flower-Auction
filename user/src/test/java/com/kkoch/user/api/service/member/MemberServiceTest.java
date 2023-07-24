@@ -1,6 +1,7 @@
 package com.kkoch.user.api.service.member;
 
 import com.kkoch.user.IntegrationTestSupport;
+import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
@@ -21,7 +22,7 @@ public class MemberServiceTest extends IntegrationTestSupport {
     @Test
     public void join() throws Exception {
         //given
-        Member member = Member.builder()
+        JoinMemberDto member = JoinMemberDto.builder()
                 .email("test@test.net")
                 .loginPw("1234")
                 .name("hong")
@@ -36,6 +37,6 @@ public class MemberServiceTest extends IntegrationTestSupport {
         Member result = memberRepository.findById(saveId).get();
 
         //then
-        Assertions.assertThat(member).isEqualTo(result);
+        Assertions.assertThat(member.getEmail()).isEqualTo(result.getEmail());
     }
 }
