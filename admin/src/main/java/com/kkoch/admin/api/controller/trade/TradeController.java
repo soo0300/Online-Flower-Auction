@@ -81,7 +81,7 @@ public class TradeController {
 
     @ApiOperation(value = "낙찰 내역 삭제")
     @DeleteMapping("/{tradeId}")
-    public ApiResponse<?> removeTrade(@PathVariable Long tradeId) {
+    public ApiResponse<Long> removeTrade(@PathVariable Long tradeId) {
         Long removedId = tradeService.remove(tradeId);
         return ApiResponse.of(MOVED_PERMANENTLY, "낙찰 내역이 삭제되었습니다.", removedId);
     }
