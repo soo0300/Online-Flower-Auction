@@ -89,6 +89,21 @@ class TradeServiceTest extends IntegrationTestSupport {
         assertThat(findTrade.get().isPickupStatus()).isTrue();
     }
 
+    @DisplayName("낙찰 내역을 삭제하면 활성화 상태가 변경이 된다.")
+    @Test
+    void remove() {
+        //given
+        Trade trade = createTrade(true);
+
+        //when
+        Long tradeId = tradeService.remove(trade.getId());
+
+        //then
+        Optional<Trade> findTrade = tradeRepository.findById(tradeId);
+        assertThat(findTrade).isPresent();
+        assertThat(findTrade.get().isActive()).isFalse();
+    }
+
     private AuctionArticle createAuctionArticle(String auctionNumber) {
         AuctionArticle auctionArticle = AuctionArticle.builder()
                 .auctionNumber(auctionNumber)

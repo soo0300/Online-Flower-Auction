@@ -150,6 +150,26 @@ class TradeControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").isNumber());
     }
 
+    @DisplayName("회원은 본인의 낙찰 내역을 삭제할 수 있다.")
+    @Test
+    void removeTrade() throws Exception {
+        //given
+        BDDMockito.given(tradeService.remove(anyLong()))
+                .willReturn(1L);
+
+        //when //then
+        mockMvc.perform(
+                delete("/admin-service/trades/{tradeId}", 1L)
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("낙찰 내역이 삭제되었습니다."))
+                .andExpect(jsonPath("$.data").isNumber());
+
+    }
+
     private AuctionArticleRequest createAuctionArticleRequest(Long auctionArticleId, int bidPrice) {
         return AuctionArticleRequest.builder()
             .auctionArticleId(auctionArticleId)
