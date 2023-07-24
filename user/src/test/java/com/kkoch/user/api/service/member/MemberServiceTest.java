@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Transactional
-public class MemberServiceTest extends IntegrationTestSupport {
+class MemberServiceTest extends IntegrationTestSupport {
 
     @Autowired
     MemberService memberService;
@@ -23,7 +23,7 @@ public class MemberServiceTest extends IntegrationTestSupport {
 
     @DisplayName("회원가입 서비스 테스트")
     @Test
-    public void join() throws Exception {
+    void join() throws Exception {
         //given
         JoinMemberDto member = JoinMemberDto.builder()
                 .email("test@test.net")

@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MemberControllerTest extends ControllerTestSupport {
+class MemberControllerTest extends ControllerTestSupport {
 
     @MockBean
     private MemberService memberService;
@@ -36,7 +36,7 @@ public class MemberControllerTest extends ControllerTestSupport {
                 .build();
 
 
-        // whem, then
+        // when, then
         mockMvc.perform(
                         post("/user-service/user/join")
                                 .content(objectMapper.writeValueAsString(member))
