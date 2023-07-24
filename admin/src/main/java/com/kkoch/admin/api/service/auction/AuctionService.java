@@ -2,12 +2,17 @@ package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
+import com.kkoch.admin.api.service.auction.dto.SetAuctionStatusDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.auction.Auction;
+import com.kkoch.admin.domain.auction.Status;
 import com.kkoch.admin.domain.auction.repository.AuctionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -15,6 +20,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuctionService {
 
     private final AuctionRepository auctionRepository;
+
+    public AuctionTitleResponse setStatus(SetAuctionStatusDto dto) {
+        Long auctionId = dto.getAuctionId();
+        Status status = dto.getStatus();
+
+        Optional<Auction> findAuction = auctionRepository.findById(auctionId);
+        if (findAuction.isEmpty()) {
+            throw new NoSuchElementException("잘못된 옥션 PK");
+        }
+
+        Auction auction = findAuction.get();
+
+        auction.changeStatus(status);
+
+        return AuctionTitleResponse.of(auction);
+    }
 
     public AuctionTitleResponse addAuction(Long adminId, AddAuctionDto dto) {
         int code = dto.getCode();
