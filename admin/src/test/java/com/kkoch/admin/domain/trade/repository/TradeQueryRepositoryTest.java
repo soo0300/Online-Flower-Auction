@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.trade.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
@@ -55,7 +56,7 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
 
     @DisplayName("회원의 삭제되지 않은 낙찰 내역중 조건을 만족하는 데이터의 수를 조회할 수 있다.")
     @Test
-    void test() {
+    void getTotalCount() {
         //given
         LocalDate currentDate = LocalDate.of(2023, 7, 10);
 
@@ -71,6 +72,22 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(totalCount).isEqualTo(2);
+    }
+
+    @DisplayName("회원은 본인의 낙찰 내역을 상세조회 할 수 있다.")
+    @Test
+    void findById() {
+        //given
+        LocalDateTime tradeDate = LocalDate.of(2023, 7, 10).atStartOfDay();
+        Trade trade = createTrade(tradeDate, true);
+
+        //when
+        TradeDetailResponse response = tradeQueryRepository.findById(trade.getId());
+
+        //then
+        assertThat(response)
+                .extracting("totalPrice", "tradeTime", "status")
+                .containsExactlyInAnyOrder(10_000, tradeDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm")), false);
     }
 
     private Trade createTrade(LocalDateTime tradeDate, boolean active) {

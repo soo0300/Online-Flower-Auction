@@ -61,9 +61,10 @@ public class TradeController {
     }
 
     @ApiOperation(value = "낙찰 내역 상세 조회")
-//    @GetMapping("/{tradeId}")
+    @GetMapping("/detail/{tradeId}")
     public ApiResponse<TradeDetailResponse> getTrade(@PathVariable Long tradeId) {
-        return ApiResponse.ok(null);
+        TradeDetailResponse response = tradeQueryService.getTrade(tradeId);
+        return ApiResponse.ok(response);
     }
 
     //낙찰 내역 수정 - 픽업여부

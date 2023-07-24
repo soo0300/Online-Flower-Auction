@@ -1,10 +1,15 @@
 package com.kkoch.admin.api.service.trade;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.auction.AuctionArticle;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
+import com.kkoch.admin.domain.plant.Category;
+import com.kkoch.admin.domain.plant.Plant;
+import com.kkoch.admin.domain.plant.repository.CategoryRepository;
+import com.kkoch.admin.domain.plant.repository.PlantRepository;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.TradeRepository;
 import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
@@ -33,6 +38,12 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private AuctionArticleRepository auctionArticleRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private PlantRepository plantRepository;
+
     @DisplayName("회원은 본인의 낙찰 내역을 기간으로 조회를 할 수 있다.")
     @Test
     void getMyTrades() {
@@ -45,11 +56,11 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
         Trade trade4 = createTrade(2L, 3000, LocalDateTime.of(2023, 7, 7, 0, 0, 0), true);
         Trade trade5 = createTrade(1L, 2000, LocalDateTime.of(2023, 7, 10, 23, 59, 59), true);
 
-        createAuctionArticle(trade2, "00001");
-        createAuctionArticle(trade2, "00002");
-        createAuctionArticle(trade2, "00003");
-        createAuctionArticle(trade5, "00004");
-        createAuctionArticle(trade5, "00005");
+        createAuctionArticle("00001", trade2, null);
+        createAuctionArticle("00002", trade2, null);
+        createAuctionArticle("00003", trade2, null);
+        createAuctionArticle("00004", trade5, null);
+        createAuctionArticle("00005", trade5, null);
 
         TradeSearchCond cond = TradeSearchCond.of(currentDate, 7);
         PageRequest pageRequest = PageRequest.of(0, 20);
@@ -67,8 +78,39 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
                 );
     }
 
-    private AuctionArticle createAuctionArticle(Trade trade, String auctionNumber) {
+    @DisplayName("회원은 본인의 낙찰 내역을 상세 조회를 할 수 있다.")
+    @Test
+    void getTrade() {
+        //given
+        Category code = createCategory("절화", null);
+        Category name = createCategory("장미(스탠다드)", code);
+        Category type = createCategory("하젤", name);
+
+        Plant plant = createPlant(code, name, type);
+
+        Trade trade = createTrade(1L, 3000, LocalDate.of(2023, 7, 10).atStartOfDay(), true);
+
+        AuctionArticle auctionArticle1 = createAuctionArticle("00001", trade, plant);
+        AuctionArticle auctionArticle2 = createAuctionArticle("00002", trade, plant);
+        AuctionArticle auctionArticle3 = createAuctionArticle("00003", trade, plant);
+
+        //when
+        TradeDetailResponse response = tradeQueryService.getTrade(trade.getId());
+
+        //then
+        assertThat(response.getTotalPrice()).isEqualTo(3000);
+        assertThat(response.getAuctionArticles()).hasSize(3)
+                .extracting("code", "name", "type")
+                .containsExactlyInAnyOrder(
+                        tuple(code.getName(), name.getName(), type.getName()),
+                        tuple(code.getName(), name.getName(), type.getName()),
+                        tuple(code.getName(), name.getName(), type.getName())
+                );
+    }
+
+    private AuctionArticle createAuctionArticle(String auctionNumber, Trade trade, Plant plant) {
         AuctionArticle auctionArticle = AuctionArticle.builder()
+                .plant(plant)
                 .trade(trade)
                 .auctionNumber(auctionNumber)
                 .grade(Grade.NONE)
@@ -91,5 +133,24 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
                 .active(active)
                 .build();
         return tradeRepository.save(trade);
+    }
+
+    private Category createCategory(String name, Category parent) {
+        Category category = Category.builder()
+                .name(name)
+                .active(true)
+                .parent(parent)
+                .build();
+        return categoryRepository.save(category);
+    }
+
+    private Plant createPlant(Category code, Category name, Category type) {
+        Plant plant = Plant.builder()
+                .active(true)
+                .code(code)
+                .name(name)
+                .type(type)
+                .build();
+        return plantRepository.save(plant);
     }
 }

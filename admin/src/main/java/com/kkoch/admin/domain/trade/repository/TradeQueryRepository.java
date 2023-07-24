@@ -1,5 +1,6 @@
 package com.kkoch.admin.domain.trade.repository;
 
+import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import com.querydsl.core.types.Projections;
@@ -67,5 +68,17 @@ public class TradeQueryRepository {
                 )
                 .fetch()
                 .size();
+    }
+
+    public TradeDetailResponse findById(Long tradeId) {
+        return queryFactory
+                .select(Projections.constructor(TradeDetailResponse.class,
+                        trade.totalPrice,
+                        trade.tradeDate,
+                        trade.pickupStatus
+                ))
+                .from(trade)
+                .where(trade.id.eq(tradeId))
+                .fetchOne();
     }
 }
