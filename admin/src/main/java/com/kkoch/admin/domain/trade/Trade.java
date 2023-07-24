@@ -65,4 +65,12 @@ public class Trade extends TimeBaseEntity {
 
         return trade;
     }
+
+    //== 비즈니스 로직 ==//
+    public void pickup() {
+        if (this.pickupStatus) {
+            throw new IllegalArgumentException("이미 픽업한 상품입니다.");
+        }
+        this.pickupStatus = true;
+    }
 }

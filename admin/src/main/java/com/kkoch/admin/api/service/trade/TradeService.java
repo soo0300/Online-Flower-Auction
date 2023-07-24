@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,6 +32,13 @@ public class TradeService {
         Trade savedTrade = tradeRepository.save(trade);
 
         return savedTrade.getId();
+    }
+
+    public Long pickup(Long tradeId) {
+        Trade trade = tradeRepository.findById(tradeId)
+            .orElseThrow(NoSuchElementException::new);
+        trade.pickup();
+        return trade.getId();
     }
 
     private List<AuctionArticle> getAuctionArticles(List<AddTradeDto> dto) {
