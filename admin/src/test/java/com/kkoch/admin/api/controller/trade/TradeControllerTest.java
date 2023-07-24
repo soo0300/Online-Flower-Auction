@@ -88,7 +88,7 @@ class TradeControllerTest extends ControllerTestSupport {
 
     @DisplayName("회원은 본인의 낙찰 내역을 상세조회할 수 있다.")
     @Test
-    void test() throws Exception {
+    void getTrade() throws Exception {
         //given
         TradeDetailResponse response = TradeDetailResponse.builder()
             .totalPrice(10000)
@@ -110,7 +110,44 @@ class TradeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.message").value("SUCCESS"))
             .andExpect(jsonPath("$.data.totalPrice").value(10000))
             .andExpect(jsonPath("$.data.status").value(false));
+    }
 
+    @DisplayName("회원이 이미 픽업한 상품이면 400 에러를 발생시킨다.")
+    @Test
+    void pickupWithException() throws Exception {
+        //given
+        BDDMockito.given(tradeService.pickup(anyLong()))
+                .willThrow(new IllegalArgumentException("이미 픽업한 상품입니다."));
+
+        //when //then
+        mockMvc.perform(
+                        patch("/admin-service/trades/{tradeId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("이미 픽업한 상품입니다."))
+                .andExpect(jsonPath("$.data").doesNotExist());
+    }
+
+    @DisplayName("회원은 본인이 낙찰받은 경매품을 픽업할 수 있다.")
+    @Test
+    void pickup() throws Exception {
+        //given
+        BDDMockito.given(tradeService.pickup(anyLong()))
+                .willReturn(1L);
+
+        //when //then
+        mockMvc.perform(
+                        patch("/admin-service/trades/{tradeId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isNumber());
     }
 
     private AuctionArticleRequest createAuctionArticleRequest(Long auctionArticleId, int bidPrice) {
