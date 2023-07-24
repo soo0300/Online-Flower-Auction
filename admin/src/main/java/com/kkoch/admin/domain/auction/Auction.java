@@ -85,4 +85,8 @@ public class Auction extends TimeBaseEntity {
 
         return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT) + " " + type + " " + this.status.getText();
     }
+
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
 }
