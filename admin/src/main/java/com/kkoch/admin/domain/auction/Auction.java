@@ -83,16 +83,6 @@ public class Auction extends TimeBaseEntity {
             type = "춘화";
         }
 
-        String status = null;
-
-        if (this.status == READY) {
-            status = "준비 중";
-        } else if (this.status == OPEN) {
-            status = "진행 중";
-        } else {
-            status = "마감";
-        }
-
-        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT) + " " + type + " " + status;
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT) + " " + type + " " + this.status.getText();
     }
 }
