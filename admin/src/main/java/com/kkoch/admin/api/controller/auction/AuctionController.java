@@ -30,10 +30,9 @@ public class AuctionController {
         if (!startTime.isAfter(LocalDateTime.now().plusHours(1))) {
             return ApiResponse.of(BAD_REQUEST, "경매 시간 입력 오류", null);
         }
-        AddAuctionDto dto = AddAuctionDto.builder()
-                .code(request.getCode())
-                .startTime(request.getStartTime())
-                .build();
+
+        AddAuctionDto dto = request.toAddAuctionDto();
+
         AuctionTitleResponse response = auctionService.addAuction(loginAdmin.getId(), dto);
         log.debug("[경매 일정 등록 응답] 경매방 제목 = {}", response.getTitle());
         return ApiResponse.ok(response);

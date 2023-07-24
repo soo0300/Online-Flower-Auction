@@ -19,7 +19,7 @@ public class AuctionService {
     public AuctionTitleResponse addAuction(Long adminId, AddAuctionDto dto) {
         int code = dto.getCode();
 
-        if (code < 0 || code > 4) {
+        if (betweenOneToFour(code)) {
             throw new IllegalArgumentException("구분코드 에러");
         }
 
@@ -29,10 +29,11 @@ public class AuctionService {
 
         Auction savedAuction = auctionRepository.save(auction);
 
-        return AuctionTitleResponse.builder()
-                .auctionId(savedAuction.getId())
-                .title(savedAuction.getTitle())
-                .build();
+        return AuctionTitleResponse.of(savedAuction);
+    }
+
+    private boolean betweenOneToFour(int code) {
+        return code < 0 || code > 4;
     }
 
 
