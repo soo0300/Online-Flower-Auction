@@ -41,6 +41,10 @@ public class TradeService {
         return trade.getId();
     }
 
+    public Long remove(Long tradeId) {
+        return null;
+    }
+
     private List<AuctionArticle> getAuctionArticles(List<AddTradeDto> dto) {
         List<Long> articleIds = dto.stream()
                 .map(AddTradeDto::getAuctionArticleId)
