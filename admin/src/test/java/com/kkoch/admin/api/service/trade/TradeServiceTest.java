@@ -12,7 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,6 +62,33 @@ class TradeServiceTest extends IntegrationTestSupport {
                 );
     }
 
+    @DisplayName("이미 픽업한 항목에 대해 다시 픽업을 시도하면 예외가 발생한다.")
+    @Test
+    void pickupWithDuplication() {
+        //given
+        Trade trade = createTrade(true);
+
+        //when //then
+        assertThatThrownBy(() -> tradeService.pickup(trade.getId()))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("이미 픽업한 상품입니다.");
+    }
+
+    @DisplayName("경매품을 픽업받으면 픽업 상태가 변경이 된다.")
+    @Test
+    void pickup() {
+        //given
+        Trade trade = createTrade(false);
+
+        //when
+        Long tradeId = tradeService.pickup(trade.getId());
+
+        //then
+        Optional<Trade> findTrade = tradeRepository.findById(tradeId);
+        assertThat(findTrade).isPresent();
+        assertThat(findTrade.get().isPickupStatus()).isTrue();
+    }
+
     private AuctionArticle createAuctionArticle(String auctionNumber) {
         AuctionArticle auctionArticle = AuctionArticle.builder()
                 .auctionNumber(auctionNumber)
@@ -80,5 +109,17 @@ class TradeServiceTest extends IntegrationTestSupport {
                 .bidPrice(bidPrice)
                 .bidTime(LocalDateTime.now())
                 .build();
+    }
+
+    private Trade createTrade(boolean pickupStatus) {
+        Trade trade = Trade.builder()
+            .totalPrice(10000)
+            .tradeDate(LocalDate.of(2023, 7, 10).atStartOfDay())
+            .pickupStatus(pickupStatus)
+            .active(true)
+            .memberId(1L)
+            .articles(new ArrayList<>())
+            .build();
+        return tradeRepository.save(trade);
     }
 }

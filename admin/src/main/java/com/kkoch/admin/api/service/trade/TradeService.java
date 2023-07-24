@@ -33,6 +33,10 @@ public class TradeService {
         return savedTrade.getId();
     }
 
+    public Long pickup(Long tradeId) {
+        return null;
+    }
+
     private List<AuctionArticle> getAuctionArticles(List<AddTradeDto> dto) {
         List<Long> articleIds = dto.stream()
                 .map(AddTradeDto::getAuctionArticleId)
