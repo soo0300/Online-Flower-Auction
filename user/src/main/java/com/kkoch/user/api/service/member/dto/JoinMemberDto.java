@@ -1,47 +1,43 @@
-package com.kkoch.user.api.controller.member.request;
+package com.kkoch.user.api.service.member.dto;
 
-import com.kkoch.user.api.service.member.dto.JoinMemberDto;
+import com.kkoch.user.domain.member.Member;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-
 @Data
 @NoArgsConstructor
-public class JoinMemberRequest {
+public class JoinMemberDto {
 
-    @NotBlank
     private String email;
-    @NotBlank
     private String loginPw;
-    @NotBlank
     private String name;
-    @NotBlank
     private String tel;
-    @NotBlank
     private String businessNumber;
     private MultipartFile file;
+    private int point;
+    private boolean active;
 
     @Builder
-    private JoinMemberRequest(String email, String loginPw, String name, String tel, String businessNumber, MultipartFile file) {
+    private JoinMemberDto(String email, String loginPw, String name, String tel, String businessNumber, MultipartFile file, int point, boolean active) {
         this.email = email;
         this.loginPw = loginPw;
         this.name = name;
         this.tel = tel;
         this.businessNumber = businessNumber;
         this.file = file;
+        this.point = point;
+        this.active = active;
     }
 
-    public JoinMemberDto toJoinMemberDto() {
-        return JoinMemberDto.builder()
+    public Member toEntity() {
+        return Member.builder()
                 .email(this.email)
                 .loginPw(this.loginPw)
                 .name(this.name)
                 .tel(this.tel)
                 .businessNumber(this.businessNumber)
-                .file(this.file)
                 .point(0)
                 .active(true)
                 .build();
