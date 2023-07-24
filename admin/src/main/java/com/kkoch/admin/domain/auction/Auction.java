@@ -9,7 +9,10 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
+import static com.kkoch.admin.domain.auction.Status.OPEN;
 import static com.kkoch.admin.domain.auction.Status.READY;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
@@ -65,5 +68,31 @@ public class Auction extends TimeBaseEntity {
                 .build();
 
         return auction;
+    }
+
+    // 비지니스 로직
+    public String getTitle() {
+        String type = null;
+        if (this.code == 1) {
+            type = "절화";
+        } else if (this.code == 2) {
+            type = "난";
+        } else if (this.code == 3) {
+            type = "관엽";
+        } else if (this.code == 4) {
+            type = "춘화";
+        }
+
+        String status = null;
+
+        if (this.status == READY) {
+            status = "준비 중";
+        } else if (this.status == OPEN) {
+            status = "진행 중";
+        } else {
+            status = "마감";
+        }
+
+        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT) + " " + type + " " + status;
     }
 }
