@@ -6,7 +6,6 @@ import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.api.service.member.dto.LoginMemberDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
-import jdk.jshell.spi.ExecutionControl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-import static org.mockito.BDDMockito.given;
 
 @Transactional
 class MemberServiceTest extends IntegrationTestSupport {
@@ -64,7 +62,7 @@ class MemberServiceTest extends IntegrationTestSupport {
 
         Assertions.assertThatThrownBy(() -> memberService.login(loginMemberDto))
                 .isInstanceOf(BadCredentialsException.class)
-                .hasMessage("잘못된 계정입니다.");
+                .hasMessage("잘못된 계정정보입니다.");
 
     }
 
@@ -79,8 +77,8 @@ class MemberServiceTest extends IntegrationTestSupport {
         LoginMemberDto loginMemberDto = createLoginMemberDto(email, loginPw);
         //when, then
 
-        String token = memberService.login(loginMemberDto);
-        Assertions.assertThat(token).isNotEmpty();
+        TokenResponse tokenResponse = memberService.login(loginMemberDto);
+        Assertions.assertThat(tokenResponse.getToken()).isNotNull();
     }
 
     private Long joinMember(String email, String loginPw) {

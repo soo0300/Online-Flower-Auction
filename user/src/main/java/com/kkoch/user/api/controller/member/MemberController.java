@@ -1,11 +1,9 @@
 package com.kkoch.user.api.controller.member;
 
 import com.kkoch.user.api.controller.ApiResponse;
-import com.kkoch.user.api.controller.member.request.EditLoginPwRequest;
-import com.kkoch.user.api.controller.member.request.EditTelRequest;
-import com.kkoch.user.api.controller.member.request.JoinMemberRequest;
-import com.kkoch.user.api.controller.member.request.WithdrawalRequest;
+import com.kkoch.user.api.controller.member.request.*;
 import com.kkoch.user.api.controller.member.response.MemberResponse;
+import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +32,15 @@ public class MemberController {
         Long memberId = memberService.join(request.toJoinMemberDto());
         log.debug("memberId = {}", memberId);
         return ApiResponse.ok(memberId);
+
+    }
+
+    @ApiOperation(value = "로그인")
+    @PostMapping("/login")
+    public ApiResponse<TokenResponse> loginMember(@Valid @RequestBody LoginMemberRequest request) {
+
+        TokenResponse tokenResponse = memberService.login(request.toLoginMemberDto());
+        return ApiResponse.ok(tokenResponse);
 
     }
 
