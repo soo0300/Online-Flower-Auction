@@ -38,8 +38,10 @@ If you are developing a production application, we recommend updating the config
 
 ### 추가설정
 - npm i framer-motion : 애니메이션 라이브러리
+- npm i react-router-dom : 라우터 추가
 - react-anchor-link-smooth-scroll@1.0.12 : nav bar 이동 라이브러리
 - @heroicons/react : tailwind에서 제공해주는 아이콘 라이브러리
+
 
 ### Dev Dependencies
 - npm i -D @types/react-anchor-link-smooth-scroll@1.0.2 
