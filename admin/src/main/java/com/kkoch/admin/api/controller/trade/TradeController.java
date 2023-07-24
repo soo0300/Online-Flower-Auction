@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,11 +67,16 @@ public class TradeController {
         return ApiResponse.ok(response);
     }
 
-    //낙찰 내역 수정 - 픽업여부
     @ApiOperation(value = "낙찰 픽업여부 변경")
     @PatchMapping("/{tradeId}")
-    public ApiResponse<?> pickup(@PathVariable Long tradeId) {
-        return ApiResponse.ok(null);
+    public ApiResponse<Long> pickup(@PathVariable Long tradeId) {
+        Long pickupTradeId;
+        try {
+            pickupTradeId = tradeService.pickup(tradeId);
+        } catch (IllegalArgumentException e) {
+            return ApiResponse.of(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+        }
+        return ApiResponse.ok(pickupTradeId);
     }
 
     //낙찰 내역 삭제
