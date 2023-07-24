@@ -42,7 +42,6 @@ public class Member extends TimeBaseEntity {
     private boolean active;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @Builder.Default
     private List<Authority> roles = new ArrayList<>();
     @Builder
     private Member(String email, String loginPw, String name, String tel, String businessNumber, int point, boolean active) {
@@ -53,5 +52,10 @@ public class Member extends TimeBaseEntity {
         this.businessNumber = businessNumber;
         this.point = point;
         this.active = active;
+
+    }
+    public void setRoles(List<Authority> role) {
+        this.roles = role;
+        role.forEach(o -> o.setMember(this));
     }
 }

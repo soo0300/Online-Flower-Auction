@@ -3,7 +3,6 @@ package com.kkoch.user.api.service.member;
 import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.api.service.member.dto.LoginMemberDto;
-import com.kkoch.user.api.controller.member.response.LoginResponse;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
