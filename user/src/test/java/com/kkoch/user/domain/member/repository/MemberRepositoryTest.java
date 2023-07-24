@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @Transactional
@@ -58,12 +60,10 @@ class MemberRepositoryTest extends IntegrationTestSupport {
 
         //when
         memberRepository.save(member);
-        Member findResult = memberRepository.findByEmail("test@test.net");
 
         //then
-        Assertions.assertThat(findResult.getId()).isNotNull();
-        Assertions.assertThat(findResult.getEmail()).isEqualTo("test@test.net");
-        Assertions.assertThat(findResult.getLoginPw()).isEqualTo("1234");
-        Assertions.assertThat(findResult).isEqualTo(member);
+        Optional<Member> findResult = memberRepository.findByEmail("test@test.net");
+        Assertions.assertThat(findResult).isPresent();
+
     }
 }

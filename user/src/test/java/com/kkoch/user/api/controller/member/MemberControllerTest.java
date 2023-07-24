@@ -3,6 +3,8 @@ package com.kkoch.user.api.controller.member;
 import com.kkoch.user.ControllerTestSupport;
 import com.kkoch.user.api.controller.member.request.JoinMemberRequest;
 import com.kkoch.user.api.service.member.MemberService;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -18,6 +20,8 @@ public class MemberControllerTest extends ControllerTestSupport {
 
     @MockBean
     private MemberService memberService;
+
+    @DisplayName("회원가입 컨트롤러 테스트")
     @Test
     @WithMockUser
     void joinMember() throws Exception {

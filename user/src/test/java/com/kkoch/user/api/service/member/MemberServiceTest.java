@@ -5,6 +5,7 @@ import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +21,7 @@ public class MemberServiceTest extends IntegrationTestSupport {
     @Autowired
     MemberRepository memberRepository;
 
+    @DisplayName("회원가입 서비스 테스트")
     @Test
     public void join() throws Exception {
         //given
