@@ -4,7 +4,6 @@ import com.kkoch.user.domain.member.Member;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
@@ -21,23 +20,24 @@ public class JoinMemberDto {
     private boolean active;
 
     @Builder
-    private JoinMemberDto(@NonNull String email, @NonNull String loginPw, @NonNull String name, @NonNull String tel, @NonNull String businessNumber, MultipartFile file, int point, @NonNull boolean active) {
+    private JoinMemberDto(String email, String loginPw, String name, String tel, String businessNumber, MultipartFile file, int point, boolean active) {
         this.email = email;
         this.loginPw = loginPw;
         this.name = name;
         this.tel = tel;
         this.businessNumber = businessNumber;
+        this.file = file;
         this.point = point;
         this.active = active;
     }
 
     public Member toEntity() {
         return Member.builder()
-                .email(email)
-                .loginPw(loginPw)
-                .name(name)
-                .tel(tel)
-                .businessNumber(businessNumber)
+                .email(this.email)
+                .loginPw(this.loginPw)
+                .name(this.name)
+                .tel(this.tel)
+                .businessNumber(this.businessNumber)
                 .point(0)
                 .active(true)
                 .build();
