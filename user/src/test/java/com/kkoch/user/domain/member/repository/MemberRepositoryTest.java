@@ -44,7 +44,6 @@ class MemberRepositoryTest extends IntegrationTestSupport {
     @DisplayName("회원이 존재하는지 테스트")
     @Test
     void checkDuplication() throws Exception {
-
         //given
         Member member = Member.builder()
                 .email("test@test.net")

@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @Transactional
 public class MemberServiceTest extends IntegrationTestSupport {
 
