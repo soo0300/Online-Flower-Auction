@@ -1,5 +1,6 @@
 package com.kkoch.admin.api.service.auction;
 
+import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.auction.Auction;
@@ -15,7 +16,7 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
 
-    public Long addAuction(Long adminId, AddAuctionDto dto) {
+    public AuctionTitleResponse addAuction(Long adminId, AddAuctionDto dto) {
         int code = dto.getCode();
 
         if (code < 0 || code > 4) {
@@ -26,7 +27,12 @@ public class AuctionService {
 
         Auction auction = Auction.toEntity(dto.getCode(), dto.getStartTime(), admin);
 
-        return auctionRepository.save(auction).getId();
+        Auction savedAuction = auctionRepository.save(auction);
+
+        return AuctionTitleResponse.builder()
+                .auctionId(savedAuction.getId())
+                .title(savedAuction.getTitle())
+                .build();
     }
 
 
