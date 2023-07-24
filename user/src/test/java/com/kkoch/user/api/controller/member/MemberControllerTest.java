@@ -21,7 +21,7 @@ class MemberControllerTest extends ControllerTestSupport {
     @MockBean
     private MemberService memberService;
 
-    @DisplayName("회원가입 컨트롤러 테스트")
+    @DisplayName("회원정보를 입력 받아 회원 가입 성공")
     @Test
     @WithMockUser
     void joinMember() throws Exception {

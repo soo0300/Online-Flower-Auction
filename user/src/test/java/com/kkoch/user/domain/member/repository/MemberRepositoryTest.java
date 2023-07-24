@@ -19,7 +19,7 @@ class MemberRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private MemberRepository memberRepository;
 
-    @DisplayName("회원 저장 테스트")
+    @DisplayName("회원 entity를 저장한다.")
     @Test
     void addMember() throws Exception {
 
@@ -44,7 +44,7 @@ class MemberRepositoryTest extends IntegrationTestSupport {
 
     }
 
-    @DisplayName("회원이 존재하는지 테스트")
+    @DisplayName("회원가입 시 중복된 회원이 존재한다면 예외가 발생한다.")
     @Test
     void checkDuplication() throws Exception {
         //given

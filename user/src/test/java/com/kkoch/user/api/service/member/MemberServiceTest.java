@@ -21,7 +21,7 @@ class MemberServiceTest extends IntegrationTestSupport {
     @Autowired
     MemberRepository memberRepository;
 
-    @DisplayName("회원가입 서비스 테스트")
+    @DisplayName("회원 정보를 입력 받아 회원 가입 성공")
     @Test
     void join() throws Exception {
         //given
