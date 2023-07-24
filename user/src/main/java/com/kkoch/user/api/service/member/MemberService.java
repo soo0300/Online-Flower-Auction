@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+
     public Long join(JoinMemberDto dto) {
 
         Member member = dto.toEntity();

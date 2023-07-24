@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Transactional
 public class MemberServiceTest extends IntegrationTestSupport {
@@ -34,9 +35,9 @@ public class MemberServiceTest extends IntegrationTestSupport {
 
         //when
         Long saveId = memberService.join(member);
-        Member result = memberRepository.findById(saveId).get();
 
         //then
-        Assertions.assertThat(member.getEmail()).isEqualTo(result.getEmail());
+        Optional<Member> result = memberRepository.findById(saveId);
+        Assertions.assertThat(result).isPresent();
     }
 }

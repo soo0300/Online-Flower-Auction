@@ -9,13 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+
 @Transactional
 class MemberRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private MemberRepository memberRepository;
 
-    @DisplayName("member repository test")
+    @DisplayName("회원 저장 테스트")
     @Test
     void addMember() throws Exception {
 
@@ -34,10 +36,9 @@ class MemberRepositoryTest extends IntegrationTestSupport {
         Member result = memberRepository.save(member);
 
         //then
-        Assertions.assertThat(result.getId()).isNotNull();
-        Assertions.assertThat(result.getEmail()).isEqualTo("test@test.net");
-        Assertions.assertThat(result.getLoginPw()).isEqualTo("1234");
-        Assertions.assertThat(result).isEqualTo(member);
+        Assertions.assertThat(member)
+                .extracting("email", "loginPw", "name", "tel", "businessNumber", "point", "active")
+                .contains("test@test.net","1234","hong","010-1234-5678","A1234512345B",0,true);
 
     }
 

@@ -29,10 +29,10 @@ public class MemberController {
     //회원가입
     @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
-    public ApiResponse<Long> joinMember(@Valid @RequestBody JoinMemberRequest request) {
+    public ApiResponse<Long> joinMember(@Valid JoinMemberRequest request) {
 
         Long memberId = memberService.join(request.toJoinMemberDto());
-        log.debug("memberId = {}",memberId);
+        log.debug("memberId = {}", memberId);
         return ApiResponse.ok(memberId);
 
     }

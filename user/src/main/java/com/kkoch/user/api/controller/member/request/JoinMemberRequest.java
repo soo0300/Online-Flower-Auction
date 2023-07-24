@@ -7,24 +7,26 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
 public class JoinMemberRequest {
 
-    @NonNull
+    @NotBlank
     private String email;
-    @NonNull
+    @NotBlank
     private String loginPw;
-    @NonNull
+    @NotBlank
     private String name;
-    @NonNull
+    @NotBlank
     private String tel;
-    @NonNull
+    @NotBlank
     private String businessNumber;
     private MultipartFile file;
 
     @Builder
-    public JoinMemberRequest(String email, String loginPw, String name, String tel, String businessNumber, MultipartFile file) {
+    private JoinMemberRequest(String email, String loginPw, String name, String tel, String businessNumber, MultipartFile file) {
         this.email = email;
         this.loginPw = loginPw;
         this.name = name;
