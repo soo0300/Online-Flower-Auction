@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
@@ -26,23 +25,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity
+@Configuration
 public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
-
     // h2-console/ 하위 모든 요청과 파비콘은 모두 무시하는것으로 설정
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().antMatchers("/h2-console/**"
-                , "/favicon.ico"
-                , "/error"
-                , "swagger-resources/**"
-                , "/swagger-ui.html"
-                , "/swagger-ui/index.html"
-                , "/swagger/**"
+                ,"/favicon.ico"
+                ,"/error"
+                ,"swagger-resources/**"
+                ,"/swagger-ui.html"
+                ,"/swagger-ui/index.html"
+                ,"/swagger/**"
         );
     }
 
