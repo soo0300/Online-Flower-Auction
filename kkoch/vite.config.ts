@@ -5,10 +5,10 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-
-  // 파일 경로를 해석하는 방법 변경하기 위해 사용
-  // ../../../ 와 같은 폴더 경로 축약
-  resolve:  {
+  resolve: {
+    // @ => src/ 하위 폴더경로로 잡음
     alias: [{ find: "@", replacement: path.resolve(__dirname, "src")}]
-  }
+  },
+  
+
 })
