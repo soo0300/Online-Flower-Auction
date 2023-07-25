@@ -22,16 +22,14 @@ public class JoinMemberRequest {
     private String tel;
     @NotBlank
     private String businessNumber;
-    private MultipartFile file;
 
     @Builder
-    private JoinMemberRequest(String email, String loginPw, String name, String tel, String businessNumber, MultipartFile file) {
+    private JoinMemberRequest(String email, String loginPw, String name, String tel, String businessNumber) {
         this.email = email;
         this.loginPw = loginPw;
         this.name = name;
         this.tel = tel;
         this.businessNumber = businessNumber;
-        this.file = file;
     }
 
     public JoinMemberDto toJoinMemberDto() {
@@ -41,7 +39,6 @@ public class JoinMemberRequest {
                 .name(this.name)
                 .tel(this.tel)
                 .businessNumber(this.businessNumber)
-                .file(this.file)
                 .point(0)
                 .active(true)
                 .build();

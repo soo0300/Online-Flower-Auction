@@ -15,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-
 @Transactional
 class MemberServiceTest extends IntegrationTestSupport {
 
@@ -40,7 +39,7 @@ class MemberServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        Long saveId = memberService.join(member);
+        Long saveId = memberService.join(member, null);
 
         //then
         Optional<Member> result = memberRepository.findById(saveId);
@@ -92,7 +91,7 @@ class MemberServiceTest extends IntegrationTestSupport {
                 .active(true)
                 .build();
 
-        return memberService.join(member);
+        return memberService.join(member, null);
     }
 
     private LoginMemberDto createLoginMemberDto(String email, String loginPw) {

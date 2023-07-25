@@ -9,6 +9,7 @@ import com.kkoch.user.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
-    public Long join(JoinMemberDto dto) {
+    public Long join(JoinMemberDto dto, MultipartFile file) {
 
         Member member = dto.toEntity();
 
