@@ -26,7 +26,7 @@ public class Trade extends TimeBaseEntity {
     private int totalPrice;
 
     @Column(nullable = false)
-    private LocalDateTime tradeDate;
+    private LocalDateTime tradeTime;
 
     @Column(nullable = false)
     private boolean pickupStatus;
@@ -40,10 +40,9 @@ public class Trade extends TimeBaseEntity {
     private List<AuctionArticle> articles = new ArrayList<>();
 
     @Builder
-    private Trade(Long id, int totalPrice, LocalDateTime tradeDate, boolean pickupStatus, boolean active, Long memberId, List<AuctionArticle> articles) {
-        this.id = id;
+    private Trade(int totalPrice, LocalDateTime tradeTime, boolean pickupStatus, boolean active, Long memberId, List<AuctionArticle> articles) {
         this.totalPrice = totalPrice;
-        this.tradeDate = tradeDate;
+        this.tradeTime = tradeTime;
         this.pickupStatus = pickupStatus;
         this.active = active;
         this.memberId = memberId;
@@ -54,7 +53,7 @@ public class Trade extends TimeBaseEntity {
     public static Trade createTrade(int totalPrice, Long memberId, List<AuctionArticle> auctionArticles) {
         Trade trade = Trade.builder()
                 .totalPrice(totalPrice)
-                .tradeDate(LocalDateTime.now())
+                .tradeTime(LocalDateTime.now())
                 .pickupStatus(false)
                 .active(true)
                 .memberId(memberId)
