@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,10 +28,21 @@ public class TradeService {
 
         int totalPrice = getTotalPrice(dto);
 
-        Trade trade = Trade.createTrade(totalPrice, memberId, auctionArticles);
-        Trade savedTrade = tradeRepository.save(trade);
+        Trade savedTrade = saveTrade(memberId, auctionArticles, totalPrice);
 
         return savedTrade.getId();
+    }
+
+    public Long pickup(Long tradeId) {
+        Trade trade = getTradeEntity(tradeId);
+        trade.pickup();
+        return trade.getId();
+    }
+
+    public Long remove(Long tradeId) {
+        Trade trade = getTradeEntity(tradeId);
+        trade.remove();
+        return trade.getId();
     }
 
     private List<AuctionArticle> getAuctionArticles(List<AddTradeDto> dto) {
@@ -55,5 +67,15 @@ public class TradeService {
         return dto.stream()
                 .mapToInt(AddTradeDto::getBidPrice)
                 .sum();
+    }
+
+    private Trade saveTrade(Long memberId, List<AuctionArticle> auctionArticles, int totalPrice) {
+        Trade trade = Trade.createTrade(totalPrice, memberId, auctionArticles);
+        return tradeRepository.save(trade);
+    }
+
+    private Trade getTradeEntity(Long tradeId) {
+        return tradeRepository.findById(tradeId)
+            .orElseThrow(NoSuchElementException::new);
     }
 }

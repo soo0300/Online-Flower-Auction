@@ -11,6 +11,7 @@ import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(controllers = {TradeController.class})
 class TradeControllerTest extends ControllerTestSupport {
 
     @MockBean
@@ -88,12 +90,12 @@ class TradeControllerTest extends ControllerTestSupport {
 
     @DisplayName("회원은 본인의 낙찰 내역을 상세조회할 수 있다.")
     @Test
-    void test() throws Exception {
+    void getTrade() throws Exception {
         //given
         TradeDetailResponse response = TradeDetailResponse.builder()
             .totalPrice(10000)
             .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
-            .status(false)
+            .pickupStatus(false)
             .build();
 
         BDDMockito.given(tradeQueryService.getTrade(anyLong()))
@@ -109,7 +111,64 @@ class TradeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.status").value("OK"))
             .andExpect(jsonPath("$.message").value("SUCCESS"))
             .andExpect(jsonPath("$.data.totalPrice").value(10000))
-            .andExpect(jsonPath("$.data.status").value(false));
+            .andExpect(jsonPath("$.data.pickupStatus").value(false));
+    }
+
+    @DisplayName("회원이 이미 픽업한 상품이면 400 에러를 발생시킨다.")
+    @Test
+    void pickupWithException() throws Exception {
+        //given
+        BDDMockito.given(tradeService.pickup(anyLong()))
+                .willThrow(new IllegalArgumentException("이미 픽업한 상품입니다."));
+
+        //when //then
+        mockMvc.perform(
+                        patch("/admin-service/trades/{tradeId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("이미 픽업한 상품입니다."))
+                .andExpect(jsonPath("$.data").doesNotExist());
+    }
+
+    @DisplayName("회원은 본인이 낙찰받은 경매품을 픽업할 수 있다.")
+    @Test
+    void pickup() throws Exception {
+        //given
+        BDDMockito.given(tradeService.pickup(anyLong()))
+                .willReturn(1L);
+
+        //when //then
+        mockMvc.perform(
+                        patch("/admin-service/trades/{tradeId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isNumber());
+    }
+
+    @DisplayName("회원은 본인의 낙찰 내역을 삭제할 수 있다.")
+    @Test
+    void removeTrade() throws Exception {
+        //given
+        BDDMockito.given(tradeService.remove(anyLong()))
+                .willReturn(1L);
+
+        //when //then
+        mockMvc.perform(
+                delete("/admin-service/trades/{tradeId}", 1L)
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("낙찰 내역이 삭제되었습니다."))
+                .andExpect(jsonPath("$.data").isNumber());
 
     }
 

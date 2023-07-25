@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,9 +37,7 @@ public class TradeController {
     @ApiOperation(value = "낙찰 내역 등록")
     @PostMapping
     public ApiResponse<Long> addTrade(@Valid @RequestBody AddTradeRequest request) {
-        List<AddTradeDto> dto = request.getArticles().stream()
-                .map(AuctionArticleRequest::toAddTradeDto)
-                .collect(Collectors.toList());
+        List<AddTradeDto> dto = toAddTradeDto(request);
 
         Long tradeId = tradeService.addTrade(request.getMemberId(), dto);
         log.debug("tradeId={}", tradeId);
@@ -67,17 +64,23 @@ public class TradeController {
         return ApiResponse.ok(response);
     }
 
-    //낙찰 내역 수정 - 픽업여부
     @ApiOperation(value = "낙찰 픽업여부 변경")
     @PatchMapping("/{tradeId}")
-    public ApiResponse<?> pickup(@PathVariable Long tradeId) {
-        return ApiResponse.ok(null);
+    public ApiResponse<Long> pickup(@PathVariable Long tradeId) {
+        Long pickupTradeId = tradeService.pickup(tradeId);
+        return ApiResponse.ok(pickupTradeId);
     }
 
-    //낙찰 내역 삭제
     @ApiOperation(value = "낙찰 내역 삭제")
     @DeleteMapping("/{tradeId}")
-    public ApiResponse<?> removeTrade(@PathVariable String tradeId) {
-        return ApiResponse.of(MOVED_PERMANENTLY, null, null);
+    public ApiResponse<Long> removeTrade(@PathVariable Long tradeId) {
+        Long removedId = tradeService.remove(tradeId);
+        return ApiResponse.of(MOVED_PERMANENTLY, "낙찰 내역이 삭제되었습니다.", removedId);
+    }
+
+    private static List<AddTradeDto> toAddTradeDto(AddTradeRequest request) {
+        return request.getArticles().stream()
+            .map(AuctionArticleRequest::toAddTradeDto)
+            .collect(Collectors.toList());
     }
 }

@@ -12,14 +12,14 @@ public class TradeDetailResponse {
 
     private int totalPrice;
     private String tradeTime;
-    private boolean status;
+    private boolean pickupStatus;
     private List<AuctionArticleResponse> auctionArticles;
 
     @Builder
-    public TradeDetailResponse(int totalPrice, LocalDateTime tradeTime, boolean status) {
+    public TradeDetailResponse(int totalPrice, LocalDateTime tradeTime, boolean pickupStatus) {
         this.totalPrice = totalPrice;
         this.tradeTime = tradeTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
-        this.status = status;
+        this.pickupStatus = pickupStatus;
     }
 
     public void insertAuctionArticles(List<AuctionArticleResponse> auctionArticles) {

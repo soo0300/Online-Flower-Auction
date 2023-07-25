@@ -32,7 +32,7 @@ public class TradeQueryRepository {
                 .where(
                         trade.memberId.eq(memberId),
                         trade.active.isTrue(),
-                        trade.tradeDate.between(cond.getStartDateTime(), cond.getEndDateTime())
+                        trade.tradeTime.between(cond.getStartDateTime(), cond.getEndDateTime())
                 )
                 .orderBy(trade.createdDate.desc())
                 .limit(pageable.getPageSize())
@@ -47,7 +47,7 @@ public class TradeQueryRepository {
                 .select(Projections.constructor(TradeResponse.class,
                         trade.id,
                         trade.totalPrice,
-                        trade.tradeDate,
+                        trade.tradeTime,
                         trade.pickupStatus,
                         trade.articles.size()
                 ))
@@ -64,7 +64,7 @@ public class TradeQueryRepository {
                 .where(
                         trade.memberId.eq(memberId),
                         trade.active.isTrue(),
-                        trade.tradeDate.between(cond.getStartDateTime(), cond.getEndDateTime())
+                        trade.tradeTime.between(cond.getStartDateTime(), cond.getEndDateTime())
                 )
                 .fetch()
                 .size();
@@ -74,7 +74,7 @@ public class TradeQueryRepository {
         return queryFactory
                 .select(Projections.constructor(TradeDetailResponse.class,
                         trade.totalPrice,
-                        trade.tradeDate,
+                        trade.tradeTime,
                         trade.pickupStatus
                 ))
                 .from(trade)

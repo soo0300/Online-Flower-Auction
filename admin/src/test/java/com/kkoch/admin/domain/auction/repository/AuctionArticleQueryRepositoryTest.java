@@ -90,7 +90,7 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
     private Trade createTrade() {
         Trade trade = Trade.builder()
                 .totalPrice(9000)
-                .tradeDate(LocalDate.of(2023, 7, 11).atStartOfDay())
+                .tradeTime(LocalDate.of(2023, 7, 11).atStartOfDay())
                 .pickupStatus(false)
                 .active(true)
                 .memberId(1L)
