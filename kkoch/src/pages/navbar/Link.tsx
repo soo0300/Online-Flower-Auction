@@ -1,4 +1,4 @@
-import { SelectedPage } from "@/shared/types";
+import { SelectedPage } from "@/components/types";
 import AnchorLink from "react-anchor-link-smooth-scroll"
 
 type Props = {

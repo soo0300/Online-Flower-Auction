@@ -1,7 +1,7 @@
-import Navbar from "@/scenes/navbar";
-import HomeAuction from "@/scenes/mainPages/HomeAuction";
-import HomeFlowers from "@/scenes/mainPages/HomeFlowers";
-import TodayFlower from "@/scenes/mainPages/TodayFlower";
+import Navbar from "@/pages/navbar";
+import HomeAuction from "@/pages/mainPages/HomeAuction";
+import HomeFlowers from "@/pages/mainPages/HomeFlowers";
+import TodayFlower from "@/pages/mainPages/TodayFlower";
 
 function App() {
   return (
