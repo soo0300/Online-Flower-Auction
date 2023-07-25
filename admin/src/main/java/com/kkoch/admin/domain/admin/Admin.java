@@ -45,4 +45,8 @@ public class Admin extends TimeBaseEntity {
         this.position = position;
         this.active = active;
     }
+
+    public static Admin toEntity(Long adminId) {
+        return null;
+    }
 }
