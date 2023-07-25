@@ -21,7 +21,7 @@ public class AddAdminDto {
 
 
     @Builder
-    public AddAdminDto(String loginId, String loginPw, String name, String tel, String position, boolean active) {
+    public AddAdminDto(String loginId, String loginPw, String name, String tel, String position) {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.name = name;

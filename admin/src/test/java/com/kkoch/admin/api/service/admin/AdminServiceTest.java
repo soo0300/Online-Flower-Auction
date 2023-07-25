@@ -31,7 +31,6 @@ class AdminServiceTest extends IntegrationTestSupport {
                 .tel("010-1234-5678")
                 .name("kim")
                 .position("경매")
-                .active(true)
                 .build();
 
         // when
