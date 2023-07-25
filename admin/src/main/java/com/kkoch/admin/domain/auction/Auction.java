@@ -89,4 +89,10 @@ public class Auction extends TimeBaseEntity {
     public void changeStatus(Status status) {
         this.status = status;
     }
+
+    public void changeAuction(int code, LocalDateTime startTime, Admin admin) {
+        this.code = code;
+        this.startTime = startTime;
+        this.admin = admin;
+    }
 }
