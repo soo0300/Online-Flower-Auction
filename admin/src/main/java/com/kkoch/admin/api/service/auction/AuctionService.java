@@ -23,7 +23,24 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
 
     public AuctionTitleResponse setAuction(Long adminId, SetAuctionDto dto) {
-        return null;
+        int code = dto.getCode();
+
+        if (betweenOneToFour(code)) {
+            throw new IllegalArgumentException("구분코드 에러");
+        }
+
+        Admin admin = Admin.toEntity(adminId);
+
+        Optional<Auction> findAuction = auctionRepository.findById(dto.getAuctionId());
+        if (findAuction.isEmpty()) {
+            throw new NoSuchElementException("존재하지 않는 경매 일정");
+        }
+
+        Auction auction = findAuction.get();
+
+        auction.changeAuction(dto.getCode(), dto.getStartTime(), admin);
+
+        return AuctionTitleResponse.of(auction);
     }
 
     public AuctionTitleResponse setStatus(SetAuctionStatusDto dto) {
