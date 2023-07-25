@@ -59,15 +59,14 @@ public class Auction extends TimeBaseEntity {
     }
 
     public static Auction toEntity(int code, LocalDateTime startTime, Admin admin) {
-        Auction auction = Auction.builder()
+
+        return Auction.builder()
                 .code(code)
                 .startTime(startTime)
                 .active(true)
                 .status(READY)
                 .admin(admin)
                 .build();
-
-        return auction;
     }
 
     // 비지니스 로직
@@ -83,6 +82,16 @@ public class Auction extends TimeBaseEntity {
             type = "춘화";
         }
 
-        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT) + " " + type + " " + this.status.getText();
+        return this.startTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)) + " " + type + " " + this.status.getText();
+    }
+
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
+
+    public void changeAuction(int code, LocalDateTime startTime, Admin admin) {
+        this.code = code;
+        this.startTime = startTime;
+        this.admin = admin;
     }
 }
