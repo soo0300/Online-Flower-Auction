@@ -46,7 +46,13 @@ public class Admin extends TimeBaseEntity {
         this.active = active;
     }
 
-    public static Admin toEntity(Long adminId) {
-        return null;
+    //연관관계 편의 메서드
+    public static Admin toEntity(Long id) {
+        Admin admin = Admin
+                .builder()
+                .build();
+        admin.id = id;
+        return admin;
     }
+
 }
