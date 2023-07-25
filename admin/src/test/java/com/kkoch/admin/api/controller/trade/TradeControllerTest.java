@@ -95,7 +95,7 @@ class TradeControllerTest extends ControllerTestSupport {
         TradeDetailResponse response = TradeDetailResponse.builder()
             .totalPrice(10000)
             .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
-            .status(false)
+            .pickupStatus(false)
             .build();
 
         BDDMockito.given(tradeQueryService.getTrade(anyLong()))
@@ -111,7 +111,7 @@ class TradeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.status").value("OK"))
             .andExpect(jsonPath("$.message").value("SUCCESS"))
             .andExpect(jsonPath("$.data.totalPrice").value(10000))
-            .andExpect(jsonPath("$.data.status").value(false));
+            .andExpect(jsonPath("$.data.pickupStatus").value(false));
     }
 
     @DisplayName("회원이 이미 픽업한 상품이면 400 에러를 발생시킨다.")

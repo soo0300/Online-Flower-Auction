@@ -86,7 +86,7 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(response)
-                .extracting("totalPrice", "tradeTime", "status")
+                .extracting("totalPrice", "tradeTime", "pickupStatus")
                 .containsExactlyInAnyOrder(10_000, tradeDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm")), false);
     }
 
