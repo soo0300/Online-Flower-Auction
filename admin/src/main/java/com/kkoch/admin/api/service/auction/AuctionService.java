@@ -3,7 +3,6 @@ package com.kkoch.admin.api.service.auction;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
-import com.kkoch.admin.api.service.auction.dto.SetAuctionStatusDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.auction.Auction;
 import com.kkoch.admin.domain.auction.Status;
@@ -40,9 +39,7 @@ public class AuctionService {
         return AuctionTitleResponse.of(auction);
     }
 
-    public AuctionTitleResponse setStatus(SetAuctionStatusDto dto) {
-        Long auctionId = dto.getAuctionId();
-        Status status = dto.getStatus();
+    public AuctionTitleResponse setStatus(Long auctionId, Status status) {
 
         Optional<Auction> findAuction = auctionRepository.findById(auctionId);
         if (findAuction.isEmpty()) {

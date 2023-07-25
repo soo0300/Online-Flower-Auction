@@ -8,7 +8,6 @@ import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.AuctionService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
-import com.kkoch.admin.api.service.auction.dto.SetAuctionStatusDto;
 import com.kkoch.admin.domain.auction.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,9 +44,7 @@ public class AuctionController {
             @PathVariable Status status,
             @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
 
-        SetAuctionStatusDto dto = toSetAuctionStatusDto(auctionId, status);
-
-        AuctionTitleResponse response = auctionService.setStatus(dto);
+        AuctionTitleResponse response = auctionService.setStatus(auctionId, status);
 
         log.debug("[경매 일정 상태 변경] 경매방 제목 = {}", response.getTitle());
         return ApiResponse.ok(response);
@@ -71,12 +68,5 @@ public class AuctionController {
         if (!startTime.isAfter(LocalDateTime.now().plusHours(1))) {
             throw new IllegalArgumentException("경매 시간 입력 오류");
         }
-    }
-
-    private SetAuctionStatusDto toSetAuctionStatusDto(Long auctionId, Status status) {
-        return SetAuctionStatusDto.builder()
-                .status(status)
-                .auctionId(auctionId)
-                .build();
     }
 }
