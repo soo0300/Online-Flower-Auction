@@ -36,10 +36,7 @@ class AuctionControllerTest extends ControllerTestSupport {
     @Test
     void setAuctionTimeError() throws Exception {
         //given
-        SetAuctionRequest request = SetAuctionRequest.builder()
-                .startTime(LocalDateTime.now().plusMinutes(30))
-                .code(1)
-                .build();
+        SetAuctionRequest request = getSetAuctionRequest(LocalDateTime.now().plusMinutes(2), 2);
         MockHttpSession session = getLoginAdminSession();
 
         //when //then
@@ -57,18 +54,16 @@ class AuctionControllerTest extends ControllerTestSupport {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
     }
 
+
     @DisplayName("[경매 일정 수정] 구분코드가 1~4 사이의 정수가 아닐 시 오류가 발생한다.")
     @Test
     void setAuctionCodeError() throws Exception {
         //given
-        SetAuctionRequest request = SetAuctionRequest.builder()
-                .startTime(LocalDateTime.now().plusHours(2))
-                .code(-5)
-                .build();
+        SetAuctionRequest request = getSetAuctionRequest(LocalDateTime.now().plusHours(2), -5);
         MockHttpSession session = getLoginAdminSession();
 
         //stubbing 작업
-        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
+        BDDMockito.given(auctionService.setAuction(anyLong(), anyLong(), any(SetAuctionDto.class)))
                 .willThrow(new IllegalArgumentException("구분코드 에러"));
 
         //when //then
@@ -90,14 +85,11 @@ class AuctionControllerTest extends ControllerTestSupport {
     @Test
     void setAuction() throws Exception {
         //given
-        SetAuctionRequest request = SetAuctionRequest.builder()
-                .startTime(LocalDateTime.now().plusHours(2))
-                .code(2)
-                .build();
+        SetAuctionRequest request = getSetAuctionRequest(LocalDateTime.now().plusHours(2), 2);
         MockHttpSession session = getLoginAdminSession();
 
         //stubbing 작업
-        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
+        BDDMockito.given(auctionService.setAuction(anyLong(), anyLong(), any(SetAuctionDto.class)))
                 .willReturn(AuctionTitleResponse.builder()
                         .auctionId(1L)
                         .title("title")
@@ -198,7 +190,7 @@ class AuctionControllerTest extends ControllerTestSupport {
 
     }
 
-    private static MockHttpSession getLoginAdminSession() {
+    private MockHttpSession getLoginAdminSession() {
         MockHttpSession session = new MockHttpSession();
         LoginAdmin loginAdmin = LoginAdmin.builder()
                 .id(1L)
@@ -206,5 +198,12 @@ class AuctionControllerTest extends ControllerTestSupport {
                 .build();
         session.setAttribute("loginAdmin", loginAdmin);
         return session;
+    }
+
+    private SetAuctionRequest getSetAuctionRequest(LocalDateTime startTime, int code) {
+        return SetAuctionRequest.builder()
+                .startTime(startTime)
+                .code(code)
+                .build();
     }
 }

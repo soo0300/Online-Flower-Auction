@@ -18,15 +18,22 @@ public class SetAuctionRequest {
     private Integer code;
 
     @Builder
-    public SetAuctionRequest(LocalDateTime startTime, Integer code) {
+    private SetAuctionRequest(LocalDateTime startTime, Integer code) {
         this.startTime = startTime;
         this.code = code;
     }
 
-    public SetAuctionDto toAddAuctionDto() {
+    public SetAuctionDto toSetAuctionDto() {
         return SetAuctionDto.builder()
                 .code(this.code)
                 .startTime(this.startTime)
                 .build();
     }
+
+//    public SetAuctionDto toSetAuctionDto(SetAuctionRequest request, LocalDateTime startTime) {
+//        return SetAuctionDto.builder()
+//                .code(request.getCode())
+//                .startTime(startTime)
+//                .build();
+//    }
 }

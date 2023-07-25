@@ -41,10 +41,9 @@ class AuctionServiceTest extends IntegrationTestSupport {
         SetAuctionDto dto = SetAuctionDto.builder()
                 .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
                 .code(2)
-                .auctionId(-1L)
                 .build();
         //when //then
-        Assertions.assertThatThrownBy(() -> auctionService.setAuction(admin.getId(), dto))
+        Assertions.assertThatThrownBy(() -> auctionService.setAuction(5L, admin.getId(), dto))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("존재하지 않는 경매 일정");
     }
@@ -58,10 +57,9 @@ class AuctionServiceTest extends IntegrationTestSupport {
         SetAuctionDto dto = SetAuctionDto.builder()
                 .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
                 .code(-2)
-                .auctionId(auction.getId())
                 .build();
         //when //then
-        Assertions.assertThatThrownBy(() -> auctionService.setAuction(admin.getId(), dto))
+        Assertions.assertThatThrownBy(() -> auctionService.setAuction(auction.getId(), admin.getId(), dto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("구분코드 에러");
     }
@@ -75,11 +73,10 @@ class AuctionServiceTest extends IntegrationTestSupport {
         SetAuctionDto dto = SetAuctionDto.builder()
                 .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
                 .code(4)
-                .auctionId(auction.getId())
                 .build();
 
         //when
-        AuctionTitleResponse response = auctionService.setAuction(admin.getId(), dto);
+        AuctionTitleResponse response = auctionService.setAuction(auction.getId(), admin.getId(), dto);
 
         //then
         Assertions.assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 춘화 준비 중");

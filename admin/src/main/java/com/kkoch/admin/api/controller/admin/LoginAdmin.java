@@ -12,7 +12,7 @@ public class LoginAdmin {
     private String authority;
 
     @Builder
-    public LoginAdmin(Long id, String authority) {
+    private LoginAdmin(Long id, String authority) {
         this.id = id;
         this.authority = authority;
     }

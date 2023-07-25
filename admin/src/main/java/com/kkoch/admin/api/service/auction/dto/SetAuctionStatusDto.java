@@ -11,7 +11,7 @@ public class SetAuctionStatusDto {
     private Status status;
 
     @Builder
-    public SetAuctionStatusDto(Long auctionId, Status status) {
+    private SetAuctionStatusDto(Long auctionId, Status status) {
         this.auctionId = auctionId;
         this.status = status;
     }

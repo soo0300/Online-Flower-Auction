@@ -29,7 +29,8 @@ public class AuctionController {
     public ApiResponse<AuctionTitleResponse> addAuction(
             @Valid @RequestBody AddAuctionRequest request,
             @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
-        validationTime(request.getStartTime());
+
+        timeValidation(request.getStartTime());
 
         AddAuctionDto dto = request.toAddAuctionDto();
 
@@ -43,6 +44,7 @@ public class AuctionController {
             @PathVariable Long auctionId,
             @PathVariable Status status,
             @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+
         SetAuctionStatusDto dto = toSetAuctionStatusDto(auctionId, status);
 
         AuctionTitleResponse response = auctionService.setStatus(dto);
@@ -57,27 +59,21 @@ public class AuctionController {
             @Valid @RequestBody SetAuctionRequest request,
             @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
 
-        LocalDateTime startTime = validationTime(request.getStartTime());
+        timeValidation(request.getStartTime());
 
-        SetAuctionDto dto = SetAuctionDto.builder()
-                .auctionId(auctionId)
-                .code(request.getCode())
-                .startTime(startTime)
-                .build();
+        SetAuctionDto dto = request.toSetAuctionDto();
 
-        AuctionTitleResponse response = auctionService.setAuction(loginAdmin.getId(), dto);
+        AuctionTitleResponse response = auctionService.setAuction(auctionId, loginAdmin.getId(), dto);
         return ApiResponse.ok(response);
     }
 
-    private static LocalDateTime validationTime(LocalDateTime request) {
-        LocalDateTime startTime = request;
+    private void timeValidation(LocalDateTime startTime) {
         if (!startTime.isAfter(LocalDateTime.now().plusHours(1))) {
             throw new IllegalArgumentException("경매 시간 입력 오류");
         }
-        return startTime;
     }
 
-    private static SetAuctionStatusDto toSetAuctionStatusDto(Long auctionId, Status status) {
+    private SetAuctionStatusDto toSetAuctionStatusDto(Long auctionId, Status status) {
         return SetAuctionStatusDto.builder()
                 .status(status)
                 .auctionId(auctionId)

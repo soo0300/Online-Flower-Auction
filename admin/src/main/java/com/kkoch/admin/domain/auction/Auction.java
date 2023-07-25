@@ -59,15 +59,14 @@ public class Auction extends TimeBaseEntity {
     }
 
     public static Auction toEntity(int code, LocalDateTime startTime, Admin admin) {
-        Auction auction = Auction.builder()
+
+        return Auction.builder()
                 .code(code)
                 .startTime(startTime)
                 .active(true)
                 .status(READY)
                 .admin(admin)
                 .build();
-
-        return auction;
     }
 
     // 비지니스 로직
