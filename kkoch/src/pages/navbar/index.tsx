@@ -1,8 +1,7 @@
 import { useState } from "react"; 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
-// import Link from './Link';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
 // import ActionButton from "@/shared/ActionButton";
 
@@ -14,8 +13,7 @@ const Navbar = () => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
   // const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
 
-  return <BrowserRouter>
-    <nav>
+  return <nav>
     <div
       className={`$${flexBetween} fixed top-0 z-30 w-full py-3 border-b-2 bg-primary-100`}
     >
@@ -28,19 +26,12 @@ const Navbar = () => {
           {isAboveMediumScreens ? // PC화면일때 : 모바일 화면일때 
             (<div className={`${flexBetween} w-full`}>
               <div className={`${flexBetween} gap-8 text-sm`}>
-                <Routes>
-                  {/* <Link to="" page="메인페이지" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/> */}
-                  <Route path="/" ></Route>
-                  <Route path="/auction" ></Route>
-                  <Route path="/flowers"></Route>
-                  <Route path="/customer"></Route>
-                  {/* <Link to="" page="경매" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/>
-                  <Link to="" page="꽃 정보" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/>
-                  <Link to="" page="고객센터" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/> */}
-                </Routes>
+                <Link to="/auction"> 경매</Link>
+                <Link to="/flowers" />
+                <Link to="/customer" />
               </div>
               <div className={`${flexBetween} gap-8`}>
-                <p>로그인</p>
+                <Link to="/login">로그인</Link>
                 <p>회원가입</p>
               </div>
             </div>)
@@ -69,17 +60,12 @@ const Navbar = () => {
 
         {/* 메뉴 목록 */}
         <div className="ml-[33%] flex flex-col gap-10 text-2xl">
+          <Link to="/auction"> 경매</Link>
           
-          {/* <Link page="메인페이지" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/>
-          <Link page="경매" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/>
-          <Link page="꽃 정보" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/>
-          <Link page="고객센터" selectedPage={selectedPage} setSelectedPage={setSelectedPage}/> */}
         </div>
       </div>
     )}
-    </nav>
-  </BrowserRouter>
-  
+  </nav>
 }
 
 export default Navbar
