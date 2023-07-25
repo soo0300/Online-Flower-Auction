@@ -1,6 +1,8 @@
 import Navbar from "@/scenes/navbar";
 import { useState, useEffect } from "react";
 import { SelectedPage } from "./shared/types";
+import Login from "./pages/Login";
+
 
 
 
@@ -30,6 +32,8 @@ function App() {
         isTop = {isTop}  
         selectedPage={selectedPage} setSelectedPage={setSelectedPage} 
       />
+      {/* <LoginPage /> */}
+      <Login />
     </div>
   )
 }
