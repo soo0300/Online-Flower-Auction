@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.kkoch.admin.domain.auction.Status.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 @Transactional
@@ -31,6 +32,33 @@ class AuctionServiceTest extends IntegrationTestSupport {
     private AuctionRepository auctionRepository;
     @Autowired
     private AdminRepository adminRepository;
+
+    @DisplayName("[경매 일정 삭제] 존재하지 않는 경매일정을 삭제할 경우 에러가 발생한다.")
+    @Test
+    void removeAuctionIdError() {
+        //given
+
+        //when //then
+        Assertions.assertThatThrownBy(() -> auctionService.remove(-1L))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("존재하지 않는 경매 일정");
+    }
+
+    @DisplayName("[경매 일정 삭제]")
+    @Test
+    void removeAuction() {
+        //given
+        Admin admin = insertAdmin();
+        Auction auction = insertAuction(admin);
+
+        //when
+        Long auctionId = auctionService.remove(auction.getId());
+
+        // then
+        Optional<Auction> findAuction = auctionRepository.findById(auctionId);
+        assertThat(findAuction).isPresent();
+        assertThat(findAuction.get().isActive()).isFalse();
+    }
 
     @DisplayName("[경매 일정 변경] 존재하지 않는 경매일정을 수정할 경우 에러가 발생한다.")
     @Test
