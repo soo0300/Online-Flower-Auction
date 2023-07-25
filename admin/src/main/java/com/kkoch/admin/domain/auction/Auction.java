@@ -94,4 +94,8 @@ public class Auction extends TimeBaseEntity {
         this.startTime = startTime;
         this.admin = admin;
     }
+
+    public void changeActive() {
+        this.active = false;
+    }
 }
