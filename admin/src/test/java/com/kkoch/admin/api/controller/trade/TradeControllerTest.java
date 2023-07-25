@@ -11,6 +11,7 @@ import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(controllers = {TradeController.class})
 class TradeControllerTest extends ControllerTestSupport {
 
     @MockBean
@@ -93,7 +95,7 @@ class TradeControllerTest extends ControllerTestSupport {
         TradeDetailResponse response = TradeDetailResponse.builder()
             .totalPrice(10000)
             .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
-            .status(false)
+            .pickupStatus(false)
             .build();
 
         BDDMockito.given(tradeQueryService.getTrade(anyLong()))
@@ -109,7 +111,7 @@ class TradeControllerTest extends ControllerTestSupport {
             .andExpect(jsonPath("$.status").value("OK"))
             .andExpect(jsonPath("$.message").value("SUCCESS"))
             .andExpect(jsonPath("$.data.totalPrice").value(10000))
-            .andExpect(jsonPath("$.data.status").value(false));
+            .andExpect(jsonPath("$.data.pickupStatus").value(false));
     }
 
     @DisplayName("회원이 이미 픽업한 상품이면 400 에러를 발생시킨다.")
@@ -124,7 +126,7 @@ class TradeControllerTest extends ControllerTestSupport {
                         patch("/admin-service/trades/{tradeId}", 1L)
                 )
                 .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.message").value("이미 픽업한 상품입니다."))

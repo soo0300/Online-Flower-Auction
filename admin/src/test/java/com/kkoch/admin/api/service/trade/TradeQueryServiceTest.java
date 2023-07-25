@@ -128,7 +128,7 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
         Trade trade = Trade.builder()
                 .memberId(memberId)
                 .totalPrice(totalPrice)
-                .tradeDate(tradeDate)
+                .tradeTime(tradeDate)
                 .pickupStatus(false)
                 .active(active)
                 .build();

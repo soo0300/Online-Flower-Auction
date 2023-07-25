@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -39,6 +41,8 @@ public class Member extends TimeBaseEntity {
     @Column(nullable = false)
     private boolean active;
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Authority> roles = new ArrayList<>();
     @Builder
     private Member(String email, String loginPw, String name, String tel, String businessNumber, int point, boolean active) {
         this.email = email;
@@ -48,5 +52,10 @@ public class Member extends TimeBaseEntity {
         this.businessNumber = businessNumber;
         this.point = point;
         this.active = active;
+
+    }
+    public void setRoles(List<Authority> role) {
+        this.roles = role;
+        role.forEach(o -> o.setMember(this));
     }
 }

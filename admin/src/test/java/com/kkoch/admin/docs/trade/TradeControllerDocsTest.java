@@ -3,13 +3,17 @@ package com.kkoch.admin.docs.trade;
 import com.kkoch.admin.api.controller.trade.TradeController;
 import com.kkoch.admin.api.controller.trade.request.AddTradeRequest;
 import com.kkoch.admin.api.controller.trade.request.AuctionArticleRequest;
+import com.kkoch.admin.api.controller.trade.response.AuctionArticleResponse;
+import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.api.service.trade.TradeQueryService;
 import com.kkoch.admin.api.service.trade.TradeService;
 import com.kkoch.admin.docs.RestDocsSupport;
+import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +22,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
@@ -29,9 +34,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TradeControllerDocsTest extends RestDocsSupport {
@@ -187,7 +192,143 @@ public class TradeControllerDocsTest extends RestDocsSupport {
                         .description("첫번째 페이지이면 true"),
                     fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN)
                         .description("리스트가 비어있는지 여부")
+                )
+            ));
+    }
 
+    @DisplayName("낙찰 내역 상세조회 API")
+    @Test
+    void getTrade() throws Exception {
+        AuctionArticleResponse auctionArticle = createAuctionArticleResponse();
+        TradeDetailResponse response = TradeDetailResponse.builder()
+            .totalPrice(10000)
+            .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
+            .pickupStatus(false)
+            .build();
+        response.insertAuctionArticles(Collections.singletonList(auctionArticle));
+
+        given(tradeQueryService.getTrade(anyLong()))
+            .willReturn(response);
+
+        mockMvc.perform(
+                get("/admin-service/trades/detail/{tradeId}", 1L)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value("200"))
+            .andExpect(jsonPath("$.status").value("OK"))
+            .andExpect(jsonPath("$.message").value("SUCCESS"))
+            .andExpect(jsonPath("$.data.totalPrice").value(10000))
+            .andExpect(jsonPath("$.data.pickupStatus").value(false))
+            .andDo(document("trade-search-detail",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.totalPrice").type(JsonFieldType.NUMBER)
+                        .description("총 낙찰 가격"),
+                    fieldWithPath("data.tradeTime").type(JsonFieldType.STRING)
+                        .description("거래 시간"),
+                    fieldWithPath("data.pickupStatus").type(JsonFieldType.BOOLEAN)
+                        .description("픽업 여부"),
+                    fieldWithPath("data.auctionArticles").type(JsonFieldType.ARRAY)
+                        .description("경매품 정보 리스트"),
+                    fieldWithPath("data.auctionArticles[].code").type(JsonFieldType.STRING)
+                        .description("식물 구분 코드"),
+                    fieldWithPath("data.auctionArticles[].name").type(JsonFieldType.STRING)
+                        .description("식물 품종 명"),
+                    fieldWithPath("data.auctionArticles[].type").type(JsonFieldType.STRING)
+                        .description("식물 품목 명"),
+                    fieldWithPath("data.auctionArticles[].grade").type(JsonFieldType.STRING)
+                        .description("경매품 등급"),
+                    fieldWithPath("data.auctionArticles[].count").type(JsonFieldType.NUMBER)
+                        .description("경매품 단수"),
+                    fieldWithPath("data.auctionArticles[].bidPrice").type(JsonFieldType.NUMBER)
+                        .description("낙찰 가격"),
+                    fieldWithPath("data.auctionArticles[].bidTime").type(JsonFieldType.STRING)
+                        .description("낙찰 시간"),
+                    fieldWithPath("data.auctionArticles[].region").type(JsonFieldType.STRING)
+                        .description("출하 지역")
+                )
+            ));
+
+    }
+
+    private static AuctionArticleResponse createAuctionArticleResponse() {
+        return AuctionArticleResponse.builder()
+            .code("절화")
+            .name("장미(스탠다드)")
+            .type("하젤")
+            .grade(Grade.NONE)
+            .count(10)
+            .bidPrice(10_000)
+            .bidTime(LocalDateTime.of(2023, 7, 10, 11, 30))
+            .region("광주")
+            .build();
+    }
+
+    @DisplayName("경매품을 픽업하는 API")
+    @Test
+    void pickup() throws Exception {
+        given(tradeService.pickup(anyLong()))
+            .willReturn(1L);
+
+        mockMvc.perform(
+                patch("/admin-service/trades/{tradeId}", 1L)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value("200"))
+            .andExpect(jsonPath("$.status").value("OK"))
+            .andExpect(jsonPath("$.message").value("SUCCESS"))
+            .andExpect(jsonPath("$.data").isNumber())
+            .andDo(document("trade-pickup",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.NUMBER)
+                        .description("응답 데이터")
+                )
+            ));
+    }
+
+    @DisplayName("낙찰 내역을 삭제하는 API")
+    @Test
+    void removeTrade() throws Exception {
+        given(tradeService.remove(anyLong()))
+            .willReturn(1L);
+
+        mockMvc.perform(
+                delete("/admin-service/trades/{tradeId}", 1L)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value("301"))
+            .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+            .andExpect(jsonPath("$.message").value("낙찰 내역이 삭제되었습니다."))
+            .andExpect(jsonPath("$.data").isNumber())
+            .andDo(document("trade-remove",
+                preprocessResponse(prettyPrint()),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.NUMBER)
+                        .description("응답 데이터")
                 )
             ));
     }

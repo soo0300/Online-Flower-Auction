@@ -49,8 +49,8 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
         assertThat(responses).hasSize(2)
                 .extracting("tradeDate", "count")
                 .containsExactlyInAnyOrder(
-                        tuple(trade2.getTradeDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0),
-                        tuple(trade4.getTradeDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0)
+                        tuple(trade2.getTradeTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0),
+                        tuple(trade4.getTradeTime().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")), 0)
                 );
     }
 
@@ -86,14 +86,14 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(response)
-                .extracting("totalPrice", "tradeTime", "status")
+                .extracting("totalPrice", "tradeTime", "pickupStatus")
                 .containsExactlyInAnyOrder(10_000, tradeDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm")), false);
     }
 
     private Trade createTrade(LocalDateTime tradeDate, boolean active) {
         Trade trade = Trade.builder()
                 .totalPrice(10_000)
-                .tradeDate(tradeDate)
+                .tradeTime(tradeDate)
                 .pickupStatus(false)
                 .active(active)
                 .memberId(1L)
