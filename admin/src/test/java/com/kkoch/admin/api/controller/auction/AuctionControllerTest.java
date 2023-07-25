@@ -3,12 +3,12 @@ package com.kkoch.admin.api.controller.auction;
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionRequest;
+import com.kkoch.admin.api.controller.auction.request.SetAuctionRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.AuctionService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
+import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionStatusDto;
-import com.kkoch.admin.domain.admin.Admin;
-import com.kkoch.admin.domain.auction.Auction;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 
 import static com.kkoch.admin.domain.auction.Status.CLOSE;
-import static com.kkoch.admin.domain.auction.Status.OPEN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 
@@ -32,6 +31,92 @@ class AuctionControllerTest extends ControllerTestSupport {
 
     @MockBean
     private AuctionService auctionService;
+
+    @DisplayName("[경매 일정 수정] 1시간 이내의 시간으로 설정 시 에러가 발생한다.")
+    @Test
+    void setAuctionTimeError() throws Exception {
+        //given
+        SetAuctionRequest request = SetAuctionRequest.builder()
+                .startTime(LocalDateTime.now().plusMinutes(30))
+                .code(1)
+                .build();
+        MockHttpSession session = getLoginAdminSession();
+
+        //when //then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.patch("/admin-service/auctions/{auctionId}", 1L)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session)
+                )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(400))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("경매 시간 입력 오류"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("[경매 일정 수정] 구분코드가 1~4 사이의 정수가 아닐 시 오류가 발생한다.")
+    @Test
+    void setAuctionCodeError() throws Exception {
+        //given
+        SetAuctionRequest request = SetAuctionRequest.builder()
+                .startTime(LocalDateTime.now().plusHours(2))
+                .code(-5)
+                .build();
+        MockHttpSession session = getLoginAdminSession();
+
+        //stubbing 작업
+        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
+                .willThrow(new IllegalArgumentException("구분코드 에러"));
+
+        //when //then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.patch("/admin-service/auctions/{auctionId}", 1L)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session)
+                )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(400))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("구분코드 에러"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
+    }
+
+    @DisplayName("[경매 일정 수정]")
+    @Test
+    void setAuction() throws Exception {
+        //given
+        SetAuctionRequest request = SetAuctionRequest.builder()
+                .startTime(LocalDateTime.now().plusHours(2))
+                .code(2)
+                .build();
+        MockHttpSession session = getLoginAdminSession();
+
+        //stubbing 작업
+        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
+                .willReturn(AuctionTitleResponse.builder()
+                        .auctionId(1L)
+                        .title("title")
+                        .build());
+
+        //when //then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.patch("/admin-service/auctions/{auctionId}", 1L)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session)
+                )
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("OK"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SUCCESS"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isNotEmpty());
+    }
 
     @DisplayName("[경매 상태 수정]")
     @Test
@@ -79,7 +164,11 @@ class AuctionControllerTest extends ControllerTestSupport {
                                 .session(session)
                 )
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(400))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("경매 시간 입력 오류"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
     }
 
     @Test
