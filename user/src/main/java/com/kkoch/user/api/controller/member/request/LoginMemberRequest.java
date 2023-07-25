@@ -18,7 +18,7 @@ public class LoginMemberRequest {
     private String loginPw;
 
     @Builder
-    public LoginMemberRequest(String email, String loginPw) {
+    private LoginMemberRequest(String email, String loginPw) {
         this.email = email;
         this.loginPw = loginPw;
     }

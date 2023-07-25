@@ -13,7 +13,7 @@ public class LoginMemberDto {
     private String loginPw;
 
     @Builder
-    public LoginMemberDto(String email, String loginPw) {
+    private LoginMemberDto(String email, String loginPw) {
         this.email = email;
         this.loginPw = loginPw;
     }
