@@ -37,4 +37,9 @@ public class AuctionController {
         log.debug("[경매 일정 등록 응답] 경매방 제목 = {}", response.getTitle());
         return ApiResponse.ok(response);
     }
+
+    @PatchMapping
+    public ApiResponse<AuctionTitleResponse> setAuctionStatus() {
+        return null;
+    }
 }
