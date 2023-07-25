@@ -1,6 +1,5 @@
 package com.kkoch.admin.api.service.admin.dto;
 
-
 import com.kkoch.admin.domain.admin.Admin;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +19,6 @@ public class AddAdminDto {
 
     private String position;
 
-    private boolean active;
 
     @Builder
     public AddAdminDto(String loginId, String loginPw, String name, String tel, String position, boolean active) {
@@ -29,7 +27,6 @@ public class AddAdminDto {
         this.name = name;
         this.tel = tel;
         this.position = position;
-        this.active = active;
     }
 
     public Admin toEntity() {
@@ -39,7 +36,8 @@ public class AddAdminDto {
                 .name(this.name)
                 .tel(this.tel)
                 .position(this.position)
-                .active(true)
                 .build();
     }
+
+
 }

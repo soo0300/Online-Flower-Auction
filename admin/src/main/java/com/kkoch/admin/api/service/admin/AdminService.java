@@ -16,7 +16,8 @@ public class AdminService {
 
     public Long addAdmin(AddAdminDto dto) {
         Admin admin = dto.toEntity();
-        adminRepository.save(admin);
-        return admin.getId();
+        Admin savedAdmin = adminRepository.save(admin);
+        return savedAdmin.getId();
     }
+
 }

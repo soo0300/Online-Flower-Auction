@@ -16,16 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
     private final AdminService adminService;
+
     //관계자 등록
-    @PostMapping()
-    public ApiResponse<?> addAdmin(AddAdminRequest request){
-        //controller 에서는 request  받아서 dto로 전달해준다.
-        AddAdminDto dto = request.addAdminDto();
-        Long id = adminService.addAdmin(dto);
-        return ApiResponse.ok(id);
+    @PostMapping
+    public ApiResponse<Long> addAdmin(@RequestParam AddAdminRequest request) {
+        AddAdminDto dto = request.toAddAdminDto();
+        Long adminId = adminService.addAdmin(dto);
+        return ApiResponse.ok(adminId);
 
     }
-
-
 
 }

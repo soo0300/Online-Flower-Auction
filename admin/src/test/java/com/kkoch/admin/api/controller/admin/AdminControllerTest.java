@@ -27,7 +27,7 @@ class AdminControllerTest extends ControllerTestSupport {
                 .loginPw("ssafy1234")
                 .name("soojin")
                 .tel("010-2034-2034")
-                .position("관리")
+                .position("30")
                 .active(true)
                 .build();
         // when
@@ -42,7 +42,6 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isNumber());
-
 
         // then
     }

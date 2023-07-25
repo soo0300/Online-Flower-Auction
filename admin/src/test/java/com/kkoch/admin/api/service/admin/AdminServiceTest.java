@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Transactional
 class AdminServiceTest extends IntegrationTestSupport {
 
@@ -23,21 +21,21 @@ class AdminServiceTest extends IntegrationTestSupport {
     @Autowired
     private AdminRepository adminRepository;
 
-    @DisplayName("관계자 등록하기 성공" )
+    @DisplayName("관계자 더미데이터로 서비스를 통해 관계자 등록 후 리포지토리로 확인하기.")
     @Test
     public void addAdminTest() throws Exception {
         // given
-            AddAdminDto addAdminDto = AddAdminDto.builder()
-                    .loginId("soo")
-                    .loginPw("0300")
-                    .tel("010-1234-5678")
-                    .name("kim")
-                    .position("경매")
-                    .active(true)
-                    .build();
+        AddAdminDto addAdminDto = AddAdminDto.builder()
+                .loginId("soo")
+                .loginPw("0300")
+                .tel("010-1234-5678")
+                .name("kim")
+                .position("경매")
+                .active(true)
+                .build();
 
         // when
-            Long adminId = adminService.addAdmin(addAdminDto);
+        Long adminId = adminService.addAdmin(addAdminDto);
 
         // then
         Optional<Admin> admin = adminRepository.findById(adminId);
