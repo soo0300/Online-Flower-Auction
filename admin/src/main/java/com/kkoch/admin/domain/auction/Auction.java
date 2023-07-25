@@ -95,7 +95,7 @@ public class Auction extends TimeBaseEntity {
         this.admin = admin;
     }
 
-    public void changeActive() {
+    public void remove() {
         this.active = false;
     }
 }
