@@ -62,7 +62,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
 
         //when //then
         AuctionTitleResponse response = auctionService.setStatus(dto);
-        Assertions.assertThat(response.getTitle()).isEqualTo("절화 마감");
+        Assertions.assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 절화 마감");
 
     }
 

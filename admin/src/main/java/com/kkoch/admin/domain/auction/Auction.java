@@ -83,7 +83,7 @@ public class Auction extends TimeBaseEntity {
             type = "춘화";
         }
 
-        return DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT) + " " + type + " " + this.status.getText();
+        return this.startTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)) + " " + type + " " + this.status.getText();
     }
 
     public void changeStatus(Status status) {
