@@ -4,6 +4,7 @@ package com.kkoch.admin.api.service.auction;
 import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
+import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionStatusDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
@@ -32,6 +33,58 @@ class AuctionServiceTest extends IntegrationTestSupport {
     @Autowired
     private AdminRepository adminRepository;
 
+    @DisplayName("[경매 일정 변경] 존재하지 않는 경매일정을 수정할 경우 에러가 발생한다.")
+    @Test
+    void setAuctionIdError() {
+        //given
+        Admin admin = insertAdmin();
+        SetAuctionDto dto = SetAuctionDto.builder()
+                .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
+                .code(2)
+                .auctionId(-1L)
+                .build();
+        //when //then
+        Assertions.assertThatThrownBy(() -> auctionService.setAuction(admin.getId(), dto))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("존재하지 않는 경매 일정");
+    }
+
+    @DisplayName("[경매 일정 변경] 구분코드 에러를 검증한다.")
+    @Test
+    void setAuctionTimeError() {
+        //given
+        Admin admin = insertAdmin();
+        Auction auction = insertAuction(admin);
+        SetAuctionDto dto = SetAuctionDto.builder()
+                .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
+                .code(-2)
+                .auctionId(auction.getId())
+                .build();
+        //when //then
+        Assertions.assertThatThrownBy(() -> auctionService.setAuction(admin.getId(), dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("구분코드 에러");
+    }
+
+    @DisplayName("[경매 일정 변경]")
+    @Test
+    void setAuction() {
+        //given
+        Admin admin = insertAdmin();
+        Auction auction = insertAuction(admin);
+        SetAuctionDto dto = SetAuctionDto.builder()
+                .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
+                .code(4)
+                .auctionId(auction.getId())
+                .build();
+
+        //when
+        AuctionTitleResponse response = auctionService.setAuction(admin.getId(), dto);
+
+        //then
+        Assertions.assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 춘화 준비 중");
+    }
+
     @DisplayName("[경매 상태 수정] 경매상태를 수정할 때 잘못된 pk의 경매일정을 수정하면 에러가 발생한다.")
     @Test
     void setAuctionPKError() {
@@ -50,7 +103,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
 
     @DisplayName("[경매 상태 수정]")
     @Test
-    void setAuction() {
+    void setAuctionStatus() {
         //given
         Admin admin = insertAdmin();
 
