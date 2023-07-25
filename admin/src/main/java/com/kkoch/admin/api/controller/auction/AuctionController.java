@@ -64,6 +64,14 @@ public class AuctionController {
         return ApiResponse.ok(response);
     }
 
+    @DeleteMapping("/{auctionId}")
+    public ApiResponse<?> removeAuction(
+            @PathVariable String auctionId,
+            @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+
+        return null;
+    }
+
     private void timeValidation(LocalDateTime startTime) {
         if (!startTime.isAfter(LocalDateTime.now().plusHours(1))) {
             throw new IllegalArgumentException("경매 시간 입력 오류");
