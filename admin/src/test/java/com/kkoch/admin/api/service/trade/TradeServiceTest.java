@@ -129,7 +129,7 @@ class TradeServiceTest extends IntegrationTestSupport {
     private Trade createTrade(boolean pickupStatus) {
         Trade trade = Trade.builder()
             .totalPrice(10000)
-            .tradeDate(LocalDate.of(2023, 7, 10).atStartOfDay())
+            .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
             .pickupStatus(pickupStatus)
             .active(true)
             .memberId(1L)

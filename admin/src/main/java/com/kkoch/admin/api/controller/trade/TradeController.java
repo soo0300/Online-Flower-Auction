@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,9 +37,7 @@ public class TradeController {
     @ApiOperation(value = "낙찰 내역 등록")
     @PostMapping
     public ApiResponse<Long> addTrade(@Valid @RequestBody AddTradeRequest request) {
-        List<AddTradeDto> dto = request.getArticles().stream()
-                .map(AuctionArticleRequest::toAddTradeDto)
-                .collect(Collectors.toList());
+        List<AddTradeDto> dto = toAddTradeDto(request);
 
         Long tradeId = tradeService.addTrade(request.getMemberId(), dto);
         log.debug("tradeId={}", tradeId);
@@ -70,12 +67,7 @@ public class TradeController {
     @ApiOperation(value = "낙찰 픽업여부 변경")
     @PatchMapping("/{tradeId}")
     public ApiResponse<Long> pickup(@PathVariable Long tradeId) {
-        Long pickupTradeId;
-        try {
-            pickupTradeId = tradeService.pickup(tradeId);
-        } catch (IllegalArgumentException e) {
-            return ApiResponse.of(HttpStatus.BAD_REQUEST, e.getMessage(), null);
-        }
+        Long pickupTradeId = tradeService.pickup(tradeId);
         return ApiResponse.ok(pickupTradeId);
     }
 
@@ -84,5 +76,11 @@ public class TradeController {
     public ApiResponse<Long> removeTrade(@PathVariable Long tradeId) {
         Long removedId = tradeService.remove(tradeId);
         return ApiResponse.of(MOVED_PERMANENTLY, "낙찰 내역이 삭제되었습니다.", removedId);
+    }
+
+    private static List<AddTradeDto> toAddTradeDto(AddTradeRequest request) {
+        return request.getArticles().stream()
+            .map(AuctionArticleRequest::toAddTradeDto)
+            .collect(Collectors.toList());
     }
 }
