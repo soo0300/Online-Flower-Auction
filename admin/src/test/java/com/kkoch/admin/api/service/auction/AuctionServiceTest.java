@@ -5,7 +5,6 @@ import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
-import com.kkoch.admin.api.service.auction.dto.SetAuctionStatusDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import com.kkoch.admin.domain.auction.Auction;
@@ -86,13 +85,9 @@ class AuctionServiceTest extends IntegrationTestSupport {
     @Test
     void setAuctionPKError() {
         //given
-        SetAuctionStatusDto dto = SetAuctionStatusDto.builder()
-                .auctionId(2L)
-                .status(OPEN)
-                .build();
 
         //when //then
-        Assertions.assertThatThrownBy(() -> auctionService.setStatus(dto))
+        Assertions.assertThatThrownBy(() -> auctionService.setStatus(-1L, OPEN))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("잘못된 옥션 PK");
 
@@ -105,14 +100,10 @@ class AuctionServiceTest extends IntegrationTestSupport {
         Admin admin = insertAdmin();
 
         Auction savedAuction = insertAuction(admin);
-        SetAuctionStatusDto dto = SetAuctionStatusDto.builder()
-                .auctionId(savedAuction.getId())
-                .status(CLOSE)
-                .build();
 
         //when //then
-        AuctionTitleResponse response = auctionService.setStatus(dto);
-        Assertions.assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 절화 마감");
+        AuctionTitleResponse response = auctionService.setStatus(savedAuction.getId(), OPEN);
+        Assertions.assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 절화 진행 중");
 
     }
 

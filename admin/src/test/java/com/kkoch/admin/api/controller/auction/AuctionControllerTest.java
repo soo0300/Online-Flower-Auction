@@ -8,7 +8,6 @@ import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.AuctionService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
-import com.kkoch.admin.api.service.auction.dto.SetAuctionStatusDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -116,15 +115,11 @@ class AuctionControllerTest extends ControllerTestSupport {
         //given
         MockHttpSession session = getLoginAdminSession();
 
-        SetAuctionStatusDto dto = SetAuctionStatusDto.builder()
-                .auctionId(3L)
-                .status(CLOSE)
-                .build();
         AuctionTitleResponse response = AuctionTitleResponse.builder()
                 .auctionId(3L)
                 .title("title")
                 .build();
-        BDDMockito.given(auctionService.setStatus(dto))
+        BDDMockito.given(auctionService.setStatus(3L, CLOSE))
                 .willReturn(response);
 
         Long auctionId = 3L;
