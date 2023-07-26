@@ -1,5 +1,6 @@
 package com.kkoch.user.api.controller.alarm.response;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ public class AlarmResponse {
     private boolean open;
     private String createDate;
 
+    @Builder
     public AlarmResponse(Long alarmId, String content, boolean open, LocalDateTime createDate) {
         this.alarmId = alarmId;
         this.content = content;
