@@ -5,6 +5,7 @@ import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionRequest;
 import com.kkoch.admin.api.controller.auction.request.SetAuctionRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
+import com.kkoch.admin.api.service.auction.AuctionQueryService;
 import com.kkoch.admin.api.service.auction.AuctionService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
@@ -34,6 +35,30 @@ class AuctionControllerTest extends ControllerTestSupport {
 
     @MockBean
     private AuctionService auctionService;
+    @MockBean
+    private AuctionQueryService auctionQueryService;
+
+    @DisplayName("[경매 일정 조회]")
+    @Test
+    void getAuctionList() throws Exception {
+        //given
+//        BDDMockito.given(auctionService.remove(anyLong()))
+//                .willReturn(1L);
+        MockHttpSession session = getLoginAdminSession();
+
+        //when //then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/admin-service/auctions")
+                                .session(session)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
+
+    }
 
     @DisplayName("[경매 일정 삭제]")
     @Test
