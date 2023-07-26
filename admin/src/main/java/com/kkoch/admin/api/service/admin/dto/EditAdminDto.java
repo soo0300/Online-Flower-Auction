@@ -19,12 +19,4 @@ public class EditAdminDto {
         this.tel = tel;
     }
 
-    public Admin toEntity() {
-        return Admin.builder()
-                .loginPw(this.loginPw)
-                .tel(this.tel)
-                .build();
-    }
-
-
 }
