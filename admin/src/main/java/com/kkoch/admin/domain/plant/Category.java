@@ -26,9 +26,6 @@ public class Category extends TimeBaseEntity {
     @Column(nullable = false)
     private boolean active;
 
-    @Column(nullable = false)
-    private int depth;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
@@ -37,10 +34,9 @@ public class Category extends TimeBaseEntity {
     private List<Category> children = new ArrayList<>();
 
     @Builder
-    private Category(String name, boolean active, int depth,Category parent, List<Category> children) {
+    private Category(String name, boolean active, Category parent, List<Category> children) {
         this.name = name;
         this.active = active;
-        this.depth = depth;
         this.parent = parent;
         this.children = children;
     }

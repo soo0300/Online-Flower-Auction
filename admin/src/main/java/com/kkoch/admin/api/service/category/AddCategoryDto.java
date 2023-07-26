@@ -11,14 +11,18 @@ public class AddCategoryDto {
 
     private String name;
 
-    private int depth;
-
     private Long parentId;
 
     @Builder
-    public AddCategoryDto(String name, int depth, Long parentId) {
+    public AddCategoryDto(String name, Long parentId) {
         this.name = name;
-        this.depth = depth;
         this.parentId = parentId;
+
+    }
+
+    public Category toEntity() {
+        return Category.builder()
+                .name(this.name)
+                .build();
     }
 }

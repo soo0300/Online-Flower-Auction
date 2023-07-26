@@ -8,4 +8,7 @@ import javax.transaction.Transactional;
 @Service
 public class CategoryService {
 
+    public Long addCategory(AddCategoryDto request) {
+        return null;
+    }
 }
