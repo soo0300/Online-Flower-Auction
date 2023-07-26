@@ -33,7 +33,7 @@ public class AuctionController {
     private final AuctionQueryService auctionQueryService;
 
     /**
-     *
+     * 로그인을 한 관계자만 경매 일정을 등록할 수 있다.
      * @throws IllegalArgumentException 구분코드가 범위(1 ~ 4)를 벗어나는 경우
      * @throws IllegalArgumentException 구분코드가 범위(1 ~ 4)를 벗어나는 경우
      */
@@ -52,7 +52,6 @@ public class AuctionController {
         return ApiResponse.ok(response);
     }
 
-
     @GetMapping("/api")
     public ApiResponse<List<AuctionForMemberResponse>> getAuctionListForMember() {
         List<AuctionForMemberResponse> responses = auctionQueryService.getAuctionForMember();
@@ -60,7 +59,7 @@ public class AuctionController {
     }
 
     @GetMapping
-    public ApiResponse<List<AuctionResponse>> getAuctions(@Login LoginAdmin loginAdmin) {
+    public ApiResponse<List<AuctionResponse>> getAuctions() {
         List<AuctionResponse> auctionSchedule = auctionQueryService.getAuctionSchedule();
         return ApiResponse.ok(auctionSchedule);
     }
