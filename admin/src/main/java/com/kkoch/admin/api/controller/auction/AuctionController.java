@@ -67,7 +67,7 @@ public class AuctionController {
     }
 
     @DeleteMapping("/{auctionId}")
-    public ApiResponse<?> removeAuction(
+    public ApiResponse<Long> removeAuction(
             @PathVariable Long auctionId,
             @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
 
