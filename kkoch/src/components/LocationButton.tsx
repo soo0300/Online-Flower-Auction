@@ -9,10 +9,11 @@ type Props = {
 const LocationButton = ({location} : Props) => {
 	const navigate = useNavigate();
 
+	// 양재 지역만 활성화 하기 위한 handler
   const handleCheck = () => {
 		console.log(location)
     if (location === "aT화훼공판장(양재동)") {
-       navigate("/watingroom")
+       navigate("/auction/waitingroom")
     } else {
       alert("서비스 준비중 입니다");
     }
