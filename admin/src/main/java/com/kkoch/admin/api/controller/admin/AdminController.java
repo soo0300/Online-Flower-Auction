@@ -8,7 +8,6 @@ import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
 @RequestMapping("/admin-service/admin")
