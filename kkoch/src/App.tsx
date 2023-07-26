@@ -5,6 +5,7 @@ import AuctionReady from "@/pages/auction/AuctionLocation";
 import MainPage from "./pages/mainPages/MainPage";
 import Login from "@/pages/user/LoginPage";
 import Signup from "@/pages/user/SignUpPage";
+import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -28,7 +29,7 @@ function App() {
         {/* 라우팅 정보 */}
         <Routes>
           <Route path={"/"} element={<MainPage />}/>
-          <Route path={"/auction"} element={<AuctionReady/>}/>
+          <Route path={"/auction"} element={<AuctionLiveRoom/>}/>
           <Route path={"/auction"} element={<AuctionReady/>}/>
 
           <Route path={"/flowers"} />
