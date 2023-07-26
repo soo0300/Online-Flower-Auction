@@ -71,6 +71,29 @@ public class AuctionArticle extends TimeBaseEntity {
         this.trade = trade;
     }
 
+    public static AuctionArticle toEntity(
+            Plant plant,
+            Auction auction,
+            String auctionNumber,
+            Grade grade,
+            int count,
+            String region,
+            String shipper,
+            int startPrice) {
+        return AuctionArticle.builder()
+                .plant(plant)
+                .auction(auction)
+                .auctionNumber(auctionNumber)
+                .grade(grade)
+                .count(count)
+                .region(region)
+                .shipper(shipper)
+                .startPrice(startPrice)
+                .bidPrice(0)
+                .bidTime(LocalDateTime.now())
+                .build();
+    }
+
     //== 비즈니스 로직 ==//
     public void bid(int bidPrice, LocalDateTime bidTime) {
         this.bidPrice = bidPrice;
