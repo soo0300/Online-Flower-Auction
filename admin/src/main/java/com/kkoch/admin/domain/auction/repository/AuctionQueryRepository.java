@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
+import com.kkoch.admin.domain.auction.Status;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -28,6 +29,9 @@ public class AuctionQueryRepository {
                         auction.startTime,
                         auction.createdDate))
                 .from(auction)
-                .where(auction.active.eq(true)).fetch();
+                .where(auction.active.eq(true)
+                        .and(auction.status.eq(Status.OPEN)
+                                .or(auction.status.eq(Status.READY))))
+                .orderBy(auction.startTime.asc()).fetch();
     }
 }
