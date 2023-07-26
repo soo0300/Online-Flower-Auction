@@ -3,10 +3,12 @@ package com.kkoch.admin.api.controller.admin.request;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
+@NoArgsConstructor
 public class AddAdminRequest {
 
     @NotBlank
@@ -21,7 +23,7 @@ public class AddAdminRequest {
     private String position;
 
     @Builder
-    private AddAdminRequest(String loginId, String loginPw, String name, String tel, String position, boolean active) {
+    private AddAdminRequest(String loginId, String loginPw, String name, String tel, String position) {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.name = name;
