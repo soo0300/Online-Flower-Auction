@@ -2,6 +2,7 @@ package com.kkoch.user.api.controller.alarm;
 
 import com.kkoch.user.api.controller.ApiResponse;
 import com.kkoch.user.api.controller.alarm.response.AlarmResponse;
+import com.kkoch.user.api.service.alarm.AlarmQueryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,16 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 @Slf4j
 @Api(tags = {"알림 기능"})
 public class AlarmController {
-    // 알림 목록 조회
+
+    private final AlarmQueryService alarmQueryService;
+
     @ApiOperation("알림 목록 조회")
     @GetMapping
     public ApiResponse<List<AlarmResponse>> getAlarms() {
-        return ApiResponse.ok(null);
+        // TODO: 2023-07-26 임우택 JWT 복호화 과정 생략
+        String email = null;
+        List<AlarmResponse> responses = alarmQueryService.searchAlarms(email);
+        return ApiResponse.ok(responses);
     }
 
     // 읽기 처리
@@ -35,7 +41,7 @@ public class AlarmController {
     // 알림 삭제
     @ApiOperation("알림 삭제")
     @DeleteMapping("/{alarmId}")
-    public ApiResponse<?> removeAlaram(@PathVariable Long alarmId) {
+    public ApiResponse<?> removeAlarm(@PathVariable Long alarmId) {
         return ApiResponse.of(MOVED_PERMANENTLY, "알림 삭제", null);
     }
 }
