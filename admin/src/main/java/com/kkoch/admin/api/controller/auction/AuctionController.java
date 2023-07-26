@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
+import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin-service/auctions")
@@ -66,10 +68,12 @@ public class AuctionController {
 
     @DeleteMapping("/{auctionId}")
     public ApiResponse<?> removeAuction(
-            @PathVariable String auctionId,
+            @PathVariable Long auctionId,
             @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
 
-        return null;
+        Long removedAuctionId = auctionService.remove(auctionId);
+
+        return ApiResponse.of(MOVED_PERMANENTLY, "경매 일정이 삭제되었습니다.", removedAuctionId);
     }
 
     private void timeValidation(LocalDateTime startTime) {
