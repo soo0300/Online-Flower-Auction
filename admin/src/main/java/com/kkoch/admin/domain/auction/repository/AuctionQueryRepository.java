@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
+import com.kkoch.admin.domain.auction.Auction;
 import com.kkoch.admin.domain.auction.Status;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,5 +34,16 @@ public class AuctionQueryRepository {
                         auction.active.isTrue(),
                         auction.status.ne(Status.CLOSE))
                 .orderBy(auction.startTime.asc()).fetch();
+    }
+
+    public List<Auction> findAuctionForMember() {
+        return queryFactory
+                .select(auction)
+                .from(auction)
+                .where(
+                        auction.active.isTrue(),
+                        auction.status.ne(Status.CLOSE))
+                .orderBy(auction.startTime.asc())
+                .limit(5).fetch();
     }
 }

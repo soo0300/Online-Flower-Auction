@@ -4,6 +4,7 @@ import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionRequest;
 import com.kkoch.admin.api.controller.auction.request.SetAuctionRequest;
+import com.kkoch.admin.api.controller.auction.response.AuctionForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.AuctionQueryService;
@@ -29,6 +30,12 @@ public class AuctionController {
 
     private final AuctionService auctionService;
     private final AuctionQueryService auctionQueryService;
+
+    @GetMapping("/api")
+    public ApiResponse<List<AuctionForMemberResponse>> getAuctionListForMember() {
+        List<AuctionForMemberResponse> responses = auctionQueryService.getAuctionForMember();
+        return ApiResponse.ok(responses);
+    }
 
     @GetMapping
     public ApiResponse<List<AuctionResponse>> getAuctionList(@SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {

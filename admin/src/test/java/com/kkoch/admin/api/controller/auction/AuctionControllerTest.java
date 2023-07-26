@@ -38,6 +38,24 @@ class AuctionControllerTest extends ControllerTestSupport {
     @MockBean
     private AuctionQueryService auctionQueryService;
 
+    @DisplayName("[경매 일정 조회] 회원용")
+    @Test
+    void getAuctionListForMember() throws Exception {
+        //given
+
+        //when //then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/admin-service/auctions/api")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
+
+    }
+
     @DisplayName("[경매 일정 조회]")
     @Test
     void getAuctionList() throws Exception {
