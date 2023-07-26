@@ -29,9 +29,9 @@ public class AuctionQueryRepository {
                         auction.startTime,
                         auction.createdDate))
                 .from(auction)
-                .where(auction.active.eq(true)
-                        .and(auction.status.eq(Status.OPEN)
-                                .or(auction.status.eq(Status.READY))))
+                .where(
+                        auction.active.isTrue(),
+                        auction.status.ne(Status.CLOSE))
                 .orderBy(auction.startTime.asc()).fetch();
     }
 }
