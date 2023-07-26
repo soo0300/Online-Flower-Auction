@@ -1,5 +1,6 @@
 package com.kkoch.admin.domain.auction;
 
+import com.kkoch.admin.domain.BaseEntity;
 import com.kkoch.admin.domain.TimeBaseEntity;
 import com.kkoch.admin.domain.admin.Admin;
 import lombok.Builder;
@@ -20,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Auction extends TimeBaseEntity {
+public class Auction extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
