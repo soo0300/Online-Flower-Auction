@@ -76,6 +76,6 @@ public class TradeService {
 
     private Trade getTradeEntity(Long tradeId) {
         return tradeRepository.findById(tradeId)
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
     }
 }

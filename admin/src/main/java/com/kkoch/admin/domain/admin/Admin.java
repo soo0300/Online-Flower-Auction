@@ -37,7 +37,8 @@ public class Admin extends TimeBaseEntity {
     private boolean active;
 
     @Builder
-    private Admin(String loginId, String loginPw, String name, String tel, String position, boolean active) {
+    private Admin(Long id, String loginId, String loginPw, String name, String tel, String position, boolean active) {
+        this.id = id;
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.name = name;
@@ -53,6 +54,12 @@ public class Admin extends TimeBaseEntity {
                 .build();
         admin.id = id;
         return admin;
+    }
+
+    public void changeAdmin(String pw, String tel) {
+        this.loginPw = pw;
+        this.tel = tel;
+
     }
 
 }
