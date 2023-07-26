@@ -1,35 +1,26 @@
-import Navbar from "@/scenes/navbar";
-import { useState, useEffect } from "react";
-import { SelectedPage } from "./shared/types";
-
-
+import Navbar from "@/pages/navbar";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import AuctionReady from "@/pages/auction/AuctionReady";
+import MainPage from "./pages/mainPages/MainPage";
+import Login from "@/pages/user/Login";
 
 function App() {
-  const [selectedPage, setSelectedPage] = useState<SelectedPage>(SelectedPage.Home);
-  const [isTop, setIsTop] = useState<boolean>(true);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if(window.scrollY === 0) {
-        setIsTop(true);
-        setSelectedPage(SelectedPage.Home);
-      } 
-
-      if(window.scrollY !== 0) {
-        setIsTop(false);
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="app bg-gray-20">
-      <Navbar 
-        isTop = {isTop}  
-        selectedPage={selectedPage} setSelectedPage={setSelectedPage} 
-      />
+      <BrowserRouter>
+        <Navbar />
+        {/* 라우팅 정보 */}
+        <Routes>
+          <Route path={"/"} element={<MainPage />}/>
+          <Route path={"/auction"} element={<AuctionReady/>}/>
+          <Route path={"/flowers"} />
+          <Route path={"/customer"} />
+
+          {/* 로그인 */}
+          <Route path={"/login"} element={<Login />}/>
+
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }

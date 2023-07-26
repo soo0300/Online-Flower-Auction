@@ -1,17 +1,16 @@
 package com.kkoch.user.api.controller.member;
 
 import com.kkoch.user.api.controller.ApiResponse;
-import com.kkoch.user.api.controller.member.request.EditLoginPwRequest;
-import com.kkoch.user.api.controller.member.request.EditTelRequest;
-import com.kkoch.user.api.controller.member.request.JoinMemberRequest;
-import com.kkoch.user.api.controller.member.request.WithdrawalRequest;
+import com.kkoch.user.api.controller.member.request.*;
 import com.kkoch.user.api.controller.member.response.MemberResponse;
+import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -29,11 +28,20 @@ public class MemberController {
     //회원가입
     @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
-    public ApiResponse<Long> joinMember(@Valid JoinMemberRequest request) {
-
-        Long memberId = memberService.join(request.toJoinMemberDto());
+    public ApiResponse<Long> joinMember(@Valid @RequestPart("dto") JoinMemberRequest request
+            , @RequestPart("file") MultipartFile file) {
+        Long memberId = memberService.join(request.toJoinMemberDto(),file);
         log.debug("memberId = {}", memberId);
         return ApiResponse.ok(memberId);
+
+    }
+
+    @ApiOperation(value = "로그인")
+    @PostMapping("/login")
+    public ApiResponse<TokenResponse> loginMember(@Valid @RequestBody LoginMemberRequest request) {
+
+        TokenResponse tokenResponse = memberService.login(request.toLoginMemberDto());
+        return ApiResponse.ok(tokenResponse);
 
     }
 

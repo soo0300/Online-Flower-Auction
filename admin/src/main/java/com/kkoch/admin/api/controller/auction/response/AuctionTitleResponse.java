@@ -11,7 +11,7 @@ public class AuctionTitleResponse {
     private String title;
 
     @Builder
-    public AuctionTitleResponse(Long auctionId, String title) {
+    private AuctionTitleResponse(Long auctionId, String title) {
         this.auctionId = auctionId;
         this.title = title;
     }

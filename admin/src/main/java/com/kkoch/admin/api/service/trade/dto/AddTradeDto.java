@@ -13,7 +13,7 @@ public class AddTradeDto {
     private LocalDateTime bidTime;
 
     @Builder
-    public AddTradeDto(Long auctionArticleId, int bidPrice, LocalDateTime bidTime) {
+    private AddTradeDto(Long auctionArticleId, int bidPrice, LocalDateTime bidTime) {
         this.auctionArticleId = auctionArticleId;
         this.bidPrice = bidPrice;
         this.bidTime = bidTime;

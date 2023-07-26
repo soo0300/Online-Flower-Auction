@@ -12,7 +12,7 @@ public class AddAuctionDto {
     private int code;
 
     @Builder
-    public AddAuctionDto(LocalDateTime startTime, int code) {
+    private AddAuctionDto(LocalDateTime startTime, int code) {
         this.startTime = startTime;
         this.code = code;
     }
