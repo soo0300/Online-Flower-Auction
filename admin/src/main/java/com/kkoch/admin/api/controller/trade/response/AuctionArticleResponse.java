@@ -25,7 +25,7 @@ public class AuctionArticleResponse {
     private String region;
 
     @Builder
-    public AuctionArticleResponse(String code, String name, String type, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region) {
+    private AuctionArticleResponse(String code, String name, String type, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region) {
         this.code = code;
         this.name = name;
         this.type = type;

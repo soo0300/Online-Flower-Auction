@@ -6,13 +6,13 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class AddAuctionDto {
+public class SetAuctionDto {
 
     private LocalDateTime startTime;
     private int code;
 
     @Builder
-    private AddAuctionDto(LocalDateTime startTime, int code) {
+    private SetAuctionDto(LocalDateTime startTime, int code) {
         this.startTime = startTime;
         this.code = code;
     }
