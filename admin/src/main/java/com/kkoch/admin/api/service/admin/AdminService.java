@@ -1,13 +1,16 @@
 package com.kkoch.admin.api.service.admin;
 
+import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
 import com.kkoch.admin.domain.admin.Admin;
+import com.kkoch.admin.domain.admin.repository.AdminQueryRepository;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -16,6 +19,7 @@ import java.util.NoSuchElementException;
 public class AdminService {
 
     private final AdminRepository adminRepository;
+    private final AdminQueryRepository adminQueryRepository;
 
     public Long addAdmin(AddAdminDto dto) {
         Admin admin = dto.toEntity();
@@ -37,6 +41,10 @@ public class AdminService {
                         -> new NoSuchElementException("존재하지 않는 관게자"));
         admin.removeAdmin();
         return admin.getId();
+    }
+
+    public List<AdminResponse> getAdminList() {
+        return adminQueryRepository.findAllAdmin();
     }
 
 

@@ -100,5 +100,25 @@ class AdminControllerTest extends ControllerTestSupport {
         // then
     }
 
+    @DisplayName("관계자 목록을 조회할 수 있다.")
+    @Test
+    public void getAdmin() throws Exception {
+        // given
+
+        // when
+        mockMvc.perform(
+                        get("/admin-service/admin")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("관계자 목록이 조회되었습니다."))
+                .andExpect(jsonPath("$.data").isNumber());
+
+
+        // then
+    }
+
 
 }

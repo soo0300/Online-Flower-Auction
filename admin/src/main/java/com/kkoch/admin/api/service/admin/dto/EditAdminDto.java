@@ -1,6 +1,5 @@
 package com.kkoch.admin.api.service.admin.dto;
 
-import com.kkoch.admin.domain.admin.Admin;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
