@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import HomeFlowerChart from "@/assets/HomeFlowerChart.png"
-import ActionButton from "@/components/ActionButton";
+import ActionButton from "@/components/buttons/ActionButton";
 
 const HomeAuction = () => {
   return (

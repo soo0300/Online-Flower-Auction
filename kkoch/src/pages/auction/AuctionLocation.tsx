@@ -1,4 +1,4 @@
-import LocationButton from "@/components/LocationButton"
+import LocationButton from "@/components/buttons/LocationButton"
 
 const ActionReady = () => {
   const location = ["aT화훼공판장(양재동)", "부산화훼공판장(엄궁동)", "광주원예농협(풍암)"

@@ -1,4 +1,4 @@
-import ActionButton from "@/components/ActionButton";
+import ActionButton from "@/components/buttons/ActionButton";
 import HomePageAuction from "@/assets/HomePageAuction.png";
 import MiraeLogo from "@/assets/MiraeLogo.png";
 import NongHyupLogo from "@/assets/NongHyupLogo.png";

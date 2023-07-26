@@ -24,7 +24,9 @@ const Navbar = ({isTop} : Props) => {
       <div className={`${flexBetween} mx-auto w-5/6`}>
         <div className={`${flexBetween} w-full gap-16`}>
           {/* 로고 이미지 */}
-          <img src={Logo} alt="logo" className="h-20"/>
+          <Link to="/">
+            <img src={Logo} alt="logo" className="h-20"/>
+          </Link>
 
           {/* 메뉴 */}
           {isAboveMediumScreens ? // PC화면일때 : 모바일 화면일때 
@@ -36,7 +38,7 @@ const Navbar = ({isTop} : Props) => {
               </div>
               <div className={`${flexBetween} gap-8`}>
                 <Link to="/login">로그인</Link>
-                <p>회원가입</p>
+                <Link to="/signup">회원가입</Link>
               </div>
             </div>)
             : (

@@ -3,7 +3,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import { useEffect, useState } from "react";
 import AuctionReady from "@/pages/auction/AuctionLocation";
 import MainPage from "./pages/mainPages/MainPage";
-import Login from "@/pages/user/Login";
+import Login from "@/pages/user/LoginPage";
+import Signup from "@/pages/user/SignUpPage";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -35,6 +36,7 @@ function App() {
 
           {/* 로그인 */}
           <Route path={"/login"} element={<Login />}/>
+          <Route path={"/signup"} element={<Signup />}/>
         </Routes>
         
       </BrowserRouter>
