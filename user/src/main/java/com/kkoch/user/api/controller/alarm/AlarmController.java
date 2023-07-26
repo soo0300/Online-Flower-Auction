@@ -31,7 +31,7 @@ public class AlarmController {
         return ApiResponse.ok(responses);
     }
 
-    // 읽기 처리
+    // TODO: 2023-07-26 임우택 알림 확인 조회와 병합 여부 결정
     @ApiOperation("알림 확인")
     @PatchMapping("/{alarmId}")
     public ApiResponse<?> setCheckAlarm(@PathVariable Long alarmId) {
