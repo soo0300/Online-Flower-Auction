@@ -18,7 +18,7 @@ public class AuctionResponse {
     private LocalDateTime createdDate;
 
     @Builder
-    private AuctionResponse(Long auctionId, int code, Status status, LocalDateTime startTime, LocalDateTime createdDate) {
+    public AuctionResponse(Long auctionId, int code, Status status, LocalDateTime startTime, LocalDateTime createdDate) {
         this.auctionId = auctionId;
         this.code = code;
         this.status = status;
