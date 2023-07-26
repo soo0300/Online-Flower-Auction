@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -18,6 +19,9 @@ public class AlarmQueryService {
     private final MemberRepository memberRepository;
 
     public List<AlarmResponse> searchAlarms(String email) {
-        return null;
+        Long memberId = memberRepository.findIdByEmail(email)
+            .orElseThrow(NoSuchElementException::new);
+
+        return alarmQueryRepository.searchAlarms(memberId);
     }
 }
