@@ -66,6 +66,13 @@ const Login = () => {
 			로그인
 		</div>
 
+		<div className='signupTitle'>
+			계정이 없으신가요?
+			<div className='signupLink'>
+				회원가입
+			</div>
+		</div>
+
 		<div className="contentWrap">
 			<div className="inputTitle">이메일 주소</div>
 			<div className="inputWrap">
