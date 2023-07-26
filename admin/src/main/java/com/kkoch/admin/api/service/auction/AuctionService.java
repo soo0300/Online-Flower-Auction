@@ -21,6 +21,16 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
 
+    public Long remove(Long auctionId) {
+
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 경매 일정"));
+
+        auction.remove();
+
+        return auction.getId();
+    }
+
     public AuctionTitleResponse setAuction(Long auctionId, Long adminId, SetAuctionDto dto) {
         int code = dto.getCode();
 

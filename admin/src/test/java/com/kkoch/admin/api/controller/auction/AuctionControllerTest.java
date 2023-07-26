@@ -24,12 +24,38 @@ import java.time.LocalDateTime;
 import static com.kkoch.admin.domain.auction.Status.CLOSE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {AuctionController.class})
 class AuctionControllerTest extends ControllerTestSupport {
 
     @MockBean
     private AuctionService auctionService;
+
+    @DisplayName("[경매 일정 삭제]")
+    @Test
+    void removeTrade() throws Exception {
+        //given
+        BDDMockito.given(auctionService.remove(anyLong()))
+                .willReturn(1L);
+        MockHttpSession session = getLoginAdminSession();
+
+        //when //then
+        mockMvc.perform(
+                        delete("/admin-service/auctions/{auctionId}", 1L)
+                                .session(session)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("경매 일정이 삭제되었습니다."))
+                .andExpect(jsonPath("$.data").isNumber());
+
+    }
 
     @DisplayName("[경매 일정 수정] 1시간 이내의 시간으로 설정 시 에러가 발생한다.")
     @Test
