@@ -5,17 +5,21 @@ import { Link } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
 // import ActionButton from "@/shared/ActionButton";
 
-const Navbar = () => {
+type Props = {
+  isTop: boolean;
+}
+
+const Navbar = ({isTop} : Props) => {
   const flexBetween = "flex items-center justify-between";
   
   // 모바일 용 토글버튼은 false로 초기화 
   const [isMenuToggled, menuToggle] = useState<boolean>(false);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
-  // const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
+  const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
 
   return <nav>
     <div
-      className={`$${flexBetween} fixed top-0 z-30 w-full py-3 border-b-2 bg-primary-100`}
+      className={`${navbarBackground} ${flexBetween} fixed top-0 z-30 w-full py-3 border-b-2`}
     >
       <div className={`${flexBetween} mx-auto w-5/6`}>
         <div className={`${flexBetween} w-full gap-16`}>
