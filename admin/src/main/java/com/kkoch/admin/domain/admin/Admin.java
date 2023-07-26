@@ -56,9 +56,9 @@ public class Admin extends TimeBaseEntity {
         return admin;
     }
 
-    public void changeAdmin(String pw, String tel){
-        this.loginPw=pw;
-        this.tel=tel;
+    public void changeAdmin(String pw, String tel) {
+        this.loginPw = pw;
+        this.tel = tel;
 
     }
 

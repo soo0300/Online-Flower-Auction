@@ -23,15 +23,13 @@ public class AdminService {
         return savedAdmin.getId();
     }
 
-    //dto로 받아서 entity로 전달하기, pw, Admin
     public Long setAdmin(Long adminId, EditAdminDto dto) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(()
                         -> new NoSuchElementException("존재하지 않는 관게자"));
-        admin.changeAdmin(dto.getLoginPw(),dto.getTel());
+        admin.changeAdmin(dto.getLoginPw(), dto.getTel());
         return admin.getId();
     }
-
 
 
 }

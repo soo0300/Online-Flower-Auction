@@ -27,9 +27,9 @@ public class AdminController {
 
     //관게자 수정
     @PatchMapping("/{adminId}")
-    public ApiResponse<Long> setAdmin(@PathVariable Long adminId,@RequestBody EditAdminRequest request){
+    public ApiResponse<Long> setAdmin(@PathVariable Long adminId, @RequestBody EditAdminRequest request) {
         EditAdminDto dto = request.toEditAdminDto();
-        Long setId = adminService.setAdmin(adminId,dto);
+        Long setId = adminService.setAdmin(adminId, dto);
         return ApiResponse.ok(setId);
 
     }
