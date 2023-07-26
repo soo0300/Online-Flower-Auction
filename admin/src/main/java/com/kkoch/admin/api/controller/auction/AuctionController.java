@@ -12,6 +12,7 @@ import com.kkoch.admin.api.service.auction.AuctionService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
 import com.kkoch.admin.domain.auction.Status;
+import com.kkoch.admin.login.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -31,22 +32,16 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final AuctionQueryService auctionQueryService;
 
-    @GetMapping("/api")
-    public ApiResponse<List<AuctionForMemberResponse>> getAuctionListForMember() {
-        List<AuctionForMemberResponse> responses = auctionQueryService.getAuctionForMember();
-        return ApiResponse.ok(responses);
-    }
-
-    @GetMapping
-    public ApiResponse<List<AuctionResponse>> getAuctionList(@SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
-        List<AuctionResponse> auctionSchedule = auctionQueryService.getAuctionSchedule();
-        return ApiResponse.ok(auctionSchedule);
-    }
-
+    /**
+     *
+     * @throws IllegalArgumentException 구분코드가 범위(1 ~ 4)를 벗어나는 경우
+     * @throws IllegalArgumentException 구분코드가 범위(1 ~ 4)를 벗어나는 경우
+     */
     @PostMapping
     public ApiResponse<AuctionTitleResponse> addAuction(
-            @Valid @RequestBody AddAuctionRequest request,
-            @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+        @Valid @RequestBody AddAuctionRequest request,
+        @Login LoginAdmin loginAdmin
+    ) {
 
         timeValidation(request.getStartTime());
 
@@ -57,11 +52,24 @@ public class AuctionController {
         return ApiResponse.ok(response);
     }
 
+
+    @GetMapping("/api")
+    public ApiResponse<List<AuctionForMemberResponse>> getAuctionListForMember() {
+        List<AuctionForMemberResponse> responses = auctionQueryService.getAuctionForMember();
+        return ApiResponse.ok(responses);
+    }
+
+    @GetMapping
+    public ApiResponse<List<AuctionResponse>> getAuctions(@Login LoginAdmin loginAdmin) {
+        List<AuctionResponse> auctionSchedule = auctionQueryService.getAuctionSchedule();
+        return ApiResponse.ok(auctionSchedule);
+    }
+
     @PatchMapping("/{auctionId}/{status}")
     public ApiResponse<AuctionTitleResponse> setAuctionStatus(
-            @PathVariable Long auctionId,
-            @PathVariable Status status,
-            @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+        @PathVariable Long auctionId,
+        @PathVariable Status status
+    ) {
 
         AuctionTitleResponse response = auctionService.setStatus(auctionId, status);
 
@@ -71,9 +79,10 @@ public class AuctionController {
 
     @PatchMapping("/{auctionId}")
     public ApiResponse<AuctionTitleResponse> setAuction(
-            @PathVariable Long auctionId,
-            @Valid @RequestBody SetAuctionRequest request,
-            @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+        @PathVariable Long auctionId,
+        @Valid @RequestBody SetAuctionRequest request,
+        @Login LoginAdmin loginAdmin
+    ) {
 
         timeValidation(request.getStartTime());
 
@@ -84,9 +93,7 @@ public class AuctionController {
     }
 
     @DeleteMapping("/{auctionId}")
-    public ApiResponse<Long> removeAuction(
-            @PathVariable Long auctionId,
-            @SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+    public ApiResponse<Long> removeAuction(@PathVariable Long auctionId) {
 
         Long removedAuctionId = auctionService.remove(auctionId);
 
