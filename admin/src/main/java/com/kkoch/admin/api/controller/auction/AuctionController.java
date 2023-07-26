@@ -4,7 +4,9 @@ import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionRequest;
 import com.kkoch.admin.api.controller.auction.request.SetAuctionRequest;
+import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
+import com.kkoch.admin.api.service.auction.AuctionQueryService;
 import com.kkoch.admin.api.service.auction.AuctionService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionDto;
 import com.kkoch.admin.api.service.auction.dto.SetAuctionDto;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
@@ -25,6 +28,13 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 public class AuctionController {
 
     private final AuctionService auctionService;
+    private final AuctionQueryService auctionQueryService;
+
+    @GetMapping
+    public ApiResponse<List<AuctionResponse>> getAuctionList(@SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+        List<AuctionResponse> auctionSchedule = auctionQueryService.getAuctionSchedule();
+        return ApiResponse.ok(auctionSchedule);
+    }
 
     @PostMapping
     public ApiResponse<AuctionTitleResponse> addAuction(
