@@ -80,7 +80,7 @@ public class TradeController {
 
     private static List<AddTradeDto> toAddTradeDto(AddTradeRequest request) {
         return request.getArticles().stream()
-            .map(AuctionArticleRequest::toAddTradeDto)
-            .collect(Collectors.toList());
+                .map(AuctionArticleRequest::toAddTradeDto)
+                .collect(Collectors.toList());
     }
 }

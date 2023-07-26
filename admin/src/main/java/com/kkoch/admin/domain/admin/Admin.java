@@ -61,5 +61,8 @@ public class Admin extends TimeBaseEntity {
         this.tel = tel;
 
     }
+    public void removeAdmin(){
+        this.active=false;
+    }
 
 }

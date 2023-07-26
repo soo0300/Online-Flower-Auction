@@ -3,23 +3,18 @@ package com.kkoch.admin.api.controller.admin;
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.admin.request.AddAdminRequest;
 import com.kkoch.admin.api.controller.admin.request.EditAdminRequest;
-import com.kkoch.admin.api.controller.trade.TradeController;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
-import com.kkoch.admin.domain.admin.Admin;
-import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -60,7 +55,6 @@ class AdminControllerTest extends ControllerTestSupport {
     @DisplayName("관계자의 비밀번호와 전화번호를 변경할 수 있다")
     @Test
     public void setAdmin() throws Exception {
-//        Admin admin = insertAdmin();
         // given
         EditAdminRequest editAdmin = EditAdminRequest.builder()
                 .tel("010-1234-5678")
@@ -86,6 +80,25 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").isNumber());
     }
 
+    @DisplayName("관계자는 관계자 정보를 삭제할 수 있다 .")
+    @Test
+    public void remove() throws Exception {
+        // given
+        BDDMockito.given(adminService.removeAdmin(anyLong()))
+                .willReturn(1L);
+        // when
+        mockMvc.perform(
+                        delete("/admin-service/admin/{adminId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("관계자 정보가 삭제되었습니다."))
+                .andExpect(jsonPath("$.data").isNumber());
+
+        // then
+    }
 
 
 }
