@@ -31,5 +31,13 @@ public class AdminService {
         return admin.getId();
     }
 
+    public Long removeAdmin(Long admindId) {
+        Admin admin = adminRepository.findById(admindId)
+                .orElseThrow(()
+                        -> new NoSuchElementException("존재하지 않는 관게자"));
+        admin.removeAdmin();
+        return admin.getId();
+    }
+
 
 }

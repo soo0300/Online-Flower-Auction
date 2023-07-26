@@ -62,6 +62,22 @@ class AdminServiceTest extends IntegrationTestSupport {
 
     }
 
+    @DisplayName("등록된 관계자를 삭제하면 비활성화 한다.")
+    @Test
+    public void removeAdmin() throws Exception {
+        // given
+        Admin admin = insertAdmin();
+        //관계자 adminId를 받아서 삭제한다.
+        Long adminId = admin.getId();
+
+        // when
+        Long deleteId = adminService.removeAdmin(adminId);
+
+        // then
+        Optional<Admin> deleteAdmin = adminRepository.findById(deleteId);
+        Assertions.assertThat(deleteAdmin.get().isActive()).isEqualTo(false);
+
+    }
 
     private Admin insertAdmin() {
         Admin admin = Admin.builder()
