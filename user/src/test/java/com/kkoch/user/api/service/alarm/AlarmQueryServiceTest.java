@@ -49,11 +49,11 @@ class AlarmQueryServiceTest extends IntegrationTestSupport {
         assertThat(responses).hasSize(5)
             .extracting("content")
             .containsExactlyInAnyOrder(
-                tuple("alarm1"),
-                tuple("alarm2"),
-                tuple("alarm3"),
-                tuple("alarm4"),
-                tuple("alarm5")
+                "alarm1",
+                "alarm2",
+                "alarm3",
+                "alarm4",
+                "alarm5"
             );
     }
 
