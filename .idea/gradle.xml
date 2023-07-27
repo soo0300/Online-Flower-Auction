@@ -22,14 +22,6 @@
         </option>
       </GradleProjectSettings>
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/apigateway" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/apigateway" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/auction" />
         <option name="modules">
           <set>

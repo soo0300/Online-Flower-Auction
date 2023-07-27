@@ -2,8 +2,19 @@ import React from 'react'
 import HomePageAuction from '@/assets/HomePageAuction.png'
 import { DoughnutChart } from '../chart/Doughnut';
 import './AuctionLiveForm.css';
+import axios from 'axios';
+
 
 const AuctionLiveForm = () => {
+
+  // const axios = require('axios');
+
+  axios.get('http://localhost:8000/admin-service/trades/1?term=4')
+  .then((Response)=>{console.log(Response.data)})
+  .catch((Error)=>{console.log(Error)})
+
+
+  
   // 경매 정보 
   const auctionInfo = {
     point: 100000, // 보유 포인트
