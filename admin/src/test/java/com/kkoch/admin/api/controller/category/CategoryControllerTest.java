@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -82,20 +84,11 @@ class CategoryControllerTest extends ControllerTestSupport {
         //given
         List<CategoryResponse> categoryResponseList = new ArrayList<>();
 
-        BDDMockito.given(categoryService.getCategories(any(Long.class)))
+        BDDMockito.given(categoryService.getCategories(anyLong()))
                 .willReturn(categoryResponseList);
 
         //when
-        GetCategoryRequest request = GetCategoryRequest.builder()
-                .name("장미")
-                .parentId(1L)
-                .build();
-
-        //then
-        mockMvc.perform(post(URI)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
-                )
+        mockMvc.perform(get(URI + "/{parentId}", 1L))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
