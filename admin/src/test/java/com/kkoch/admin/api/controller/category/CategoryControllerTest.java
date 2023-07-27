@@ -19,16 +19,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = {CategoryController.class})
 class CategoryControllerTest extends ControllerTestSupport {
 
+    final String URI = "/admin-service/categories";
     @MockBean
     private CategoryService categoryService;
-
     @MockBean
     private CategoryRepository categoryRepository;
 
-    final String URI = "/user-service/categories";
-    @DisplayName("최상위 카테고리 등록 성공")
+    @DisplayName("관계자는 최상위 카테고리를 등록할 수 있다.")
     @Test
-    void addCategory() throws Exception {
+    void addRootCategory() throws Exception {
         //given
         AddCategoryRequest request = AddCategoryRequest.builder()
                 .name("절화")
@@ -48,5 +47,25 @@ class CategoryControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").isNumber());
     }
 
+    @DisplayName("관계자가 카테고리를 등록할 때 이름을 입력하지 않으면 예외가 발생한다.")
+    @Test
+    void addSubCategory() throws Exception {
+        //given
+        AddCategoryRequest request = AddCategoryRequest.builder()
+                .name("")
+                .level(1)
+                .build();
+
+        //when, then
+        mockMvc.perform(post(URI)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
+
+    }
 
 }

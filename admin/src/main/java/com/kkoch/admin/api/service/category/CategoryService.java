@@ -19,13 +19,10 @@ public class CategoryService {
     public Long addCategory(AddCategoryDto dto) {
 
         Category category = dto.toEntity();
-        setParentCategory(category,dto.getParentId());
+        setParentCategory(category, dto.getParentId());
         return categoryRepository.save(category).getId();
     }
 
-    /**
-     * 카테고리 ID로 카테고리 엔티티 조회
-     */
     private Category getCategoryEntity(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
