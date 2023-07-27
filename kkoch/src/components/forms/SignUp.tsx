@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 
 interface ISignUpForm {
@@ -12,9 +11,7 @@ interface ISignUpForm {
   extraError: string;
 }
 
-
 const SignUp = () => {
-  // const navigate = useNavigate();
   const [ name, setName ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ businessNumber, setBusinessNumber ] = useState('');
@@ -28,10 +25,6 @@ const SignUp = () => {
 	const [ pwCheckValid, setPwCheckValid ] = useState(false);
 	const [ notAllow, setNotAllow ] = useState(true);
 
-
-
-  
-  
   // 이름 검증 함수
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -42,9 +35,7 @@ const SignUp = () => {
     } else {
       setNameValid(false);
     }
-    
   }
-  
   
 	// 이메일 검증 함수
 	const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +108,6 @@ const SignUp = () => {
 		setNotAllow(true);
 	}, [nameValid, emailValid, businessNumberValid, pwValid, pwCheckValid]);
   
-  
   const {
     register, // input 요소를 react-hook-form과 연결시켜 검증 규칙을 적용하는 메서드
     formState: { errors }, // form state 정보 담는 객체
@@ -138,7 +128,7 @@ const SignUp = () => {
 
   return (
     <form onSubmit={handleSubmit(onValid)}>
-      <fieldset>
+      <fieldset className='gap-16 bg-gray-20 py-10 md:h-full md:pb-0'>
 
         <legend style={{ display: 'none' }}>회원가입</legend>
         <div className="titleWrap">
@@ -237,7 +227,6 @@ const SignUp = () => {
           }
         </div>
         
-
         {/* 비밀번호 */}
         <div className='inputTitle'>비밀번호</div>
         <div className='inputWrap'>

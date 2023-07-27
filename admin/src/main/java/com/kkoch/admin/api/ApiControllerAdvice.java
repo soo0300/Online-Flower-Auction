@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.NoSuchElementException;
+
 @RestControllerAdvice
 public class ApiControllerAdvice {
 
@@ -13,9 +15,9 @@ public class ApiControllerAdvice {
     @ExceptionHandler(BindException.class)
     public ApiResponse<Object> bindException(BindException e) {
         return ApiResponse.of(
-            HttpStatus.BAD_REQUEST,
-            e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
-            null
+                HttpStatus.BAD_REQUEST,
+                e.getBindingResult().getAllErrors().get(0).getDefaultMessage(),
+                null
         );
     }
 
@@ -23,9 +25,19 @@ public class ApiControllerAdvice {
     @ExceptionHandler(IllegalArgumentException.class)
     public ApiResponse<Object> illegalArgumentException(IllegalArgumentException e) {
         return ApiResponse.of(
-            HttpStatus.BAD_REQUEST,
-            e.getMessage(),
-            null
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                null
+        );
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NoSuchElementException.class)
+    public ApiResponse<Object> noSuchElementException(NoSuchElementException e) {
+        return ApiResponse.of(
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                null
         );
     }
 }
