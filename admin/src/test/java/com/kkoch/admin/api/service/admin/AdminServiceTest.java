@@ -113,12 +113,11 @@ class AdminServiceTest extends IntegrationTestSupport {
         Admin admin = insertAdmin();
 
         // when
-        boolean loginSuccess = adminService.loginAdmin(admin.getLoginId(),admin.getLoginPw());
+        boolean loginSuccess = adminService.loginAdmin(admin.getLoginId(), admin.getLoginPw());
 
         // then
         Assertions.assertThat(loginSuccess).isEqualTo(true);
     }
-
 
 
     private Admin insertAdmin() {
