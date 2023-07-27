@@ -1,54 +1,60 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { OpenVidu, Publisher, Session } from 'openvidu-browser';
+import CameraOff from '@/assets/cameraOff.png';
 
 const AuctionWaitingRoom: React.FC = () => {
   const [publisher, setPublisher] = useState<Publisher | null>(null);
-  const [isCameraTested, setIsCameraTested] = useState<boolean>(false);
-  const [isMicTested, setIsMicTested] = useState<boolean>(false);
+  const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
+  const [isMicOn, setIsMicOn] = useState<boolean>(false);
   const [session, setSession] = useState<Session | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null); // useRef 훅을 사용하여 video 엘리먼트를 참조
-
-  const startCameraTest = async () => {
-    const OV = new OpenVidu();
-    const mySession = OV.initSession();
-
-    try {
-      const publisher = OV.initPublisher('cameraTest', {
-        videoSource: undefined, // 기본 비디오 장치 사용
-        audioSource: undefined, // 기본 오디오 장치 사용
-        publishAudio: true,
-        publishVideo: true,
-        resolution: '640x480',
-        frameRate: 30,
-      });
-      mySession.publish(publisher);
-
-      setSession(mySession);
-      setPublisher(publisher);
-      setIsCameraTested(true); // 카메라 테스트 시작 상태로 변경
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    if (isCameraTested && publisher && videoRef.current) {
-      // publisher가 생성된 후에 비디오 엘리먼트에 웹캠 스트림을 할당
-      publisher.addVideoElement(videoRef.current);
-    }
-  }, [isCameraTested, publisher]);
+    const initOpenVidu = async () => {
+      const OV = new OpenVidu();
+      const mySession = OV.initSession();
 
+      try {
+        const publisher = OV.initPublisher('cameraTest', {
+          videoSource: undefined, // 기본 비디오 장치 사용
+          audioSource: undefined, // 기본 오디오 장치 사용
+          publishAudio: true,
+          publishVideo: true,
+          resolution: '640x480',
+          frameRate: 30,
+        });
+        mySession.publish(publisher);
 
-  const startMicTest = () => {
+        setSession(mySession);
+        setPublisher(publisher);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    initOpenVidu();
+  }, []);
+
+  const toggleCamera = () => {
     if (publisher) {
-      publisher.publishAudio(true);
-      setIsMicTested(true);
+      const videoEnabled = !publisher.stream.videoActive; // OpenVidu의 API를 사용하여 비디오 활성화 여부 확인
+      publisher.publishVideo(videoEnabled); // OpenVidu의 API를 사용하여 비디오 트랙 토글
+      setIsCameraOn(videoEnabled); // 카메라 상태를 현재 상태의 반대로 변경
+    }
+  };
+  
+
+  const toggleMic = () => {
+    if (publisher) {
+      const audioEnabled = publisher.stream.getMediaStream().getAudioTracks()[0].enabled;
+      publisher.stream.getMediaStream().getAudioTracks()[0].enabled = !audioEnabled;
+      setIsMicOn(!audioEnabled); // 마이크 상태를 현재 상태의 반대로 변경
     }
   };
 
   const joinSession = () => {
-    setIsCameraTested(false);
-    setIsMicTested(false);
+    setIsCameraOn(false);
+    setIsMicOn(false);
     setPublisher(null);
     setSession(null);
   };
@@ -60,26 +66,30 @@ const AuctionWaitingRoom: React.FC = () => {
       </div>
 
       <div className="mx-auto w-5/6 items-center justify-center md:flex md:flex-wrap md:h-5/6">
-        {/* 카메라 테스트 버튼 */}
-        {!isCameraTested && !isMicTested && !session && (
-          <button onClick={startCameraTest}>카메라 테스트 시작</button>
-        )}
-
         {/* 카메라 테스트 화면 */}
-        {isCameraTested && publisher && (
-          <div id="cameraTest" style={{ width: '100%', height: 'auto' }}>
-            <video ref={videoRef} autoPlay playsInline /> {/* videoRef를 video 엘리먼트의 ref로 설정 */}
+        {publisher && (
+          <div className='w-full flex justify-center'>
+            {isCameraOn ? (
+              <video ref={videoRef} autoPlay playsInline />
+            ) : (
+              <img src={CameraOff} alt="" />
+            )}
           </div>
         )}
 
-        {/* 마이크 테스트 버튼 */}
-        {isCameraTested && !isMicTested && (
-          <button onClick={startMicTest}>마이크 테스트 시작</button>
-        )}
+        <div>
+          {/* 마이크 on/off 버튼 */}
+          <button onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
+          {/* 마이크 on/off 버튼 */}
+          <button onClick={toggleMic}>{isMicOn ? '마이크 끄기' : '마이크 켜기'}</button>
+        </div>
+
 
         {/* 입장하기 버튼 */}
-        {isCameraTested && isMicTested && !session && (
+        {isCameraOn && !session ? (
           <button onClick={joinSession}>화상 통화에 입장하기</button>
+        ) : (
+          <button disabled>입장하기</button>
         )}
       </div>
     </section>
