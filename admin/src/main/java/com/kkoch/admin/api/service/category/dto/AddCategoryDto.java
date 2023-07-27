@@ -16,7 +16,7 @@ public class AddCategoryDto {
     private int level;
 
     @Builder
-    public AddCategoryDto(String name, Long parentId, int level) {
+    private AddCategoryDto(String name, Long parentId, int level) {
         this.name = name;
         this.parentId = parentId;
         this.level = level;
