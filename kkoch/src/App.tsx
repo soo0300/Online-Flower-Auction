@@ -6,6 +6,7 @@ import AuctionWaitingRoom from "@/pages/auction/AuctionWaitingRoom";
 import MainPage from "./pages/mainPages/MainPage";
 import Login from "@/pages/user/LoginPage";
 import Signup from "@/pages/user/SignUpPage";
+import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
