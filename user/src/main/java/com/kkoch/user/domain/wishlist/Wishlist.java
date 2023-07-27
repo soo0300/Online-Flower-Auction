@@ -25,6 +25,7 @@ public class Wishlist extends TimeBaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    // TODO: 2023-07-26 연관관계 끊기 
     @Column(nullable = false)
     private Long auctionArticleId;
 

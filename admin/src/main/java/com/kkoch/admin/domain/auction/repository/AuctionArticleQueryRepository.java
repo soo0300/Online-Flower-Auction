@@ -35,7 +35,7 @@ public class AuctionArticleQueryRepository {
                         auctionArticle.bidPrice,
                         auctionArticle.bidTime,
                         auctionArticle.region
-                        ))
+                ))
                 .from(auctionArticle)
                 .join(auctionArticle.plant, plant)
                 .join(plant.code, code)
@@ -43,5 +43,13 @@ public class AuctionArticleQueryRepository {
                 .join(plant.type, type)
                 .where(auctionArticle.trade.id.eq(tradeId))
                 .fetch();
+    }
+
+    public int getAuctionArticle(Long auctionId) {
+        return queryFactory.select(auctionArticle.id)
+                .from(auctionArticle)
+                .where(auctionArticle.auction.id.eq(auctionId))
+                .fetch()
+                .size();
     }
 }
