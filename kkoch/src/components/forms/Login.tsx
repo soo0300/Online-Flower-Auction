@@ -29,7 +29,6 @@ const Login = () => {
 		} else {
 			setEmailValid(false);
 		}
-
 	}
 
 	// 비밀번호 검증 함수
@@ -61,7 +60,7 @@ const Login = () => {
 	}, [emailValid, passwordValid]);
 
   return (
-		<div className="page">
+		<div className="page gap-16 bg-gray-20 py-10 md:h-full md:pb-0">
 		<div className="titleWrap">
 			로그인
 		</div>

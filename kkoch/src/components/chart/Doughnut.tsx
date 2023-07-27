@@ -6,8 +6,8 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export function DoughnutChart() {
   const [yellow, setYellow] = useState(10); // 초기 노란색 부분 데이터 설정
-  const [blue, setBlue] = useState(15); // 초기 노란색 부분 데이터 설정
-  const [red, setRed] = useState(20); // 초기 노란색 부분 데이터 설정
+  const [blue, setBlue] = useState(15); // 초기 파란색 부분 데이터 설정
+  const [red, setRed] = useState(20); // 초기 빨간색 부분 데이터 설정
 
   const data = {
     datasets: [
@@ -32,26 +32,27 @@ export function DoughnutChart() {
 
   const options = {
     rotation: 230, // 도넛 차트를 회전
+    responsive: false
   };
 
   // 시간이 지남에 따라 노란색 부분 데이터 업데이트
   useEffect(() => {
     const yellowInterval = setInterval(() => {
       // 노란색 부분 데이터가 1씩 줄어들도록 설정 (여기에서는 1로 가정)
-      setYellow((prevData) => Math.max(prevData - 2, 0));
+      setYellow((prevData) => Math.max(prevData - 5, 0));
     }, 1000); // 1초마다 업데이트 (원하는 시간 간격으로 변경 가능)
 
     const BlueInterval = setInterval(() => {
       // 노란색 부분 데이터가 1씩 줄어들도록 설정 (여기에서는 1로 가정)
       if (yellow === 0 && blue > 0) {
-        setBlue((prevData) => Math.max(prevData - 2, 0));
+        setBlue((prevData) => Math.max(prevData - 5, 0));
       }
     }, 1000); // 1초마다 업데이트 (원하는 시간 간격으로 변경 가능)
 
     const RedInterval = setInterval(() => {
       // 노란색 부분 데이터가 1씩 줄어들도록 설정 (여기에서는 1로 가정)
       if (yellow === 0 && blue === 0 && red > 0) {
-        setRed((prevData) => Math.max(prevData - 2, 0));
+        setRed((prevData) => Math.max(prevData - 5, 0));
       }
     }, 1000); // 1초마다 업데이트 (원하는 시간 간격으로 변경 가능)
     
