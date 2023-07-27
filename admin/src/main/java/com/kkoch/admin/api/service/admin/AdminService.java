@@ -53,10 +53,11 @@ public class AdminService {
         LoginAdmin admin = adminQueryRepository.findByLoginIdAndLoginPw(dto.getLoginId(), dto.getLoginPw());
 
         if (admin == null) {
-            throw new NoSuchElementException("아이디와 비밀번호를 확인하세요");
+            throw new IllegalArgumentException("아이디와 비밀번호를 확인하세요");
         }
 
         return admin;
 
     }
 }
+
