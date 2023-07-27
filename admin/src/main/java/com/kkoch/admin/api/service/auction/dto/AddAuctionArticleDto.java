@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class AddAuctionArticleDto {
 
-    private String auctionNumber;
     private Grade grade;
     private int count;
     private String region;
@@ -16,8 +15,7 @@ public class AddAuctionArticleDto {
     private int startPrice;
 
     @Builder
-    private AddAuctionArticleDto(String auctionNumber, Grade grade, int count, String region, String shipper, int startPrice) {
-        this.auctionNumber = auctionNumber;
+    private AddAuctionArticleDto(Grade grade, int count, String region, String shipper, int startPrice) {
         this.grade = grade;
         this.count = count;
         this.region = region;

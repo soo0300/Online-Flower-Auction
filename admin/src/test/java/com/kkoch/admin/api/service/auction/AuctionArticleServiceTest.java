@@ -88,13 +88,28 @@ class AuctionArticleServiceTest extends IntegrationTestSupport {
 
     private static AddAuctionArticleDto getAddAuctionArticleDto() {
         return AddAuctionArticleDto.builder()
-                .auctionNumber("05-23")
                 .grade(Grade.NONE)
                 .count(10)
                 .region("광주")
                 .shipper("꽃파라")
                 .startPrice(20000)
                 .build();
+    }
+
+    private AuctionArticle insertAuctionArticle(Plant plant, Auction auction) {
+        AuctionArticle auctionArticle = AuctionArticle.builder()
+                .plant(plant)
+                .auction(auction)
+                .auctionNumber("00001")
+                .grade(Grade.NONE)
+                .count(10)
+                .region("광주")
+                .shipper("꽃파라")
+                .startPrice(20000)
+                .bidPrice(0)
+                .bidTime(LocalDateTime.now())
+                .build();
+        return auctionArticleRepository.save(auctionArticle);
     }
 
     private Auction insertAuction(Admin admin) {
