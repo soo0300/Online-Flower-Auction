@@ -47,7 +47,7 @@ const AuctionLiveForm = () => {
           </div>
           <div className='auction-bidding-border'>
             <div className='auction-bidding-info'> 
-              <div>
+              <div className='auction-bidding-price'>
                 현재가: { auctionInfo.nowPrice} <br />
                 낙찰자: { auctionInfo.buyer} <br />
                 낙찰단가: {auctionInfo.bidPrice} <br />
@@ -61,6 +61,23 @@ const AuctionLiveForm = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div className='button-container'>
+        <div>
+          <button className='normal-button'>마이크 켜기</button>
+        </div>
+        <div>
+          <button className='normal-button'>비디오 켜기</button>
+        </div>
+        <div>
+          <button className='normal-button'>위시리스트 보기</button>
+        </div>
+        <div>
+          <button className='normal-button'>금일 경매 목록</button>
+        </div>
+        <div>
+          <button className='bidding-button'>입찰하기</button>
         </div>
       </div>
     </div>

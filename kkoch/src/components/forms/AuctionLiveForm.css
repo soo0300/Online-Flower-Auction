@@ -5,13 +5,14 @@
 
 /* 상단 제목 스타일 */
 .auction-heading {
+  padding-top: 10px;
+  padding-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   color: black;
   font-weight: 700;
   font-size: 26px;
-
 }
 
 /* 경매 내용 컨테이너 스타일 */
@@ -52,6 +53,11 @@
 
 /* 경매 상태 스타일 */
 .auction-status {
+  display: flex;
+  justify-content: center;
+  color: black;
+  font-weight: 1000;
+  
 }
 
 /* 경매 내용과 도넛 차트를 담는 컨테이너 스타일 */
@@ -68,6 +74,10 @@
 
 /* 출하량 및 경매 정보 스타일 */
 .auction-status-info {
+  display: flex;
+  justify-content: center;
+  color: black;
+  font-weight: 700;
 }
 
 /* 경매 입찰 정보 컨테이너 스타일 */
@@ -75,7 +85,7 @@
 }
 
 /* 현재가 및 낙찰 정보 스타일 */
-.auction-bidding-info > div {
+.auction-bidding-price {
   display: flex;
   justify-content: center;
   color: black;
@@ -88,6 +98,7 @@
   justify-content: center;
   color: black;
   font-weight: 1000;
+  padding-top: 10px;
 }
 
 /* 다음 꽃 정보 내용 스타일 */
@@ -96,4 +107,28 @@
   justify-content: center;
   color: black;
   font-weight: 500;
+}
+
+.button-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.normal-button {
+  color:white;
+  background-color: #FA5B33;
+  font-weight: 700;
+  border-radius: 10px;
+  width: 130px;
+  height: 40px;
+}
+
+.bidding-button {
+  color: white;
+  background-color: #459358;
+  font-weight: 700;
+  border-radius: 10px;
+  width: 130px;
+  height: 40px;
 }
