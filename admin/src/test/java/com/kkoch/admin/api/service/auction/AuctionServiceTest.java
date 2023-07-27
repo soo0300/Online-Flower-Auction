@@ -117,7 +117,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
         //when //then
         Assertions.assertThatThrownBy(() -> auctionService.setStatus(-1L, OPEN))
                 .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("잘못된 옥션 PK");
+                .hasMessage("존재하지 않는 경매 일정");
 
     }
 
