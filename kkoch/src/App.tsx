@@ -7,6 +7,7 @@ import MainPage from "./pages/mainPages/MainPage";
 import Login from "@/pages/user/LoginPage";
 import Signup from "@/pages/user/SignUpPage";
 import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
+import MyPage from "./pages/user/MyPage";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -32,6 +33,7 @@ function App() {
           <Route path={"/"} element={<MainPage />}/>
           <Route path={"/auction"} element={<AuctionLocation/>}/>
           <Route path={"/auction/waitingroom"} element={<AuctionWaitingRoom/>}/>
+          <Route path={"/auction/liveroom"} element={<AuctionLiveRoom/>}/>
 
           <Route path={"/flowers"} />
           <Route path={"/customer"} />
@@ -39,6 +41,9 @@ function App() {
           {/* 로그인 */}
           <Route path={"/login"} element={<Login />}/>
           <Route path={"/signup"} element={<Signup />}/>
+
+          {/* 마이페이지 */}
+          <Route path={"/mypage"} element={<MyPage />}/>
         </Routes>
         
       </BrowserRouter>
