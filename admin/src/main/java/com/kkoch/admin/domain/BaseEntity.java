@@ -19,10 +19,9 @@ import static lombok.AccessLevel.PROTECTED;
 public abstract class BaseEntity extends TimeBaseEntity {
 
     @CreatedBy
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Long createdBy;
 
     @LastModifiedBy
-    @Column(nullable = false)
     private Long lastModifiedBy;
 }
