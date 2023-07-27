@@ -131,7 +131,7 @@ class AuctionControllerTest extends ControllerTestSupport {
         MockHttpSession session = getLoginAdminSession();
 
         //stubbing 작업
-        BDDMockito.given(auctionService.setAuction(anyLong(), anyLong(), any(SetAuctionDto.class)))
+        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
                 .willThrow(new IllegalArgumentException("구분코드 에러"));
 
         //when //then
@@ -157,7 +157,7 @@ class AuctionControllerTest extends ControllerTestSupport {
         MockHttpSession session = getLoginAdminSession();
 
         //stubbing 작업
-        BDDMockito.given(auctionService.setAuction(anyLong(), anyLong(), any(SetAuctionDto.class)))
+        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
                 .willReturn(AuctionTitleResponse.builder()
                         .auctionId(1L)
                         .title("title")
