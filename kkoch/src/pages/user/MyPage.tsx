@@ -6,7 +6,6 @@ import {
   MDBTabsLink,
   MDBTabsContent,
   MDBTabsPane,
-  MDBCardBody,
   MDBCard
 } from 'mdb-react-ui-kit';
 
