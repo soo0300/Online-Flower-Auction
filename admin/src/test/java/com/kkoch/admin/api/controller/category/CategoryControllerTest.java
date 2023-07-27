@@ -4,13 +4,16 @@ package com.kkoch.admin.api.controller.category;
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.category.request.AddCategoryRequest;
 import com.kkoch.admin.api.service.category.CategoryService;
+import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,16 +32,19 @@ class CategoryControllerTest extends ControllerTestSupport {
     @Test
     void addRootCategory() throws Exception {
         //given
+        BDDMockito.given(categoryService.addCategory(any(AddCategoryDto.class)))
+                .willReturn(2L);
+
         AddCategoryRequest request = AddCategoryRequest.builder()
-                .name("절화")
-                .level(1)
+                .name("장미")
+                .parentId(1L)
                 .build();
 
         //when, then
         mockMvc.perform(post(URI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
-                        .accept(MediaType.APPLICATION_JSON))
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("200"))
@@ -53,7 +59,6 @@ class CategoryControllerTest extends ControllerTestSupport {
         //given
         AddCategoryRequest request = AddCategoryRequest.builder()
                 .name("")
-                .level(1)
                 .build();
 
         //when, then
