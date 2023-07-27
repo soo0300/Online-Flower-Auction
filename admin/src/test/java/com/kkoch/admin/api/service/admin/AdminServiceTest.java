@@ -95,7 +95,6 @@ class AdminServiceTest extends IntegrationTestSupport {
     public void removeAdmin() throws Exception {
         // given
         Admin admin = insertAdmin();
-        //관계자 adminId를 받아서 삭제한다.
         Long adminId = admin.getId();
 
         // when
@@ -106,6 +105,21 @@ class AdminServiceTest extends IntegrationTestSupport {
         Assertions.assertThat(deleteAdmin.get().isActive()).isEqualTo(false);
 
     }
+
+    @DisplayName("관계자는 아이디와 비밀번호를 통해서 관리자 페이지에 로그인한다.")
+    @Test
+    public void loginAdmin() throws Exception {
+        // given
+        Admin admin = insertAdmin();
+
+        // when
+        boolean loginSuccess = adminService.loginAdmin(admin.getLoginId(),admin.getLoginPw());
+
+        // then
+        Assertions.assertThat(loginSuccess).isEqualTo(true);
+    }
+
+
 
     private Admin insertAdmin() {
         Admin admin = Admin.builder()

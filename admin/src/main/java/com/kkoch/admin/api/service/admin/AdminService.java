@@ -47,5 +47,13 @@ public class AdminService {
         return adminQueryRepository.findAllAdmin();
     }
 
+    public boolean loginAdmin(String loginId, String loginPw){
+        Admin admin = adminRepository.findByLoginId(loginId);
+        if(admin!=null && admin.getLoginPw().equals(loginPw)){
+            return true;
+        }
+        return false; //로그인 실패
+    }
+
 
 }
