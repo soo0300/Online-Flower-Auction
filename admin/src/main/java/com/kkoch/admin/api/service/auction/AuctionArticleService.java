@@ -28,7 +28,7 @@ public class AuctionArticleService {
 
     public Long addAuctionArticle(Long plantId, Long auctionId, AddAuctionArticleDto dto) {
         Auction auction = auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 경매 일정"));
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 경매 일정입니다."));
         Plant plant = plantRepository.findById(plantId)
                 .orElseThrow(() -> new NoSuchElementException("존재하지 않는 식물입니다."));
         int auctionArticleCount = generateAuctionArticleCount(auctionId);
