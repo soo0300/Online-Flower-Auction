@@ -1,7 +1,9 @@
 package com.kkoch.admin.api.controller.category.response;
 
+import com.kkoch.admin.domain.plant.Category;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 public class CategoryResponse {
@@ -15,6 +17,13 @@ public class CategoryResponse {
         this.categoryId = categoryId;
         this.name = name;
         this.level = level;
+    }
+    // ??
+    public CategoryResponse(Category entity){
+        this.categoryId = entity.getId();
+        this.name = entity.getName();
+        this.level = entity.getLevel();
+
     }
 
 }

@@ -69,14 +69,14 @@ class CategoryServiceTest extends IntegrationTestSupport {
         Category catgory2 = createCategory("튤립", parentCatgory);
         //when
 
-        List<CategoryResponse> results = categoryService.getCategories();
-        //then
+        List<CategoryResponse> results = categoryService.getCategories(parentCatgory.getId());
 
+        //then
         Assertions.assertThat(results).hasSize(2)
                 .extracting("name", "categoryId", "level")
                 .containsExactlyInAnyOrder(
-                        tuple("장미", 2),
-                        tuple("튤립", 2)
+                        tuple(catgory1.getName(), catgory1.getId(), catgory1.getLevel()),
+                        tuple(catgory2.getName(), catgory2.getId(), catgory2.getLevel())
                 );
     }
 
