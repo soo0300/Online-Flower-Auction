@@ -22,7 +22,7 @@ public class LoginRequest {
         this.loginPw = loginPw;
     }
 
-    public LoginDto toLoginRequestDto() {
+    public LoginDto toLoginDto() {
         LoginDto dto = LoginDto.builder()
                 .loginId(this.loginId)
                 .loginPw(this.loginPw)

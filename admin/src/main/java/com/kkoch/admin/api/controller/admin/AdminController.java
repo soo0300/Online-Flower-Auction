@@ -59,7 +59,7 @@ public class AdminController {
     //관계자 로그인
     @PostMapping("/login")
     public ApiResponse<String> login(@RequestBody LoginRequest request, HttpSession session) {
-        LoginDto dto = request.toLoginRequestDto();
+        LoginDto dto = request.toLoginDto();
         LoginAdmin loginAdmin = adminService.loginAdmin(dto);
         session.setAttribute("loginAdmin", loginAdmin);
         return ApiResponse.ok("Login success!");
