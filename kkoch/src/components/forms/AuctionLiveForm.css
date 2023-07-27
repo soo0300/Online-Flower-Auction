@@ -3,13 +3,25 @@
   display: flex;
 }
 
-/* 상단 제목 스타일 */
-.auction-heading {
-  padding-top: 10px;
-  padding-bottom: 20px;
+/* 최상단 타이틀, 버튼 div */
+.auction-top {
+  display: flex;
+  align-items: center;
+}
+
+/* 나가기 버튼 */
+.leave-button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* 상단 제목 스타일 */
+.auction-heading {
+  flex: 1;
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 20px;
   color: black;
   font-weight: 700;
   font-size: 26px;
@@ -57,7 +69,7 @@
   justify-content: center;
   color: black;
   font-weight: 1000;
-  
+
 }
 
 /* 경매 내용과 도넛 차트를 담는 컨테이너 스타일 */
