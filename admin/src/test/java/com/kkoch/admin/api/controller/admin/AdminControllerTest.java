@@ -48,7 +48,23 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isNumber());
+        // then
+    }
 
+    @DisplayName("관계자 목록을 조회할 수 있다.")
+    @Test
+    public void getAdmin() throws Exception {
+        // given
+        // when
+        mockMvc.perform(
+                        get("/admin-service/admin")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
         // then
     }
 
@@ -99,6 +115,4 @@ class AdminControllerTest extends ControllerTestSupport {
 
         // then
     }
-
-
 }

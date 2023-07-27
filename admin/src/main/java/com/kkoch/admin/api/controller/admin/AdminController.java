@@ -3,11 +3,15 @@ package com.kkoch.admin.api.controller.admin;
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.admin.request.AddAdminRequest;
 import com.kkoch.admin.api.controller.admin.request.EditAdminRequest;
+import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
 @RequestMapping("/admin-service/admin")
@@ -16,6 +20,13 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 public class AdminController {
 
     private final AdminService adminService;
+
+    //관계자 전체 조회
+    @GetMapping
+    public ApiResponse<List<AdminResponse>> getAdminList() {
+        List<AdminResponse> adminList = adminService.getAdminList();
+        return ApiResponse.ok(adminList);
+    }
 
     //관계자 등록
     @PostMapping
@@ -41,6 +52,4 @@ public class AdminController {
         Long deleteId = adminService.removeAdmin(adminId);
         return ApiResponse.of(MOVED_PERMANENTLY, "관계자 정보가 삭제되었습니다.", deleteId);
     }
-
-
 }

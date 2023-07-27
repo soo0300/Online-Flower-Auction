@@ -1,9 +1,11 @@
 package com.kkoch.admin.api.service.admin;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
 import com.kkoch.admin.domain.admin.Admin;
+import com.kkoch.admin.domain.admin.repository.AdminQueryRepository;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -21,6 +24,8 @@ class AdminServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private AdminRepository adminRepository;
+    @Autowired
+    private AdminQueryRepository adminQueryRepository;
 
     @DisplayName("관계자 더미데이터로 서비스를 통해 관계자 등록 후 리포지토리로 확인하기.")
     @Test
@@ -40,6 +45,29 @@ class AdminServiceTest extends IntegrationTestSupport {
         // then
         Optional<Admin> admin = adminRepository.findById(adminId);
         Assertions.assertThat(admin).isPresent();
+    }
+
+    @DisplayName("등록된 관계자의 목록을 조회할 수 있다.")
+    @Test
+    public void getAdmin() throws Exception {
+        // given
+        Admin admin = insertAdmin();
+        Admin admin2 = Admin.builder()
+                .loginId("molly")
+                .loginPw("konglish")
+                .name("jin")
+                .position("30")
+                .tel("010-1234-1234")
+                .active(true)
+                .build();
+        adminRepository.save(admin2);
+
+        // when
+        List<AdminResponse> admins = adminService.getAdminList();
+
+        // then
+        Assertions.assertThat(admins.size()).isEqualTo(2);
+        Assertions.assertThat(admins.get(1).getName()).isEqualTo("jin");
     }
 
     @DisplayName("관계자 정보에서 비밀번호와 전화번호만 변경할 수 있다.")
@@ -90,6 +118,4 @@ class AdminServiceTest extends IntegrationTestSupport {
                 .build();
         return adminRepository.save(admin);
     }
-
-
 }
