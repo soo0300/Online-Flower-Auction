@@ -1,7 +1,6 @@
 package com.kkoch.admin.domain.auction;
 
 import com.kkoch.admin.domain.BaseEntity;
-import com.kkoch.admin.domain.TimeBaseEntity;
 import com.kkoch.admin.domain.admin.Admin;
 import lombok.Builder;
 import lombok.Getter;
@@ -74,7 +73,7 @@ public class Auction extends BaseEntity {
     //== 비즈니스 로직 ==//
     public String getTitle() {
         List<String> types = List.of("절화", "난", "관엽", "춘화");
-        return this.startTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)) + " " + types.get(this.code) + " " + this.status.getText();
+        return this.startTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)) + " " + types.get(this.code - 1) + " " + this.status.getText();
     }
 
     public void changeStatus(Status status) {
