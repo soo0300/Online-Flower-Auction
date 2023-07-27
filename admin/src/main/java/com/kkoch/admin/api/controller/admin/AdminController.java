@@ -28,7 +28,6 @@ public class AdminController {
         return ApiResponse.ok(adminList);
     }
 
-
     //관계자 등록
     @PostMapping
     public ApiResponse<Long> addAdmin(@RequestBody AddAdminRequest request) {
@@ -53,6 +52,4 @@ public class AdminController {
         Long deleteId = adminService.removeAdmin(adminId);
         return ApiResponse.of(MOVED_PERMANENTLY, "관계자 정보가 삭제되었습니다.", deleteId);
     }
-
-
 }

@@ -48,7 +48,6 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isNumber());
-
         // then
     }
 
@@ -56,7 +55,6 @@ class AdminControllerTest extends ControllerTestSupport {
     @Test
     public void getAdmin() throws Exception {
         // given
-
         // when
         mockMvc.perform(
                         get("/admin-service/admin")
@@ -67,8 +65,6 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isArray());
-
-
         // then
     }
 
@@ -119,6 +115,4 @@ class AdminControllerTest extends ControllerTestSupport {
 
         // then
     }
-
-
 }

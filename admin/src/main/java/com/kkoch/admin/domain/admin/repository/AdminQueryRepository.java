@@ -19,7 +19,6 @@ public class AdminQueryRepository {
     }
 
     public List<AdminResponse> findAllAdmin() {
-
         return queryFactory
                 .select(Projections.constructor(AdminResponse.class,
                         admin.loginId,
@@ -33,5 +32,4 @@ public class AdminQueryRepository {
                 .fetch();
 
     }
-
 }

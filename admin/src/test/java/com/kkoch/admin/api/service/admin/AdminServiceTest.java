@@ -12,7 +12,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +69,6 @@ class AdminServiceTest extends IntegrationTestSupport {
         Assertions.assertThat(admins.get(1).getName()).isEqualTo("jin");
     }
 
-
     @DisplayName("관계자 정보에서 비밀번호와 전화번호만 변경할 수 있다.")
     @Test
     public void setAdminTest() throws Exception {
@@ -108,7 +106,6 @@ class AdminServiceTest extends IntegrationTestSupport {
 
     }
 
-
     private Admin insertAdmin() {
         Admin admin = Admin.builder()
                 .loginId("admin")
@@ -120,6 +117,4 @@ class AdminServiceTest extends IntegrationTestSupport {
                 .build();
         return adminRepository.save(admin);
     }
-
-
 }
