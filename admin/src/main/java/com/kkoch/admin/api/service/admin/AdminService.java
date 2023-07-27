@@ -1,8 +1,10 @@
 package com.kkoch.admin.api.service.admin;
 
+import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
+import com.kkoch.admin.api.service.admin.dto.LoginDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminQueryRepository;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
@@ -47,5 +49,15 @@ public class AdminService {
         return adminQueryRepository.findAllAdmin();
     }
 
+    public LoginAdmin loginAdmin(LoginDto dto) {
+        LoginAdmin admin = adminQueryRepository.findByLoginIdAndLoginPw(dto.getLoginId(), dto.getLoginPw());
 
+        if (admin == null) {
+            throw new IllegalArgumentException("아이디와 비밀번호를 확인하세요");
+        }
+
+        return admin;
+
+    }
 }
+

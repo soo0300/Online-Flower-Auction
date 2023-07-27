@@ -1,5 +1,6 @@
 package com.kkoch.admin.domain.admin.repository;
 
+import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;;
@@ -30,6 +31,17 @@ public class AdminQueryRepository {
                 .from(admin)
                 .where(admin.active.eq(true))
                 .fetch();
+
+    }
+
+    public LoginAdmin findByLoginIdAndLoginPw(String loginId, String loginPw) {
+        return queryFactory
+                .select(Projections.constructor(LoginAdmin.class,
+                        admin.id,
+                        admin.position))
+                .from(admin)
+                .where(admin.loginId.eq(loginId), admin.loginPw.eq(loginPw))
+                .fetchOne();
 
     }
 }

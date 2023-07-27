@@ -3,13 +3,16 @@ package com.kkoch.admin.api.controller.admin;
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.admin.request.AddAdminRequest;
 import com.kkoch.admin.api.controller.admin.request.EditAdminRequest;
+import com.kkoch.admin.api.controller.admin.request.LoginRequest;
 import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
+import com.kkoch.admin.api.service.admin.dto.LoginDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
@@ -52,4 +55,14 @@ public class AdminController {
         Long deleteId = adminService.removeAdmin(adminId);
         return ApiResponse.of(MOVED_PERMANENTLY, "관계자 정보가 삭제되었습니다.", deleteId);
     }
+
+    //관계자 로그인
+    @PostMapping("/login")
+    public ApiResponse<String> login(@RequestBody LoginRequest request, HttpSession session) {
+        LoginDto dto = request.toLoginDto();
+        LoginAdmin loginAdmin = adminService.loginAdmin(dto);
+        session.setAttribute("loginAdmin", loginAdmin);
+        return ApiResponse.ok("Login success!");
+    }
+
 }
