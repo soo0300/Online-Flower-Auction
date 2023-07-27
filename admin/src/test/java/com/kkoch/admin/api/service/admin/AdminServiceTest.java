@@ -1,9 +1,11 @@
 package com.kkoch.admin.api.service.admin;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
+import com.kkoch.admin.api.service.admin.dto.LoginDto;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminQueryRepository;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
@@ -11,9 +13,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Transactional
@@ -106,19 +111,37 @@ class AdminServiceTest extends IntegrationTestSupport {
 
     }
 
+    @DisplayName("관계자는 로그인 정보가 틀리면 예외가 발생한다.")
+    @Test
+    public void loginAdminException() throws Exception {
+        // given
+        LoginDto dto = LoginDto.builder()
+                .loginId("0300")
+                .loginPw("123")
+                .build();
+
+        // when
+        Assertions.assertThatThrownBy(() -> adminService.loginAdmin(dto))
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("아이디와 비밀번호를 확인하세요");
+    }
+
     @DisplayName("관계자는 아이디와 비밀번호를 통해서 관리자 페이지에 로그인한다.")
     @Test
     public void loginAdmin() throws Exception {
         // given
         Admin admin = insertAdmin();
+        LoginDto dto = LoginDto.builder()
+                .loginId(admin.getLoginId())
+                .loginPw(admin.getLoginPw())
+                .build();
 
         // when
-        boolean loginSuccess = adminService.loginAdmin(admin.getLoginId(), admin.getLoginPw());
+        LoginAdmin loginAdmin = adminService.loginAdmin(dto);
 
         // then
-        Assertions.assertThat(loginSuccess).isEqualTo(true);
+        Assertions.assertThat(loginAdmin).isNotNull();
     }
-
 
     private Admin insertAdmin() {
         Admin admin = Admin.builder()
