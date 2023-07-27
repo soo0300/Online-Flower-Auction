@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -20,9 +21,9 @@ public class AddAuctionArticleRequest {
     private Grade grade;
     @NotNull
     private Integer count;
-    @NotNull
+    @NotBlank
     private String region;
-    @NotNull
+    @NotBlank
     private String shipper;
     @NotNull
     private Integer startPrice;
