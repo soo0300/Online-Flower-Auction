@@ -36,7 +36,7 @@ public class AuctionService {
         return AuctionTitleResponse.of(savedAuction);
     }
 
-    public AuctionTitleResponse setAuction(Long auctionId, Long adminId, SetAuctionDto dto) {
+    public AuctionTitleResponse setAuction(Long auctionId, SetAuctionDto dto) {
         int code = dto.getCode();
 
         if (isRangeBetweenOneToFour(code)) {
@@ -45,9 +45,7 @@ public class AuctionService {
 
         Auction auction = getAuctionEntity(auctionId);
 
-        Admin admin = Admin.toEntity(adminId);
-
-        auction.changeAuction(dto.getCode(), dto.getStartTime(), admin);
+        auction.changeAuction(dto.getCode(), dto.getStartTime());
 
         return AuctionTitleResponse.of(auction);
     }

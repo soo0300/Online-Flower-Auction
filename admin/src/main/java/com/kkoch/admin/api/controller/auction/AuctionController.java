@@ -34,8 +34,12 @@ public class AuctionController {
 
     /**
      * 로그인을 한 관계자만 경매 일정을 등록할 수 있다.
-     * @throws IllegalArgumentException 구분코드가 범위(1 ~ 4)를 벗어나는 경우
-     * @throws IllegalArgumentException 구분코드가 범위(1 ~ 4)를 벗어나는 경우
+     * @throws IllegalArgumentException
+     * <pre>
+     *     현재 시간 + 1시간 이전의 일정이 등록되는 경우<br/>
+     *     구분코드가 범위(1 ~ 4)를 벗어나는 경우
+     * </pre>
+     *
      */
     @PostMapping
     public ApiResponse<AuctionTitleResponse> addAuction(
@@ -79,15 +83,14 @@ public class AuctionController {
     @PatchMapping("/{auctionId}")
     public ApiResponse<AuctionTitleResponse> setAuction(
         @PathVariable Long auctionId,
-        @Valid @RequestBody SetAuctionRequest request,
-        @Login LoginAdmin loginAdmin
+        @Valid @RequestBody SetAuctionRequest request
     ) {
 
         timeValidation(request.getStartTime());
 
         SetAuctionDto dto = request.toSetAuctionDto();
 
-        AuctionTitleResponse response = auctionService.setAuction(auctionId, loginAdmin.getId(), dto);
+        AuctionTitleResponse response = auctionService.setAuction(auctionId, dto);
         return ApiResponse.ok(response);
     }
 

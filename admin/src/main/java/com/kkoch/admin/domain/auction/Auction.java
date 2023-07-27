@@ -80,10 +80,9 @@ public class Auction extends BaseEntity {
         this.status = status;
     }
 
-    public void changeAuction(int code, LocalDateTime startTime, Admin admin) {
+    public void changeAuction(int code, LocalDateTime startTime) {
         this.code = code;
         this.startTime = startTime;
-        this.admin = admin;
     }
 
     public void remove() {

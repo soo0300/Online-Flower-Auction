@@ -9,7 +9,6 @@ import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import com.kkoch.admin.domain.auction.Auction;
 import com.kkoch.admin.domain.auction.repository.AuctionRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,9 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static com.kkoch.admin.domain.auction.Status.*;
+import static com.kkoch.admin.domain.auction.Status.OPEN;
+import static com.kkoch.admin.domain.auction.Status.READY;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -39,7 +40,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
         //given
 
         //when //then
-        Assertions.assertThatThrownBy(() -> auctionService.remove(-1L))
+        assertThatThrownBy(() -> auctionService.remove(-1L))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("존재하지 않는 경매 일정");
     }
@@ -64,13 +65,12 @@ class AuctionServiceTest extends IntegrationTestSupport {
     @Test
     void setAuctionIdError() {
         //given
-        Admin admin = insertAdmin();
         SetAuctionDto dto = SetAuctionDto.builder()
                 .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
                 .code(2)
                 .build();
         //when //then
-        Assertions.assertThatThrownBy(() -> auctionService.setAuction(5L, admin.getId(), dto))
+        assertThatThrownBy(() -> auctionService.setAuction(5L, dto))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("존재하지 않는 경매 일정");
     }
@@ -86,7 +86,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
                 .code(-2)
                 .build();
         //when //then
-        Assertions.assertThatThrownBy(() -> auctionService.setAuction(auction.getId(), admin.getId(), dto))
+        assertThatThrownBy(() -> auctionService.setAuction(auction.getId(), dto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("구분코드 에러");
     }
@@ -103,10 +103,10 @@ class AuctionServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        AuctionTitleResponse response = auctionService.setAuction(auction.getId(), admin.getId(), dto);
+        AuctionTitleResponse response = auctionService.setAuction(auction.getId(), dto);
 
         //then
-        Assertions.assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 춘화 준비 중");
+        assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 춘화 준비 중");
     }
 
     @DisplayName("[경매 상태 수정] 경매상태를 수정할 때 잘못된 pk의 경매일정을 수정하면 에러가 발생한다.")
@@ -115,7 +115,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
         //given
 
         //when //then
-        Assertions.assertThatThrownBy(() -> auctionService.setStatus(-1L, OPEN))
+        assertThatThrownBy(() -> auctionService.setStatus(-1L, OPEN))
                 .isInstanceOf(NoSuchElementException.class)
                 .hasMessage("존재하지 않는 경매 일정");
 
@@ -131,7 +131,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
 
         //when //then
         AuctionTitleResponse response = auctionService.setStatus(savedAuction.getId(), OPEN);
-        Assertions.assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 절화 진행 중");
+        assertThat(response.getTitle()).isEqualTo("23. 9. 20. 오전 5:00 절화 진행 중");
 
     }
 
@@ -149,7 +149,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
         //when
 
         //then
-        Assertions.assertThatThrownBy(() -> auctionService.addAuction(admin.getId(), dto))
+        assertThatThrownBy(() -> auctionService.addAuction(admin.getId(), dto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("구분코드 에러");
     }
@@ -169,7 +169,7 @@ class AuctionServiceTest extends IntegrationTestSupport {
 
         //then
         Optional<Auction> findAuction = auctionRepository.findById(response.getAuctionId());
-        Assertions.assertThat(findAuction).isPresent();
+        assertThat(findAuction).isPresent();
     }
 
 
