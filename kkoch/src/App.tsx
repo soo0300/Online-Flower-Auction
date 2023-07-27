@@ -1,7 +1,8 @@
 import Navbar from "@/pages/navbar";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import { useEffect, useState } from "react";
-import AuctionReady from "@/pages/auction/AuctionLocation";
+import AuctionLocation from "@/pages/auction/AuctionLocation";
+import AuctionWaitingRoom from "@/pages/auction/AuctionWaitingRoom";
 import MainPage from "./pages/mainPages/MainPage";
 import Login from "@/pages/user/LoginPage";
 import Signup from "@/pages/user/SignUpPage";
@@ -29,8 +30,8 @@ function App() {
         {/* 라우팅 정보 */}
         <Routes>
           <Route path={"/"} element={<MainPage />}/>
-          <Route path={"/auction"} element={<AuctionLiveRoom/>}/>
-          <Route path={"/auction"} element={<AuctionReady/>}/>
+          <Route path={"/auction"} element={<AuctionLocation/>}/>
+          <Route path={"/auction/waitingroom"} element={<AuctionWaitingRoom/>}/>
 
           <Route path={"/flowers"} />
           <Route path={"/customer"} />

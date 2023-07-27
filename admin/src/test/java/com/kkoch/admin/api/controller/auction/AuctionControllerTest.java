@@ -38,6 +38,24 @@ class AuctionControllerTest extends ControllerTestSupport {
     @MockBean
     private AuctionQueryService auctionQueryService;
 
+    @DisplayName("[경매 일정 조회] 회원용")
+    @Test
+    void getAuctionListForMember() throws Exception {
+        //given
+
+        //when //then
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/admin-service/auctions/api")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
+
+    }
+
     @DisplayName("[경매 일정 조회]")
     @Test
     void getAuctionList() throws Exception {
@@ -113,7 +131,7 @@ class AuctionControllerTest extends ControllerTestSupport {
         MockHttpSession session = getLoginAdminSession();
 
         //stubbing 작업
-        BDDMockito.given(auctionService.setAuction(anyLong(), anyLong(), any(SetAuctionDto.class)))
+        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
                 .willThrow(new IllegalArgumentException("구분코드 에러"));
 
         //when //then
@@ -139,7 +157,7 @@ class AuctionControllerTest extends ControllerTestSupport {
         MockHttpSession session = getLoginAdminSession();
 
         //stubbing 작업
-        BDDMockito.given(auctionService.setAuction(anyLong(), anyLong(), any(SetAuctionDto.class)))
+        BDDMockito.given(auctionService.setAuction(anyLong(), any(SetAuctionDto.class)))
                 .willReturn(AuctionTitleResponse.builder()
                         .auctionId(1L)
                         .title("title")

@@ -5,6 +5,7 @@ import com.kkoch.user.api.controller.member.request.*;
 import com.kkoch.user.api.controller.member.response.MemberResponse;
 import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
+import com.kkoch.user.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
@@ -24,7 +26,7 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 public class MemberController {
 
     private final MemberService memberService;
-
+    private final JwtUtil jwtUtil;
     //회원가입
     @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
@@ -50,6 +52,8 @@ public class MemberController {
     public void getMembers() {
 
     }
+
+
 
     //내정보조회
     @ApiOperation(value = "마이페이지 정보 조회")
@@ -78,4 +82,5 @@ public class MemberController {
     public ApiResponse<?> withdrawal(@RequestBody WithdrawalRequest request) {
         return ApiResponse.of(MOVED_PERMANENTLY, "회원 탈퇴", null);
     }
+
 }

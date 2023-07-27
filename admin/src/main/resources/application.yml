@@ -7,7 +7,7 @@ server:
 logging:
   level:
     org.hibernate: debug
-    com.kkoch.admin: debug
+    com.kkoch.admin: info
 
 ---
 # MSA setting
@@ -58,7 +58,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    defer-datasource-initialization: true
+#    defer-datasource-initialization: true
 
   h2:
     console:

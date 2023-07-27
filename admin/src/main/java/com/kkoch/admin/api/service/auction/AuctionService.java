@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,52 +20,10 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
 
-    public Long remove(Long auctionId) {
-
-        Auction auction = auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 경매 일정"));
-
-        auction.remove();
-
-        return auction.getId();
-    }
-
-    public AuctionTitleResponse setAuction(Long auctionId, Long adminId, SetAuctionDto dto) {
-        int code = dto.getCode();
-
-        if (betweenOneToFour(code)) {
-            throw new IllegalArgumentException("구분코드 에러");
-        }
-
-        Auction auction = auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 경매 일정"));
-
-
-        Admin admin = Admin.toEntity(adminId);
-
-        auction.changeAuction(dto.getCode(), dto.getStartTime(), admin);
-
-        return AuctionTitleResponse.of(auction);
-    }
-
-    public AuctionTitleResponse setStatus(Long auctionId, Status status) {
-
-        Optional<Auction> findAuction = auctionRepository.findById(auctionId);
-        if (findAuction.isEmpty()) {
-            throw new NoSuchElementException("잘못된 옥션 PK");
-        }
-
-        Auction auction = findAuction.get();
-
-        auction.changeStatus(status);
-
-        return AuctionTitleResponse.of(auction);
-    }
-
     public AuctionTitleResponse addAuction(Long adminId, AddAuctionDto dto) {
         int code = dto.getCode();
 
-        if (betweenOneToFour(code)) {
+        if (isRangeBetweenOneToFour(code)) {
             throw new IllegalArgumentException("구분코드 에러");
         }
 
@@ -79,9 +36,38 @@ public class AuctionService {
         return AuctionTitleResponse.of(savedAuction);
     }
 
-    private boolean betweenOneToFour(int code) {
+    public AuctionTitleResponse setAuction(Long auctionId, SetAuctionDto dto) {
+        int code = dto.getCode();
+
+        if (isRangeBetweenOneToFour(code)) {
+            throw new IllegalArgumentException("구분코드 에러");
+        }
+
+        Auction auction = getAuctionEntity(auctionId);
+
+        auction.changeAuction(dto.getCode(), dto.getStartTime());
+
+        return AuctionTitleResponse.of(auction);
+    }
+
+    public AuctionTitleResponse setStatus(Long auctionId, Status status) {
+        Auction auction = getAuctionEntity(auctionId);
+        auction.changeStatus(status);
+        return AuctionTitleResponse.of(auction);
+    }
+
+    public Long remove(Long auctionId) {
+        Auction auction = getAuctionEntity(auctionId);
+        auction.remove();
+        return auction.getId();
+    }
+
+    private boolean isRangeBetweenOneToFour(int code) {
         return code < 0 || code > 4;
     }
 
-
+    private Auction getAuctionEntity(Long auctionId) {
+        return auctionRepository.findById(auctionId)
+            .orElseThrow(() -> new NoSuchElementException("존재하지 않는 경매 일정"));
+    }
 }
