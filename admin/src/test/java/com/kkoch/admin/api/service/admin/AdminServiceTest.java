@@ -47,6 +47,30 @@ class AdminServiceTest extends IntegrationTestSupport {
         Assertions.assertThat(admin).isPresent();
     }
 
+    @DisplayName("등록된 관계자의 목록을 조회할 수 있다.")
+    @Test
+    public void getAdmin() throws Exception {
+        // given
+        Admin admin = insertAdmin();
+        Admin admin2 = Admin.builder()
+                .loginId("molly")
+                .loginPw("konglish")
+                .name("jin")
+                .position("30")
+                .tel("010-1234-1234")
+                .active(true)
+                .build();
+        adminRepository.save(admin2);
+
+        // when
+        List<AdminResponse> admins = adminService.getAdminList();
+
+        // then
+        Assertions.assertThat(admins.size()).isEqualTo(2);
+        Assertions.assertThat(admins.get(1).getName()).isEqualTo("jin");
+    }
+
+
     @DisplayName("관계자 정보에서 비밀번호와 전화번호만 변경할 수 있다.")
     @Test
     public void setAdminTest() throws Exception {
@@ -84,28 +108,6 @@ class AdminServiceTest extends IntegrationTestSupport {
 
     }
 
-    @DisplayName("등록된 관계자의 목록을 조회할 수 있다.")
-    @Test
-    public void getAdmin() throws Exception {
-        // given
-        Admin admin = insertAdmin();
-        Admin admin2 = Admin.builder()
-                .loginId("molly")
-                .loginPw("konglish")
-                .name("jin")
-                .position("30")
-                .tel("010-1234-1234")
-                .active(true)
-                .build();
-        adminRepository.save(admin2);
-
-        // when
-        List<AdminResponse> admins = adminService.getAdminList();
-
-        // then
-        Assertions.assertThat(admins.size()).isEqualTo(2);
-        Assertions.assertThat(admins.get(1).getName()).isEqualTo("jin");
-    }
 
     private Admin insertAdmin() {
         Admin admin = Admin.builder()

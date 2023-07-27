@@ -16,7 +16,7 @@ public class AdminResponse {
     private boolean active;
 
     @Builder
-    private AdminResponse(String loginId, String loginPw, String name, String tel, String position, boolean active) {
+    public AdminResponse(String loginId, String loginPw, String name, String tel, String position, boolean active) {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.name = name;

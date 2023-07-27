@@ -52,6 +52,26 @@ class AdminControllerTest extends ControllerTestSupport {
         // then
     }
 
+    @DisplayName("관계자 목록을 조회할 수 있다.")
+    @Test
+    public void getAdmin() throws Exception {
+        // given
+
+        // when
+        mockMvc.perform(
+                        get("/admin-service/admin")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
+
+
+        // then
+    }
+
     @DisplayName("관계자의 비밀번호와 전화번호를 변경할 수 있다")
     @Test
     public void setAdmin() throws Exception {
@@ -96,26 +116,6 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
                 .andExpect(jsonPath("$.message").value("관계자 정보가 삭제되었습니다."))
                 .andExpect(jsonPath("$.data").isNumber());
-
-        // then
-    }
-
-    @DisplayName("관계자 목록을 조회할 수 있다.")
-    @Test
-    public void getAdmin() throws Exception {
-        // given
-
-        // when
-        mockMvc.perform(
-                        get("/admin-service/admin")
-                )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("301"))
-                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
-                .andExpect(jsonPath("$.message").value("관계자 목록이 조회되었습니다."))
-                .andExpect(jsonPath("$.data").isNumber());
-
 
         // then
     }

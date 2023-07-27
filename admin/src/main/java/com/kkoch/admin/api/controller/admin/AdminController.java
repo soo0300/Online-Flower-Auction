@@ -23,7 +23,7 @@ public class AdminController {
 
     //관계자 전체 조회
     @GetMapping
-    public ApiResponse<List<AdminResponse>> getAdminList(@SessionAttribute(name = "loginAdmin") LoginAdmin loginAdmin) {
+    public ApiResponse<List<AdminResponse>> getAdminList() {
         List<AdminResponse> adminList = adminService.getAdminList();
         return ApiResponse.ok(adminList);
     }

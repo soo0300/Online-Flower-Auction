@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EditAdminDto {
 
-
     private String loginPw;
     private String tel;
 

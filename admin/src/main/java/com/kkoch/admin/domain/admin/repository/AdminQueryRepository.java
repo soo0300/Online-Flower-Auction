@@ -4,6 +4,7 @@ import com.kkoch.admin.api.controller.admin.response.AdminResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -18,8 +19,15 @@ public class AdminQueryRepository {
     }
 
     public List<AdminResponse> findAllAdmin() {
+
         return queryFactory
-                .select(Projections.constructor(AdminResponse.class))
+                .select(Projections.constructor(AdminResponse.class,
+                        admin.loginId,
+                        admin.loginPw,
+                        admin.name,
+                        admin.tel,
+                        admin.position,
+                        admin.active))
                 .from(admin)
                 .where(admin.active.eq(true))
                 .fetch();
