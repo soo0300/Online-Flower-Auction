@@ -1,8 +1,8 @@
 package com.kkoch.admin.api.controller.category;
 
-
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.category.request.AddCategoryRequest;
+import com.kkoch.admin.api.controller.category.response.CategoryResponse;
 import com.kkoch.admin.api.service.category.CategoryService;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
@@ -13,7 +13,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -72,5 +77,25 @@ class CategoryControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"));
 
     }
+
+    @DisplayName("카테고리를 선택시 하위 카테고리를 조회 할 수 있다.")
+    @Test
+    void getCategories() throws Exception {
+        //given
+        List<CategoryResponse> categoryResponseList = new ArrayList<>();
+
+        BDDMockito.given(categoryService.getCategories(anyLong()))
+                .willReturn(categoryResponseList);
+
+        //when
+        mockMvc.perform(get(URI + "/{parentId}", 1L))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
+    }
+
 
 }
