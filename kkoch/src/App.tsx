@@ -6,7 +6,8 @@ import AuctionWaitingRoom from "@/pages/auction/AuctionWaitingRoom";
 import MainPage from "./pages/mainPages/MainPage";
 import Login from "@/pages/user/LoginPage";
 import Signup from "@/pages/user/SignUpPage";
-import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
+// import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
+import TradingInfo from "./components/forms/TradingInfo";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -33,7 +34,7 @@ function App() {
           <Route path={"/auction"} element={<AuctionLocation/>}/>
           <Route path={"/auction/waitingroom"} element={<AuctionWaitingRoom/>}/>
 
-          <Route path={"/flowers"} />
+          <Route path={"/flowers"} element={<TradingInfo />}/>
           <Route path={"/customer"} />
 
           {/* 로그인 */}

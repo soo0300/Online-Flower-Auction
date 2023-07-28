@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './Login.css';
+import axios from 'axios';
 
 // type Props = {}
 
@@ -9,6 +10,14 @@ const User = {
 }
 
 const Login = () => {
+
+
+	axios.get('/admin-service/trades/1?term=4')
+	.then((Response)=>{console.log(Response)})
+	.catch((Error)=>{console.log(Error)})
+
+
+	
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword] = useState('');
 
