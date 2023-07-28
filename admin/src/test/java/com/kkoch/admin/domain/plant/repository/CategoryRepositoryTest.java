@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.transaction.Transactional;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
-
 @Transactional
 class CategoryRepositoryTest extends IntegrationTestSupport {
 
@@ -24,14 +22,14 @@ class CategoryRepositoryTest extends IntegrationTestSupport {
     void getSubCategories() throws Exception {
         //given
         Category parentCatgory = createRootCategory("절화");
-        Category catgory1 = createCategory("장미",parentCatgory);
-        Category catgory2 = createCategory("튤립",parentCatgory);
-        Category category1_1 = createCategory("레드",catgory1);
-        Category category1_2 = createCategory("블루",catgory1);
+        Category catgory1 = createCategory("장미", parentCatgory);
+        Category catgory2 = createCategory("튤립", parentCatgory);
+        Category category1_1 = createCategory("레드", catgory1);
+        Category category1_2 = createCategory("블루", catgory1);
 
         //when
-        List<Category> results = categoryRepository.findAllByParent(parentCatgory);
-        List<Category> subResults = categoryRepository.findAllByParent(catgory1);
+        List<Category> results = categoryRepository.findAllById(parentCatgory.getId());
+        List<Category> subResults = categoryRepository.findAllById(catgory1.getId());
 
         //then
         Assertions.assertThat(results).hasSize(2)

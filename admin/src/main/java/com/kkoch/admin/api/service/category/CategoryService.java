@@ -27,8 +27,7 @@ public class CategoryService {
     }
 
     public List<CategoryResponse> getCategories(Long parentId) {
-        Category parent = getCategoryEntity(parentId);
-        return categoryRepository.findAllByParent(parent)
+        return categoryRepository.findAllById(parentId)
                 .stream().map(CategoryResponse::new).collect(Collectors.toList());
 
     }
