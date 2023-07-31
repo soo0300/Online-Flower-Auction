@@ -13,19 +13,16 @@ public class AddCategoryDto {
 
     private Long parentId;
 
-    private int level;
 
     @Builder
-    private AddCategoryDto(String name, Long parentId, int level) {
+    private AddCategoryDto(String name, Long parentId) {
         this.name = name;
         this.parentId = parentId;
-        this.level = level;
     }
 
     public Category toEntity() {
         return Category.builder()
                 .name(this.name)
-                .level(this.level)
                 .build();
     }
 }

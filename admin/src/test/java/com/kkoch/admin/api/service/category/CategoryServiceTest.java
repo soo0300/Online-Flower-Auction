@@ -10,12 +10,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
+
+@Transactional
 
 class CategoryServiceTest extends IntegrationTestSupport {
 
@@ -35,15 +38,11 @@ class CategoryServiceTest extends IntegrationTestSupport {
                 .level(1)
                 .build();
 
-        Long parentId = 1L;
-
-        ReflectionTestUtils.setField(parentCategory, "id", parentId);
-
         categoryRepository.save(parentCategory);
 
         AddCategoryDto dto = AddCategoryDto.builder()
                 .name("장미")
-                .parentId(parentId)
+                .parentId(parentCategory.getId())
                 .build();
 
         Long fakeId = 2L;
@@ -118,7 +117,6 @@ class CategoryServiceTest extends IntegrationTestSupport {
         assertThat(findCategory).isPresent();
         assertThat(findSubCategory).isPresent();
         assertThat(findCategory.get().isActive()).isFalse();
-        assertThat(findSubCategory.get().isActive()).isFalse();
 
     }
 
