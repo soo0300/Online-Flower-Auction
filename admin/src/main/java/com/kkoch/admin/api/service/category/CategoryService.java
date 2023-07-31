@@ -44,6 +44,9 @@ public class CategoryService {
 
     private void removeAllSubCategories(Category category) {
         List<Category> subCategories = category.getChildren();
+
+        if (subCategories.isEmpty()) return;
+
         for (Category subCategory : subCategories) {
             subCategory.remove();
         }

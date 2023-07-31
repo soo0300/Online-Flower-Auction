@@ -122,7 +122,6 @@ class CategoryServiceTest extends IntegrationTestSupport {
 
     }
 
-
     private Category createRootCategory(String name) {
         Category category = Category.builder()
                 .name(name)
