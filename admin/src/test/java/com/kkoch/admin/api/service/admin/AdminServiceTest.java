@@ -13,12 +13,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockHttpSession;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Transactional
@@ -122,7 +119,7 @@ class AdminServiceTest extends IntegrationTestSupport {
 
         // when
         Assertions.assertThatThrownBy(() -> adminService.loginAdmin(dto))
-                .isInstanceOf(NoSuchElementException.class)
+                .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("아이디와 비밀번호를 확인하세요");
     }
 
