@@ -26,12 +26,12 @@ public class Plant extends TimeBaseEntity {
     private Category code;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "name")
-    private Category name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type")
     private Category type;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "name")
+    private Category name;
 
     @Builder
     private Plant(boolean active, Category code, Category name, Category type) {
