@@ -20,7 +20,6 @@ public class ReservationServiceTest extends IntegrationTestSupport {
     @Autowired
     private ReservationRepository reservationRepository;
 
-
     @DisplayName("거래 예약 항목을 입력받아 거래 예약을 등록")
     @Test
     public void addReservation() throws Exception {

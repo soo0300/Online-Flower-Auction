@@ -24,10 +24,6 @@ public class Reservation extends TimeBaseEntity {
     @Column(nullable = false)
     private int price;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id", updatable = false, nullable = false)
-//    private Member member;
-
     private Long memberId;
 
     @Column(nullable = false)
