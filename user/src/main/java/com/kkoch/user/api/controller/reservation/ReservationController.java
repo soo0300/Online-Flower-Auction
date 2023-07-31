@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
@@ -26,7 +27,7 @@ public class ReservationController {
 
     @ApiOperation(value = "거래 예약 등록")
     @PostMapping
-    public ApiResponse<Long> addReservation(@RequestBody AddReservationRequest request) {
+    public ApiResponse<Long> addReservation(@Valid @RequestBody AddReservationRequest request) {
         AddReservationDto dto = request.toAddReservationDto();
         Long memberId = reservationService.addReservation(dto);
         return ApiResponse.ok(memberId);
