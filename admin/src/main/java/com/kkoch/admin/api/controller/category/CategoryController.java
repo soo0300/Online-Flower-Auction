@@ -42,6 +42,12 @@ public class CategoryController {
         SetCategoryDto dto = request.toSetCategoryDto();
         CategoryResponse result = categoryService.setCategory(categoryId, dto);
         return ApiResponse.of(HttpStatus.MOVED_PERMANENTLY, "카테고리가 수정되었습니다.", result);
+    }
+
+    @DeleteMapping("/{categoryId}")
+    public ApiResponse<Long> removeCategory(@PathVariable Long categoryId) {
+        Long removeId = categoryService.removeCategory(categoryId);
+        return ApiResponse.of(HttpStatus.MOVED_PERMANENTLY, "카테고리가 삭제되었습니다.", removeId);
 
     }
 }
