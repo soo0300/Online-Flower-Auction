@@ -27,6 +27,12 @@ public class CategoryService {
         return category.getId();
     }
 
+    public CategoryResponse setCategory(SetCategoryDto setCategoryDto) {
+        Category category = getCategoryEntity(setCategoryDto.getCategoryId());
+        category.changeCategory(setCategoryDto.getChangeName());
+        return CategoryResponse.of(category);
+    }
+
     public List<CategoryResponse> getCategories(Long parentId) {
         return categoryRepository.findAllById(parentId)
                 .stream().map(CategoryResponse::new).collect(Collectors.toList());
@@ -38,7 +44,4 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
     }
 
-    public Category setCategory(SetCategoryDto setCategoryDto) {
-        return null;
-    }
 }

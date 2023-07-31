@@ -6,14 +6,15 @@ import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 class CategoryServiceTest extends IntegrationTestSupport {
@@ -55,7 +56,7 @@ class CategoryServiceTest extends IntegrationTestSupport {
         List<Category> categories = categoryRepository.findAll();
 
         //then
-        Assertions.assertThat(categories).hasSize(2);
+        assertThat(categories).hasSize(2);
 
     }
 
@@ -71,7 +72,7 @@ class CategoryServiceTest extends IntegrationTestSupport {
         List<CategoryResponse> results = categoryService.getCategories(parentCatgory.getId());
 
         //then
-        Assertions.assertThat(results).hasSize(2)
+        assertThat(results).hasSize(2)
                 .extracting("name", "categoryId", "level")
                 .containsExactlyInAnyOrder(
                         tuple(catgory1.getName(), catgory1.getId(), catgory1.getLevel()),
@@ -93,12 +94,13 @@ class CategoryServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        Category resultCategory = categoryService.setCategory(setCategoryDto);
+        CategoryResponse resultCategory = categoryService.setCategory(setCategoryDto);
 
         //then
-        Assertions.assertThat(resultCategory.getName()).isEqualTo(category1.getName());
+        Optional<Category> findCategory = categoryRepository.findById(category1.getId());
+        assertThat(findCategory).isPresent();
+        assertThat(findCategory.get().getName()).isEqualTo(resultCategory.getName());
     }
-
 
     private Category createRootCategory(String name) {
         Category category = Category.builder()

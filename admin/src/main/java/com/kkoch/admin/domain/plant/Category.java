@@ -55,4 +55,7 @@ public class Category extends TimeBaseEntity {
         return child;
     }
 
+    public void changeCategory(String name) {
+        this.name = name;
+    }
 }
