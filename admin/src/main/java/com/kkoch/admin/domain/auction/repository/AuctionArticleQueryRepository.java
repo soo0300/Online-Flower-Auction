@@ -1,8 +1,10 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import com.kkoch.admin.domain.plant.QCategory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -59,6 +61,37 @@ public class AuctionArticleQueryRepository {
                 .size();
     }
 
+    public List<AuctionArticlesResponse> getAuctionArticleListForAdmin(AuctionArticleSearchForAdminCond cond) {
+        QCategory code = new QCategory("code");
+        QCategory name = new QCategory("name");
+        QCategory type = new QCategory("type");
+
+        return queryFactory.select(Projections.constructor(AuctionArticlesResponse.class,
+                        auctionArticle.plant.code.name,
+                        auctionArticle.plant.name.name,
+                        auctionArticle.plant.type.name,
+                        auctionArticle.grade,
+                        auctionArticle.count,
+                        auctionArticle.bidPrice,
+                        auctionArticle.bidTime,
+                        auctionArticle.region,
+                        auctionArticle.shipper))
+                .from(auctionArticle)
+                .join(auctionArticle.plant, plant)
+                .join(plant.code, code)
+                .join(plant.name, name)
+                .join(plant.type, type)
+                .where(
+                        auctionArticle.plant.code.name.eq(cond.getCode()),
+                        auctionArticle.bidTime.between(cond.getStartDateTime(), cond.getEndDateTime()),
+                        eqPlantName(cond.getName()),
+                        eqPlantType(cond.getType()),
+                        eqAuctionRegion(cond.getRegion()),
+                        eqShipper(cond.getShipper())
+                )
+                .fetch();
+    }
+
     public List<AuctionArticleForMemberResponse> getAuctionArticleListForMember(AuctionArticleSearchCond cond, Pageable pageable) {
         QCategory code = new QCategory("code");
         QCategory name = new QCategory("name");
@@ -113,6 +146,10 @@ public class AuctionArticleQueryRepository {
 
     private BooleanExpression eqPlantName(String name) {
         return hasText(name) ? auctionArticle.plant.name.name.eq(name) : null;
+    }
+
+    private BooleanExpression eqShipper(String shipper) {
+        return hasText(shipper) ? auctionArticle.shipper.eq(shipper) : null;
     }
 
 }
