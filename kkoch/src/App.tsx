@@ -8,6 +8,8 @@ import Login from "@/pages/user/LoginPage";
 import Signup from "@/pages/user/SignUpPage";
 import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 import MyPage from "./pages/user/MyPage";
+// import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
+import TradingInfo from "./components/forms/TradingInfo";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -35,7 +37,7 @@ function App() {
           <Route path={"/auction/waitingroom"} element={<AuctionWaitingRoom/>}/>
           <Route path={"/auction/liveroom"} element={<AuctionLiveRoom/>}/>
 
-          <Route path={"/flowers"} />
+          <Route path={"/flowers"} element={<TradingInfo />}/>
           <Route path={"/customer"} />
 
           {/* 로그인 */}

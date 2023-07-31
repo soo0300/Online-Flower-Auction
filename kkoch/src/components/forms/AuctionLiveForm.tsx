@@ -9,9 +9,6 @@ const AuctionLiveForm = () => {
 
   // const axios = require('axios');
 
-  axios.get('http://localhost:8000/admin-service/trades/1?term=4')
-  .then((Response)=>{console.log(Response.data)})
-  .catch((Error)=>{console.log(Error)})
 
 
   
