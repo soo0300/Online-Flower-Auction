@@ -3,29 +3,66 @@ package com.kkoch.admin.api.controller.auction;
 
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
 import com.kkoch.admin.domain.Grade;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {AuctionArticleController.class})
 class AuctionArticleControllerTest extends ControllerTestSupport {
 
     @MockBean
     private AuctionArticleService auctionArticleService;
+    @MockBean
+    private AuctionArticleQueryService auctionArticleQueryService;
+
+    @DisplayName("[경매 실적 조회]")
+    @Test
+    void getAuctionArticleForMember() throws Exception {
+        //given
+        List<AuctionArticleForMemberResponse> list = List.of();
+        PageImpl<AuctionArticleForMemberResponse> responses = new PageImpl<>(list);
+
+        BDDMockito.given(auctionArticleQueryService.getAuctionArticleListForMember(any(AuctionArticleSearchCond.class), any(Pageable.class)))
+                .willReturn(responses);
+
+        //when //then
+        mockMvc.perform(
+
+                        get("/admin-service/auction-articles/api")
+                                .queryParam("endDateTime", "2023-08-01")
+                                .queryParam("code", "절화")
+                                .queryParam("type", "장미")
+                                .queryParam("name", "푸에고")
+                                .queryParam("region", "")
+                                .queryParam("page", "0")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data.content").isArray());
+    }
 
     @DisplayName("[경매품 등록] 존재하지 않는 경매일정에 경매품을 등록하면 예외가 발생한다.")
     @Test
@@ -39,16 +76,16 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
         //when
         //then
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/admin-service/auction-articles")
+                        post("/admin-service/auction-articles")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(400))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("BAD_REQUEST"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("존재하지 않는 경매 일정입니다."))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("존재하지 않는 경매 일정입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 
 
@@ -64,16 +101,16 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
         //when
         //then
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/admin-service/auction-articles")
+                        post("/admin-service/auction-articles")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(400))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("BAD_REQUEST"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("존재하지 않는 식물입니다."))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("존재하지 않는 식물입니다."))
+                .andExpect(jsonPath("$.data").isEmpty());
     }
 
     @DisplayName("[경매품 등록]")
@@ -85,16 +122,16 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
         //when
         //then
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/admin-service/auction-articles")
+                        post("/admin-service/auction-articles")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("OK"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SUCCESS"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isNumber());
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(200))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isNumber());
     }
 
     private static AddAuctionArticleRequest generateAddAuctionArticleRequest() {
