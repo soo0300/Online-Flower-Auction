@@ -4,6 +4,7 @@ import com.kkoch.admin.api.controller.category.response.CategoryResponse;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import com.kkoch.admin.domain.plant.Category;
+import com.kkoch.admin.domain.plant.Plant;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import com.kkoch.admin.domain.plant.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,6 @@ public class CategoryService {
             addPlant(category);
 
         return category.getId();
-    }
-
-    private void addPlant(Category category) {
-
     }
 
     public CategoryResponse setCategory(Long categoryId, SetCategoryDto setCategoryDto) {
@@ -71,6 +68,17 @@ public class CategoryService {
     private Category getCategoryEntity(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
+    }
+
+    private void addPlant(Category category) {
+        Plant plant = Plant.builder()
+                .active(true)
+                .code(category.getParent().getParent())
+                .type(category.getParent())
+                .name(category)
+                .build();
+
+        plantRepository.save(plant);
     }
 
     private boolean isSubdivision(int level) {
