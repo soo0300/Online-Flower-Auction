@@ -37,12 +37,16 @@ public class CategoryService {
         Category category = getCategoryEntity(categoryId);
         category.remove();
 
-        List<Category> subCategories = category.getChildren();
-        for (Category subCategory:subCategories) {
-            subCategory.remove();
-        }
+        removeAllSubCategories(category);
 
         return category.getId();
+    }
+
+    private void removeAllSubCategories(Category category) {
+        List<Category> subCategories = category.getChildren();
+        for (Category subCategory : subCategories) {
+            subCategory.remove();
+        }
     }
 
     public List<CategoryResponse> getCategories(Long parentId) {
