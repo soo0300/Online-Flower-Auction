@@ -23,7 +23,13 @@ public class CategoryResponse {
         this.categoryId = entity.getId();
         this.name = entity.getName();
         this.level = entity.getLevel();
-
     }
 
+    public static CategoryResponse of(Category category) {
+        return CategoryResponse.builder()
+                .name(category.getName())
+                .categoryId(category.getId())
+                .level(category.getLevel())
+                .build();
+    }
 }

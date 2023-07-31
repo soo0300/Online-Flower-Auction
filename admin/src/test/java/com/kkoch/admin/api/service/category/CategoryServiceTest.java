@@ -3,9 +3,9 @@ package com.kkoch.admin.api.service.category;
 import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.controller.category.response.CategoryResponse;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
+import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 class CategoryServiceTest extends IntegrationTestSupport {
@@ -56,7 +56,7 @@ class CategoryServiceTest extends IntegrationTestSupport {
         List<Category> categories = categoryRepository.findAll();
 
         //then
-        Assertions.assertThat(categories).hasSize(2);
+        assertThat(categories).hasSize(2);
 
     }
 
@@ -72,12 +72,33 @@ class CategoryServiceTest extends IntegrationTestSupport {
         List<CategoryResponse> results = categoryService.getCategories(parentCatgory.getId());
 
         //then
-        Assertions.assertThat(results).hasSize(2)
+        assertThat(results).hasSize(2)
                 .extracting("name", "categoryId", "level")
                 .containsExactlyInAnyOrder(
                         tuple(catgory1.getName(), catgory1.getId(), catgory1.getLevel()),
                         tuple(catgory2.getName(), catgory2.getId(), catgory2.getLevel())
                 );
+    }
+
+    @DisplayName("관계자는 카테고리를 선택해 이름을 변경 할 수 있다.")
+    @Test
+    void setCategory() throws Exception {
+        //given
+        Category parentCategory = createRootCategory("절화");
+        Category category1 = createCategory("장미", parentCategory);
+        Category category2 = createCategory("튤립", parentCategory);
+
+        SetCategoryDto setCategoryDto = SetCategoryDto.builder()
+                .changeName("바뀐 장미")
+                .build();
+
+        //when
+        CategoryResponse resultCategory = categoryService.setCategory(category1.getId(),setCategoryDto);
+
+        //then
+        Optional<Category> findCategory = categoryRepository.findById(category1.getId());
+        assertThat(findCategory).isPresent();
+        assertThat(findCategory.get().getName()).isEqualTo(resultCategory.getName());
     }
 
     private Category createRootCategory(String name) {

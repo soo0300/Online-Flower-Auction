@@ -2,6 +2,7 @@ package com.kkoch.admin.api.service.category;
 
 import com.kkoch.admin.api.controller.category.response.CategoryResponse;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
+import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,12 @@ public class CategoryService {
         return category.getId();
     }
 
+    public CategoryResponse setCategory(Long categoryId, SetCategoryDto setCategoryDto) {
+        Category category = getCategoryEntity(categoryId);
+        category.changeCategory(setCategoryDto.getChangeName());
+        return CategoryResponse.of(category);
+    }
+
     public List<CategoryResponse> getCategories(Long parentId) {
         return categoryRepository.findAllById(parentId)
                 .stream().map(CategoryResponse::new).collect(Collectors.toList());
@@ -36,4 +43,5 @@ public class CategoryService {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
     }
+
 }

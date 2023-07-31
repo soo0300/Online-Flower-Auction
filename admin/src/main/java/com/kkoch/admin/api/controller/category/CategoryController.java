@@ -1,12 +1,14 @@
 package com.kkoch.admin.api.controller.category;
 
-
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.category.request.AddCategoryRequest;
+import com.kkoch.admin.api.controller.category.request.SetCategoryRequest;
 import com.kkoch.admin.api.controller.category.response.CategoryResponse;
 import com.kkoch.admin.api.service.category.CategoryService;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
+import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,7 +32,16 @@ public class CategoryController {
 
     @GetMapping("/{parentId}")
     public ApiResponse<List<CategoryResponse>> getCategories(@PathVariable Long parentId) {
-
         return ApiResponse.ok(categoryService.getCategories(parentId));
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ApiResponse<CategoryResponse> setCategory(@PathVariable Long categoryId
+            , @Valid @RequestBody SetCategoryRequest request) {
+
+        SetCategoryDto dto = request.toSetCategoryDto();
+        CategoryResponse result = categoryService.setCategory(categoryId, dto);
+        return ApiResponse.of(HttpStatus.MOVED_PERMANENTLY, "카테고리가 수정되었습니다.", result);
+
     }
 }

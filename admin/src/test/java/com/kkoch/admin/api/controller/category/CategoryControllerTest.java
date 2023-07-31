@@ -2,13 +2,14 @@ package com.kkoch.admin.api.controller.category;
 
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.category.request.AddCategoryRequest;
+import com.kkoch.admin.api.controller.category.request.SetCategoryRequest;
 import com.kkoch.admin.api.controller.category.response.CategoryResponse;
 import com.kkoch.admin.api.service.category.CategoryService;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
+import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -18,8 +19,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +38,7 @@ class CategoryControllerTest extends ControllerTestSupport {
     @Test
     void addRootCategory() throws Exception {
         //given
-        BDDMockito.given(categoryService.addCategory(any(AddCategoryDto.class)))
+        given(categoryService.addCategory(any(AddCategoryDto.class)))
                 .willReturn(2L);
 
         AddCategoryRequest request = AddCategoryRequest.builder()
@@ -84,7 +85,7 @@ class CategoryControllerTest extends ControllerTestSupport {
         //given
         List<CategoryResponse> categoryResponseList = new ArrayList<>();
 
-        BDDMockito.given(categoryService.getCategories(anyLong()))
+        given(categoryService.getCategories(anyLong()))
                 .willReturn(categoryResponseList);
 
         //when
@@ -97,5 +98,32 @@ class CategoryControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").isArray());
     }
 
+    @DisplayName("관계자가 카테고리를 선택하여 카테고리 이름을 수정할 수 있다.")
+    @Test
+    void setCategory() throws Exception {
+        //given
+        SetCategoryRequest request = SetCategoryRequest
+                .builder()
+                .changeName("바뀐 장미")
+                .build();
+        //when
+        given(categoryService.setCategory(anyLong(), any(SetCategoryDto.class)))
+                .willReturn(CategoryResponse.builder()
+                        .categoryId(1L)
+                        .name("바뀐 장미")
+                        .level(2)
+                        .build());
+        //then
+        mockMvc.perform(patch(URI + "/{categoryId}",1L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("카테고리가 수정되었습니다."))
+                .andExpect(jsonPath("$.data").isNotEmpty());
+    }
 
 }
