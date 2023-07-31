@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.0.18",
     "@mui/material": "^5.14.2",
     "@mui/x-data-grid": "^6.10.2",
+    "@mui/x-data-grid-generator": "^6.10.2",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.4.0",
     "chart.js": "^4.3.1",
