@@ -120,9 +120,9 @@ class CategoryControllerTest extends ControllerTestSupport {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("200"))
-                .andExpect(jsonPath("$.status").value("OK"))
-                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("카테고리가 수정되었습니다."))
                 .andExpect(jsonPath("$.data").isNotEmpty());
     }
 
