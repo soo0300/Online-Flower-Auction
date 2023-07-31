@@ -1,6 +1,6 @@
 package com.kkoch.admin.api.service.trade;
 
-import com.kkoch.admin.api.controller.trade.response.AuctionArticleResponse;
+import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleQueryRepository;
@@ -31,7 +31,7 @@ public class TradeQueryService {
 
     public TradeDetailResponse getTrade(Long tradeId) {
         TradeDetailResponse response = tradeQueryRepository.findById(tradeId);
-        List<AuctionArticleResponse> contents = auctionArticleQueryRepository.findByTradeId(tradeId);
+        List<SuccessfulBid> contents = auctionArticleQueryRepository.findByTradeId(tradeId);
         response.insertAuctionArticles(contents);
         return response;
     }

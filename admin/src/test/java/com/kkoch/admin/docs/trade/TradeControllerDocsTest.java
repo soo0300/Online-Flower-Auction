@@ -3,7 +3,7 @@ package com.kkoch.admin.docs.trade;
 import com.kkoch.admin.api.controller.trade.TradeController;
 import com.kkoch.admin.api.controller.trade.request.AddTradeRequest;
 import com.kkoch.admin.api.controller.trade.request.AuctionArticleRequest;
-import com.kkoch.admin.api.controller.trade.response.AuctionArticleResponse;
+import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.api.service.trade.TradeQueryService;
@@ -199,7 +199,7 @@ public class TradeControllerDocsTest extends RestDocsSupport {
     @DisplayName("낙찰 내역 상세조회 API")
     @Test
     void getTrade() throws Exception {
-        AuctionArticleResponse auctionArticle = createAuctionArticleResponse();
+        SuccessfulBid auctionArticle = createSuccessfulBid();
         TradeDetailResponse response = TradeDetailResponse.builder()
             .totalPrice(10000)
             .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
@@ -237,31 +237,31 @@ public class TradeControllerDocsTest extends RestDocsSupport {
                         .description("거래 시간"),
                     fieldWithPath("data.pickupStatus").type(JsonFieldType.BOOLEAN)
                         .description("픽업 여부"),
-                    fieldWithPath("data.auctionArticles").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data.successfulBid").type(JsonFieldType.ARRAY)
                         .description("경매품 정보 리스트"),
-                    fieldWithPath("data.auctionArticles[].code").type(JsonFieldType.STRING)
+                    fieldWithPath("data.successfulBid[].code").type(JsonFieldType.STRING)
                         .description("식물 구분 코드"),
-                    fieldWithPath("data.auctionArticles[].name").type(JsonFieldType.STRING)
+                    fieldWithPath("data.successfulBid[].name").type(JsonFieldType.STRING)
                         .description("식물 품종 명"),
-                    fieldWithPath("data.auctionArticles[].type").type(JsonFieldType.STRING)
+                    fieldWithPath("data.successfulBid[].type").type(JsonFieldType.STRING)
                         .description("식물 품목 명"),
-                    fieldWithPath("data.auctionArticles[].grade").type(JsonFieldType.STRING)
+                    fieldWithPath("data.successfulBid[].grade").type(JsonFieldType.STRING)
                         .description("경매품 등급"),
-                    fieldWithPath("data.auctionArticles[].count").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.successfulBid[].count").type(JsonFieldType.NUMBER)
                         .description("경매품 단수"),
-                    fieldWithPath("data.auctionArticles[].bidPrice").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.successfulBid[].bidPrice").type(JsonFieldType.NUMBER)
                         .description("낙찰 가격"),
-                    fieldWithPath("data.auctionArticles[].bidTime").type(JsonFieldType.STRING)
+                    fieldWithPath("data.successfulBid[].bidTime").type(JsonFieldType.STRING)
                         .description("낙찰 시간"),
-                    fieldWithPath("data.auctionArticles[].region").type(JsonFieldType.STRING)
+                    fieldWithPath("data.successfulBid[].region").type(JsonFieldType.STRING)
                         .description("출하 지역")
                 )
             ));
 
     }
 
-    private static AuctionArticleResponse createAuctionArticleResponse() {
-        return AuctionArticleResponse.builder()
+    private static SuccessfulBid createSuccessfulBid() {
+        return SuccessfulBid.builder()
             .code("절화")
             .name("장미(스탠다드)")
             .type("하젤")
