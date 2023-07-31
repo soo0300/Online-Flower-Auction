@@ -6,12 +6,10 @@ import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,5 +27,16 @@ public class AuctionArticleController {
         Long savedAuctionArticleId = auctionArticleService.addAuctionArticle(request.getPlantId(), request.getAuctionId(), dto);
         log.debug("[경매품 등록 응답] 경매품 상장번호 = {}", savedAuctionArticleId);
         return ApiResponse.ok(savedAuctionArticleId);
+    }
+
+    @GetMapping("/api")
+    public ApiResponse<?> getAuctionArticlesForMember(
+            @RequestParam LocalDateTime endDateTime,
+            @RequestParam String code,
+            @RequestParam String type,
+            @RequestParam String name,
+            @RequestParam String region
+    ) {
+        return null;
     }
 }
