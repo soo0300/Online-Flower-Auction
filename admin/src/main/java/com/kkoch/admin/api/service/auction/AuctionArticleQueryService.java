@@ -1,8 +1,10 @@
 package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleQueryRepository;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,4 +27,7 @@ public class AuctionArticleQueryService {
         return new PageImpl<>(responses, pageable, totalCount);
     }
 
+    public List<AuctionArticlesResponse> getAuctionArticleListForAdmin(AuctionArticleSearchForAdminCond cond) {
+        return auctionArticleQueryRepository.getAuctionArticleListForAdmin(cond);
+    }
 }

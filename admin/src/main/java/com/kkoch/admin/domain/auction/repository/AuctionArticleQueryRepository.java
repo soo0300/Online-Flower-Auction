@@ -82,6 +82,7 @@ public class AuctionArticleQueryRepository {
                 .join(plant.name, name)
                 .join(plant.type, type)
                 .where(
+                        // TODO: 2023-07-31 날짜 조건이 없을수도 있을듯
                         auctionArticle.plant.code.name.eq(cond.getCode()),
                         auctionArticle.bidTime.between(cond.getStartDateTime(), cond.getEndDateTime()),
                         eqPlantName(cond.getName()),
