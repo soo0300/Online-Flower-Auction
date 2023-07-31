@@ -114,6 +114,7 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
                 <MenuItem value="">전체</MenuItem>
                 <MenuItem value="양재">양재</MenuItem>
                 <MenuItem value="광주">광주</MenuItem>
+                <MenuItem value="광주">부산</MenuItem>
               </Select>
             </FormControl>
             <div className='button-search' onClick={handleSearch}>
