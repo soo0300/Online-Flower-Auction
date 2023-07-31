@@ -1,29 +1,55 @@
-import React from 'react'
-import { DataGrid, GridColDef, GridColumnMenu, GridColumnMenuProps, GridRowsProp } from '@mui/x-data-grid';
+import React, { useState } from 'react'
+import { DataGrid, GridRowParams } from '@mui/x-data-grid';
+import TableFilter from './TableFilter';
+import './TradingTable.css';
+import columns from './TableColumns'
+import { initialRows } from './TableRows';
+import FilterValues from './TableInterface';
 
 const TradingTable = () => {
+  // 테이블 데이터 초기 상태
+  const [tableData, setTableData] = useState(initialRows); 
 
-  const rows: GridRowsProp = [
-    { id: 1, col1: '장미', col2: '스프린트', col3: '특', col4: '30', col5: '3,000', col6: '양재' },
-    { id: 2, col1: '장미', col2: '스프린트', col3: '특', col4: '20', col5: '2,500', col6: '양재' },
-    { id: 3, col1: '장미', col2: '스프린트', col3: '특', col4: '10', col5: '2,000', col6: '양재' },
-    { id: 4, col1: '장미', col2: '스프린트', col3: '특', col4: '15', col5: '1,500', col6: '양재' },
-    { id: 5, col1: '장미', col2: '스프린트', col3: '특', col4: '10', col5: '5,000', col6: '양재' },
-  ];
+  // TableFilter에서 필터 정보를 받아와서 테이블 데이터를 필터링하는 함수
+  const handleFilterChange = (filter: FilterValues) => {
+    const filterData = initialRows.filter((item) => {
+      return (
+        (!filter.flower || item.flower === filter.flower) &&
+        (!filter.variety || item.variety === filter.variety) &&
+        (!filter.location || item.location === filter.location)
+        );
+      });
+      console.log(filterData);
+      setTableData(filterData);
+    };
 
-  const columns: GridColDef[] = [
-  { field: 'col1', headerName: '품목', width: 100 },
-  { field: 'col2', headerName: '품종', width: 100 },
-  { field: 'col3', headerName: '등급', width: 100 },
-  { field: 'col4', headerName: '단(속)', width: 100 },
-  { field: 'col5', headerName: '낙찰단가', width: 100 },
-  { field: 'col6', headerName: '지역', width: 100 },
-];
+
+  const getRowClassName = (params: GridRowParams) => {
+    return params.row.col4 >= 0 ? 'custom-row-sold' : '';
+  }
 
 
   return (
-    <div style={{ height: '100%', width: '100%' }}>
-      <DataGrid rows={rows} columns={columns} disableColumnMenu />
+    <div className='table-container'>
+      <TableFilter onFilterChange={handleFilterChange} />
+      <div>
+        <div className='table-title'>
+          실시간 거래 현황
+          <span className='table-units'>
+            단위: 원 | 기간: 1주일 단위
+          </span>
+        </div>
+      </div>
+      <div className='tablecontent'>
+        <div className='datagrid-container'>
+          <DataGrid 
+            rows={tableData}
+            columns={columns}
+            getRowClassName={ getRowClassName }
+            disableColumnMenu
+          />
+        </div>
+      </div>
     </div>
   )
 }
