@@ -8,13 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class SetCategoryDto {
 
-    private Long categoryId;
-
     private String changeName;
 
     @Builder
-    public SetCategoryDto(Long categoryId, String changeName) {
-        this.categoryId = categoryId;
+    private SetCategoryDto(String changeName) {
         this.changeName = changeName;
     }
 }

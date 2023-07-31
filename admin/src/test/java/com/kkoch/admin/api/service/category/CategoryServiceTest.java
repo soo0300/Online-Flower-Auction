@@ -89,12 +89,11 @@ class CategoryServiceTest extends IntegrationTestSupport {
         Category category2 = createCategory("튤립", parentCategory);
 
         SetCategoryDto setCategoryDto = SetCategoryDto.builder()
-                .categoryId(category1.getId())
                 .changeName("바뀐 장미")
                 .build();
 
         //when
-        CategoryResponse resultCategory = categoryService.setCategory(setCategoryDto);
+        CategoryResponse resultCategory = categoryService.setCategory(category1.getId(),setCategoryDto);
 
         //then
         Optional<Category> findCategory = categoryRepository.findById(category1.getId());

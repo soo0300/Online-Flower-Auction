@@ -27,8 +27,8 @@ public class CategoryService {
         return category.getId();
     }
 
-    public CategoryResponse setCategory(SetCategoryDto setCategoryDto) {
-        Category category = getCategoryEntity(setCategoryDto.getCategoryId());
+    public CategoryResponse setCategory(Long categoryId, SetCategoryDto setCategoryDto) {
+        Category category = getCategoryEntity(categoryId);
         category.changeCategory(setCategoryDto.getChangeName());
         return CategoryResponse.of(category);
     }

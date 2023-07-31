@@ -30,7 +30,11 @@ public class CategoryController {
 
     @GetMapping("/{parentId}")
     public ApiResponse<List<CategoryResponse>> getCategories(@PathVariable Long parentId) {
-
         return ApiResponse.ok(categoryService.getCategories(parentId));
+    }
+
+    @PatchMapping("/{categoryId}")
+    public ApiResponse<CategoryResponse> setCategory(@PathVariable Long categoryId){
+        return null;
     }
 }
