@@ -25,4 +25,8 @@ public class AuctionArticleSearchCond {
         this.type = type;
         this.region = region;
     }
+
+    public static AuctionArticleSearchCond of(LocalDate endDateTime, String code, String type, String name, String region) {
+        return new AuctionArticleSearchCond(endDateTime, code, name, type, region);
+    }
 }
