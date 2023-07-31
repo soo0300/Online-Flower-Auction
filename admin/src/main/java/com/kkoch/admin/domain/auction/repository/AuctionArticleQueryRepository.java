@@ -1,11 +1,12 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
-import com.kkoch.admin.api.controller.trade.response.AuctionArticleResponse;
+import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.plant.QCategory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -26,12 +27,12 @@ public class AuctionArticleQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<AuctionArticleResponse> findByTradeId(Long tradeId) {
+    public List<SuccessfulBid> findByTradeId(Long tradeId) {
         QCategory code = new QCategory("code");
         QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
         return queryFactory
-                .select(Projections.constructor(AuctionArticleResponse.class,
+                .select(Projections.constructor(SuccessfulBid.class,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.name.name,
                         auctionArticle.plant.type.name,
@@ -63,6 +64,22 @@ public class AuctionArticleQueryRepository {
         QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
 
+        return getAuctionArticleByCond(cond, code, name, type)
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
+    }
+
+    public int getTotalCount(AuctionArticleSearchCond cond) {
+        QCategory code = new QCategory("code");
+        QCategory name = new QCategory("name");
+        QCategory type = new QCategory("type");
+        return getAuctionArticleByCond(cond, code, name, type)
+                .fetch()
+                .size();
+    }
+
+    private JPAQuery<AuctionArticleForMemberResponse> getAuctionArticleByCond(AuctionArticleSearchCond cond, QCategory code, QCategory name, QCategory type) {
         return queryFactory.select(Projections.constructor(AuctionArticleForMemberResponse.class,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.name.name,
@@ -77,15 +94,13 @@ public class AuctionArticleQueryRepository {
                 .join(plant.code, code)
                 .join(plant.name, name)
                 .join(plant.type, type)
-                .where(auctionArticle.plant.code.name.eq(cond.getCode()),
+                .where(auctionArticle.bidPrice.gt(0),
+                        auctionArticle.plant.code.name.eq(cond.getCode()),
                         auctionArticle.bidTime.between(cond.getStartDateTime(), cond.getEndDateTime()),
                         eqPlantName(cond.getName()),
                         eqPlantType(cond.getType()),
                         eqAuctionRegion(cond.getRegion())
-                )
-                .limit(pageable.getPageSize())
-                .offset(pageable.getOffset())
-                .fetch();
+                );
     }
 
     private BooleanExpression eqAuctionRegion(String region) {

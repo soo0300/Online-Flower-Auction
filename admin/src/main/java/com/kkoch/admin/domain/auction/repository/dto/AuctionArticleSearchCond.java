@@ -1,5 +1,6 @@
 package com.kkoch.admin.domain.auction.repository.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,7 +16,8 @@ public class AuctionArticleSearchCond {
     private String type;
     private String region;
 
-    public AuctionArticleSearchCond(LocalDate endDateTime, String code, String name, String type, String region) {
+    @Builder
+    private AuctionArticleSearchCond(LocalDate endDateTime, String code, String name, String type, String region) {
         this.endDateTime = endDateTime.plusDays(1).atStartOfDay();
         this.startDateTime = endDateTime.minusDays(7).atStartOfDay();
         this.code = code;
