@@ -82,11 +82,11 @@ class AuctionArticleQueryServiceTest extends IntegrationTestSupport {
         assertThat(responses).hasSize(1);
     }
 
-    private Plant insertPlant(Category code, Category rose, Category victoria) {
+    private Plant insertPlant(Category code, Category type, Category name) {
         return plantRepository.save(Plant.builder()
                 .code(code)
-                .type(rose)
-                .name(victoria)
+                .type(type)
+                .name(name)
                 .build());
     }
 
