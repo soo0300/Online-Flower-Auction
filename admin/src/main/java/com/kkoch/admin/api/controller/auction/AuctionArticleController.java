@@ -3,10 +3,12 @@ package com.kkoch.admin.api.controller.auction;
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -53,5 +55,18 @@ public class AuctionArticleController {
         return ApiResponse.ok(responses);
     }
 
+    @GetMapping
+    public ApiResponse<Page<AuctionArticlesResponse>> getAuctionArticlesForAdmin(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDateTime,
+            @RequestParam(defaultValue = "절화") String code,
+            @RequestParam @Nullable String type,
+            @RequestParam @Nullable String name,
+            @RequestParam @Nullable String region,
+            @RequestParam @Nullable String shipper
+    ) {
+        AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.of(endDateTime, code, type, name, region,shipper);\yuiop[]f
 
+        Page<AuctionArticleForMemberResponse> responses = auctionArticleQueryService.getAuctionArticleListForMember(cond, pageRequest);
+        return ApiResponse.ok(responses);
+    }
 }
