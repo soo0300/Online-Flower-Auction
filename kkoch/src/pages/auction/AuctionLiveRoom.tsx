@@ -1,4 +1,4 @@
-import AuctionLiveForm from "@/components/forms/AuctionLiveForm"
+import AuctionLiveForm from "./AuctionLiveForm"
 
 const AuctionLiveRoom = () => {
   return (

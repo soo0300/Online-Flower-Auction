@@ -1,8 +1,8 @@
 import React from 'react'
 import HomePageAuction from '@/assets/HomePageAuction.png'
-import { DoughnutChart } from '../chart/Doughnut';
+import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
-import axios from 'axios';
+// import axios from 'axios';
 
 
 const AuctionLiveForm = () => {

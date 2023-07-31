@@ -1,8 +1,8 @@
-import SignUp from "@/components/forms/SignUp"
+import SignUp from "./SignUp"
 
-const SignUpPage = () => {
-  return (  
-    <SignUp/>  
+function SignUpPage() {
+  return (
+    <SignUp />
   )
 }
 

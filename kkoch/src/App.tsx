@@ -3,13 +3,13 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import { useEffect, useState } from "react";
 import AuctionLocation from "@/pages/auction/AuctionLocation";
 import AuctionWaitingRoom from "@/pages/auction/AuctionWaitingRoom";
-import MainPage from "./pages/mainPages/MainPage";
+import MainPage from "@/pages/mainPages/MainPage";
 import Login from "@/pages/user/LoginPage";
 import Signup from "@/pages/user/SignUpPage";
-import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
-import MyPage from "./pages/user/MyPage";
+import AuctionLiveRoom from "@/pages/auction/AuctionLiveRoom";
+import MyPage from "@/pages/user/MyPage";
 // import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
-import TradingInfo from "./components/forms/TradingInfo";
+import TradingInfo from "@/pages/flowerInfo/TradingInfo"
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
