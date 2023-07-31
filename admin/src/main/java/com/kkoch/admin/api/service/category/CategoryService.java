@@ -33,6 +33,18 @@ public class CategoryService {
         return CategoryResponse.of(category);
     }
 
+    public Long removeCategory(Long categoryId) {
+        Category category = getCategoryEntity(categoryId);
+        category.remove();
+
+        List<Category> subCategories = category.getChildren();
+        for (Category subCategory:subCategories) {
+            subCategory.remove();
+        }
+
+        return category.getId();
+    }
+
     public List<CategoryResponse> getCategories(Long parentId) {
         return categoryRepository.findAllById(parentId)
                 .stream().map(CategoryResponse::new).collect(Collectors.toList());
@@ -42,9 +54,5 @@ public class CategoryService {
     private Category getCategoryEntity(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
-    }
-
-    public Long removeCategory(Long categoryId) {
-        return 1L;
     }
 }
