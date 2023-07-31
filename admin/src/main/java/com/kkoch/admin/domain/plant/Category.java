@@ -58,4 +58,8 @@ public class Category extends TimeBaseEntity {
     public void changeCategory(String name) {
         this.name = name;
     }
+
+    public void remove() {
+        this.active = false;
+    }
 }

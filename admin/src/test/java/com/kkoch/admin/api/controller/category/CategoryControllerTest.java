@@ -114,7 +114,7 @@ class CategoryControllerTest extends ControllerTestSupport {
                         .level(2)
                         .build());
         //then
-        mockMvc.perform(patch(URI + "/{categoryId}",1L)
+        mockMvc.perform(patch(URI + "/{categoryId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request))
                         .accept(MediaType.APPLICATION_JSON))
@@ -125,5 +125,23 @@ class CategoryControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.message").value("카테고리가 수정되었습니다."))
                 .andExpect(jsonPath("$.data").isNotEmpty());
     }
+
+    @DisplayName("관계자는 카테고리를 선택해 삭제할 수 있다. 카테고리 삭제시 하위 카테고리 모두 삭제된다.")
+    @Test
+    void removeCategory() throws Exception {
+        //given
+        given(categoryService.removeCategory(anyLong())).willReturn(1L);
+
+        //when, then
+        mockMvc.perform(delete(URI + "/{categoryId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("301"))
+                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
+                .andExpect(jsonPath("$.message").value("카테고리가 삭제되었습니다."))
+                .andExpect(jsonPath("$.data").isNumber());
+    }
+
 
 }
