@@ -1,7 +1,7 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
-import com.kkoch.admin.api.controller.trade.response.AuctionArticleResponse;
+import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.auction.AuctionArticle;
 import com.kkoch.admin.domain.plant.Category;
@@ -56,7 +56,7 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
         AuctionArticle auctionArticle3 = createAuctionArticle("00003", LocalDate.of(2023, 7, 10).atStartOfDay(), plant, trade);
 
         //when
-        List<AuctionArticleResponse> responses = auctionArticleQueryRepository.findByTradeId(trade.getId());
+        List<SuccessfulBid> responses = auctionArticleQueryRepository.findByTradeId(trade.getId());
 
         //then
         assertThat(responses).hasSize(3)
