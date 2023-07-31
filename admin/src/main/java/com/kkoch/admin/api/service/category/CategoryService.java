@@ -5,6 +5,7 @@ import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
+import com.kkoch.admin.domain.plant.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,20 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    private final PlantRepository plantRepository;
+
     public Long addCategory(AddCategoryDto dto) {
         Category findCategory = getCategoryEntity(dto.getParentId());
         Category category = findCategory.createCategory(dto.getName());
 
+        if (isSubdivision(category.getLevel()))
+            addPlant(category);
+
         return category.getId();
+    }
+
+    private void addPlant(Category category) {
+
     }
 
     public CategoryResponse setCategory(Long categoryId, SetCategoryDto setCategoryDto) {
@@ -61,5 +71,9 @@ public class CategoryService {
     private Category getCategoryEntity(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
+    }
+
+    private boolean isSubdivision(int level) {
+        return level == 3;
     }
 }
