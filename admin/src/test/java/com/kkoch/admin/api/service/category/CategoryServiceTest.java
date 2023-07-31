@@ -93,13 +93,35 @@ class CategoryServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        CategoryResponse resultCategory = categoryService.setCategory(category1.getId(),setCategoryDto);
+        CategoryResponse resultCategory = categoryService.setCategory(category1.getId(), setCategoryDto);
 
         //then
         Optional<Category> findCategory = categoryRepository.findById(category1.getId());
         assertThat(findCategory).isPresent();
         assertThat(findCategory.get().getName()).isEqualTo(resultCategory.getName());
     }
+
+    @DisplayName("관계자는 카테고리를 선택해 삭제할 수 있다. 카테고리 삭제시 하위 카테고리 모두 삭제된다.")
+    @Test
+    void removeCategory() throws Exception {
+        //given
+        Category parentCategory = createRootCategory("절화");
+        Category category = createCategory("장미", parentCategory);
+        Category subCategory = createCategory("거베라", category);
+
+        //when
+        Long categoryId = categoryService.removeCategory(category.getId());
+
+        //then
+        Optional<Category> findCategory = categoryRepository.findById(categoryId);
+        Optional<Category> findSubCategory = categoryRepository.findById(subCategory.getId());
+        assertThat(findCategory).isPresent();
+        assertThat(findSubCategory).isPresent();
+        assertThat(findCategory.get().isActive()).isFalse();
+        assertThat(findSubCategory.get().isActive()).isFalse();
+
+    }
+
 
     private Category createRootCategory(String name) {
         Category category = Category.builder()

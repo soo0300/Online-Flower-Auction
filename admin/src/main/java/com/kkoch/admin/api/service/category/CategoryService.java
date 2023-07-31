@@ -44,4 +44,7 @@ public class CategoryService {
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
     }
 
+    public Long removeCategory(Long categoryId) {
+        return 1L;
+    }
 }
