@@ -31,11 +31,11 @@ public class ReservationControllerTest extends ControllerTestSupport {
     public void addReservation() throws Exception {
         // given
         AddReservationRequest request = AddReservationRequest.builder()
-                .memberId(0L).plantId(0L).price(1500).count(5)
+                .plantId(0L).price(1500).count(5)
                 .build();
 
         // when
-        given(reservationService.addReservation(any(AddReservationDto.class))).willReturn(1L);
+        given(reservationService.addReservation("soo0300@naver.com", any(AddReservationDto.class))).willReturn(1L);
 
         // then
         mockMvc.perform(

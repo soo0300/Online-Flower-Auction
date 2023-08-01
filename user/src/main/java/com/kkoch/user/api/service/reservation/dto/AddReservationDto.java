@@ -9,22 +9,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddReservationDto {
 
-    private Long memberId;
     private Long plantId;
     private int count;
     private int price;
 
     @Builder
-    public AddReservationDto(Long memberId, Long plantId, int count, int price) {
-        this.memberId = memberId;
+    public AddReservationDto(Long plantId, int count, int price) {
         this.plantId = plantId;
         this.count = count;
         this.price = price;
     }
 
-    public Reservation toEntity() {
+    public Reservation toEntity(Long memberId) {
         Reservation reservation = Reservation.builder()
-                .memberId(this.memberId)
+                .memberId(memberId)
                 .plantId(this.plantId)
                 .count(this.count)
                 .price(this.price)

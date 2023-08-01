@@ -25,14 +25,13 @@ public class ReservationServiceTest extends IntegrationTestSupport {
     public void addReservation() throws Exception {
         // given
         AddReservationDto dto = AddReservationDto.builder()
-                .memberId(0L)
                 .plantId(0L)
                 .count(10)
                 .price(2000)
                 .build();
 
         // when
-        Long reservationId = reservationService.addReservation(dto);
+        Long reservationId = reservationService.addReservation("soo",dto);
 
         // then
         Optional<Reservation> result = reservationRepository.findById(reservationId);

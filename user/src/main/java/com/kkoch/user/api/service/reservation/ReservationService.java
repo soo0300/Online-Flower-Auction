@@ -19,11 +19,18 @@ public class ReservationService {
 
     //거래 예약 등록
     public Long addReservation(String loginID, AddReservationDto dto) {
-        Reservation reservation = dto.toEntity();
-        Optional<Member> member = reservationRepository.findByLoginId(loginID);
+        Optional<Member> member = reservationRepository.findByEmail(loginID);
         Long savedId = member.get().getId();
+        //memberId를 포함하여 엔티티로 만들어 준다.
+
+        Reservation reservation = dto.toEntity(savedId);
+
+//        if (reservation == null) {
+//            throw new IllegalArgumentException("등록을 다시 해주세요");
+//        }
+
         reservationRepository.save(reservation);
-        Optional<Reservation> savedReservation = reservationRepository.findById(dto.getMemberId());
+        Optional<Reservation> savedReservation = reservationRepository.findById(savedId);
         return savedReservation.get().getId();
     }
 }

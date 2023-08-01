@@ -9,7 +9,8 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 public class AddReservationRequest {
-
+    @NonNull
+    private String loginId;
     @NonNull
     private Long plantId;
     @NonNull
