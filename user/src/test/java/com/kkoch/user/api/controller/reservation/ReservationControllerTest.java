@@ -60,7 +60,7 @@ public class ReservationControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").isNumber());
     }
 
-    @DisplayName("거래 예약 항목을 입력받아 거래 예약을 등록")
+    @DisplayName("회원은 자신의 거래 예약을 삭제할 수 있다.")
     @Test
     @WithMockUser
     public void removeReservation() throws Exception {

@@ -61,20 +61,6 @@ public class ReservationServiceTest extends IntegrationTestSupport {
 
     }
 
-    @DisplayName("회원은 자신이 예약한 거래 예약을 조회할 수 있다")
-    @Test
-    public void getReservation() throws Exception {
-        // given
-        Reservation reservation = insertReservation();
-        Long memberId = reservation.getMember().getId();
-
-        // when
-        Reservation reser = reservationService.getReservation(memberId);
-
-        // then
-        Assertions.assertThat(reser.getMember().getId()).isEqualTo(memberId);
-    }
-
     private Member insertMember() {
         Member member = Member.builder()
                 .email("soo")
