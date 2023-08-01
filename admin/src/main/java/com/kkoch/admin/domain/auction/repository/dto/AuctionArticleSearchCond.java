@@ -19,7 +19,7 @@ public class AuctionArticleSearchCond {
     @Builder
     private AuctionArticleSearchCond(LocalDate endDateTime, String code, String type, String name, String region) {
         this.endDateTime = endDateTime.plusDays(1).atStartOfDay();
-        this.startDateTime = endDateTime.minusDays(7).atStartOfDay();
+        this.startDateTime = endDateTime.minusDays(6).atStartOfDay();
         this.code = code;
         this.type = type;
         this.name = name;
