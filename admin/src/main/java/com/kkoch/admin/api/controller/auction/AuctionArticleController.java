@@ -45,9 +45,9 @@ public class AuctionArticleController {
     public ApiResponse<Page<AuctionArticleForMemberResponse>> getAuctionArticlesForMember(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDateTime,
             @RequestParam(defaultValue = "절화") String code,
-            @RequestParam @Nullable String type,
-            @RequestParam @Nullable String name,
-            @RequestParam @Nullable String region,
+            @RequestParam(defaultValue = "") String type,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String region,
             @RequestParam(defaultValue = "0") Integer page
     ) {
         AuctionArticleSearchCond cond = AuctionArticleSearchCond.of(endDateTime, code, type, name, region);
@@ -61,10 +61,10 @@ public class AuctionArticleController {
     public ApiResponse<List<AuctionArticlesForAdminResponse>> getAuctionArticlesForAdmin(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDateTime,
             @RequestParam(defaultValue = "절화") String code,
-            @RequestParam @Nullable String type,
-            @RequestParam @Nullable String name,
-            @RequestParam @Nullable String region,
-            @RequestParam @Nullable String shipper
+            @RequestParam(defaultValue = "") String type,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String region,
+            @RequestParam(defaultValue = "") String shipper
     ) {
         AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.of(endDateTime, code, type, name, region, shipper);
 

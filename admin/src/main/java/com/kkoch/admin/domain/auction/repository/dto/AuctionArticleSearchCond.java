@@ -12,21 +12,21 @@ public class AuctionArticleSearchCond {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String code;
-    private String name;
     private String type;
+    private String name;
     private String region;
 
     @Builder
-    private AuctionArticleSearchCond(LocalDate endDateTime, String code, String name, String type, String region) {
+    private AuctionArticleSearchCond(LocalDate endDateTime, String code, String type, String name, String region) {
         this.endDateTime = endDateTime.plusDays(1).atStartOfDay();
         this.startDateTime = endDateTime.minusDays(7).atStartOfDay();
         this.code = code;
-        this.name = name;
         this.type = type;
+        this.name = name;
         this.region = region;
     }
 
     public static AuctionArticleSearchCond of(LocalDate endDateTime, String code, String type, String name, String region) {
-        return new AuctionArticleSearchCond(endDateTime, code, name, type, region);
+        return new AuctionArticleSearchCond(endDateTime, code, type, name, region);
     }
 }

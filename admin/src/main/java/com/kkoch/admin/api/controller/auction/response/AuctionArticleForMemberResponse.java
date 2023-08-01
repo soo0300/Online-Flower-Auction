@@ -15,8 +15,8 @@ public class AuctionArticleForMemberResponse {
 
     // 식물
     private String code;
-    private String name;
     private String type;
+    private String name;
 
     private String grade;
     private int count;
@@ -25,10 +25,10 @@ public class AuctionArticleForMemberResponse {
     private String region;
 
     @Builder
-    public AuctionArticleForMemberResponse(String code, String name, String type, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region) {
+    public AuctionArticleForMemberResponse(String code, String type, String name, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region) {
         this.code = code;
-        this.name = name;
         this.type = type;
+        this.name = name;
         this.grade = grade.getText();
         this.count = count;
         this.bidPrice = bidPrice;

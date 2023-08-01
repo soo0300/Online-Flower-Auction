@@ -33,13 +33,13 @@ public class AuctionArticleQueryRepository {
 
     public List<SuccessfulBid> findByTradeId(Long tradeId) {
         QCategory code = new QCategory("code");
-        QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
         return queryFactory
                 .select(Projections.constructor(SuccessfulBid.class,
                         auctionArticle.plant.code.name,
-                        auctionArticle.plant.name.name,
                         auctionArticle.plant.type.name,
+                        auctionArticle.plant.name.name,
                         auctionArticle.grade,
                         auctionArticle.count,
                         auctionArticle.bidPrice,
@@ -49,8 +49,8 @@ public class AuctionArticleQueryRepository {
                 .from(auctionArticle)
                 .join(auctionArticle.plant, plant)
                 .join(plant.code, code)
-                .join(plant.name, name)
                 .join(plant.type, type)
+                .join(plant.name, name)
                 .where(auctionArticle.trade.id.eq(tradeId))
                 .fetch();
     }
@@ -65,13 +65,13 @@ public class AuctionArticleQueryRepository {
 
     public List<AuctionArticlesForAdminResponse> getAuctionArticleListForAdmin(AuctionArticleSearchForAdminCond cond) {
         QCategory code = new QCategory("code");
-        QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
 
         return queryFactory.select(Projections.constructor(AuctionArticlesForAdminResponse.class,
                         auctionArticle.plant.code.name,
-                        auctionArticle.plant.name.name,
                         auctionArticle.plant.type.name,
+                        auctionArticle.plant.name.name,
                         auctionArticle.grade,
                         auctionArticle.count,
                         auctionArticle.bidPrice,
@@ -81,8 +81,8 @@ public class AuctionArticleQueryRepository {
                 .from(auctionArticle)
                 .join(auctionArticle.plant, plant)
                 .join(plant.code, code)
-                .join(plant.name, name)
                 .join(plant.type, type)
+                .join(plant.name, name)
                 .where(
                         auctionArticle.plant.code.name.eq(cond.getCode()),
                         auctionArticle.bidTime.between(cond.getStartDateTime(), cond.getEndDateTime()),
@@ -96,8 +96,8 @@ public class AuctionArticleQueryRepository {
 
     public List<AuctionArticlesResponse> getAuctionArticleList(Long auctionId) {
         QCategory code = new QCategory("code");
-        QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
 
         return queryFactory.select(Projections.constructor(AuctionArticlesResponse.class,
                         auctionArticle.id,
@@ -113,8 +113,8 @@ public class AuctionArticleQueryRepository {
                 .from(auctionArticle)
                 .join(auctionArticle.plant, plant)
                 .join(plant.code, code)
-                .join(plant.name, name)
                 .join(plant.type, type)
+                .join(plant.name, name)
                 .join(auctionArticle.auction, auction)
                 .on(auctionArticle.auction.id.eq(auctionId))
                 .orderBy(auctionArticle.auctionNumber.asc())
@@ -123,8 +123,8 @@ public class AuctionArticleQueryRepository {
 
     public List<AuctionArticleForMemberResponse> getAuctionArticleListForMember(AuctionArticleSearchCond cond, Pageable pageable) {
         QCategory code = new QCategory("code");
-        QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
 
         return getAuctionArticleByCond(cond, code, name, type)
                 .limit(pageable.getPageSize())
@@ -134,18 +134,18 @@ public class AuctionArticleQueryRepository {
 
     public int getTotalCount(AuctionArticleSearchCond cond) {
         QCategory code = new QCategory("code");
-        QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
-        return getAuctionArticleByCond(cond, code, name, type)
+        QCategory name = new QCategory("name");
+        return getAuctionArticleByCond(cond, code, type, name)
                 .fetch()
                 .size();
     }
 
-    private JPAQuery<AuctionArticleForMemberResponse> getAuctionArticleByCond(AuctionArticleSearchCond cond, QCategory code, QCategory name, QCategory type) {
+    private JPAQuery<AuctionArticleForMemberResponse> getAuctionArticleByCond(AuctionArticleSearchCond cond, QCategory code, QCategory type, QCategory name) {
         return queryFactory.select(Projections.constructor(AuctionArticleForMemberResponse.class,
                         auctionArticle.plant.code.name,
-                        auctionArticle.plant.name.name,
                         auctionArticle.plant.type.name,
+                        auctionArticle.plant.name.name,
                         auctionArticle.grade,
                         auctionArticle.count,
                         auctionArticle.bidPrice,
@@ -154,8 +154,8 @@ public class AuctionArticleQueryRepository {
                 .from(auctionArticle)
                 .join(auctionArticle.plant, plant)
                 .join(plant.code, code)
-                .join(plant.name, name)
                 .join(plant.type, type)
+                .join(plant.name, name)
                 .where(auctionArticle.bidPrice.gt(0),
                         auctionArticle.plant.code.name.eq(cond.getCode()),
                         auctionArticle.bidTime.between(cond.getStartDateTime(), cond.getEndDateTime()),
