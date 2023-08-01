@@ -20,4 +20,6 @@ public class GetPlantRequest {
         this.type = type;
         this.name = name;
     }
+
+
 }
