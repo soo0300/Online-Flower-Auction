@@ -9,8 +9,8 @@ import lombok.NonNull;
 public class SetReservationRequest {
 
     @NonNull
-    private int count;
+    private Integer count;
     @NonNull
-    private int price;
+    private Integer price;
 
 }

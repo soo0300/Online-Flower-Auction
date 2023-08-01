@@ -11,17 +11,14 @@ import lombok.NonNull;
 public class AddReservationRequest {
 
     @NonNull
-    private Long memberId;
-    @NonNull
     private Long plantId;
     @NonNull
-    private int count;
+    private Integer count;
     @NonNull
-    private int price;
+    private Integer price;
 
     @Builder
-    public AddReservationRequest(@NonNull Long memberId, @NonNull Long plantId, @NonNull int count, @NonNull int price) {
-        this.memberId = memberId;
+    public AddReservationRequest(Long plantId, Integer count, Integer price) {
         this.plantId = plantId;
         this.count = count;
         this.price = price;
@@ -29,7 +26,6 @@ public class AddReservationRequest {
 
     public AddReservationDto toAddReservationDto() {
         AddReservationDto dto = AddReservationDto.builder()
-                .memberId(memberId)
                 .plantId(plantId)
                 .count(count)
                 .price(price)
