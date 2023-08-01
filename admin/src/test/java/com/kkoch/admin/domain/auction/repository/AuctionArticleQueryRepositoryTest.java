@@ -1,7 +1,8 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponese;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.admin.Admin;
@@ -45,6 +46,35 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
     @Autowired
     private AuctionRepository auctionRepository;
 
+    @DisplayName("[경매품 조회(Repository)] 경매용")
+    @Test
+    void getAuctionArticles() {
+        Category code = insertCategory("절화");
+        Category rose = insertCategory("장미");
+        Category fuego = insertCategory("푸에고");
+        Category victoria = insertCategory("빅토리아");
+
+        Plant roseFuego = insertPlant(code, rose, fuego);
+        Plant roseVictoria = insertPlant(code, rose, victoria);
+
+        Admin admin = insertAdmin();
+        Auction savedAuction1 = insertAuction(admin, LocalDateTime.of(2023, 9, 20, 5, 0));
+        Auction savedAuction2 = insertAuction(admin, LocalDateTime.of(2023, 9, 20, 5, 0));
+
+        insertAuctionArticle(roseFuego, savedAuction1, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        insertAuctionArticle(roseFuego, savedAuction2, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(10));
+        insertAuctionArticle(roseFuego, savedAuction1, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        insertAuctionArticle(roseVictoria, savedAuction1, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        insertAuctionArticle(roseVictoria, savedAuction2, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(10));
+        insertAuctionArticle(roseVictoria, savedAuction1, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+
+        //when
+        List<AuctionArticlesResponese> responese = auctionArticleQueryRepository.getAuctionArticleList(savedAuction1.getId());
+
+        //then
+        assertThat(responese).hasSize(4);
+    }
+
     @DisplayName("[경매품 조회] 관리자용")
     @Test
     void getAuctionArticleForAdmin() {
@@ -76,7 +106,7 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        List<AuctionArticlesResponse> responses = auctionArticleQueryRepository.getAuctionArticleListForAdmin(cond);
+        List<AuctionArticlesForAdminResponse> responses = auctionArticleQueryRepository.getAuctionArticleListForAdmin(cond);
 
         //then
         assertThat(responses).hasSize(2);
