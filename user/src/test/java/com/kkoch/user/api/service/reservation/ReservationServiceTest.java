@@ -1,3 +1,5 @@
+package com.kkoch.user.api.service.reservation;
+
 import com.kkoch.user.IntegrationTestSupport;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
 import com.kkoch.user.domain.member.Member;

@@ -32,4 +32,15 @@ public class ReservationService {
 
         return savedReservation.getId();
     }
+
+    //거래 예약 삭제
+    public Long removeReservation(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("삭제할 수 없는 거래 예약입니다."));
+
+        reservationRepository.delete(reservation);
+
+        return reservation.getId();
+    }
+
 }
