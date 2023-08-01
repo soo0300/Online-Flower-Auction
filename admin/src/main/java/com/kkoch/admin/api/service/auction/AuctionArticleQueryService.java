@@ -2,6 +2,7 @@ package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleQueryRepository;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
@@ -29,5 +30,9 @@ public class AuctionArticleQueryService {
 
     public List<AuctionArticlesForAdminResponse> getAuctionArticleListForAdmin(AuctionArticleSearchForAdminCond cond) {
         return auctionArticleQueryRepository.getAuctionArticleListForAdmin(cond);
+    }
+
+    public List<AuctionArticlesResponse> getAuctionArticleList(Long auctionId) {
+        return auctionArticleQueryRepository.getAuctionArticleList(auctionId);
     }
 }
