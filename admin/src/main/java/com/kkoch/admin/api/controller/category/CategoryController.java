@@ -3,7 +3,9 @@ package com.kkoch.admin.api.controller.category;
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.category.request.AddCategoryRequest;
 import com.kkoch.admin.api.controller.category.request.SetCategoryRequest;
+import com.kkoch.admin.api.controller.category.response.CategoryForMemberResponse;
 import com.kkoch.admin.api.controller.category.response.CategoryResponse;
+import com.kkoch.admin.api.service.category.CategoryQueryService;
 import com.kkoch.admin.api.service.category.CategoryService;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
@@ -20,6 +22,7 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final CategoryQueryService categoryQueryService;
 
     @PostMapping
     public ApiResponse<Long> addCategory(@Valid @RequestBody AddCategoryRequest request) {
@@ -49,5 +52,13 @@ public class CategoryController {
         Long removeId = categoryService.removeCategory(categoryId);
         return ApiResponse.of(HttpStatus.MOVED_PERMANENTLY, "카테고리가 삭제되었습니다.", removeId);
 
+    }
+
+    @GetMapping
+    public ApiResponse<List<CategoryForMemberResponse>> getCategories(
+        @RequestParam String code
+    ) {
+        List<CategoryForMemberResponse> categories = categoryQueryService.getCategories(code);
+        return ApiResponse.ok(categories);
     }
 }
