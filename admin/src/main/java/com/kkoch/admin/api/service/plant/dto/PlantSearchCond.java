@@ -6,11 +6,11 @@ import lombok.Data;
 @Data
 public class PlantSearchCond {
 
-    String code;
+    private String code;
 
-    String type;
+    private String type;
 
-    String name;
+    private String name;
 
     @Builder
     private PlantSearchCond(String code, String type, String name) {

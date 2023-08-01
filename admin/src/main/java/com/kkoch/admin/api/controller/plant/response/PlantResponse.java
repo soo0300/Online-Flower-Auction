@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 public class PlantResponse {
 
-    Long plantId;
+   private Long plantId;
 
-    String code;
+   private String code;
 
-    String type;
+   private String type;
 
-    String name;
+   private String name;
 
     @Builder
     public PlantResponse(Long plantId, String code, String type, String name) {
