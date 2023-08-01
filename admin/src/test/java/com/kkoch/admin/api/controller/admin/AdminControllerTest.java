@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {AdminController.class})
+@WebMvcTest(controllers = {AdminApiController.class})
 class AdminControllerTest extends ControllerTestSupport {
 
     @MockBean
