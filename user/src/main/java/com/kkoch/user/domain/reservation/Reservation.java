@@ -1,6 +1,7 @@
 package com.kkoch.user.domain.reservation;
 
 import com.kkoch.user.domain.TimeBaseEntity;
+import com.kkoch.user.domain.member.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,16 +25,18 @@ public class Reservation extends TimeBaseEntity {
     @Column(nullable = false)
     private int price;
 
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", updatable = false, nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private Long plantId;
 
     @Builder
-    private Reservation(int count, int price, Long memberId, Long plantId) {
+    private Reservation(int count, int price, Member member, Long plantId) {
         this.count = count;
         this.price = price;
-        this.memberId = memberId;
+        this.member = member;
         this.plantId = plantId;
     }
 }
