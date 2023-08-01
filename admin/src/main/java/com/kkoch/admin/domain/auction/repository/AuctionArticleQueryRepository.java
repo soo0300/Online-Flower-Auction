@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.kkoch.admin.domain.auction.QAuction.auction;
 import static com.kkoch.admin.domain.auction.QAuctionArticle.*;
 import static com.kkoch.admin.domain.plant.QPlant.*;
 import static org.springframework.util.StringUtils.*;
@@ -54,7 +55,7 @@ public class AuctionArticleQueryRepository {
                 .fetch();
     }
 
-    public int getAuctionArticle(Long auctionId) {
+    public int getAuctionArticleCount(Long auctionId) {
         return queryFactory.select(auctionArticle.id)
                 .from(auctionArticle)
                 .where(auctionArticle.auction.id.eq(auctionId))
@@ -90,6 +91,33 @@ public class AuctionArticleQueryRepository {
                         eqAuctionRegion(cond.getRegion()),
                         eqShipper(cond.getShipper())
                 )
+                .fetch();
+    }
+
+    public List<AuctionArticlesResponese> getAuctionArticleList(Long auctionId) {
+        QCategory code = new QCategory("code");
+        QCategory name = new QCategory("name");
+        QCategory type = new QCategory("type");
+
+        return queryFactory.select(Projections.constructor(AuctionArticlesResponese.class,
+                        auctionArticle.id,
+                        auctionArticle.auctionNumber,
+                        auctionArticle.plant.code.name,
+                        auctionArticle.plant.type.name,
+                        auctionArticle.plant.name.name,
+                        auctionArticle.count,
+                        auctionArticle.startPrice,
+                        auctionArticle.grade,
+                        auctionArticle.region,
+                        auctionArticle.shipper))
+                .from(auctionArticle)
+                .join(auctionArticle.plant, plant)
+                .join(plant.code, code)
+                .join(plant.name, name)
+                .join(plant.type, type)
+                .join(auctionArticle.auction, auction)
+                .on(auctionArticle.auction.id.eq(auctionId))
+                .orderBy(auctionArticle.auctionNumber.asc())
                 .fetch();
     }
 
