@@ -3,12 +3,16 @@ package com.kkoch.user.api.controller.reservation;
 import com.kkoch.user.api.controller.ApiResponse;
 import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
+import com.kkoch.user.api.service.reservation.ReservationService;
+import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
+import com.kkoch.user.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
@@ -20,10 +24,17 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 @Api(tags = {"거래 예약 기능"})
 public class ReservationController {
 
+    private final ReservationService reservationService;
+    private final JwtUtil jwtUtil;
+
     @ApiOperation(value = "거래 예약 등록")
     @PostMapping
-    public ApiResponse<?> addReservation(@RequestBody AddReservationRequest request) {
-        return null;
+    public ApiResponse<Long> addReservation(@Valid @RequestBody AddReservationRequest request) {
+
+        String loginId = jwtUtil.getEmailByJWT();
+        AddReservationDto dto = request.toAddReservationDto();
+        Long reservationId = reservationService.addReservation(loginId, dto);
+        return ApiResponse.ok(reservationId);
     }
 
     @ApiOperation(value = "거래 예약 조회")
