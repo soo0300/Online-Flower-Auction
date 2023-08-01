@@ -1,5 +1,3 @@
-package com.kkoch.user.api.service.reservation;
-
 import com.kkoch.user.IntegrationTestSupport;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
 import com.kkoch.user.domain.member.Member;
@@ -46,6 +44,21 @@ public class ReservationServiceTest extends IntegrationTestSupport {
         Assertions.assertThat(result).isPresent();
     }
 
+    @DisplayName("거래 예약을 삭제할 수 있다.")
+    @Test
+    public void removeReservation() throws Exception {
+        //given
+        Reservation reservation = insertReservation();
+
+        // when
+        reservationService.removeReservation(reservation.getId());
+
+        // then
+        Optional<Reservation> reser = reservationRepository.findById(reservation.getId());
+        Assertions.assertThat(reser).isNotPresent();
+
+    }
+
     private Member insertMember() {
         Member member = Member.builder()
                 .email("soo")
@@ -60,4 +73,15 @@ public class ReservationServiceTest extends IntegrationTestSupport {
         return memberRepository.save(member);
     }
 
+    private Reservation insertReservation(){
+        Reservation reservation = Reservation.builder()
+                .plantId(1L)
+                .count(1)
+                .member(insertMember())
+                .price(1000)
+                .build();
+
+        return reservationRepository.save(reservation);
+
+    }
 }
