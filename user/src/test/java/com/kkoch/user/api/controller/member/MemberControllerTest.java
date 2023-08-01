@@ -7,6 +7,7 @@ import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
 import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.api.service.member.dto.LoginMemberDto;
+import com.kkoch.user.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,6 +31,9 @@ class MemberControllerTest extends ControllerTestSupport {
 
     @MockBean
     private MemberService memberService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @DisplayName("회원정보를 입력 받아 회원 가입 성공")
     @Test

@@ -5,6 +5,7 @@ import com.kkoch.user.api.controller.member.request.*;
 import com.kkoch.user.api.controller.member.response.MemberResponse;
 import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
+import com.kkoch.user.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 public class MemberController {
 
     private final MemberService memberService;
-
+    private final JwtUtil jwtUtil;
     //회원가입
     @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
@@ -33,7 +34,6 @@ public class MemberController {
         Long memberId = memberService.join(request.toJoinMemberDto(), file);
         log.debug("memberId = {}", memberId);
         return ApiResponse.ok(memberId);
-
     }
 
     @ApiOperation(value = "로그인")

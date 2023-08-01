@@ -19,10 +19,10 @@ import java.util.Optional;
 class MemberServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    MemberService memberService;
+    private MemberService memberService;
 
     @Autowired
-    MemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     @DisplayName("회원 정보를 입력 받아 회원 가입 성공")
     @Test
