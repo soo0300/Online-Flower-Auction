@@ -1,5 +1,6 @@
 package com.kkoch.admin.api.controller.plant.request;
 
+import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,4 +23,11 @@ public class GetPlantRequest {
     }
 
 
+    public PlantSearchCond toSearchCond() {
+        return PlantSearchCond.builder()
+                .code(this.code)
+                .type(this.type)
+                .name(this.name)
+                .build();
+    }
 }
