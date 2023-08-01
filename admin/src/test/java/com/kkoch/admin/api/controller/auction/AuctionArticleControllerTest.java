@@ -5,6 +5,7 @@ import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
@@ -36,6 +37,27 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
     private AuctionArticleService auctionArticleService;
     @MockBean
     private AuctionArticleQueryService auctionArticleQueryService;
+
+    @DisplayName("[경매품 조회] 경매 시 경매품 목록")
+    @Test
+    void getAuctionArticleForAuction() throws Exception {
+        //given
+        List<AuctionArticlesResponse> list = List.of();
+
+        BDDMockito.given(auctionArticleQueryService.getAuctionArticleList(anyLong()))
+                .willReturn(list);
+
+        //when //then
+        mockMvc.perform(
+                        get("/admin-service/auction-articles/{auctionId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
+    }
 
     @DisplayName("[경매 실적 조회] 관리자용")
     @Test
