@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AuctionArticlesResponese {
+public class AuctionArticlesResponse {
 
     private Long auctionArticleId;
     private String auctionNumber;
@@ -24,7 +24,7 @@ public class AuctionArticlesResponese {
     private String shipper;
 
     @Builder
-    public AuctionArticlesResponese(Long auctionArticleId, String auctionNumber, String code, String type, String name, int count, int startPrice, Grade grade, String region, String shipper) {
+    public AuctionArticlesResponse(Long auctionArticleId, String auctionNumber, String code, String type, String name, int count, int startPrice, Grade grade, String region, String shipper) {
         this.auctionArticleId = auctionArticleId;
         this.auctionNumber = auctionNumber;
         this.code = code;

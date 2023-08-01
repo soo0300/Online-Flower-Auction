@@ -2,7 +2,7 @@ package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponese;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.admin.Admin;
@@ -69,10 +69,10 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
         insertAuctionArticle(roseVictoria, savedAuction1, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
 
         //when
-        List<AuctionArticlesResponese> responese = auctionArticleQueryRepository.getAuctionArticleList(savedAuction1.getId());
+        List<AuctionArticlesResponse> response = auctionArticleQueryRepository.getAuctionArticleList(savedAuction1.getId());
 
         //then
-        assertThat(responese).hasSize(4);
+        assertThat(response).hasSize(4);
     }
 
     @DisplayName("[경매품 조회] 관리자용")

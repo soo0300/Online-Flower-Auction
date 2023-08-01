@@ -2,7 +2,7 @@ package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponese;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
@@ -94,12 +94,12 @@ public class AuctionArticleQueryRepository {
                 .fetch();
     }
 
-    public List<AuctionArticlesResponese> getAuctionArticleList(Long auctionId) {
+    public List<AuctionArticlesResponse> getAuctionArticleList(Long auctionId) {
         QCategory code = new QCategory("code");
         QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
 
-        return queryFactory.select(Projections.constructor(AuctionArticlesResponese.class,
+        return queryFactory.select(Projections.constructor(AuctionArticlesResponse.class,
                         auctionArticle.id,
                         auctionArticle.auctionNumber,
                         auctionArticle.plant.code.name,
