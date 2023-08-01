@@ -1,12 +1,13 @@
 package com.kkoch.admin.api.service.plant;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.plant.response.PlantResponse;
+import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.Plant;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import com.kkoch.admin.domain.plant.repository.PlantQueryRepository;
 import com.kkoch.admin.domain.plant.repository.PlantRepository;
-import com.kkoch.admin.domain.plant.repository.dto.PlantSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ class PlantQueryServiceTest extends IntegrationTestSupport {
                 .type("장미")
                 .build();
 
-        List<PlantQueryRepository> results = plantQueryService.getPlants(plantSearchCond);
+        List<PlantResponse> results = plantQueryService.getPlants(plantSearchCond);
 
         //then
         assertThat(results).hasSize(3)

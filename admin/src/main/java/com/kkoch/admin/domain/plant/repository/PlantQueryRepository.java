@@ -1,7 +1,7 @@
 package com.kkoch.admin.domain.plant.repository;
 
 import com.kkoch.admin.api.controller.plant.response.PlantResponse;
-import com.kkoch.admin.domain.plant.repository.dto.PlantSearchCond;
+import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;

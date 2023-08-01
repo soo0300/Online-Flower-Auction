@@ -4,7 +4,7 @@ import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.controller.plant.response.PlantResponse;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.Plant;
-import com.kkoch.admin.domain.plant.repository.dto.PlantSearchCond;
+import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

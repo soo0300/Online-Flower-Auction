@@ -1,12 +1,10 @@
-package com.kkoch.admin.api.controller.request;
+package com.kkoch.admin.api.service.plant.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Data
-public class GetPlantRequest {
+public class PlantSearchCond {
 
     String code;
 
@@ -15,7 +13,7 @@ public class GetPlantRequest {
     String name;
 
     @Builder
-    public GetPlantRequest(String code, String type, String name) {
+    private PlantSearchCond(String code, String type, String name) {
         this.code = code;
         this.type = type;
         this.name = name;
