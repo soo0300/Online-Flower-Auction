@@ -4,11 +4,13 @@ package com.kkoch.admin.api.controller.auction;
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -34,6 +36,32 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
     private AuctionArticleService auctionArticleService;
     @MockBean
     private AuctionArticleQueryService auctionArticleQueryService;
+
+    @DisplayName("[경매 실적 조회] 관리자용")
+    @Test
+    void getAuctionArticleForAdmin() throws Exception {
+        //given
+        List<AuctionArticlesResponse> list = List.of();
+
+        BDDMockito.given(auctionArticleQueryService.getAuctionArticleListForAdmin(any(AuctionArticleSearchForAdminCond.class)))
+                .willReturn(list);
+
+        //when //then
+        mockMvc.perform(
+
+                        get("/admin-service/auction-articles")
+                                .queryParam("endDateTime", "2023-08-01")
+                                .queryParam("code", "절화")
+                                .queryParam("type", "장미")
+                                .queryParam("name", "푸에고")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isArray());
+    }
 
     @DisplayName("[경매 실적 조회]")
     @Test
