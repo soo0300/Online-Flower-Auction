@@ -33,9 +33,22 @@ public class CategoryController {
         return ApiResponse.ok(result);
     }
 
-    @GetMapping("/{parentId}")
-    public ApiResponse<List<CategoryResponse>> getCategories(@PathVariable Long parentId) {
-        return ApiResponse.ok(categoryService.getCategories(parentId));
+    @GetMapping("/type")
+    public ApiResponse<List<String>> getTypes(
+        @RequestParam(defaultValue = "절화") String code
+    ) {
+        List<String> types = categoryQueryService.getTypesForMember(code);
+        return ApiResponse.ok(types);
+    }
+
+    @GetMapping("/name")
+    public ApiResponse<List<String>> getNames(
+        @RequestParam(defaultValue = "절화") String code,
+        @RequestParam(defaultValue = "") String type
+        //날짜
+    ) {
+        List<String> names = categoryQueryService.getNamesForMember(code, type);
+        return ApiResponse.ok(names);
     }
 
     @PatchMapping("/{categoryId}")
@@ -54,7 +67,7 @@ public class CategoryController {
 
     }
 
-    @GetMapping
+//    @GetMapping
     public ApiResponse<List<CategoryForMemberResponse>> getCategories(
         @RequestParam String code
     ) {
