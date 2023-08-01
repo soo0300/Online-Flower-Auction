@@ -18,6 +18,14 @@ public class CategoryQueryService {
 
     private final CategoryQueryRepository categoryQueryRepository;
 
+    public List<String> getTypesForMember(String code) {
+        return categoryQueryRepository.getTypes(code);
+    }
+
+    public List<String> getNamesForMember(String code, String type) {
+        return categoryQueryRepository.getNames(code, type);
+    }
+
     public List<CategoryForMemberResponse> getCategories(String parentName) {
         List<Category> categories = categoryQueryRepository.getCategories(parentName);
 
