@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Component
+//@Component
 public class LoginAdminAuditorAware implements AuditorAware<Long> {
 
     private final HttpSession httpSession;
