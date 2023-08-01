@@ -17,20 +17,18 @@ public class AddCategoryRequest {
 
     private Long parentId;
 
-    @NonNull
-    private int level;
 
     @Builder
-    private AddCategoryRequest(String name, Long parentId, int level) {
+    private AddCategoryRequest(String name, Long parentId) {
         this.name = name;
         this.parentId = parentId;
-        this.level = level;
+
     }
 
     public AddCategoryDto toAddCategoryDto() {
         return AddCategoryDto.builder()
                 .name(this.name)
-                .level(this.level)
+                .parentId(this.parentId)
                 .build();
     }
 
