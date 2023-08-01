@@ -9,4 +9,12 @@
 //       }
 //     )
 //   );
+//   app.use("/user-service",
+//   createProxyMiddleware(
+//     {
+//       target: "http://localhost:8000",
+//       changeOrigin: true,
+//     }
+//   )
+// );
 // };

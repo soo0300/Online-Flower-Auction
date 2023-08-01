@@ -92,7 +92,14 @@ const SignUp = () => {
 	}
   
   // 회원가입 버튼
-  const onClickConfirmButton = () => {
+  const onClickConfirmButton = (e) => {
+    e.preventDefault();
+    console.log(e)
+
+
+
+
+
     if (name && email && businessNumber && pw && pwCheck) {
       alert('회원가입 성공')
     } else {
