@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
-
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
 @RequiredArgsConstructor
@@ -32,10 +31,9 @@ public class MemberController {
     @PostMapping("/join")
     public ApiResponse<Long> joinMember(@Valid @RequestPart("dto") JoinMemberRequest request
             , @RequestPart("file") MultipartFile file) {
-        Long memberId = memberService.join(request.toJoinMemberDto(),file);
+        Long memberId = memberService.join(request.toJoinMemberDto(), file);
         log.debug("memberId = {}", memberId);
         return ApiResponse.ok(memberId);
-
     }
 
     @ApiOperation(value = "로그인")
@@ -52,7 +50,6 @@ public class MemberController {
     public void getMembers() {
 
     }
-
 
 
     //내정보조회
