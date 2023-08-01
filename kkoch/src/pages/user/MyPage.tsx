@@ -12,7 +12,7 @@ import {
 import { useState } from 'react';
 import MyAuctionList from './MyAuctionList';
 import MyProfile from './MyProfile';
-import MyReservation from './MyReservation';
+import MyReservation from './MyReservation/MyReservation';
 
 const MyPage = () => {
   const [basicActive, setBasicActive] = useState('tab1');

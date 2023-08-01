@@ -1,7 +1,7 @@
 import { MDBCard, MDBCardBody, MDBCardTitle } from "mdb-react-ui-kit";
 import { DataGrid, GridRowsProp, GridColDef, gridClasses } from '@mui/x-data-grid';
 import { alpha, styled } from '@mui/material/styles';
-import ActionButton from "@/components/buttons/ActionButton";
+import MyReservModal from "./MyReservModal";
 
 const ODD_OPACITY = 0.2;
 
@@ -65,7 +65,7 @@ const MyReservation = () => {
       <MDBCardBody>
         <MDBCardTitle className="mb-4 font-bold flex justify-between items-start">
           <p>화훼 예약 목록</p>
-          <ActionButton path="/reservation/add" str="추가 하기"></ActionButton>
+          <MyReservModal></MyReservModal>
         </MDBCardTitle>
 
         <div style={{ height: 400, width: '100%' }}>
