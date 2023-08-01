@@ -1,10 +1,8 @@
-import ActionButton from "@/components/buttons/ActionButton";
 import HomePageAuction from "@/assets/HomePageAuction.png";
 import MiraeLogo from "@/assets/MiraeLogo.png";
 import NongHyupLogo from "@/assets/NongHyupLogo.png";
 import SSAFYLogo from "@/assets/SSAFYLogo.png";
 import SamsungLogo from "@/assets/SamsungLogo.png";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 import { motion } from "framer-motion";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
@@ -60,14 +58,9 @@ const HomeAuction = () => {
             }}
           >
             
-            <ActionButton>
+            <button>
               Join Now
-            </ActionButton>
-            <AnchorLink
-              className="text-sm font-bold text-primary-500 underline hover:text-secondary-500"
-            >
-              <p>Learn More</p>
-            </AnchorLink>
+            </button>
           </motion.div>
         </div>
         

@@ -9,9 +9,9 @@ import {
   MDBModalBody,
   MDBModalFooter,
 } from 'mdb-react-ui-kit';
-import ReservForm from './ReservForm';
+import ReservForm from '@/pages/user/MyReservation/ReservForm';
 
-export default function Modal() {
+export default function MyReservModal() {
   const [centredModal, setCentredModal] = useState(false);
 
   const toggleShow = () => setCentredModal(!centredModal);

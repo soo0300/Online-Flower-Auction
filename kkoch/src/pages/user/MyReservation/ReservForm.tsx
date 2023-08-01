@@ -1,7 +1,7 @@
 import { MDBInput } from 'mdb-react-ui-kit';
-import SelectForm from './SelectForm';
-export default function ReservForm() {
+import SelectForm from '@/pages/user/MyReservation/SelectForm';
 
+export default function ReservForm() {
   return (
     <form className=''>
       <SelectForm placeholder='품목'/>
