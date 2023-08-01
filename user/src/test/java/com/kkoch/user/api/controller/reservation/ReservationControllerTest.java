@@ -4,6 +4,7 @@ import com.kkoch.user.ControllerTestSupport;
 import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
 import com.kkoch.user.api.service.reservation.ReservationService;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
+import com.kkoch.user.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,13 +27,18 @@ public class ReservationControllerTest extends ControllerTestSupport {
     @MockBean
     private ReservationService reservationService;
 
+    @MockBean
+    private JwtUtil jwtUtil;
+
     @DisplayName("거래 예약 항목을 입력받아 거래 예약을 등록")
     @Test
     @WithMockUser
     public void addReservation() throws Exception {
         // given
         AddReservationRequest request = AddReservationRequest.builder()
-                .plantId(0L).price(1500).count(5)
+                .plantId(1L)
+                .count(5)
+                .price(1500)
                 .build();
 
         // when

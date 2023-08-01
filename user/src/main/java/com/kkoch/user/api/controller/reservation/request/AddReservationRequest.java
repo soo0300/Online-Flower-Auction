@@ -10,8 +10,6 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class AddReservationRequest {
     @NonNull
-    private String loginId;
-    @NonNull
     private Long plantId;
     @NonNull
     private Integer count;
@@ -19,7 +17,7 @@ public class AddReservationRequest {
     private Integer price;
 
     @Builder
-    public AddReservationRequest(Long plantId, Integer count, Integer price) {
+    private AddReservationRequest(Long plantId, Integer count, Integer price) {
         this.plantId = plantId;
         this.count = count;
         this.price = price;
