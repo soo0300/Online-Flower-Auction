@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,7 +57,7 @@ public class AuctionArticleController {
     }
 
     @GetMapping
-    public ApiResponse<Page<AuctionArticlesResponse>> getAuctionArticlesForAdmin(
+    public ApiResponse<List<AuctionArticlesResponse>> getAuctionArticlesForAdmin(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDateTime,
             @RequestParam(defaultValue = "절화") String code,
             @RequestParam @Nullable String type,
@@ -64,9 +65,9 @@ public class AuctionArticleController {
             @RequestParam @Nullable String region,
             @RequestParam @Nullable String shipper
     ) {
-        AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.of(endDateTime, code, type, name, region,shipper);\yuiop[]f
+        AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.of(endDateTime, code, type, name, region, shipper);
 
-        Page<AuctionArticleForMemberResponse> responses = auctionArticleQueryService.getAuctionArticleListForMember(cond, pageRequest);
+        List<AuctionArticlesResponse> responses = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
         return ApiResponse.ok(responses);
     }
 }
