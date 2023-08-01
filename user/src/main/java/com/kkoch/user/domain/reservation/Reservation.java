@@ -33,7 +33,7 @@ public class Reservation extends TimeBaseEntity {
     private Long plantId;
 
     @Builder
-    private Reservation(int count, int price, Member memeber, Long plantId) {
+    private Reservation(int count, int price, Member member, Long plantId) {
         this.count = count;
         this.price = price;
         this.member = member;

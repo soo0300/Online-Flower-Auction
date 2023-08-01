@@ -99,7 +99,7 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(response.getTotalPrice()).isEqualTo(3000);
-        assertThat(response.getAuctionArticles()).hasSize(3)
+        assertThat(response.getSuccessfulBid()).hasSize(3)
                 .extracting("code", "name", "type")
                 .containsExactlyInAnyOrder(
                         tuple(code.getName(), name.getName(), type.getName()),
