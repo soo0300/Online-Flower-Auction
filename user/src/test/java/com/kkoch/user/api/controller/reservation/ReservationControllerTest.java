@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -58,4 +59,35 @@ public class ReservationControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isNumber());
     }
+
+    @DisplayName("거래 예약 항목을 입력받아 거래 예약을 등록")
+    @Test
+    @WithMockUser
+    public void removeReservation() throws Exception {
+        // given
+        AddReservationRequest request = AddReservationRequest.builder()
+                .plantId(1L)
+                .count(5)
+                .price(1500)
+                .build();
+        Long reservationId = 1L;
+
+        // when
+        given(reservationService.removeReservation(any())).willReturn(reservationId);
+
+        // then
+        mockMvc.perform(
+                        delete("/user-service/reservations/{reservationId}", reservationId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isNumber());
+    }
 }
+
