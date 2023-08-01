@@ -46,6 +46,6 @@ public class AuctionArticleService {
     }
 
     private int generateAuctionArticleCount(Long auctionId) {
-        return auctionArticleQueryRepository.getAuctionArticle(auctionId) + 1;
+        return auctionArticleQueryRepository.getAuctionArticleCount(auctionId) + 1;
     }
 }

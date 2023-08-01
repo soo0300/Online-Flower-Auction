@@ -48,7 +48,7 @@ class AuctionArticleServiceTest extends IntegrationTestSupport {
         //then
         Assertions.assertThatThrownBy(() -> auctionArticleService.addAuctionArticle(savedPlant.getId(), -1L, dto))
                 .isInstanceOf(NoSuchElementException.class)
-                .hasMessage("존재하지 않는 경매 일정");
+                .hasMessage("존재하지 않는 경매 일정입니다.");
     }
 
     @DisplayName("[경매품 등록] 등록되지 않은 식물을 경매품에 등록할 경우 예외가 발생한다.")

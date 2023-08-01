@@ -13,7 +13,7 @@ public class TradeDetailResponse {
     private int totalPrice;
     private String tradeTime;
     private boolean pickupStatus;
-    private List<AuctionArticleResponse> auctionArticles;
+    private List<SuccessfulBid> successfulBid;
 
     @Builder
     public TradeDetailResponse(int totalPrice, LocalDateTime tradeTime, boolean pickupStatus) {
@@ -22,7 +22,7 @@ public class TradeDetailResponse {
         this.pickupStatus = pickupStatus;
     }
 
-    public void insertAuctionArticles(List<AuctionArticleResponse> auctionArticles) {
-        this.auctionArticles = auctionArticles;
+    public void insertAuctionArticles(List<SuccessfulBid> successfulBid) {
+        this.successfulBid = successfulBid;
     }
 }

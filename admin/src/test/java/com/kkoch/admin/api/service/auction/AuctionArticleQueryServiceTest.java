@@ -1,54 +1,55 @@
-package com.kkoch.admin.domain.auction.repository;
+package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
-import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import com.kkoch.admin.domain.auction.Auction;
 import com.kkoch.admin.domain.auction.AuctionArticle;
+import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
+import com.kkoch.admin.domain.auction.repository.AuctionRepository;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.Plant;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import com.kkoch.admin.domain.plant.repository.PlantRepository;
-import com.kkoch.admin.domain.trade.Trade;
-import com.kkoch.admin.domain.trade.repository.TradeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.kkoch.admin.domain.auction.Status.READY;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
+class AuctionArticleQueryServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private AuctionArticleQueryRepository auctionArticleQueryRepository;
+    private AuctionArticleQueryService auctionArticleQueryService;
     @Autowired
     private AuctionArticleRepository auctionArticleRepository;
     @Autowired
-    private CategoryRepository categoryRepository;
+    private AuctionRepository auctionRepository;
     @Autowired
     private PlantRepository plantRepository;
     @Autowired
-    private TradeRepository tradeRepository;
+    private CategoryRepository categoryRepository;
     @Autowired
     private AdminRepository adminRepository;
-    @Autowired
-    private AuctionRepository auctionRepository;
 
-    @DisplayName("[경매품 조회(Repository)] 경매용")
+    @DisplayName("[경매품 전체 조회] (경매용)")
     @Test
-    void getAuctionArticles() {
+    void getAuctionArticleListForAuction() {
+        //given
         Category code = insertCategory("절화");
         Category rose = insertCategory("장미");
         Category fuego = insertCategory("푸에고");
@@ -68,16 +69,26 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
         insertAuctionArticle(roseVictoria, savedAuction2, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(10));
         insertAuctionArticle(roseVictoria, savedAuction1, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
 
+        AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.builder()
+                .code("절화")
+                .type("장미")
+                .name("푸에고")
+                .endDateTime(LocalDateTime.of(2023, 9, 20, 5, 0).toLocalDate())
+                .region("광주")
+                .shipper("꽃파라")
+                .build();
+
         //when
-        List<AuctionArticlesResponse> response = auctionArticleQueryRepository.getAuctionArticleList(savedAuction1.getId());
+        List<AuctionArticlesResponse> response = auctionArticleQueryService.getAuctionArticleList(savedAuction1.getId());
 
         //then
         assertThat(response).hasSize(4);
     }
 
-    @DisplayName("[경매품 조회] 관리자용")
+    @DisplayName("[경매품 전체 조회] (관리자)")
     @Test
-    void getAuctionArticleForAdmin() {
+    void getAllAuctionArticleListForAdmin() {
+        //given
         Category code = insertCategory("절화");
         Category rose = insertCategory("장미");
         Category fuego = insertCategory("푸에고");
@@ -99,100 +110,56 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
         AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.builder()
                 .code("절화")
                 .type("장미")
-                .name(null)
+                .name("푸에고")
                 .endDateTime(LocalDateTime.of(2023, 9, 20, 5, 0).toLocalDate())
                 .region("광주")
                 .shipper("꽃파라")
                 .build();
 
         //when
-        List<AuctionArticlesForAdminResponse> responses = auctionArticleQueryRepository.getAuctionArticleListForAdmin(cond);
+        List<AuctionArticlesForAdminResponse> response = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
 
         //then
-        assertThat(responses).hasSize(2);
+        assertThat(response).hasSize(1);
     }
 
-    @DisplayName("")
+    @DisplayName("[실시간 거래실적 조회]")
     @Test
-    void findByTradeId() {
+    void getAuctionArticleList() {
         //given
-        Category code = createCategory("절화", null);
-        Category name = createCategory("장미(스탠다드)", code);
-        Category type = createCategory("하젤", name);
+        Category code = insertCategory("절화");
+        Category rose = insertCategory("장미");
+        Category fuego = insertCategory("푸에고");
+        Category victoria = insertCategory("빅토리아");
 
-        Plant plant = createPlant(code, name, type);
+        Plant roseFuego = insertPlant(code, rose, fuego);
+        Plant roseVictoria = insertPlant(code, rose, victoria);
 
-        Trade trade = createTrade();
+        Admin admin = insertAdmin();
+        Auction savedAuction = insertAuction(admin, LocalDateTime.of(2023, 9, 20, 5, 0));
 
-        AuctionArticle auctionArticle1 = createAuctionArticle("00001", LocalDate.of(2023, 7, 10).atStartOfDay(), plant, trade);
-        AuctionArticle auctionArticle2 = createAuctionArticle("00002", LocalDate.of(2023, 7, 10).atStartOfDay(), plant, trade);
-        AuctionArticle auctionArticle3 = createAuctionArticle("00003", LocalDate.of(2023, 7, 10).atStartOfDay(), plant, trade);
+        insertAuctionArticle(roseFuego, savedAuction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(10));
+        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        insertAuctionArticle(roseVictoria, savedAuction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(10));
+        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+
+        AuctionArticleSearchCond cond = AuctionArticleSearchCond.builder()
+                .code("절화")
+                .type("장미")
+                .name("푸에고")
+                .endDateTime(LocalDateTime.of(2023, 9, 20, 5, 0).toLocalDate())
+                .region("광주")
+                .build();
+        PageRequest pageRequest = PageRequest.of(0, 20);
 
         //when
-        List<SuccessfulBid> responses = auctionArticleQueryRepository.findByTradeId(trade.getId());
+        Page<AuctionArticleForMemberResponse> result = auctionArticleQueryService.getAuctionArticleListForMember(cond, pageRequest);
 
         //then
-        assertThat(responses).hasSize(3)
-                .extracting("code", "name", "type")
-                .containsExactlyInAnyOrder(
-                        tuple(code.getName(), name.getName(), type.getName()),
-                        tuple(code.getName(), name.getName(), type.getName()),
-                        tuple(code.getName(), name.getName(), type.getName())
-                );
-    }
-
-    private Category createCategory(String name, Category parent) {
-        Category category = Category.builder()
-                .name(name)
-                .active(true)
-                .parent(parent)
-                .build();
-        return categoryRepository.save(category);
-    }
-
-    private Plant createPlant(Category code, Category name, Category type) {
-        Plant plant = Plant.builder()
-                .active(true)
-                .code(code)
-                .name(name)
-                .type(type)
-                .build();
-        return plantRepository.save(plant);
-    }
-
-    private Trade createTrade() {
-        Trade trade = Trade.builder()
-                .totalPrice(9000)
-                .tradeTime(LocalDate.of(2023, 7, 11).atStartOfDay())
-                .pickupStatus(false)
-                .active(true)
-                .memberId(1L)
-                .build();
-        return tradeRepository.save(trade);
-    }
-
-    private AuctionArticle createAuctionArticle(String auctionNumber, LocalDateTime bidTime, Plant plant, Trade trade) {
-        AuctionArticle auctionArticle = AuctionArticle.builder()
-                .auctionNumber(auctionNumber)
-                .grade(Grade.NONE)
-                .count(10)
-                .bidPrice(3000)
-                .bidTime(bidTime)
-                .region("광주")
-                .shipper("김싸피")
-                .startPrice(5000)
-                .plant(plant)
-                .trade(trade)
-                .build();
-        return auctionArticleRepository.save(auctionArticle);
-    }
-
-    // TODO: 2023-07-31 코드 합치기
-    private Category insertCategory(String name) {
-        Category category = Category.builder()
-                .name(name)
-                .build();
-        return categoryRepository.save(category);
+        List<AuctionArticleForMemberResponse> responses = result.getContent();
+        assertThat(responses).hasSize(1);
     }
 
     private Plant insertPlant(Category code, Category type, Category name) {
@@ -201,6 +168,29 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
                 .type(type)
                 .name(name)
                 .build());
+    }
+
+    private Category insertCategory(String name) {
+        Category category = Category.builder()
+                .name(name)
+                .build();
+        return categoryRepository.save(category);
+    }
+
+    private AuctionArticle insertAuctionArticle(Plant plant, Auction auction, String region, LocalDateTime bidTime) {
+        AuctionArticle auctionArticle = AuctionArticle.builder()
+                .plant(plant)
+                .auction(auction)
+                .auctionNumber("00001")
+                .grade(Grade.NONE)
+                .count(10)
+                .region(region)
+                .shipper("꽃파라")
+                .startPrice(20000)
+                .bidPrice(10000)
+                .bidTime(bidTime)
+                .build();
+        return auctionArticleRepository.save(auctionArticle);
     }
 
     private Auction insertAuction(Admin admin, LocalDateTime startTime) {
@@ -224,21 +214,5 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
                 .active(true)
                 .build();
         return adminRepository.save(admin);
-    }
-
-    private AuctionArticle insertAuctionArticle(Plant plant, Auction auction, String region, LocalDateTime bidTime) {
-        AuctionArticle auctionArticle = AuctionArticle.builder()
-                .plant(plant)
-                .auction(auction)
-                .auctionNumber("00001")
-                .grade(Grade.NONE)
-                .count(10)
-                .region(region)
-                .shipper("꽃파라")
-                .startPrice(20000)
-                .bidPrice(10000)
-                .bidTime(bidTime)
-                .build();
-        return auctionArticleRepository.save(auctionArticle);
     }
 }
