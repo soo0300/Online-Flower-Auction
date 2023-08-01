@@ -7,6 +7,24 @@
   right: 10px;
 }
 
+.paging-title {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 150px;
+  color: #FFB7C5;
+  font-weight: 800;
+}
+
+.paging-title div {
+  cursor: pointer;
+}
+
+.paging-title div.clicked {
+  font-weight: bold;
+  color: #F25477; /* 클릭된 상태의 글자색을 변경합니다. 원하는 색상으로 변경하세요. */
+}
+
 .tablecontent {
   height: 100%;
   width: 100%;
