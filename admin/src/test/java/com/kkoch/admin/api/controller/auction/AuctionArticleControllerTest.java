@@ -4,7 +4,7 @@ package com.kkoch.admin.api.controller.auction;
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
@@ -41,7 +41,7 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
     @Test
     void getAuctionArticleForAdmin() throws Exception {
         //given
-        List<AuctionArticlesResponse> list = List.of();
+        List<AuctionArticlesForAdminResponse> list = List.of();
 
         BDDMockito.given(auctionArticleQueryService.getAuctionArticleListForAdmin(any(AuctionArticleSearchForAdminCond.class)))
                 .willReturn(list);

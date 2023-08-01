@@ -3,7 +3,7 @@ package com.kkoch.admin.api.controller.auction;
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
@@ -57,7 +57,7 @@ public class AuctionArticleController {
     }
 
     @GetMapping
-    public ApiResponse<List<AuctionArticlesResponse>> getAuctionArticlesForAdmin(
+    public ApiResponse<List<AuctionArticlesForAdminResponse>> getAuctionArticlesForAdmin(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDateTime,
             @RequestParam(defaultValue = "절화") String code,
             @RequestParam @Nullable String type,
@@ -67,7 +67,7 @@ public class AuctionArticleController {
     ) {
         AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.of(endDateTime, code, type, name, region, shipper);
 
-        List<AuctionArticlesResponse> responses = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
+        List<AuctionArticlesForAdminResponse> responses = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
         return ApiResponse.ok(responses);
     }
 }

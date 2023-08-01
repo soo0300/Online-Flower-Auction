@@ -11,7 +11,7 @@ import java.time.format.FormatStyle;
 
 @Data
 @NoArgsConstructor
-public class AuctionArticlesResponse {
+public class AuctionArticlesForAdminResponse {
 
     // 식물
     private String code;
@@ -26,7 +26,7 @@ public class AuctionArticlesResponse {
     private String shipper;
 
     @Builder
-    public AuctionArticlesResponse(String code, String name, String type, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region, String shipper) {
+    public AuctionArticlesForAdminResponse(String code, String name, String type, Grade grade, int count, int bidPrice, LocalDateTime bidTime, String region, String shipper) {
         this.code = code;
         this.name = name;
         this.type = type;

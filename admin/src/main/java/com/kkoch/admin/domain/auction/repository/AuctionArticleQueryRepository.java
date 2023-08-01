@@ -1,7 +1,8 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponese;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
@@ -61,12 +62,12 @@ public class AuctionArticleQueryRepository {
                 .size();
     }
 
-    public List<AuctionArticlesResponse> getAuctionArticleListForAdmin(AuctionArticleSearchForAdminCond cond) {
+    public List<AuctionArticlesForAdminResponse> getAuctionArticleListForAdmin(AuctionArticleSearchForAdminCond cond) {
         QCategory code = new QCategory("code");
         QCategory name = new QCategory("name");
         QCategory type = new QCategory("type");
 
-        return queryFactory.select(Projections.constructor(AuctionArticlesResponse.class,
+        return queryFactory.select(Projections.constructor(AuctionArticlesForAdminResponse.class,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.name.name,
                         auctionArticle.plant.type.name,
@@ -82,7 +83,6 @@ public class AuctionArticleQueryRepository {
                 .join(plant.name, name)
                 .join(plant.type, type)
                 .where(
-                        // TODO: 2023-07-31 날짜 조건이 없을수도 있을듯
                         auctionArticle.plant.code.name.eq(cond.getCode()),
                         auctionArticle.bidTime.between(cond.getStartDateTime(), cond.getEndDateTime()),
                         eqPlantName(cond.getName()),

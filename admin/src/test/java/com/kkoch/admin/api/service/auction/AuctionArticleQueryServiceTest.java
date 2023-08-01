@@ -2,7 +2,7 @@ package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
@@ -77,7 +77,7 @@ class AuctionArticleQueryServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        List<AuctionArticlesResponse> response = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
+        List<AuctionArticlesForAdminResponse> response = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
 
         //then
         assertThat(response).hasSize(1);
