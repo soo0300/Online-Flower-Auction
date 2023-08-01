@@ -17,16 +17,50 @@ public class CategoryQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<Category> getCategories(String parentName) {
+    public List<String> getTypes(String codeName) {
         QCategory code = new QCategory("code");
-        QCategory name = new QCategory("name");
+        QCategory type = new QCategory("type");
         return queryFactory
-            .select(name)
+            .select(type.name)
+            .from(type)
+            .join(type.parent, code)
+            .where(
+                type.active.isTrue(),
+                code.name.eq(codeName)
+            )
+            .orderBy(type.createdDate.asc())
+            .fetch();
+    }
+
+    public List<String> getNames(String codeName, String typeName) {
+        QCategory code = new QCategory("code");
+        QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
+
+        return queryFactory
+            .select(name.name)
             .from(name)
-            .join(name.parent, code).fetchJoin()
+            .join(name.parent, type)
+            .join(type.parent, code)
             .where(
                 name.active.isTrue(),
-                name.parent.name.eq(parentName)
+                code.name.eq(codeName),
+                type.name.eq(typeName)
+            )
+            .orderBy(name.createdDate.asc())
+            .fetch();
+    }
+
+    public List<Category> getCategories(String parentName) {
+        QCategory code = new QCategory("code");
+        QCategory type = new QCategory("type");
+        return queryFactory
+            .select(type)
+            .from(type)
+            .join(type.parent, code).fetchJoin()
+            .where(
+                type.active.isTrue(),
+                type.parent.name.eq(parentName)
             )
             .fetch();
     }
