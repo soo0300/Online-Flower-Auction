@@ -3,11 +3,13 @@ package com.kkoch.admin;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+@Profile("local")
 @Component
 @RequiredArgsConstructor
 public class InitData {
