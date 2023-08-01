@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,7 +36,7 @@ public class ReservationControllerTest extends ControllerTestSupport {
                 .build();
 
         // when
-        given(reservationService.addReservation("soo0300@naver.com", any(AddReservationDto.class))).willReturn(1L);
+        given(reservationService.addReservation(anyString(), any(AddReservationDto.class))).willReturn(1L);
 
         // then
         mockMvc.perform(
