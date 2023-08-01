@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import AuctionLocation from "@/pages/auction/AuctionLocation";
 import AuctionWaitingRoom from "@/pages/auction/AuctionWaitingRoom";
 import MainPage from "@/pages/mainPages/MainPage";
-import Login from "@/pages/user/LoginPage";
-import Signup from "@/pages/user/SignUpPage";
+import Login from "@/pages/user/login/LoginPage";
+import Signup from "@/pages/user/signUp/SignUpPage";
 import AuctionLiveRoom from "@/pages/auction/AuctionLiveRoom";
-import MyPage from "@/pages/user/MyPage";
+import MyPage from "@/pages/user/profile/MyPage";
 // import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 import TradingInfo from "@/pages/flowerInfo/TradingInfo"
 

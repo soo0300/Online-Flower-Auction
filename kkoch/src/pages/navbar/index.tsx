@@ -1,8 +1,11 @@
-import { useState } from "react"; 
+import { useState, useEffect } from "react"; 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from '@/reducer/store'; // RootState 추가
+import { logout } from '@/reducer/store/authSlice';
 // import ActionButton from "@/shared/ActionButton";
 
 type Props = {
@@ -16,6 +19,24 @@ const Navbar = ({isTop} : Props) => {
   const [isMenuToggled, menuToggle] = useState<boolean>(false);
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
   const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
+
+  const dispatch = useDispatch();
+
+  // 로그인 여부 확인
+  const isLoggedIn = useSelector((state: RootState) => state.auth.token !== null);
+  const [isLoggedOut, setIsLoggedOut] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedOut(!isLoggedIn);
+  }, [isLoggedIn]);
+
+
+  const handleLogout = () => {
+    // 로그아웃
+    if(confirm("로그아웃 하시겠습니까?")) {
+      dispatch(logout());
+    }
+  }
 
   return <nav>
     <div
@@ -36,10 +57,14 @@ const Navbar = ({isTop} : Props) => {
                 <Link to="/flowers"> 화훼정보</Link>
                 <Link to="/customer" />
               </div>
-              <div className={`${flexBetween} gap-8`}>
-                <Link to="/login">로그인</Link>
-                <Link to="/signup">회원가입</Link>
-              </div>
+                { isLoggedOut ? (
+                  <div className={`${flexBetween} gap-8`}>
+                    <Link to="/login">로그인</Link>
+                    <Link to="/signup">회원가입</Link>
+                  </div>
+                  ) : (
+                  <a href="" onClick={handleLogout}>로그아웃</a>
+                )}
             </div>)
             : (
                 <button
