@@ -4,6 +4,7 @@ import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
@@ -69,5 +70,13 @@ public class AuctionArticleController {
 
         List<AuctionArticlesForAdminResponse> responses = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
         return ApiResponse.ok(responses);
+    }
+
+    @GetMapping("/{auctionId}")
+    public ApiResponse<List<AuctionArticlesResponse>> getAuctionArticlesForAuction(
+            @PathVariable Long auctionId) {
+
+        List<AuctionArticlesResponse> response = auctionArticleQueryService.getAuctionArticleList(auctionId);
+        return ApiResponse.ok(response);
     }
 }
