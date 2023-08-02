@@ -1,46 +1,104 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { OpenVidu, Publisher, Session } from 'openvidu-browser';
 import CameraOff from '@/assets/cameraOff.png';
+import axios from 'axios';
 
 const AuctionWaitingRoom: React.FC = () => {
   const [publisher, setPublisher] = useState<Publisher | null>(null);
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
   const [isMicOn, setIsMicOn] = useState<boolean>(false);
   const [session, setSession] = useState<Session | null>(null);
+  
+  // const [token, setToken] = useState(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    const initOpenVidu = async () => {
+  const initSessionAndToken = async () => {
+    try {
+      // OpenVidu 서버에 세션 생성 요청 보내기
+      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/openvidu/api/sessions', null, {
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
+        },
+      });
+
+      const sessionId = sessionResponse.data.sessionId;
+      // console.log("여기", sessionId)
+      // OpenVidu 서버에 토큰 생성 요청 보내기
+      const tokenResponse = await axios.post(`https://i9c204.p.ssafy.io:8443/openvidu/api/sessions/${sessionId}/connection`, null, {
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
+        },
+      });
+
+      // setToken(tokenResponse.data.token)
+      const token =  tokenResponse.data.token;
+      console.log('토큰', token);
+      console.log('세션', sessionId);
+
       const OV = new OpenVidu();
       const mySession = OV.initSession();
 
-      try {
-        const publisher = OV.initPublisher('cameraTest', {
-          videoSource: undefined, // 기본 비디오 장치 사용
-          audioSource: undefined, // 기본 오디오 장치 사용
-          publishAudio: true,
-          publishVideo: true,
-          resolution: '640x480',
-          frameRate: 30,
-        });
-        mySession.publish(publisher);
+      await mySession.connect(token); // OpenVidu 세션에 연결
+      
+      const publisher = OV.initPublisher('cameraTest', {
+        videoSource: undefined, // 기본 비디오 장치 사용
+        audioSource: undefined, // 기본 오디오 장치 사용
+        publishAudio: true,
+        publishVideo: true,
+        resolution: '640x480',
+        frameRate: 30,
+      });
+      mySession.publish(publisher);
 
-        setSession(mySession);
-        setPublisher(publisher);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
+      setSession(mySession);
+      setPublisher(publisher);
+      
+      console.log('퍼블리셔', publisher.stream)
+      // 토큰과 세션 정보를 설정
+      console.log('토큰', tokenResponse.data.token);
+    } catch (error) {
+      console.error('Error:', error.response.data);
+    }
+  };
 
-    initOpenVidu();
+  useEffect(() => {
+    // const initOpenVidu = async () => {
+    //   const OV = new OpenVidu();
+    //   const mySession = OV.initSession();
+
+    //   try {
+    //     await mySession.connect(token); // OpenVidu 세션에 연결
+    //     const publisher = OV.initPublisher('cameraTest', {
+    //       videoSource: undefined, // 기본 비디오 장치 사용
+    //       audioSource: undefined, // 기본 오디오 장치 사용
+    //       publishAudio: true,
+    //       publishVideo: true,
+    //       resolution: '640x480',
+    //       frameRate: 30,
+    //     });
+    //     mySession.publish(publisher);
+
+    //     setSession(mySession);
+    //     setPublisher(publisher);
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //   }
+    // };
+    // initOpenVidu();
+    initSessionAndToken();
   }, []);
+  console.log('videoRef.current:', videoRef.current);
 
   const toggleCamera = () => {
-    if (publisher) {
-      const videoEnabled = !publisher.stream.videoActive; // OpenVidu의 API를 사용하여 비디오 활성화 여부 확인
-      publisher.publishVideo(videoEnabled); // OpenVidu의 API를 사용하여 비디오 트랙 토글
-      setIsCameraOn(videoEnabled); // 카메라 상태를 현재 상태의 반대로 변경
+    console.log('퍼블리셔', publisher)
+    if (!publisher || !session) {
+      return;
     }
+    const videoEnabled = !publisher.stream.videoActive; // OpenVidu의 API를 사용하여 비디오 활성화 여부 확인
+    publisher.publishVideo(videoEnabled); // OpenVidu의 API를 사용하여 비디오 트랙 토글
+    setIsCameraOn(videoEnabled); // 카메라 상태를 현재 상태의 반대로 변경
   };
   
 
