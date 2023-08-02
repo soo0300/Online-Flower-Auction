@@ -48,11 +48,11 @@ public class ReservationController {
     public ApiResponse<?> editReservation(@PathVariable Long reservationId) {
         return ApiResponse.of(MOVED_PERMANENTLY, "예약 변경", null);
     }
-
     @ApiOperation(value = "거래 예약 삭제")
     @DeleteMapping("/{reservationId}")
-    public ApiResponse<?> removeReservation(@PathVariable Long reservationId) {
-        return ApiResponse.of(MOVED_PERMANENTLY, "거래 예약 삭제", null);
+    public ApiResponse<Long> removeReservation(@PathVariable Long reservationId) {
+        Long savedId = reservationService.removeReservation(reservationId);
+        return ApiResponse.ok(savedId);
     }
 }
 
