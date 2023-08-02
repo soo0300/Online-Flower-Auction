@@ -1,63 +1,56 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { OpenVidu, Publisher, Session } from 'openvidu-browser';
-import CameraOff from '@/assets/cameraOff.png';
+import React, { useRef, useEffect } from 'react';
+// import CameraOff from '@/assets/cameraOff.png';
+
+
+const getWebcam = (callback) => {
+  try {
+    const constraints = {
+      'video': true,
+      'audio': false
+    }
+    navigator.mediaDevices.getUserMedia(constraints)
+      .then(callback);
+  } catch (err) {
+    console.log(err);
+    return undefined;
+  }
+}
+
+const Styles = {
+  Video: { width: "100%", height: "100%", background: 'rgba(245, 240, 215, 0.5)' },
+  None: { display: 'none' },
+}
 
 const AuctionWaitingRoom: React.FC = () => {
-  const [publisher, setPublisher] = useState<Publisher | null>(null);
-  const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
-  const [isMicOn, setIsMicOn] = useState<boolean>(false);
-  const [session, setSession] = useState<Session | null>(null);
+  const [playing, setPlaying] = React.useState(undefined);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const initOpenVidu = async () => {
-      const OV = new OpenVidu();
-      const mySession = OV.initSession();
-
-      try {
-        const publisher = OV.initPublisher('cameraTest', {
-          videoSource: undefined, // 기본 비디오 장치 사용
-          audioSource: undefined, // 기본 오디오 장치 사용
-          publishAudio: true,
-          publishVideo: true,
-          resolution: '640x480',
-          frameRate: 30,
-        });
-        mySession.publish(publisher);
-
-        setSession(mySession);
-        setPublisher(publisher);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    initOpenVidu();
+    getWebcam((stream => {
+      setPlaying(true);
+      videoRef.current.srcObject = stream;
+    }));
   }, []);
-
-  const toggleCamera = () => {
-    if (publisher) {
-      const videoEnabled = !publisher.stream.videoActive; // OpenVidu의 API를 사용하여 비디오 활성화 여부 확인
-      publisher.publishVideo(videoEnabled); // OpenVidu의 API를 사용하여 비디오 트랙 토글
-      setIsCameraOn(videoEnabled); // 카메라 상태를 현재 상태의 반대로 변경
-    }
-  };
   
+  const startOrStop = () => {
+    if (playing) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      const tracks = stream?.getTracks();
+      if (tracks) {
+        tracks.forEach((track) => {
+          track.stop();
+        });
+      }
+      setPlaying(false);
 
-  const toggleMic = () => {
-    if (publisher) {
-      const audioEnabled = publisher.stream.getMediaStream().getAudioTracks()[0].enabled;
-      publisher.stream.getMediaStream().getAudioTracks()[0].enabled = !audioEnabled;
-      setIsMicOn(!audioEnabled); // 마이크 상태를 현재 상태의 반대로 변경
+    } else {
+      getWebcam((stream) => {
+        videoRef.current.srcObject = stream;
+        setPlaying(true);
+      });
     }
-  };
-
-  const joinSession = () => {
-    setIsCameraOn(false);
-    setIsMicOn(false);
-    setPublisher(null);
-    setSession(null);
-  };
+    setPlaying(!playing);
+  }
 
   return (
     <section className="gap-16 bg-gray-20 py-10 pt-[150px] md:h-full md:pb-0"> 
@@ -66,32 +59,10 @@ const AuctionWaitingRoom: React.FC = () => {
       </div>
 
       <div className="mx-auto w-5/6 items-center justify-center md:flex md:flex-wrap md:h-5/6">
-        {/* 카메라 테스트 화면 */}
-        {publisher && (
-          <div className='w-full flex justify-center'>
-            {isCameraOn ? (
-              <video ref={videoRef} autoPlay playsInline />
-            ) : (
-              <img src={CameraOff} alt="" />
-            )}
-          </div>
-        )}
+        <video ref={videoRef} autoPlay style={Styles.Video} />
+        <button color="warning" onClick={startOrStop}>{playing ? 'Stop' : 'Start'} </button>
+      </div >
 
-        <div>
-          {/* 마이크 on/off 버튼 */}
-          <button onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
-          {/* 마이크 on/off 버튼 */}
-          <button onClick={toggleMic}>{isMicOn ? '마이크 끄기' : '마이크 켜기'}</button>
-        </div>
-
-
-        {/* 입장하기 버튼 */}
-        {isCameraOn && !session ? (
-          <button onClick={joinSession}>화상 통화에 입장하기</button>
-        ) : (
-          <button disabled>입장하기</button>
-        )}
-      </div>
     </section>
   );
 };
