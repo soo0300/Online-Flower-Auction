@@ -39,7 +39,7 @@ class MemberServiceTest extends IntegrationTestSupport {
                 .build();
 
         //when
-        Long saveId = memberService.join(member, null);
+        Long saveId = memberService.join(member);
 
         //then
         Optional<Member> result = memberRepository.findById(saveId);
@@ -91,7 +91,7 @@ class MemberServiceTest extends IntegrationTestSupport {
                 .active(true)
                 .build();
 
-        return memberService.join(member, null);
+        return memberService.join(member);
     }
 
     private LoginMemberDto createLoginMemberDto(String email, String loginPw) {
