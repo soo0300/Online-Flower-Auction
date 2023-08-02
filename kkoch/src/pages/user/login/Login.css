@@ -54,11 +54,9 @@
   height: 48px;
   border: none;
   font-weight: 700;
-  background-color: #FE904B;
   border-radius: 64px;
   color: white;
   margin-bottom: 16px;
-  cursor: pointer;
 }
 
 .bottomButton:disabled {

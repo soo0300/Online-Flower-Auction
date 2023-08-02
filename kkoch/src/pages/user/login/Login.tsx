@@ -21,13 +21,14 @@ const Login = () => {
 
 	// 이메일 검증 함수
 	const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setEmail(e.target.value);
+		const newEmail = e.target.value
+		setEmail(newEmail);
 
 		// 이메일 정규표현식
 		const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
 
 		// 정규표현식이 true 이면
-		if (regex.test(email)) {
+		if (regex.test(newEmail)) {
 			setEmailValid(true);
 		} else {
 			setEmailValid(false);
@@ -36,10 +37,11 @@ const Login = () => {
 
 	// 비밀번호 검증 함수
 	const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setPassword(e.target.value);
+		const newPw = e.target.value;
+		setPassword(newPw);
 
 		const regex = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+])(?!.*[^a-zA-z0-9$`~!@$!%*#^?&\\(\\)\-_=+]).{8,20}$/;
-		if (regex.test(password)) {
+		if (regex.test(newPw)) {
 			setPasswordValid(true);
 		} else {
 			setPasswordValid(false);
@@ -83,7 +85,7 @@ const Login = () => {
 	}
 
 	useEffect(() => {
-		if (emailValid) {
+		if (emailValid && passwordValid) {
 			setNotAllow(false);
 			return;
 		}
@@ -108,7 +110,7 @@ const Login = () => {
 					</span>
 				</div>
 
-				<div className="contentWrap">
+				<div className="mt-4">
 					<div className="inputTitle">이메일 주소</div>
 					<div className="inputWrap">
 						<input 
@@ -151,7 +153,7 @@ const Login = () => {
 				</div>
 				
 				<div>
-					<button type="submit" className='bottomButton' disabled={ notAllow }>
+					<button type="submit" className='mt-5 bottomButton bg-orange-400' disabled={ notAllow }>
 						확인
 					</button>
 				</div>

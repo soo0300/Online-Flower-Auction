@@ -11,6 +11,7 @@ interface ISignUpForm {
   pw: string;
   pwCheck: string;
   businessNumber: string;
+  tel: string;
   extraError: string;
 }
 
@@ -20,11 +21,13 @@ const SignUp = () => {
 	const [ businessNumber, setBusinessNumber ] = useState('');
 	const [ pw, setPw] = useState('');
 	const [ pwCheck, setPwCheck] = useState('');
+	const [ tel, setTel] = useState('');
   const [ file, setFile ] = useState('');
 
 	const [ nameValid, setNameValid ] = useState(false);
 	const [ emailValid, setEmailValid ] = useState(false);
 	const [ businessNumberValid, setBusinessNumberValid ] = useState(false);
+	const [ telValid, setTelValid ] = useState(false);
 	const [ pwValid, setPwValid ] = useState(false);
 	const [ pwCheckValid, setPwCheckValid ] = useState(false);
 	const [ notAllow, setNotAllow ] = useState(true);
@@ -33,10 +36,11 @@ const SignUp = () => {
 
   // 이름 검증 함수
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    const newName = e.target.value;
+    setName(newName);
 
     const regex = /^[A-za-z0-9가-힣]{2,30}$/
-    if (regex.test(name)) {
+    if (regex.test(newName)) {
       setNameValid(true);
     } else {
       setNameValid(false);
@@ -45,13 +49,14 @@ const SignUp = () => {
   
 	// 이메일 검증 함수
 	const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    const newEmail = e.target.value;
+    setEmail(newEmail);
 
 		// 이메일 정규표현식
 		const regex = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
     
 		// 정규표현식이 true 이면
-		if (regex.test(email)) {
+		if (regex.test(newEmail)) {
       setEmailValid(true);
 		} else {
       setEmailValid(false);
@@ -60,25 +65,43 @@ const SignUp = () => {
   
   // 사업자 번호 검증 함수
 	const handleBusinessNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setBusinessNumber(e.target.value);
+    const newBN = e.target.value;
+		setBusinessNumber(newBN);
     
 		// 사업자 번호 정규표현식
 		const regex = /([0-9]{3})-?([0-9]{2})-?([0-9]{5})/
     
 		// 정규표현식이 true 이면
-		if (regex.test(businessNumber)) {
+		if (regex.test(newBN)) {
       setBusinessNumberValid(true);
 		} else {
       setBusinessNumberValid(false);
 		}
 	}
+
+  // 전화 번호 검증 함수
+	const handleTel = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTel = e.target.value;
+    setTel(newTel);
+  
+		// 전화 번호 정규표현식
+		const regex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/
+
+		// 정규표현식이 true 이면
+		if (regex.test(newTel)) {
+      setTelValid(true);
+		} else {
+      setTelValid(false);
+		}
+	}
   
 	// 비밀번호 검증 함수
 	const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPw(e.target.value);
+    const newPw = e.target.value;
+    setPw(newPw);
     
 		const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-		if (regex.test(pw)) {
+		if (regex.test(newPw)) {
       setPwValid(true);
 		} else {
       setPwValid(false);
@@ -87,10 +110,11 @@ const SignUp = () => {
   
   // 비밀번호 확인 검증 함수
 	const handlePasswordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPwCheck(e.target.value);
+    const newPwCheck = e.target.value;
+    setPwCheck(newPwCheck);
     
 		const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-		if (regex.test(pwCheck)) {
+		if (regex.test(newPwCheck)) {
       setPwCheckValid(true);
 		} else {
       setPwCheckValid(false);
@@ -101,15 +125,12 @@ const SignUp = () => {
   
   
   const handleChangeFile = (event) => {
-    console.log(event.target.files[0])
     setFile(event.target.files[0])
   }
 
-  
   // 회원가입 버튼
   const onClickConfirmButton = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    console.log(e)
 
     const formData = new FormData()
     
@@ -119,7 +140,7 @@ const SignUp = () => {
       email: email,
       loginPw: pw,
       name: name,
-      tel: "010-0000-0000",
+      tel: tel,
       businessNumber: businessNumber
     }
 
@@ -147,12 +168,14 @@ const SignUp = () => {
   }
   
 	useEffect(() => {
-    if (nameValid && emailValid && businessNumberValid && pwValid && pwCheckValid) {
+    console.log(name, email, tel, pw, pwCheck, businessNumber, notAllow)
+    console.log(nameValid, emailValid, businessNumberValid, telValid, pwValid, pwCheckValid)
+    if (nameValid && emailValid && businessNumberValid && telValid && pwValid && pwCheckValid) {
       setNotAllow(false);
 			return;
 		}
 		setNotAllow(true);
-	}, [nameValid, emailValid, businessNumberValid, pwValid, pwCheckValid]);
+	}, [nameValid, emailValid, businessNumberValid, telValid, pwValid, pwCheckValid]);
   
   const {
     register, // input 요소를 react-hook-form과 연결시켜 검증 규칙을 적용하는 메서드
@@ -174,7 +197,7 @@ const SignUp = () => {
 
   return (
 		<div className="flex justify-around pt-[150px]">
-			<div>
+			<div className='mt-[100px]'>
 				<img src={flowerImg} alt="" />
 			</div>
       <form className='w-[35%] flex flex-col' onSubmit={handleSubmit(onValid)}>
@@ -335,6 +358,33 @@ const SignUp = () => {
               )
             }
           </div>
+
+          {/* 전화 번호 */}
+          <div className='inputTitle'>전화 번호</div>
+          <div className='inputWrap'>
+            {/* <LockIcon /> 아이콘 */}
+            <input
+              className='input'
+              {...register('tel', {
+                required: '전화번호를 입력해주세요.',
+                pattern: {
+                  value: /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/,
+                  message: '전화번호를 올바르게 입력해주세요.',
+                },
+              })}
+              onChange={handleTel} 
+              placeholder='전화번호를 입력해주세요'
+            />
+          </div>
+          <div className='errorMessageWrap'>
+            {
+              !telValid && tel.length > 0 && (
+                <div>
+                  {errors?.tel?.message}
+                </div>
+              )
+            }
+          </div>
           
           {/* 파일 업로드 확인 */}
           <div className='inputTitle'>사업자 등록증 첨부</div>
@@ -348,10 +398,9 @@ const SignUp = () => {
 
         </fieldset>
         
-        <button onClick={ onClickConfirmButton } className='bottomButton' disabled={ !notAllow }>
-          확인
+        <button onClick={ onClickConfirmButton } className='bottomButton mt-3 bg-orange-400' disabled={ notAllow }>
+          회원 가입
         </button>
-        {/* {errors?.extraError?.message && <p>{errors?.extraError?.message}</p>} */}
       </form>
     </div>
   );
