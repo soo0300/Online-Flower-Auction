@@ -55,6 +55,19 @@ public class NoticeQueryRepository {
                 .fetch();
     }
 
+    public long getTotalCount(NoticeSearchCond cond) {
+        return queryFactory
+                .select(notice.id)
+                .from(notice)
+                .where(
+                        notice.active.isTrue(),
+                        eqTitle(cond.getTitle()),
+                        eqContent(cond.getContent())
+                )
+                .fetch()
+                .size();
+    }
+
     private BooleanExpression eqTitle(String title) {
         return hasText(title) ? notice.title.like("%" + title + "%") : null;
     }
