@@ -6,7 +6,7 @@ endif::[]
 :icons: font
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 3
+:toclevels: 2
 :sectlinks:
 
 [[Trade-API]]
@@ -33,3 +33,9 @@ include::api/category/category-name-search.adoc[]
 == Auction Article API
 
 include::api/auctionarticle/auction-article-search.adoc[]
+
+[[Notice-API]]
+== Notice API
+
+include::api/notice/notice_search.adoc[]
+include::api/notice/notice_detail_search.adoc[]
