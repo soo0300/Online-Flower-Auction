@@ -47,7 +47,7 @@ public class Admin extends TimeBaseEntity {
         this.active = active;
     }
 
-    //연관관계 편의 메서드
+    //== 연관관계 편의 메서드 ==//
     public static Admin toEntity(Long id) {
         Admin admin = Admin
                 .builder()
@@ -56,14 +56,14 @@ public class Admin extends TimeBaseEntity {
         return admin;
     }
 
-    public void changeAdmin(String pw, String tel) {
-        this.loginPw = pw;
+    //== 비즈니스 로직 ==//
+    public void edit(String loginPw, String tel) {
+        this.loginPw = loginPw;
         this.tel = tel;
 
     }
 
-    public void removeAdmin() {
+    public void remove() {
         this.active = false;
     }
-
 }
