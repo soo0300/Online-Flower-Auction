@@ -168,8 +168,6 @@ const SignUp = () => {
   }
   
 	useEffect(() => {
-    console.log(name, email, tel, pw, pwCheck, businessNumber, notAllow)
-    console.log(nameValid, emailValid, businessNumberValid, telValid, pwValid, pwCheckValid)
     if (nameValid && emailValid && businessNumberValid && telValid && pwValid && pwCheckValid) {
       setNotAllow(false);
 			return;
