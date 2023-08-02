@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.kkoch.admin.domain.notice.QNotice.*;
 import static org.springframework.util.StringUtils.*;
@@ -66,6 +67,19 @@ public class NoticeQueryRepository {
                 )
                 .fetch()
                 .size();
+    }
+
+    public Optional<NoticeResponse> getNotice(Long noticeId) {
+        NoticeResponse content = queryFactory
+                .select(Projections.constructor(NoticeResponse.class,
+                        notice.title,
+                        notice.content,
+                        notice.createdDate
+                ))
+                .from(notice)
+                .where(notice.id.eq(noticeId))
+                .fetchFirst();
+        return Optional.ofNullable(content);
     }
 
     private BooleanExpression eqTitle(String title) {
