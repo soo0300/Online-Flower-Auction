@@ -10,6 +10,7 @@ import AuctionLiveRoom from "@/pages/auction/AuctionLiveRoom";
 import MyPage from "@/pages/user/profile/MyPage";
 // import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 import TradingInfo from "@/pages/flowerInfo/TradingInfo"
+import FlowerDetail from "./pages/flowerInfo/FlowerDetail";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -38,6 +39,7 @@ function App() {
           <Route path={"/auction/liveroom"} element={<AuctionLiveRoom/>}/>
 
           <Route path={"/flowers"} element={<TradingInfo />}/>
+          <Route path={"/flowers/info"} element={<FlowerDetail />}/>
           <Route path={"/customer"} />
 
           {/* 로그인 */}
