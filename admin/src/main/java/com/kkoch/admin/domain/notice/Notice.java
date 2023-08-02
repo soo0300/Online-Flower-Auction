@@ -26,14 +26,18 @@ public class Notice extends TimeBaseEntity {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private boolean active;
+
     @ManyToOne
     @JoinColumn(name = "admin_id")
     private Admin admin;
 
     @Builder
-    private Notice(String title, String content, Admin admin) {
+    private Notice(String title, String content, boolean active, Admin admin) {
         this.title = title;
         this.content = content;
+        this.active = active;
         this.admin = admin;
     }
 }
