@@ -40,4 +40,14 @@ public class Notice extends TimeBaseEntity {
         this.active = active;
         this.admin = admin;
     }
+
+    //== 비즈니스 로직 ==//
+    public void edit(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public void remove() {
+        this.active = false;
+    }
 }
