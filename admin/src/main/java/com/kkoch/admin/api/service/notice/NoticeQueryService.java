@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -25,5 +26,10 @@ public class NoticeQueryService {
         long totalCount = noticeQueryRepository.getTotalCount(cond);
 
         return new PageImpl<>(content, pageable, totalCount);
+    }
+
+    public NoticeResponse getNotice(Long noticeId) {
+        return noticeQueryRepository.getNotice(noticeId)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
