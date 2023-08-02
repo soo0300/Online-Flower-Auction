@@ -104,4 +104,4 @@ jwt:
   token-validity-in-seconds: 86400
 
 file:
-  dir:
+  dir: C:\SSAFY\upload

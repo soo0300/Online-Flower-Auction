@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import './SignUp.css';
 import flowerImg from "@/assets/flowerBackImg.png"
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+
 interface ISignUpForm {
   name: string;
   email: string;
@@ -26,6 +28,8 @@ const SignUp = () => {
 	const [ pwValid, setPwValid ] = useState(false);
 	const [ pwCheckValid, setPwCheckValid ] = useState(false);
 	const [ notAllow, setNotAllow ] = useState(true);
+
+  const navigate = useNavigate();
 
   // 이름 검증 함수
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,13 +134,15 @@ const SignUp = () => {
 			},
 			data: formData
 		})
-		.then(res => { 
-      console.log(res)
-			alert("환영합니다.");
+		.then(() => { 
+			if(confirm("회원 가입이 완료 되었습니다. 로그인 해주십시오")) {
+        navigate("/login");
+      }
 
 		})
 		.catch((err) => {
 			console.log(err.response.data)
+      alert("회원가입에 실패 했습니다")
 		});
   }
   

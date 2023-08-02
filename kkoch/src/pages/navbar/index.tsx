@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"; 
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
@@ -64,7 +64,14 @@ const Navbar = ({isTop} : Props) => {
                     <Link to="/signup">회원가입</Link>
                   </div>
                   ) : (
-                  <a href="" onClick={handleLogout}>로그아웃</a>
+                    <div>
+                      <a href="" onClick={handleLogout}>로그아웃</a>
+                      <Link to="/mypage">
+                        <button>
+                          <UserCircleIcon />
+                        </button>
+                      </Link>
+                    </div>
                 )}
             </div>)
             : (
