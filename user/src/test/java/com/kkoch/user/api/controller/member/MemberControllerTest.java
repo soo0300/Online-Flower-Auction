@@ -58,7 +58,7 @@ class MemberControllerTest extends ControllerTestSupport {
                 "<<png data>>".getBytes());
 
         // when
-        given(memberService.join(any(JoinMemberDto.class),any(MockMultipartFile.class))).willReturn(1L);
+        given(memberService.join(any(JoinMemberDto.class))).willReturn(1L);
         // 파일 형태로 변환
         MockMultipartFile joinMember = new MockMultipartFile("dto", "", "application/json", JoinMemberRequestJSON.getBytes(StandardCharsets.UTF_8));
 
@@ -123,7 +123,7 @@ class MemberControllerTest extends ControllerTestSupport {
                 .active(true)
                 .build();
 
-        Long saveId = memberService.join(member, null);
+        Long saveId = memberService.join(member);
     }
 
 }

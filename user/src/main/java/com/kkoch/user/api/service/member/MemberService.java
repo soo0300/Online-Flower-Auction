@@ -17,7 +17,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final JwtProvider jwtProvider;
-    public Long join(JoinMemberDto dto, MultipartFile file) {
+    public Long join(JoinMemberDto dto) {
 
         Member member = dto.toEntity();
 
