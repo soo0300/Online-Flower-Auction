@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
-import { persistReducer } from 'redux-persist';
+import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // 로컬 스토리지 사용
 
 const rootReducer = combineReducers({
@@ -21,5 +21,7 @@ const store = configureStore({
   reducer : persistedReducer
 })
 
-export default store
+
+export default store 
+export const persistor = persistStore(store); // persistor를 생성합니다.
 export type RootState = ReturnType<typeof store.getState>;
