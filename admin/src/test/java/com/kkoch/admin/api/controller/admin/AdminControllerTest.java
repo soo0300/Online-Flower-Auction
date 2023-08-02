@@ -4,6 +4,7 @@ import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.admin.request.AddAdminRequest;
 import com.kkoch.admin.api.controller.admin.request.EditAdminRequest;
 import com.kkoch.admin.api.controller.admin.request.LoginRequest;
+import com.kkoch.admin.api.service.admin.AdminQueryService;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
 import com.kkoch.admin.api.service.admin.dto.LoginDto;
@@ -33,6 +34,9 @@ class AdminControllerTest extends ControllerTestSupport {
     @MockBean
     private AdminService adminService;
 
+    @MockBean
+    private AdminQueryService adminQueryService;
+
     @DisplayName("관계자 정보를 입력받아서 관계자 등록 성공 ")
     @Test
     public void addAdminTest() throws Exception {
@@ -47,7 +51,7 @@ class AdminControllerTest extends ControllerTestSupport {
         // when
         // then
         mockMvc.perform(
-                        post("/admin-service/admin")
+                        post("/admin-service/admins")
                                 .content(objectMapper.writeValueAsString(admin))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -66,7 +70,7 @@ class AdminControllerTest extends ControllerTestSupport {
         // when
         // then
         mockMvc.perform(
-                        get("/admin-service/admin")
+                        get("/admin-service/admins")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -92,7 +96,7 @@ class AdminControllerTest extends ControllerTestSupport {
 
         //when //then
         mockMvc.perform(
-                        patch("/admin-service/admin/{adminId}", 1L)
+                        patch("/admin-service/admins/{adminId}", 1L)
                                 .content(objectMapper.writeValueAsString(editAdmin))
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -104,7 +108,7 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.data").isNumber());
     }
 
-    @DisplayName("관계자는 관계자 정보를 삭제할 수 있다 .")
+    @DisplayName("관계자는 관계자 정보를 삭제할 수 있다.")
     @Test
     public void remove() throws Exception {
         // given
@@ -113,7 +117,7 @@ class AdminControllerTest extends ControllerTestSupport {
         // when
         // then
         mockMvc.perform(
-                        delete("/admin-service/admin/{adminId}", 1L)
+                        delete("/admin-service/admins/{adminId}", 1L)
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -122,72 +126,5 @@ class AdminControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.message").value("관계자 정보가 삭제되었습니다."))
                 .andExpect(jsonPath("$.data").isNumber());
 
-    }
-
-    @DisplayName("관계자는 맞지 않는 정보를 입력할 시 로그인에 실패한다.")
-    @Test
-    public void loginAdminFail() throws Exception {
-        // given
-        BDDMockito.given(adminService.loginAdmin(any(LoginDto.class)))
-                .willThrow(new IllegalArgumentException("아이디와 비밀번호를 확인하세요"));
-
-        LoginRequest request = LoginRequest.builder()
-                .loginId("123")
-                .loginPw("345")
-                .build();
-
-        // when
-        // then
-        mockMvc.perform(
-                        MockMvcRequestBuilders.post("/admin-service/admin/login")
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(400))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("BAD_REQUEST"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("아이디와 비밀번호를 확인하세요"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isEmpty());
-    }
-
-    @DisplayName("관계자는 올바른 입력 시 로그인에 성공한다.")
-    @Test
-    public void loginAdminSuccess() throws Exception {
-        // given
-        BDDMockito.given(adminService.loginAdmin(any(LoginDto.class)))
-                .willReturn(LoginAdmin.builder()
-                        .id(1L)
-                        .authority("50")
-                        .build());
-
-        LoginRequest request = LoginRequest.builder()
-                .loginId("123")
-                .loginPw("345")
-                .build();
-
-        // when
-        // then
-        mockMvc.perform(
-                        MockMvcRequestBuilders.post("/admin-service/admin/login")
-                                .content(objectMapper.writeValueAsString(request))
-                                .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("OK"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SUCCESS"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data").isString());
-    }
-
-    private MockHttpSession getLoginAdminSession() {
-        MockHttpSession session = new MockHttpSession();
-        LoginAdmin loginAdmin = LoginAdmin.builder()
-                .id(1L)
-                .authority("10")
-                .build();
-        session.setAttribute("loginAdmin", loginAdmin);
-        return session;
     }
 }

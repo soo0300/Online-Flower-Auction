@@ -1,6 +1,7 @@
 package com.kkoch.admin.api.controller.admin;
 
 import com.kkoch.admin.api.controller.admin.request.LoginRequest;
+import com.kkoch.admin.api.service.admin.AdminQueryService;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.LoginDto;
 import com.kkoch.admin.login.Login;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpSession;
 public class AdminController {
 
     private final AdminService adminService;
+    private final AdminQueryService adminQueryService;
 
     @GetMapping
     public String index(@ModelAttribute(name = "form") LoginRequest request, @Login LoginAdmin loginAdmin) {
@@ -31,7 +33,7 @@ public class AdminController {
     @PostMapping("/login")
     public String login(@ModelAttribute(name = "form") LoginRequest request, HttpSession session) {
         LoginDto dto = request.toLoginDto();
-        LoginAdmin loginAdmin = adminService.loginAdmin(dto);
+        LoginAdmin loginAdmin = adminQueryService.loginAdmin(dto);
         session.setAttribute("loginAdmin", loginAdmin);
         return "redirect:/";
     }
