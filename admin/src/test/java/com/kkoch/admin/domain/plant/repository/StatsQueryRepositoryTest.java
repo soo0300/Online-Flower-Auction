@@ -1,7 +1,7 @@
 package com.kkoch.admin.domain.plant.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
-import com.kkoch.admin.api.controller.stats.response.AuctionArticleForStatsResponse;
+import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.auction.AuctionArticle;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
@@ -63,17 +63,16 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
         AuctionArticle auctionArticle5 = createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.Advanced, plant2, trade);
 
         //when
-        List<AuctionArticleForStatsResponse> responses = statsQueryRepository.findByTime();
+        List<AuctionArticleForStatsDto> responses = statsQueryRepository.findByTime();
 
         //then
         assertThat(responses).hasSize(3)
-                .extracting("plantId", "grade", "count", "bidPrice", "bidTime")
+                .extracting("plantId", "grade", "count", "bidPrice")
                 .containsExactlyInAnyOrder(
-                        tuple(auctionArticle1.getPlant().getId(), auctionArticle1.getGrade(), auctionArticle1.getCount(), auctionArticle1.getBidPrice(), auctionArticle1.getBidTime().withNano(0)),
-                        tuple(auctionArticle2.getPlant().getId(), auctionArticle2.getGrade(), auctionArticle2.getCount(), auctionArticle2.getBidPrice(), auctionArticle2.getBidTime().withNano(0)),
-                        tuple(auctionArticle5.getPlant().getId(), auctionArticle5.getGrade(), auctionArticle5.getCount(), auctionArticle5.getBidPrice(), auctionArticle5.getBidTime().withNano(0))
+                        tuple(auctionArticle1.getPlant().getId(), auctionArticle1.getGrade(), auctionArticle1.getCount(), auctionArticle1.getBidPrice()),
+                        tuple(auctionArticle2.getPlant().getId(), auctionArticle2.getGrade(), auctionArticle2.getCount(), auctionArticle2.getBidPrice()),
+                        tuple(auctionArticle5.getPlant().getId(), auctionArticle5.getGrade(), auctionArticle5.getCount(), auctionArticle5.getBidPrice()));
 
-                );
 
     }
 

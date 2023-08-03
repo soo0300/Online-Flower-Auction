@@ -1,6 +1,6 @@
 package com.kkoch.admin.domain.plant.repository;
 
-import com.kkoch.admin.api.controller.stats.response.AuctionArticleForStatsResponse;
+import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -21,9 +21,9 @@ public class StatsQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<AuctionArticleForStatsResponse> findByTime() {
+    public List<AuctionArticleForStatsDto> findByTime() {
         return queryFactory
-                .select(Projections.constructor(AuctionArticleForStatsResponse.class,
+                .select(Projections.constructor(AuctionArticleForStatsDto.class,
                         auctionArticle.plant.id,
                         auctionArticle.grade,
                         auctionArticle.count,

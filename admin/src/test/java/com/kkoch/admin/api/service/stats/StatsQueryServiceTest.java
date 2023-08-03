@@ -1,7 +1,7 @@
 package com.kkoch.admin.api.service.stats;
 
 import com.kkoch.admin.IntegrationTestSupport;
-import com.kkoch.admin.api.controller.stats.response.AuctionArticleForStatsResponse;
+import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.auction.AuctionArticle;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
@@ -67,7 +67,7 @@ class StatsQueryServiceTest extends IntegrationTestSupport {
         createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.Advanced, plant2, trade);
 
         //when
-        List<AuctionArticleForStatsResponse> responses = statsQueryService.getAuctionList();
+        List<AuctionArticleForStatsDto> responses = statsQueryService.getAuctionList();
 
         //then
         assertThat(responses).hasSize(3);

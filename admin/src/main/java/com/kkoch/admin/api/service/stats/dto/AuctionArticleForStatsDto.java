@@ -1,4 +1,4 @@
-package com.kkoch.admin.api.controller.stats.response;
+package com.kkoch.admin.api.service.stats.dto;
 
 import com.kkoch.admin.domain.Grade;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
-public class AuctionArticleForStatsResponse {
+public class AuctionArticleForStatsDto {
 
     private Long plantId;
 
@@ -19,14 +19,12 @@ public class AuctionArticleForStatsResponse {
 
     private int bidPrice;
 
-    private LocalDateTime bidTime;
 
     @Builder
-    public AuctionArticleForStatsResponse(Long plantId, Grade grade, int count, int bidPrice, LocalDateTime bidTime) {
+    public AuctionArticleForStatsDto(Long plantId, Grade grade, int count, int bidPrice) {
         this.plantId = plantId;
         this.grade = grade;
         this.count = count;
         this.bidPrice = bidPrice;
-        this.bidTime = bidTime.withNano(0);
     }
 }
