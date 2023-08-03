@@ -2,13 +2,15 @@ package com.kkoch.user.api.controller.reservation;
 
 import com.kkoch.user.ControllerTestSupport;
 import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
+import com.kkoch.user.api.controller.reservation.request.EditReservationRequest;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.ReservationService;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
-import com.kkoch.user.domain.reservation.Reservation;
+import com.kkoch.user.api.service.reservation.dto.EditReservationDto;
 import com.kkoch.user.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -111,8 +113,7 @@ public class ReservationControllerTest extends ControllerTestSupport {
 
         // then
         mockMvc.perform(
-                        // URL에 memberId를 쿼리 파라미터로 전달
-                        get("/user-service/reservations") // URL에 memberId를 쿼리 파라미터로 전달
+                        get("/user-service/reservations")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                                 .with(csrf())
@@ -124,6 +125,35 @@ public class ReservationControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isNotEmpty());
     }
+
+    @DisplayName("거래 예약의 단수와 가격을 변경할 수 있다")
+    @Test
+    public void setReservation() throws Exception {
+        // given
+        EditReservationRequest editReservation = EditReservationRequest.builder()
+                .count(500)
+                .price(2300)
+                .build();
+
+        EditReservationDto dto = editReservation.toEditReservationDto();
+
+        BDDMockito.given(reservationService.setReservation(1L, dto)
+        ).willReturn(1L);
+
+        //when //then
+        mockMvc.perform(
+                        patch("/reservation-service/reservations//{reservationId}", 1L)
+                                .content(objectMapper.writeValueAsString(editReservation))
+                                .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isNumber());
+    }
+
 
 }
 
