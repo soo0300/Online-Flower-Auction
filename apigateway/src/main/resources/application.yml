@@ -18,6 +18,7 @@ spring:
 #          uri: lb://USER-SERVICE
 #          predicates:
 #            - Path=/user-service/**
+        # login
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -25,24 +26,26 @@ spring:
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        # join
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user-service/users
+            - Path=/user-service/join
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>), /$\{segment}
-
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+        # other
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
-            - Method=POST
+            - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
-            - RewritePath=/user-service/(?<segment>), /$\{segment}
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
         - id: admin-service
           uri: lb://ADMIN-SERVICE
           predicates:
@@ -52,4 +55,6 @@ spring:
           predicates:
             - Path=/auction-service/**
 
+token:
+  secret: user_token
 
