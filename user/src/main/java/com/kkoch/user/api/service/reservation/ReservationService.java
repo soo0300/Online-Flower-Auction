@@ -43,4 +43,8 @@ public class ReservationService {
         return reservation.getId();
     }
 
+    //거래 예약 조회
+    public Reservation getReservation(Long memberId) {
+        return null;
+    }
 }
