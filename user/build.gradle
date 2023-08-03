@@ -75,6 +75,10 @@ dependencies {
 	// RestDocs
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+	// cloud config
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 }
 
 dependencyManagement {
