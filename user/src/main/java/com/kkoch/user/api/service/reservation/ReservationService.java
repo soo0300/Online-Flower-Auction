@@ -2,6 +2,7 @@ package com.kkoch.user.api.service.reservation;
 
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
+import com.kkoch.user.api.service.reservation.dto.EditReservationDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
 import com.kkoch.user.domain.reservation.Reservation;
@@ -47,5 +48,13 @@ public class ReservationService {
         ReservationResponse response = new ReservationResponse(reservation.getPlantId(),
                 reservation.getCount(), reservation.getPrice());
         return response;
+    }
+
+    //거래 예약 수정
+    public Long setReservation(Long reservationId, EditReservationDto dto) {
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NoSuchElementException("조회할 수 없는 거래 예약입니다"));
+        reservation.editReservation(dto.getCount(), dto.getPrice());
+        return reservation.getId();
     }
 }

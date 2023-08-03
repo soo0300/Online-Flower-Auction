@@ -39,4 +39,10 @@ public class Reservation extends TimeBaseEntity {
         this.member = member;
         this.plantId = plantId;
     }
+
+    // -- 비즈니스 로직
+    public void editReservation(int count, int price) {
+        this.count = count;
+        this.price = price;
+    }
 }
