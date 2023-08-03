@@ -3,6 +3,7 @@ package com.kkoch.user.api.service.reservation;
 import com.kkoch.user.IntegrationTestSupport;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
+import com.kkoch.user.api.service.reservation.dto.EditReservationDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
 import com.kkoch.user.domain.reservation.Reservation;
@@ -74,6 +75,25 @@ public class ReservationServiceTest extends IntegrationTestSupport {
 
         // then
         Assertions.assertThat(response.getPrice()).isEqualTo(1000);
+    }
+
+    @DisplayName("회원은 자신의 거래 예약의 정보를 수정할 수 있다")
+    @Test
+    public void setReservation() throws Exception {
+        // given
+        Reservation reservation = insertReservation();
+        EditReservationDto dto = EditReservationDto.builder()
+                .price(500)
+                .count(1)
+                .build();
+        Long reservationId = reservation.getId();
+
+        // when
+        Long id = reservationService.setReservation(reservationId,dto);
+        Optional<Reservation> reser = reservationRepository.findById(id);
+
+        // then
+        Assertions.assertThat(reser.get().getPrice()).isEqualTo(500);
     }
 
     private Member insertMember() {
