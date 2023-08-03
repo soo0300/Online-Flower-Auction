@@ -1,5 +1,6 @@
 package com.kkoch.user.api.service.member;
 
+import com.kkoch.user.api.controller.member.response.MemberResponse;
 import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
@@ -22,13 +23,13 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public Long join(JoinMemberDto dto) {
+    public MemberResponse join(JoinMemberDto dto) {
         dto.setMemberKey(UUID.randomUUID().toString());
         Member member = dto.toEntity(passwordEncoder.encode(dto.getPwd()));
 
         Member savedMember = memberRepository.save(member);
 
-        return savedMember.getId();
+        return MemberResponse.of(savedMember);
     }
 
     @Override

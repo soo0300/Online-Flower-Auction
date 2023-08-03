@@ -20,23 +20,21 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user-service/user")
+@RequestMapping("/")
 @Slf4j
-@Api(tags = {"회원 기능"})
 public class MemberController {
 
     private final MemberService memberService;
 //    private final FileStore fileStore;
 
-    //회원가입
-    @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
-    public ApiResponse<Long> joinMember(@Valid @RequestPart("dto") JoinMemberRequest request
-            , @RequestPart("file") MultipartFile file) throws IOException {
+    public ApiResponse<MemberResponse> joinMember(@Valid @RequestBody JoinMemberRequest request
+//            , @RequestPart("file") MultipartFile file) throws IOException {
+    ) {
 //        fileStore.storeFile(file);
-        Long memberId = memberService.join(request.toJoinMemberDto());
-        log.debug("memberId = {}", memberId);
-        return ApiResponse.ok(memberId);
+        MemberResponse response = memberService.join(request.toJoinMemberDto());
+        log.debug("MemberResponse={}", response);
+        return ApiResponse.ok(response);
     }
 
     @ApiOperation(value = "로그인")
@@ -56,11 +54,11 @@ public class MemberController {
 
 
     //내정보조회
-    @ApiOperation(value = "마이페이지 정보 조회")
-    @GetMapping("/my")
-    public ApiResponse<MemberResponse> getMyInfo() {
-        return ApiResponse.ok(null);
-    }
+//    @ApiOperation(value = "마이페이지 정보 조회")
+//    @GetMapping("/my")
+//    public ApiResponse<MemberResponse> getMyInfo() {
+//        return ApiResponse.ok(null);
+//    }
 
     //내정보수정 - 비밀번호 변경
     @ApiOperation(value = "회원 비밀번호 변경")
