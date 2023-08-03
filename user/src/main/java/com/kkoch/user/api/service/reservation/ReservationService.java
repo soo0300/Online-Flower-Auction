@@ -44,10 +44,8 @@ public class ReservationService {
                 .orElseThrow(() -> new IllegalArgumentException("조회할 수 없는 회원입니다."));
         Reservation reservation = reservationRepository.findByMember(member)
                 .orElseThrow(() -> new IllegalArgumentException("조회할 수 없는  거래 예약입니다."));
-
         ReservationResponse response = new ReservationResponse(reservation.getPlantId(),
-                reservation.getCount(),reservation.getPrice());
-
+                reservation.getCount(), reservation.getPrice());
         return response;
     }
 }

@@ -67,10 +67,10 @@ public class ReservationServiceTest extends IntegrationTestSupport {
     public void getReservation() throws Exception {
         // given
         Reservation reservation = insertReservation();
-        String loiginId = reservation.getMember().getEmail();
+        String loginId = reservation.getMember().getEmail();
 
         // when
-        ReservationResponse response = reservationService.getReservation(loiginId);
+        ReservationResponse response = reservationService.getReservation(loginId);
 
         // then
         Assertions.assertThat(response.getPrice()).isEqualTo(1000);

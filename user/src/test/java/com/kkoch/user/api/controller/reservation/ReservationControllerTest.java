@@ -113,8 +113,6 @@ public class ReservationControllerTest extends ControllerTestSupport {
         mockMvc.perform(
                         // URL에 memberId를 쿼리 파라미터로 전달
                         get("/user-service/reservations") // URL에 memberId를 쿼리 파라미터로 전달
-                                // memberId를 쿼리 파라미터로 설정
-                                .param("memberId", memberId.toString())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(request))
                                 .with(csrf())
