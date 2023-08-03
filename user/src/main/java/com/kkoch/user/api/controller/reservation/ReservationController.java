@@ -2,10 +2,11 @@ package com.kkoch.user.api.controller.reservation;
 
 import com.kkoch.user.api.controller.ApiResponse;
 import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
+import com.kkoch.user.api.controller.reservation.request.EditReservationRequest;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.ReservationService;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
-import com.kkoch.user.domain.reservation.Reservation;
+import com.kkoch.user.api.service.reservation.dto.EditReservationDto;
 import com.kkoch.user.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,10 +46,12 @@ public class ReservationController {
         return ApiResponse.ok(response);
     }
 
-    @ApiOperation(value = "예약 단수 및 가격 변경")
+    @ApiOperation(value = "거래 예약 단수 및 가격 변경")
     @PatchMapping("/{reservationId}")
-    public ApiResponse<?> editReservation(@PathVariable Long reservationId) {
-        return ApiResponse.of(MOVED_PERMANENTLY, "예약 변경", null);
+    public ApiResponse<?> editReservation(@PathVariable Long reservationId, EditReservationRequest request) {
+        EditReservationDto dto = request.toEditReservationDto();
+        reservationService.setReservation(reservationId, dto);
+        return ApiResponse.of(MOVED_PERMANENTLY, "거래 예약 변경", null);
     }
 
     @ApiOperation(value = "거래 예약 삭제")
