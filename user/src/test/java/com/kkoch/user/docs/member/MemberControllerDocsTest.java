@@ -1,23 +1,15 @@
 package com.kkoch.user.docs.member;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kkoch.user.api.controller.member.MemberController;
-import com.kkoch.user.api.controller.member.request.JoinMemberRequest;
 import com.kkoch.user.api.controller.member.request.LoginMemberRequest;
 import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
-import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.api.service.member.dto.LoginMemberDto;
 import com.kkoch.user.docs.RestDocsSupport;
-import com.kkoch.user.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;

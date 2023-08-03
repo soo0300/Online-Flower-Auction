@@ -7,7 +7,6 @@ import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
 import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.api.service.member.dto.LoginMemberDto;
-import com.kkoch.user.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

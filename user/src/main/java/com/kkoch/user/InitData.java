@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class InitData {
 
@@ -33,7 +33,6 @@ public class InitData {
     private Member createMember(String email, String loginPw, String name, String tel, String businessNumber, int point) {
         return Member.builder()
             .email(email)
-            .loginPw(loginPw)
             .name(name)
             .tel(tel)
             .businessNumber(businessNumber)

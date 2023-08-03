@@ -5,8 +5,6 @@ import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.ReservationService;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
-import com.kkoch.user.domain.reservation.Reservation;
-import com.kkoch.user.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -25,24 +23,25 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 public class ReservationController {
 
     private final ReservationService reservationService;
-    private final JwtUtil jwtUtil;
 
     @ApiOperation(value = "거래 예약 등록")
     @PostMapping
     public ApiResponse<Long> addReservation(@Valid @RequestBody AddReservationRequest request) {
 
-        String loginId = jwtUtil.getEmailByJWT();
-        AddReservationDto dto = request.toAddReservationDto();
-        Long reservationId = reservationService.addReservation(loginId, dto);
-        return ApiResponse.ok(reservationId);
+//        String loginId = jwtUtil.getEmailByJWT();
+//        AddReservationDto dto = request.toAddReservationDto();
+//        Long reservationId = reservationService.addReservation(loginId, dto);
+//        return ApiResponse.ok(reservationId);
+        return null;
     }
 
     @ApiOperation(value = "거래 예약 조회")
     @GetMapping
     public ApiResponse<ReservationResponse> getMyReservation() {
-        String loginId = jwtUtil.getEmailByJWT();
-        ReservationResponse response = reservationService.getReservation(loginId);
-        return ApiResponse.ok(response);
+//        String loginId = jwtUtil.getEmailByJWT();
+//        ReservationResponse response = reservationService.getReservation(loginId);
+//        return ApiResponse.ok(response);
+        return null;
     }
 
     @ApiOperation(value = "예약 단수 및 가격 변경")

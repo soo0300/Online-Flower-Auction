@@ -5,8 +5,6 @@ import com.kkoch.user.api.controller.member.request.*;
 import com.kkoch.user.api.controller.member.response.MemberResponse;
 import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
-import com.kkoch.user.common.FileStore;
-import com.kkoch.user.jwt.JwtUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +26,14 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 public class MemberController {
 
     private final MemberService memberService;
-    private final JwtUtil jwtUtil;
-    private final FileStore fileStore;
+//    private final FileStore fileStore;
 
     //회원가입
     @ApiOperation(value = "회원 가입")
     @PostMapping("/join")
     public ApiResponse<Long> joinMember(@Valid @RequestPart("dto") JoinMemberRequest request
             , @RequestPart("file") MultipartFile file) throws IOException {
-        fileStore.storeFile(file);
+//        fileStore.storeFile(file);
         Long memberId = memberService.join(request.toJoinMemberDto());
         log.debug("memberId = {}", memberId);
         return ApiResponse.ok(memberId);
@@ -46,9 +43,9 @@ public class MemberController {
     @PostMapping("/login")
     public ApiResponse<TokenResponse> loginMember(@Valid @RequestBody LoginMemberRequest request) {
 
-        TokenResponse tokenResponse = memberService.login(request.toLoginMemberDto());
-        return ApiResponse.ok(tokenResponse);
-
+//        TokenResponse tokenResponse = memberService.login(request.toLoginMemberDto());
+//        return ApiResponse.ok(tokenResponse);
+        return null;
     }
 
     //회원조회(관계자) SSR

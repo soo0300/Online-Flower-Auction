@@ -98,4 +98,4 @@ spring:
       mode: never
 
 file:
-  dir: C:\SSAFY\upload
+  dir:

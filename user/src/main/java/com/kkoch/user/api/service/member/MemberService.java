@@ -1,15 +1,10 @@
 package com.kkoch.user.api.service.member;
 
-import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.dto.JoinMemberDto;
-import com.kkoch.user.api.service.member.dto.LoginMemberDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
-import com.kkoch.user.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 

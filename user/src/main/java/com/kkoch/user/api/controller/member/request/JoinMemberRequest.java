@@ -35,12 +35,12 @@ public class JoinMemberRequest {
     public JoinMemberDto toJoinMemberDto() {
         return JoinMemberDto.builder()
                 .email(this.email)
-                .loginPw(this.loginPw)
+//                .loginPw(this.loginPw)
                 .name(this.name)
                 .tel(this.tel)
                 .businessNumber(this.businessNumber)
-                .point(0)
-                .active(true)
+//                .point(0)
+//                .active(true)
                 .build();
     }
 }
