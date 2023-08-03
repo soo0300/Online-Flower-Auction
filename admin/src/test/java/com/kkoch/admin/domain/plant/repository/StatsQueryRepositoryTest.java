@@ -57,21 +57,21 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
         Trade trade = createTrade();
 
         AuctionArticle auctionArticle1 = createAuctionArticle("00001", LocalDateTime.now().minusHours(11), Grade.Super, plant1, trade);
-        AuctionArticle auctionArticle2 = createAuctionArticle("00002", LocalDateTime.now().minusHours(12), Grade.Super, plant1, trade);
+        AuctionArticle auctionArticle2 = createAuctionArticle("00002", LocalDateTime.now().minusHours(10), Grade.Super, plant1, trade);
         AuctionArticle auctionArticle3 = createAuctionArticle("00003", LocalDateTime.now().minusHours(13), Grade.Advanced, plant1, trade);
         AuctionArticle auctionArticle4 = createAuctionArticle("00004", LocalDateTime.now().minusHours(13), Grade.Super, plant2, trade);
         AuctionArticle auctionArticle5 = createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.Advanced, plant2, trade);
 
         //when
-        List<AuctionArticleForStatsResponse> responses = statsQueryRepository.findByBidTime();
+        List<AuctionArticleForStatsResponse> responses = statsQueryRepository.findByTime();
 
         //then
         assertThat(responses).hasSize(3)
                 .extracting("plantId", "grade", "count", "bidPrice", "bidTime")
                 .containsExactlyInAnyOrder(
-                        tuple(auctionArticle1.getPlant().getId(), auctionArticle1.getGrade().name(), auctionArticle1.getCount(), auctionArticle1.getBidPrice(), auctionArticle1.getBidTime()),
-                        tuple(auctionArticle2.getPlant().getId(), auctionArticle2.getGrade().name(), auctionArticle2.getCount(), auctionArticle2.getBidPrice(), auctionArticle2.getBidTime()),
-                        tuple(auctionArticle5.getPlant().getId(), auctionArticle5.getGrade().name(), auctionArticle5.getCount(), auctionArticle5.getBidPrice(), auctionArticle5.getBidTime())
+                        tuple(auctionArticle1.getPlant().getId(), auctionArticle1.getGrade(), auctionArticle1.getCount(), auctionArticle1.getBidPrice(), auctionArticle1.getBidTime().withNano(0)),
+                        tuple(auctionArticle2.getPlant().getId(), auctionArticle2.getGrade(), auctionArticle2.getCount(), auctionArticle2.getBidPrice(), auctionArticle2.getBidTime().withNano(0)),
+                        tuple(auctionArticle5.getPlant().getId(), auctionArticle5.getGrade(), auctionArticle5.getCount(), auctionArticle5.getBidPrice(), auctionArticle5.getBidTime().withNano(0))
 
                 );
 
@@ -110,7 +110,7 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
     private AuctionArticle createAuctionArticle(String auctionNumber, LocalDateTime bidTime, Grade grade, Plant plant, Trade trade) {
         AuctionArticle auctionArticle = AuctionArticle.builder()
                 .auctionNumber(auctionNumber)
-                .grade(Grade.NONE)
+                .grade(grade)
                 .count(10)
                 .bidPrice(3000)
                 .bidTime(bidTime)
