@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkoch.user.api.controller.member.request.LoginRequest;
 import com.kkoch.user.api.service.member.MemberService;
 import com.kkoch.user.domain.member.Member;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,18 +22,23 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private MemberService memberService;
-    private Environment env;
+    private final MemberService memberService;
+    private final Environment env;
+    private final Key key;
 
     public AuthenticationFilter(AuthenticationManager authenticationManager, MemberService memberService, Environment env) {
         super.setAuthenticationManager(authenticationManager);
         this.memberService = memberService;
         this.env = env;
+        byte[] keyBytes = Decoders.BASE64.decode("VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa");
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     @Override
@@ -47,5 +56,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         String username = ((User) authResult.getPrincipal()).getUsername();
         Member member = memberService.getUserDetailsByEmail(username);
+
+        String token = Jwts.builder()
+            .setSubject(member.getMemberKey())
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact();
+
+        response.addHeader("token", token);
+        response.addHeader("userId", member.getMemberKey());
     }
 }
