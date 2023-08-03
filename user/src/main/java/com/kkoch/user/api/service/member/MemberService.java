@@ -4,6 +4,7 @@ import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,11 +14,11 @@ import java.util.UUID;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public Long join(JoinMemberDto dto) {
         dto.setMemberKey(UUID.randomUUID().toString());
-
-        Member member = dto.toEntity("test");
+        Member member = dto.toEntity(passwordEncoder.encode(dto.getPwd()));
 
         Member savedMember = memberRepository.save(member);
 
