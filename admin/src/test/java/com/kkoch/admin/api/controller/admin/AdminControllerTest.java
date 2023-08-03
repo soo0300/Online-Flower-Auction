@@ -3,24 +3,16 @@ package com.kkoch.admin.api.controller.admin;
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.admin.request.AddAdminRequest;
 import com.kkoch.admin.api.controller.admin.request.EditAdminRequest;
-import com.kkoch.admin.api.controller.admin.request.LoginRequest;
 import com.kkoch.admin.api.service.admin.AdminQueryService;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.EditAdminDto;
-import com.kkoch.admin.api.service.admin.dto.LoginDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

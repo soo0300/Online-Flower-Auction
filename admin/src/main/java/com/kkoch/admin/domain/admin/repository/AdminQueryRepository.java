@@ -25,14 +25,14 @@ public class AdminQueryRepository {
         return queryFactory
             .select(Projections.constructor(AdminResponse.class,
                 admin.loginId,
-                admin.loginPw,
                 admin.name,
                 admin.tel,
                 admin.position,
+                admin.createdDate,
                 admin.active)
             )
             .from(admin)
-            .where(admin.active.eq(true))
+            .orderBy(admin.name.asc())
             .fetch();
     }
 
