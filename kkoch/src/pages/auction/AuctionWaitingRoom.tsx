@@ -1,99 +1,147 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { OpenVidu, Publisher, Session } from 'openvidu-browser';
+import { OpenVidu, Session } from 'openvidu-browser';
 import CameraOff from '@/assets/cameraOff.png';
+import axios from 'axios';
 
 const AuctionWaitingRoom: React.FC = () => {
-  const [publisher, setPublisher] = useState<Publisher | null>(null);
-  const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
-  const [isMicOn, setIsMicOn] = useState<boolean>(false);
+  const [token, setToken] = useState('');
   const [session, setSession] = useState<Session | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const initOpenVidu = async () => {
-      const OV = new OpenVidu();
-      const mySession = OV.initSession();
-
-      try {
-        const publisher = OV.initPublisher('cameraTest', {
-          videoSource: undefined, // 기본 비디오 장치 사용
-          audioSource: undefined, // 기본 오디오 장치 사용
-          publishAudio: true,
-          publishVideo: true,
-          resolution: '640x480',
-          frameRate: 30,
-        });
-        mySession.publish(publisher);
-
-        setSession(mySession);
-        setPublisher(publisher);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    initOpenVidu();
-  }, []);
-
-  const toggleCamera = () => {
-    if (publisher) {
-      const videoEnabled = !publisher.stream.videoActive; // OpenVidu의 API를 사용하여 비디오 활성화 여부 확인
-      publisher.publishVideo(videoEnabled); // OpenVidu의 API를 사용하여 비디오 트랙 토글
-      setIsCameraOn(videoEnabled); // 카메라 상태를 현재 상태의 반대로 변경
-    }
-  };
+  const [subscriber, setSubscriber] = useState(null);
+  const [publisher, setPublisher] = useState(null);
+  const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
   
 
-  const toggleMic = () => {
-    if (publisher) {
-      const audioEnabled = publisher.stream.getMediaStream().getAudioTracks()[0].enabled;
-      publisher.stream.getMediaStream().getAudioTracks()[0].enabled = !audioEnabled;
-      setIsMicOn(!audioEnabled); // 마이크 상태를 현재 상태의 반대로 변경
-    }
-  };
+  const subscriberContainer = useRef<HTMLDivElement | null>(null);
 
-  const joinSession = () => {
-    setIsCameraOn(false);
-    setIsMicOn(false);
-    setPublisher(null);
-    setSession(null);
+
+  const initSessionAndToken = async () => {
+    try {
+      // OpenVidu 서버에 세션 생성 요청 보내기
+      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/openvidu/api/sessions', null, {
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
+        },
+      });
+
+      const sessionId = sessionResponse.data.sessionId;
+
+      // OpenVidu 서버에 토큰 생성 요청 보내기
+      const tokenResponse = await axios.post(`https://i9c204.p.ssafy.io:8443/openvidu/api/sessions/${sessionId}/connection`, null, {
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
+        },
+      });
+      setToken(tokenResponse.data.token);
+    }
+    catch (error) {
+      console.error('Error:', error.response.data);
+    }
+  }
+  
+  useEffect(() => {
+    initSessionAndToken();
+  }, [])
+
+  useEffect(() => {
+    if (token) {
+      const OV =  new OpenVidu()
+      const mySession = OV.initSession()
+      setSession(mySession)
+      mySession.connect(token);
+      // console.log('세션이요', mySession);
+
+      const publisher = OV.initPublisher(subscriberContainer.current,
+        {
+          audioSource: undefined, // The source of audio. If undefined default audio input
+          videoSource: undefined, // The source of video. If undefined default video input
+          publishAudio: true,     // Whether you want to start the publishing with audio unmuted or muted
+          publishVideo: true,     // Whether you want to start the publishing with video enabled or disabled
+          resolution: '640x480',  // The resolution of your video
+          frameRate: 30,          // The frame rate of your videot
+          mirror: false           // Whether to mirror your local video or not
+        },
+        (error) => {
+          if (error) {
+            console.error('Error Publisher', error)
+          } else {
+            console.log('initialized')
+          }
+        }
+      );
+
+      setPublisher(publisher);
+      
+
+      mySession.on('streamCreated', (e) => {
+        if (!subscriber && e.stream.connection.connectionId !== mySession.connection.connectionId) {
+          setSubscriber(e.stream);
+          mySession.publish(publisher);
+          // publisher.addVideoElement(subscriberContainer);
+        }
+      });
+
+      return () => {
+        mySession.disconnect();
+        mySession.off('streamCreated');
+      };
+
+      // mySession.on('streamCreated', (e) => {
+      //   console.log('이벤또', e)
+      //   setSubscriber(e.stream);
+      //   console.log('구독중', subscriber, 'subVideo')
+      //   mySession.publish(publisher)
+      //   publisher.addVideoElement(subscriberContainer)
+      // })
+
+      // if (publisher) {
+      //   publisher.addVideoElement(subscriberContainer);
+       
+      // }
+            
+    }
+  }, [token, isCameraOn])
+
+
+  // useEffect(() => {
+  //   if (publisher && subscriberContainer) {
+  //     // 스트리밍 시작 및 영상 출력
+  //     session.publish(publisher);
+  //     publisher.addVideoElement(subscriberContainer);
+  //   }
+  // })
+
+  // 카메라 상태를 토글하는 함수
+  const toggleCamera = () => {
+    if (publisher) {
+      console.log('카메라상태', isCameraOn)
+      if (isCameraOn) {
+        publisher.publishVideo(false); // 카메라 끄기
+      } else {
+        publisher.publishVideo(true); // 카메라 켜기
+      }
+      setIsCameraOn((prev) => !prev); // isCameraOn 상태를 반전시킴
+    }
   };
 
   return (
-    <section className="gap-16 bg-gray-20 py-10 pt-[150px] md:h-full md:pb-0"> 
+    <div className="gap-16 bg-gray-20 py-10 pt-[150px] md:h-full md:pb-0">
       <div className="mx-auto w-5/6 items-center md:flex">
         <h1>aT화훼 공판장 (양재동) 경매방</h1>
       </div>
-
       <div className="mx-auto w-5/6 items-center justify-center md:flex md:flex-wrap md:h-5/6">
-        {/* 카메라 테스트 화면 */}
-        {publisher && (
-          <div className='w-full flex justify-center'>
-            {isCameraOn ? (
-              <video ref={videoRef} autoPlay playsInline />
-            ) : (
-              <img src={CameraOff} alt="" />
-            )}
-          </div>
-        )}
-
-        <div>
-          {/* 마이크 on/off 버튼 */}
-          <button onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
-          {/* 마이크 on/off 버튼 */}
-          <button onClick={toggleMic}>{isMicOn ? '마이크 끄기' : '마이크 켜기'}</button>
-        </div>
-
-
-        {/* 입장하기 버튼 */}
-        {isCameraOn && !session ? (
-          <button onClick={joinSession}>화상 통화에 입장하기</button>
+        {isCameraOn ? (
+          <div ref={subscriberContainer} className='w-full flex justify-center'></div>
         ) : (
-          <button disabled>입장하기</button>
+          <img src={CameraOff} alt="" />
         )}
       </div>
-    </section>
-  );
-};
+      <div>
+        <button onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
+      </div>
+    </div>
+  )
+}
 
 export default AuctionWaitingRoom;
