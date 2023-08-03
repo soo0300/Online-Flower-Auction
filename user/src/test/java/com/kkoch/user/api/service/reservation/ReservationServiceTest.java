@@ -1,6 +1,7 @@
 package com.kkoch.user.api.service.reservation;
 
 import com.kkoch.user.IntegrationTestSupport;
+import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
@@ -59,6 +60,20 @@ public class ReservationServiceTest extends IntegrationTestSupport {
         Optional<Reservation> reser = reservationRepository.findById(reservation.getId());
         Assertions.assertThat(reser).isNotPresent();
 
+    }
+
+    @DisplayName("회원은 자신이 예약한 거래 예약을 조회할 수 있다")
+    @Test
+    public void getReservation() throws Exception {
+        // given
+        Reservation reservation = insertReservation();
+        String loginId = reservation.getMember().getEmail();
+
+        // when
+        ReservationResponse response = reservationService.getReservation(loginId);
+
+        // then
+        Assertions.assertThat(response.getPrice()).isEqualTo(1000);
     }
 
     private Member insertMember() {

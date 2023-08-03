@@ -2,8 +2,10 @@ package com.kkoch.user.api.controller.reservation;
 
 import com.kkoch.user.ControllerTestSupport;
 import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
+import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.ReservationService;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
+import com.kkoch.user.domain.reservation.Reservation;
 import com.kkoch.user.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,8 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,5 +90,40 @@ public class ReservationControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
                 .andExpect(jsonPath("$.data").isNumber());
     }
+
+
+    @DisplayName("회원은 자신의 거래 예약을 조회할 수 있다")
+    @Test
+    @WithMockUser
+    public void getReservation() throws Exception {
+        // given
+        AddReservationRequest request = AddReservationRequest.builder()
+                .plantId(1L)
+                .count(5)
+                .price(1500)
+                .build();
+        Long memberId = 1L;
+
+        ReservationResponse response = new ReservationResponse();
+
+        // when
+        given(reservationService.getReservation(any())).willReturn(response);
+
+        // then
+        mockMvc.perform(
+                        // URL에 memberId를 쿼리 파라미터로 전달
+                        get("/user-service/reservations") // URL에 memberId를 쿼리 파라미터로 전달
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(request))
+                                .with(csrf())
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isNotEmpty());
+    }
+
 }
 
