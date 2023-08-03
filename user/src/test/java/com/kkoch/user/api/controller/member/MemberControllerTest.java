@@ -2,7 +2,7 @@ package com.kkoch.user.api.controller.member;
 
 import com.kkoch.user.ControllerTestSupport;
 import com.kkoch.user.api.controller.member.request.JoinMemberRequest;
-import com.kkoch.user.api.controller.member.request.LoginMemberRequest;
+import com.kkoch.user.api.controller.member.request.LoginRequest;
 import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
 import com.kkoch.user.api.service.member.dto.JoinMemberDto;
@@ -84,7 +84,7 @@ class MemberControllerTest extends ControllerTestSupport {
         //given
         joinMember();
 
-        LoginMemberRequest loginMemberRequest = LoginMemberRequest.builder()
+        LoginRequest loginMemberRequest = LoginRequest.builder()
                 .email("test@test.com")
                 .loginPw("1234")
                 .build();

@@ -1,7 +1,7 @@
 package com.kkoch.user.docs.member;
 
 import com.kkoch.user.api.controller.member.MemberController;
-import com.kkoch.user.api.controller.member.request.LoginMemberRequest;
+import com.kkoch.user.api.controller.member.request.LoginRequest;
 import com.kkoch.user.api.controller.member.response.TokenResponse;
 import com.kkoch.user.api.service.member.MemberService;
 import com.kkoch.user.api.service.member.dto.LoginMemberDto;
@@ -37,7 +37,7 @@ public class MemberControllerDocsTest extends RestDocsSupport {
     @DisplayName("회원 로그인 API")
     @Test
     void loginMember() throws Exception {
-        LoginMemberRequest request = LoginMemberRequest.builder()
+        LoginRequest request = LoginRequest.builder()
             .email("ssafy@ssafy.com")
             .loginPw("ssafy1234@")
             .build();

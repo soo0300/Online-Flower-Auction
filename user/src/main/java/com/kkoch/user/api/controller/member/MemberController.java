@@ -41,7 +41,7 @@ public class MemberController {
 
     @ApiOperation(value = "로그인")
     @PostMapping("/login")
-    public ApiResponse<TokenResponse> loginMember(@Valid @RequestBody LoginMemberRequest request) {
+    public ApiResponse<TokenResponse> loginMember(@Valid @RequestBody LoginRequest request) {
 
 //        TokenResponse tokenResponse = memberService.login(request.toLoginMemberDto());
 //        return ApiResponse.ok(tokenResponse);
