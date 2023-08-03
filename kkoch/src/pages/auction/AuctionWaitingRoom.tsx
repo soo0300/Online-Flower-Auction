@@ -13,27 +13,29 @@ const AuctionWaitingRoom: React.FC = () => {
 
   const subscriberContainer = useRef<HTMLDivElement | null>(null);
 
-
+  // 경매사랑 구매자 구분
   const initSessionAndToken = async () => {
     try {
       // OpenVidu 서버에 세션 생성 요청 보내기
-      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/openvidu/api/sessions', null, {
+      const sessionResponse = await axios.post('http://i9c204.p.ssafy.io:5000/api/sessions', null, {
         headers: {
           "Content-Type": "application/json",
-          'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
+          // 'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
         },
       });
+      const sessionId = sessionResponse.data;
 
-      const sessionId = sessionResponse.data.sessionId;
+      // console.log(sessionId)
 
       // OpenVidu 서버에 토큰 생성 요청 보내기
-      const tokenResponse = await axios.post(`https://i9c204.p.ssafy.io:8443/openvidu/api/sessions/${sessionId}/connection`, null, {
+      const tokenResponse = await axios.post(`http://i9c204.p.ssafy.io:5000/api/sessions/${sessionId}/connections`, null, {
         headers: {
           "Content-Type": "application/json",
-          'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
+          // 'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
         },
       });
-      setToken(tokenResponse.data.token);
+      setToken(tokenResponse.data.split('&')[1].split('=')[1]);
+      // console.log(tokenResponse.data)
     }
     catch (error) {
       console.error('Error:', error.response.data);
@@ -45,6 +47,7 @@ const AuctionWaitingRoom: React.FC = () => {
   }, [])
 
   useEffect(() => {
+    console.log(token)
     if (token) {
       const OV =  new OpenVidu()
       const mySession = OV.initSession()
@@ -78,6 +81,7 @@ const AuctionWaitingRoom: React.FC = () => {
         if (!subscriber && e.stream.connection.connectionId !== mySession.connection.connectionId) {
           setSubscriber(e.stream);
           mySession.publish(publisher);
+          console.log('이거이거이거')
           // publisher.addVideoElement(subscriberContainer);
         }
       });
