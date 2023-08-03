@@ -44,4 +44,14 @@ public class MemberService implements UserDetailsService {
             true, true, true, true,
             new ArrayList<>()); //권한
     }
+
+    public Member getUserDetailsByEmail(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+
+        if (findMember.isEmpty()) {
+            throw new UsernameNotFoundException("등록되지 않는 사용자입니다.");
+        }
+
+        return findMember.get();
+    }
 }
