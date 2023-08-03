@@ -1,6 +1,7 @@
 package com.kkoch.user.api.service.reservation;
 
 import com.kkoch.user.IntegrationTestSupport;
+import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
@@ -66,13 +67,13 @@ public class ReservationServiceTest extends IntegrationTestSupport {
     public void getReservation() throws Exception {
         // given
         Reservation reservation = insertReservation();
-        Long memberId = reservation.getMember().getId();
+        String loiginId = reservation.getMember().getEmail();
 
         // when
-        Reservation reser = reservationService.getReservation(memberId);
+        ReservationResponse response = reservationService.getReservation(loiginId);
 
         // then
-        Assertions.assertThat(reser.getMember().getId()).isEqualTo(memberId);
+        Assertions.assertThat(response.getPrice()).isEqualTo(1000);
     }
 
     private Member insertMember() {

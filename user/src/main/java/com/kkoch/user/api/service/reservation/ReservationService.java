@@ -1,5 +1,6 @@
 package com.kkoch.user.api.service.reservation;
 
+import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
@@ -38,11 +39,15 @@ public class ReservationService {
     }
 
     //거래 예약 조회
-    public Reservation getReservation(Long memberId) {
-        Member member = memberRepository.findById(memberId)
+    public ReservationResponse getReservation(String loginId) {
+        Member member = memberRepository.findByEmail(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("조회할 수 없는 회원입니다."));
         Reservation reservation = reservationRepository.findByMember(member)
                 .orElseThrow(() -> new IllegalArgumentException("조회할 수 없는  거래 예약입니다."));
-        return reservation;
+
+        ReservationResponse response = new ReservationResponse(reservation.getPlantId(),
+                reservation.getCount(),reservation.getPrice());
+
+        return response;
     }
 }

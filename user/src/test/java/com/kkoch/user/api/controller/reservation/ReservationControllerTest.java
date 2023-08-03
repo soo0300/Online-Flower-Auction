@@ -2,6 +2,7 @@ package com.kkoch.user.api.controller.reservation;
 
 import com.kkoch.user.ControllerTestSupport;
 import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
+import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.ReservationService;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
 import com.kkoch.user.domain.reservation.Reservation;
@@ -103,10 +104,10 @@ public class ReservationControllerTest extends ControllerTestSupport {
                 .build();
         Long memberId = 1L;
 
-        Reservation reservation = Reservation.builder().build();
+        ReservationResponse response = new ReservationResponse();
 
         // when
-        given(reservationService.getReservation(any())).willReturn(reservation);
+        given(reservationService.getReservation(any())).willReturn(response);
 
         // then
         mockMvc.perform(
