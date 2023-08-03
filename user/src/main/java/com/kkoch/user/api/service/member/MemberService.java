@@ -11,30 +11,33 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final JwtProvider jwtProvider;
+
     public Long join(JoinMemberDto dto) {
+        dto.setMemberKey(UUID.randomUUID().toString());
 
-        Member member = dto.toEntity();
+        Member member = dto.toEntity("test");
 
-        memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
 
-        return member.getId();
+        return savedMember.getId();
     }
 
-    public TokenResponse login(LoginMemberDto dto) {
-        Member member = memberRepository.findByEmail(dto.getEmail()).orElseThrow(() ->
-                new BadCredentialsException("잘못된 계정정보입니다."));
-
-        if (!isSamePw(dto.getLoginPw(),member.getLoginPw())) {
-            throw new BadCredentialsException("잘못된 계정정보입니다.");
-        }
-        return new TokenResponse(jwtProvider.createToken(member.getEmail(), member.getRoles()));
-    }
+//    public TokenResponse login(LoginMemberDto dto) {
+//        Member member = memberRepository.findByEmail(dto.getEmail()).orElseThrow(() ->
+//                new BadCredentialsException("잘못된 계정정보입니다."));
+//
+//        if (!isSamePw(dto.getLoginPw(),member.getLoginPw())) {
+//            throw new BadCredentialsException("잘못된 계정정보입니다.");
+//        }
+//        return new TokenResponse(jwtProvider.createToken(member.getEmail(), member.getRoles()));
+//    }
 
     public boolean isSamePw(String dtoPW, String domainPw){
         return dtoPW.equals(domainPw);

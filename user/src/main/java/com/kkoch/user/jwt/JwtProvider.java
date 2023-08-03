@@ -24,7 +24,7 @@ import java.util.List;
 @Component
 public class JwtProvider {
 
-    @Value("${jwt.secret}")
+//    @Value("${token.secret}")
     private String salt;
 
     private Key secretKey;

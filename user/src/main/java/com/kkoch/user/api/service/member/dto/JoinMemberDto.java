@@ -10,33 +10,32 @@ import lombok.NoArgsConstructor;
 public class JoinMemberDto {
 
     private String email;
-    private String loginPw;
+    private String pwd;
     private String name;
     private String tel;
     private String businessNumber;
-    private int point;
-    private boolean active;
+    private String memberKey;
 
     @Builder
-    private JoinMemberDto(String email, String loginPw, String name, String tel, String businessNumber, int point, boolean active) {
+    private JoinMemberDto(String email, String pwd, String name, String tel, String businessNumber, String memberKey) {
         this.email = email;
-        this.loginPw = loginPw;
+        this.pwd = pwd;
         this.name = name;
         this.tel = tel;
         this.businessNumber = businessNumber;
-        this.point = point;
-        this.active = active;
+        this.memberKey = memberKey;
     }
 
-    public Member toEntity() {
+    public Member toEntity(String encryptedPwd) {
         return Member.builder()
-                .email(this.email)
-                .loginPw(this.loginPw)
-                .name(this.name)
-                .tel(this.tel)
-                .businessNumber(this.businessNumber)
-                .point(0)
-                .active(true)
-                .build();
+            .email(this.email)
+            .encryptedPwd(encryptedPwd)
+            .name(this.name)
+            .tel(this.tel)
+            .businessNumber(this.businessNumber)
+            .point(0)
+            .active(true)
+            .memberKey(this.memberKey)
+            .build();
     }
 }
