@@ -2,6 +2,7 @@ package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.domain.Grade;
@@ -11,6 +12,7 @@ import com.kkoch.admin.domain.auction.Auction;
 import com.kkoch.admin.domain.auction.AuctionArticle;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
 import com.kkoch.admin.domain.auction.repository.AuctionRepository;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import com.kkoch.admin.domain.plant.Category;
@@ -123,7 +125,7 @@ class AuctionArticleQueryServiceTest extends IntegrationTestSupport {
         assertThat(response).hasSize(1);
     }
 
-    @DisplayName("[실시간 거래실적 조회]")
+    @DisplayName("[실시간 거래실적 조회] 1주일 고정")
     @Test
     void getAuctionArticleList() {
         //given
@@ -160,6 +162,46 @@ class AuctionArticleQueryServiceTest extends IntegrationTestSupport {
         //then
         List<AuctionArticleForMemberResponse> responses = result.getContent();
         assertThat(responses).hasSize(1);
+    }
+
+    @DisplayName("[실시간 거래실적 조회] 기간 검색 조건 추가")
+    @Test
+    void getAuctionArticleListForPeriod() {
+        //given
+        Category code = insertCategory("절화");
+        Category rose = insertCategory("장미");
+        Category fuego = insertCategory("푸에고");
+        Category victoria = insertCategory("빅토리아");
+
+        Plant roseFuego = insertPlant(code, rose, fuego);
+        Plant roseVictoria = insertPlant(code, rose, victoria);
+
+        Admin admin = insertAdmin();
+        Auction savedAuction = insertAuction(admin, LocalDateTime.of(2023, 9, 20, 5, 0));
+
+        insertAuctionArticle(roseFuego, savedAuction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0));
+        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(3));
+        insertAuctionArticle(roseVictoria, savedAuction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(4));
+        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(5));
+        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(6));
+
+        AuctionArticlePeriodSearchCond cond = AuctionArticlePeriodSearchCond.builder()
+                .code("절화")
+                .type("장미")
+                .name("")
+                .endDateTime(LocalDateTime.of(2023, 9, 20, 5, 0).toLocalDate())
+                .startDateTime(LocalDateTime.of(2023, 9, 15, 5, 0).toLocalDate())
+                .region("")
+                .build();
+        PageRequest pageRequest = PageRequest.of(0, 20);
+
+        //when
+        Page<AuctionArticlePeriodSearchResponse> result = auctionArticleQueryService.getAuctionArticlePeriodSearch(cond, pageRequest);
+
+        //then
+        List<AuctionArticlePeriodSearchResponse> responses = result.getContent();
+        assertThat(responses).hasSize(5);
     }
 
     private Plant insertPlant(Category code, Category type, Category name) {
