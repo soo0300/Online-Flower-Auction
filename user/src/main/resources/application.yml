@@ -59,6 +59,11 @@ spring:
           starttls:
             enable: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans
 
 ---
 #spring local setting
@@ -97,11 +102,7 @@ spring:
     init:
       mode: never
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh, health, beans
+
 
 file:
   dir:
