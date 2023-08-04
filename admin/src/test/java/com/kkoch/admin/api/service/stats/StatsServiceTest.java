@@ -3,7 +3,11 @@ package com.kkoch.admin.api.service.stats;
 import com.kkoch.admin.IntegrationTestSupport;
 import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
 import com.kkoch.admin.domain.Grade;
+import com.kkoch.admin.domain.plant.Category;
+import com.kkoch.admin.domain.plant.Plant;
 import com.kkoch.admin.domain.plant.Stats;
+import com.kkoch.admin.domain.plant.repository.CategoryRepository;
+import com.kkoch.admin.domain.plant.repository.PlantRepository;
 import com.kkoch.admin.domain.plant.repository.StatsRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import static org.assertj.core.groups.Tuple.tuple;
 
 class StatsServiceTest extends IntegrationTestSupport {
 
@@ -22,29 +27,53 @@ class StatsServiceTest extends IntegrationTestSupport {
     @Autowired
     StatsRepository statsRepository;
 
+    @Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    PlantRepository plantRepository;
+
     @DisplayName("전일 낙찰된 경매품의 평균 단가를 계산해 낙찰 통계에 저장한다.")
     @Test
     void addStats() throws Exception {
         //given
+        Category code = createCategory("절화", null);
+        Category name = createCategory("장미(스탠다드)", code);
+        Category type1 = createCategory("하젤", name);
+        Category type2 = createCategory("클레라", name);
+
+        Plant plant1 = createPlant(code, name, type1);
+        Plant plant2 = createPlant(code, name, type2);
+
         List<AuctionArticleForStatsDto> dto = createAuctionArticleList();
 
         //when
-        Long statsId = statsService.addStats(dto);
+        statsService.addStats(dto);
 
         //then
-        Optional<Stats> result = statsRepository.findById(statsId);
-        Assertions.assertThat(result).isPresent();
+        List<Stats> results = statsRepository.findAll();
+        Assertions.assertThat(results).hasSize(5)
+                .extracting("priceAvg", "priceMax", "priceMin", "grade", "count")
+                .containsExactlyInAnyOrder(
+                        tuple(1750, 2000, 1500, Grade.Super, 20),
+                        tuple(1300, 1300, 1300, Grade.Advanced, 10),
+                        tuple(1000, 1500, 500, Grade.Normal, 30),
+                        tuple(5000, 5000, 5000, Grade.Super, 20),
+                        tuple(3000, 3000, 3000, Grade.Normal, 10)
+                );
     }
 
     private List<AuctionArticleForStatsDto> createAuctionArticleList() {
         List<AuctionArticleForStatsDto> lists = new ArrayList<>();
-        lists.add(createDto(1L, Grade.Advanced, 1000, 10));
+        lists.add(createDto(1L, Grade.Advanced, 1300, 10));
+        lists.add(createDto(1L, Grade.Super, 2000, 10));
         lists.add(createDto(1L, Grade.Super, 1500, 10));
-        lists.add(createDto(1L, Grade.Super, 1500, 10));
+        lists.add(createDto(1L, Grade.Normal, 500, 10));
         lists.add(createDto(1L, Grade.Normal, 1000, 10));
-        lists.add(createDto(2L, Grade.Super, 1000, 10));
-        lists.add(createDto(2L, Grade.Super, 1000, 10));
-        lists.add(createDto(2L, Grade.Super, 1000, 10));
+        lists.add(createDto(1L, Grade.Normal, 1500, 10));
+        lists.add(createDto(2L, Grade.Super, 5000, 10));
+        lists.add(createDto(2L, Grade.Super, 5000, 10));
+        lists.add(createDto(2L, Grade.Normal, 3000, 10));
 
         return lists;
     }
@@ -58,5 +87,23 @@ class StatsServiceTest extends IntegrationTestSupport {
                 .build();
     }
 
+    private Category createCategory(String name, Category parent) {
+        Category category = Category.builder()
+                .name(name)
+                .active(true)
+                .parent(parent)
+                .build();
+        return categoryRepository.save(category);
+    }
+
+    private Plant createPlant(Category code, Category name, Category type) {
+        Plant plant = Plant.builder()
+                .active(true)
+                .code(code)
+                .name(name)
+                .type(type)
+                .build();
+        return plantRepository.save(plant);
+    }
 
 }

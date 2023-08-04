@@ -22,6 +22,12 @@ public class Stats extends TimeBaseEntity {
     @Column(nullable = false)
     private int priceAvg;
 
+    @Column(nullable = false)
+    private int priceMax;
+
+    @Column(nullable = false)
+    private int priceMin;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, updatable = false, length = 20)
     private Grade grade;
@@ -34,8 +40,10 @@ public class Stats extends TimeBaseEntity {
     private Plant plant;
 
     @Builder
-    private Stats(int priceAvg, Grade grade, int count, Plant plant) {
+    private Stats(int priceAvg, int priceMax, int priceMin, Grade grade, int count, Plant plant) {
         this.priceAvg = priceAvg;
+        this.priceMax = priceMax;
+        this.priceMin = priceMin;
         this.grade = grade;
         this.count = count;
         this.plant = plant;
