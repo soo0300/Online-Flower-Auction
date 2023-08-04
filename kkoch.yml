@@ -1,6 +1,7 @@
 token:
   expiration_time: 86400000
-  secret: user_token
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
 gateway:
-  ip: 172.20.10.12
+  ip: 172.0.0.1
+
