@@ -5,8 +5,6 @@ import com.kkoch.user.api.controller.reservation.request.AddReservationRequest;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.api.service.reservation.ReservationService;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
-import com.kkoch.user.domain.reservation.Reservation;
-import com.kkoch.user.jwt.JwtUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

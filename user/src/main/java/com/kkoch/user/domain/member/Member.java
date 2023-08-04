@@ -1,38 +1,37 @@
 package com.kkoch.user.domain.member;
 
 import com.kkoch.user.domain.TimeBaseEntity;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+import static javax.persistence.GenerationType.*;
+import static lombok.AccessLevel.*;
+
 @Entity
+@Getter
+@NoArgsConstructor(access = PROTECTED)
 public class Member extends TimeBaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, updatable = false, length = 100)
+    @Column(unique = true, nullable = false, updatable = false, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 60)
-    private String loginPw;
+    @Column(nullable = false, length = 100)
+    private String encryptedPwd;
 
     @Column(nullable = false, updatable = false, length = 20)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 13)
+    @Column(unique = true, nullable = false, length = 13)
     private String tel;
 
-    @Column(nullable = false, unique = true, length = 12)
+    @Column(unique = true, nullable = false, updatable = false, length = 12)
     private String businessNumber;
 
     @Column(nullable = false)
@@ -41,21 +40,18 @@ public class Member extends TimeBaseEntity {
     @Column(nullable = false)
     private boolean active;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Authority> roles = new ArrayList<>();
+    @Column(unique = true, nullable = false, length = 100)
+    private String memberKey;
+
     @Builder
-    private Member(String email, String loginPw, String name, String tel, String businessNumber, int point, boolean active) {
+    public Member(String email, String encryptedPwd, String name, String tel, String businessNumber, int point, boolean active, String memberKey) {
         this.email = email;
-        this.loginPw = loginPw;
+        this.encryptedPwd = encryptedPwd;
         this.name = name;
         this.tel = tel;
         this.businessNumber = businessNumber;
         this.point = point;
         this.active = active;
-
-    }
-    public void setRoles(List<Authority> role) {
-        this.roles = role;
-        role.forEach(o -> o.setMember(this));
+        this.memberKey = memberKey;
     }
 }
