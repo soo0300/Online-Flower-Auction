@@ -48,7 +48,7 @@ class StatsServiceTest extends IntegrationTestSupport {
         List<AuctionArticleForStatsDto> dto = createAuctionArticleList();
 
         //when
-        statsService.addStats(dto);
+        statsService.saveHistoryBidStats(dto);
 
         //then
         List<Stats> results = statsRepository.findAll();
