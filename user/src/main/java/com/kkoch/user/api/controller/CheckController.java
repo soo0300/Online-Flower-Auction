@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user-service")
 @Slf4j
 public class CheckController {
 

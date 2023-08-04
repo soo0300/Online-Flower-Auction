@@ -34,7 +34,7 @@ public class WebSecurity {
         http.csrf().disable();
 
         http.authorizeRequests()
-            .antMatchers("/error/**", "/join", "/user-service/health-check").permitAll()
+            .antMatchers("/error/**", "/join", "/health-check").permitAll()
             .antMatchers("/**")
             .hasIpAddress("172.0.0.1")
             .and()
