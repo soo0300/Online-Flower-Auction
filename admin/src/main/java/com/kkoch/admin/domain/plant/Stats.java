@@ -2,12 +2,10 @@ package com.kkoch.admin.domain.plant;
 
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.TimeBaseEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter

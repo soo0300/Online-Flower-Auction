@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.plant.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.stats.response.StatsResponse;
 import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.auction.AuctionArticle;
@@ -8,11 +9,13 @@ import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
 import com.kkoch.admin.domain.auction.repository.AuctionRepository;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.Plant;
+import com.kkoch.admin.domain.plant.Stats;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.TradeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +29,9 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     StatsQueryRepository statsQueryRepository;
+
+    @Autowired
+    StatsRepository statsRepository;
 
     @Autowired
     AuctionArticleRepository auctionArticleRepository;
@@ -63,7 +69,7 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
         AuctionArticle auctionArticle5 = createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.Advanced, plant2, trade);
 
         //when
-        List<AuctionArticleForStatsDto> responses = statsQueryRepository.findByTime();
+        List<AuctionArticleForStatsDto> responses = statsQueryRepository.findAuctionArticleByTime();
 
         //then
         assertThat(responses).hasSize(3)
@@ -73,8 +79,56 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
                         tuple(auctionArticle2.getPlant().getId(), auctionArticle2.getGrade(), auctionArticle2.getCount(), auctionArticle2.getBidPrice()),
                         tuple(auctionArticle5.getPlant().getId(), auctionArticle5.getGrade(), auctionArticle5.getCount(), auctionArticle5.getBidPrice()));
 
-
     }
+
+    @DisplayName("사용자는 기간(1일, 7일, 30일)을 선택하여 낙찰 통계를 조회할 수 있다.")
+    @Test
+    void getStatsByPeriod() throws Exception {
+        //given
+        Category code = createCategory("절화", null);
+        Category name = createCategory("장미(스탠다드)", code);
+        Category type1 = createCategory("하젤", name);
+        Category type2 = createCategory("클레라", name);
+
+        Plant plant1 = createPlant(code, name, type1);
+        Plant plant2 = createPlant(code, name, type2);
+        Stats stats1 = createStats(3000, 5000, 2000, Grade.Super, 40, plant1);
+        Stats stats2 = createStats(4000, 4000, 4000, Grade.Super, 30, plant1);
+        Stats stats3 = createStats(2000, 2500, 1000, Grade.Normal, 20, plant1);
+        Stats stats4 = createStats(1000, 1000, 1000, Grade.Normal, 30, plant2);
+
+        ReflectionTestUtils.setField(stats1, "createdDate", LocalDateTime.now().minusDays(8));
+
+        StatsSearchCond statsSearchCond = StatsSearchCond.builder()
+                .plantId(plant1.getId())
+                .searchDay(7)
+                .build();
+
+        //when
+        List<StatsResponse> responses = statsQueryRepository.findByCond(statsSearchCond);
+
+        //then
+        assertThat(responses).hasSize(3);
+//                .extracting("priceAvg", "grade", "createdDate")
+//                .containsExactlyInAnyOrder(
+//                        tuple(stats2.getPriceAvg(), stats2.getGrade(), stats2.getCreatedDate()),
+//                        tuple(stats3.getPriceAvg(), stats3.getGrade(), stats3.getCreatedDate())
+//                );
+    }
+
+    private Stats createStats(int avg, int max, int min, Grade grade, int total, Plant plant) {
+        Stats stats = Stats.builder()
+                .priceAvg(avg)
+                .priceMax(max)
+                .priceMin(min)
+                .grade(grade)
+                .count(total)
+                .plant(plant)
+                .build();
+
+        return statsRepository.save(stats);
+    }
+
 
     private Category createCategory(String name, Category parent) {
         Category category = Category.builder()

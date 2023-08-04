@@ -16,6 +16,6 @@ public class StatsQueryService {
     private final StatsQueryRepository statsQueryRepository;
 
     public List<AuctionArticleForStatsDto> getAuctionList() {
-        return statsQueryRepository.findByTime();
+        return statsQueryRepository.findAuctionArticleByTime();
     }
 }

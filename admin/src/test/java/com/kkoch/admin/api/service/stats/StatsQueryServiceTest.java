@@ -72,7 +72,6 @@ class StatsQueryServiceTest extends IntegrationTestSupport {
         //then
         assertThat(responses).hasSize(3);
 
-
     }
 
     private Category createCategory(String name, Category parent) {
