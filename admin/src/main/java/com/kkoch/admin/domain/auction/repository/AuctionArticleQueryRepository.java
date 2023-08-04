@@ -1,9 +1,11 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import com.kkoch.admin.domain.plant.QCategory;
@@ -132,6 +134,19 @@ public class AuctionArticleQueryRepository {
                 .fetch();
     }
 
+    // TODO: 2023-08-04 리팩토링 해보기
+
+    public List<AuctionArticlePeriodSearchResponse> getAuctionArticleListForPeriodSearch(AuctionArticlePeriodSearchCond cond, Pageable pageable) {
+        QCategory code = new QCategory("code");
+        QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
+
+        return getAuctionArticleByPeriodSearchCond(cond, code, name, type)
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
+    }
+
     public int getTotalCount(AuctionArticleSearchCond cond) {
         QCategory code = new QCategory("code");
         QCategory type = new QCategory("type");
@@ -139,6 +154,30 @@ public class AuctionArticleQueryRepository {
         return getAuctionArticleByCond(cond, code, type, name)
                 .fetch()
                 .size();
+    }
+
+    private JPAQuery<AuctionArticlePeriodSearchResponse> getAuctionArticleByPeriodSearchCond(AuctionArticlePeriodSearchCond cond, QCategory code, QCategory type, QCategory name) {
+        return queryFactory.select(Projections.constructor(AuctionArticlePeriodSearchResponse.class,
+                        auctionArticle.plant.code.name,
+                        auctionArticle.plant.type.name,
+                        auctionArticle.plant.name.name,
+                        auctionArticle.grade,
+                        auctionArticle.count,
+                        auctionArticle.bidPrice,
+                        auctionArticle.bidTime,
+                        auctionArticle.region))
+                .from(auctionArticle)
+                .join(auctionArticle.plant, plant)
+                .join(plant.code, code)
+                .join(plant.type, type)
+                .join(plant.name, name)
+                .where(auctionArticle.bidPrice.gt(0),
+                        auctionArticle.plant.code.name.eq(cond.getCode()),
+                        auctionArticle.bidTime.between(cond.getStartDateTime(), cond.getEndDateTime()),
+                        eqPlantName(cond.getName()),
+                        eqPlantType(cond.getType()),
+                        eqAuctionRegion(cond.getRegion())
+                );
     }
 
     private JPAQuery<AuctionArticleForMemberResponse> getAuctionArticleByCond(AuctionArticleSearchCond cond, QCategory code, QCategory type, QCategory name) {
