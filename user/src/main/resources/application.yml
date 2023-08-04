@@ -100,6 +100,6 @@ spring:
 file:
   dir:
 
-token:
-  expiration_time: 86400000
-  secret: 'VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa'
+#token:
+#  expiration_time: 86400000
+#  secret: 'VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa'
