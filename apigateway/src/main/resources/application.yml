@@ -65,5 +65,10 @@ spring:
             - Path=/auction-service/**
 
 token:
-  secret: user_token
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace
