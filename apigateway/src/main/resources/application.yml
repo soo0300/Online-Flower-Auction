@@ -73,8 +73,8 @@ spring:
           predicates:
             - Path=/auction-service/**
 
-token:
-  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+#token:
+#  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
 
 management:
   endpoints:

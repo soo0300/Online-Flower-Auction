@@ -1,2 +1,6 @@
 encrypt:
-  key: abcdefghijklmnopqrstuvwxyz0123456789
+#  key: abcdefghijklmnopqrstuvwxyz0123456789
+  key-store:
+    location: file://${user.home}/project/kkoch/keystore/apiEncryptionKey.jks
+    password: ssafyc204
+    alias: apiEncryptionKey
