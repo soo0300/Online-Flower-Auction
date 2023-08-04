@@ -156,6 +156,15 @@ public class AuctionArticleQueryRepository {
                 .size();
     }
 
+    public int getTotalCountForPeriod(AuctionArticlePeriodSearchCond cond) {
+        QCategory code = new QCategory("code");
+        QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
+        return getAuctionArticleByPeriodSearchCond(cond, code, type, name)
+                .fetch()
+                .size();
+    }
+
     private JPAQuery<AuctionArticlePeriodSearchResponse> getAuctionArticleByPeriodSearchCond(AuctionArticlePeriodSearchCond cond, QCategory code, QCategory type, QCategory name) {
         return queryFactory.select(Projections.constructor(AuctionArticlePeriodSearchResponse.class,
                         auctionArticle.plant.code.name,
