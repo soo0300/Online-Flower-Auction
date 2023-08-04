@@ -4,9 +4,14 @@ server:
 spring:
   application:
     name: config-service
+  profiles:
+    active: native
   cloud:
     config:
       server:
-        git:
-          uri: file://C:\SSAFY\project
-          default-label: feature/S09P12C204-359-msa
+        native:
+          search-locations: file:C:\SSAFY\native-file-repo
+#        git:
+#          uri: file://C:\SSAFY\project
+#          uri: https://lab.ssafy.com/s09-webmobile1-sub2/S09P12C204
+#          default-label: feature/S09P12C204-359-msa
