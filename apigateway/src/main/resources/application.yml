@@ -36,7 +36,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-        # join
+        # health-check
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
