@@ -1,17 +1,11 @@
 import React from 'react'
-import HomePageAuction from '@/assets/HomePageAuction.png'
+// import HomePageAuction from '@/assets/HomePageAuction.png'
 import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
-// import axios from 'axios';
-
+import Video from '../buyer/VideoRoom';
 
 const AuctionLiveForm = () => {
 
-  // const axios = require('axios');
-
-
-
-  
   // 경매 정보 
   const auctionInfo = {
     point: 100000, // 보유 포인트
@@ -49,7 +43,8 @@ const AuctionLiveForm = () => {
       </div>
       <div className='auction-content'>
         <div className='stream-image'>
-          <img src={ HomePageAuction } alt="LiveStream" />
+          <Video />
+          {/* <img src={ HomePageAuction } alt="LiveStream" /> */}
         </div>
         <div className='auction-info'>
           <div className='auction-point'>

@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { OpenVidu, Session } from 'openvidu-browser';
 import CameraOff from '@/assets/cameraOff.png';
 import axios from 'axios';
-import Video from '../buyer/VideoRoom';
+// import Video from '../buyer/VideoRoom';
+import { Link } from 'react-router-dom';
+
 
 const AuctionWaitingRoom: React.FC = () => {
   const [token, setToken] = useState('');
@@ -17,7 +19,7 @@ const AuctionWaitingRoom: React.FC = () => {
   const initSessionAndToken = async () => {
     try {
       // OpenVidu 서버에 세션 생성 요청 보내기
-      const sessionResponse = await axios.post('http://i9c204.p.ssafy.io:5000/api/sessions', null, {
+      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/api/sessions', null, {
         headers: {
           "Content-Type": "application/json",
           // 'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
@@ -26,12 +28,13 @@ const AuctionWaitingRoom: React.FC = () => {
       const sessionId = sessionResponse.data;
 
       // OpenVidu 서버에 토큰 생성 요청 보내기
-      const tokenResponse = await axios.post(`http://i9c204.p.ssafy.io:5000/api/sessions/${sessionId}/connections`, null, {
+      const tokenResponse = await axios.post(`https://i9c204.p.ssafy.io:8443/api/sessions/${sessionId}/connections`, null, {
         headers: {
           "Content-Type": "application/json",
           // 'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
         },
       });
+      // console.log('포트번호', tokenResponse.data)
       setToken(tokenResponse.data.split('&')[1].split('=')[1]);
     }
     catch (error) {
@@ -158,7 +161,16 @@ const AuctionWaitingRoom: React.FC = () => {
         <div>
           <button onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
         </div>
-        <Video></Video>
+        
+        <div>
+          <Link to='/auction/liveroom'>
+            <button>입장하기</button>
+          </Link>
+        </div>
+        {/* <Video></Video> */}
+        {/* <input className="btn btn-lg btn-success" name="commit" type="submit" value="입장하기" /> */}
+        {/* <Link to='http://localhost:5173/auction/liveroom'>
+        </Link> */}
       </div> 
   )
 }
