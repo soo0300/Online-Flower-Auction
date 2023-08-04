@@ -8,5 +8,5 @@ spring:
     config:
       server:
         git:
-          uri: file:///Users/dong82/project/kkoch
+          uri: file://C:\SSAFY\project
           default-label: feature/S09P12C204-359-msa
