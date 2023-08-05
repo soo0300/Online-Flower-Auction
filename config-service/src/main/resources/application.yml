@@ -4,15 +4,21 @@ server:
 spring:
   application:
     name: config-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   profiles:
     active: native
   cloud:
     config:
       server:
         native:
-          search-locations: file://${user.home}/ssafy/native-file-repo
-#          search-locations: file:C:\SSAFY\native-file-repo
-#        git:
-#          uri: file://C:\SSAFY\project
-#          uri: https://lab.ssafy.com/s09-webmobile1-sub2/S09P12C204
-#          default-label: feature/S09P12C204-359-msa
+          search-locations: file://${user.home}/apps/S09P12C204/native-file-repo
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, busrefresh

@@ -11,6 +11,11 @@ eureka:
 spring:
   application:
     name: apigateway
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   cloud:
     gateway:
       routes:
@@ -45,7 +50,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-        # health-check
+        # user health-check
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -64,10 +69,20 @@ spring:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthorizationHeaderFilter
+        # admin
         - id: admin-service
           uri: lb://ADMIN-SERVICE
           predicates:
             - Path=/admin-service/**
+        # admin actuator
+        - id: admin-service
+          uri: lb://ADMIN-SERVICE
+          predicates:
+            - Path=/admin-service/actuator/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/admin-service/(?<segment>.*), /$\{segment}
         - id: auction-service
           uri: lb://AUCTION-SERVICE
           predicates:
@@ -80,4 +95,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, httptrace
+        include: refresh, health, beans, httptrace, info, metrics, prometheus, busrefresh
