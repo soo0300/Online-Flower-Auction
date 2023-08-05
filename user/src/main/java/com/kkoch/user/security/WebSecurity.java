@@ -34,9 +34,9 @@ public class WebSecurity {
         http.csrf().disable();
 
         http.authorizeRequests()
-            .antMatchers("/error/**", "/join", "/health-check", "/actuator/**").permitAll()
+            .antMatchers("/error/**", "/join", "/health-check", "/actuator/**", "/h2-console/**").permitAll()
             .antMatchers("/**")
-            .hasIpAddress("172.0.0.1")
+            .access("hasIpAddress('192.168.0.16')")
             .and()
             .authenticationManager(authenticationManager)
             .addFilter(authenticationFilter);

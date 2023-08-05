@@ -1,5 +1,6 @@
 package com.kkoch.user.api.controller;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -15,7 +16,8 @@ public class CheckController {
     private final Environment env;
 
     @GetMapping("/health-check")
-    public String healthCheck() {
+    @Timed(value = "users.status", longTask = true)
+    public String status() {
         return String.format("It's Working in User Service"
             + ", port(local.server.port)=" + env.getProperty("local.server.port")
             + ", port(server.port)=" + env.getProperty("server.port")
