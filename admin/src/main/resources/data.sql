@@ -1,4 +1,4 @@
-use kkoch_admin;
+-- use kkoch_admin;
 
 -- admin table create
 
@@ -58,7 +58,7 @@ create table category
     created_date       timestamp          not null default now(),
     last_modified_date timestamp          not null default now(),
     parent_id          bigint             null,
-    foreign key (parent_id) references category (parent_id)
+    foreign key (parent_id) references category (category_id)
 );
 
 -- plane table create
