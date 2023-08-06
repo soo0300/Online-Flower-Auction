@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import HomePageAuction from '@/assets/HomePageAuction.png'
 import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
@@ -9,9 +9,6 @@ const AuctionLiveForm = () => {
 
   // const axios = require('axios');
 
-
-
-  
   // 경매 정보 
   const auctionInfo = {
     point: 100000, // 보유 포인트
@@ -19,10 +16,40 @@ const AuctionLiveForm = () => {
     provider: "홍승준", // 출하자
     flower: "장미/스프레이", // 품명
     grade: "특", // 등급
-    nowPrice: 5000, // 현재가
+    nowPrice: 50000, // 현재가
     bidPrice: 2000, // 낙찰가
     buyer: "김싸피", // 낙찰자
   }; 
+  
+  // 원래 가격과 최종 가격을 지정
+  const originalPrice = auctionInfo.nowPrice;
+  const finalPrice = originalPrice / 2; // 최종 가격은 원래 가격의 1/2로 설정
+
+  // 현재가를 변화시킬 state
+  const [currentPrice, setCurrentPrice] = useState(originalPrice);
+
+  useEffect(() => {
+    const interval = 10; // 0.01초
+    const totalTime = 10000; // 10초
+    const steps = totalTime / interval; // 총 스텝 수
+    const decreaseAmount = (originalPrice - finalPrice) / steps; // 감소량 계산
+
+    // 타이머, 변화량 값 계산하고 반환
+    const timer = setInterval(() => {
+      setCurrentPrice((prevPrice) => 
+      Math.max(prevPrice - decreaseAmount, finalPrice));
+    }, interval);
+
+    setTimeout(() => {
+       // 10초 후에 타이머 중단
+      clearInterval(timer);
+    }, totalTime);
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 타이머 정리
+      clearInterval(timer); 
+    };
+  }, []);
 
   return (
     <div className='gap-24 bg-gray-20 py-28 md:h-full md:pb-0'>
@@ -91,7 +118,8 @@ const AuctionLiveForm = () => {
           <div className='auction-bidding-border'>
             <div className='auction-bidding-info'> 
               <div className='auction-bidding-price'>
-                현재가: { auctionInfo.nowPrice} <br />
+                {/* 10원단위까지만 표시될 수 있게 */}
+                현재가: { Math.floor(currentPrice / 10) * 10 } <br />
                 낙찰자: { auctionInfo.buyer} <br />
                 낙찰단가: {auctionInfo.bidPrice} <br />
               </div>
