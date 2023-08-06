@@ -10,7 +10,7 @@ const HomeAuction = () => {
   const sponsors = "w-[20%] mx-6";
 
   return (
-    <section className="gap-16 bg-gray-20 py-10 md:h-full md:pb-0"> 
+    <section className="gap-16 bg-gray-20 md:h-full md:pb-0"> 
       {/* 경매 소개 부분 */}
 
       <motion.div
