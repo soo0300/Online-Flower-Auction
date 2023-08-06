@@ -1,0 +1,17 @@
+.delete-btn {
+  background-color: #FFCD5B;
+  color: black;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+}
+
+/* 버튼에 호버 효과 추가 (선택사항) */
+.delete-btn:hover {
+  background-color: #F25477;
+}
