@@ -1,6 +1,6 @@
 package com.kkoch.user.api.service.reservation;
 
-import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
+import com.kkoch.user.api.controller.reservation.response.AddReservationResponse;
 import com.kkoch.user.api.service.reservation.dto.AddReservationDto;
 import com.kkoch.user.client.PlantServiceClient;
 import com.kkoch.user.domain.member.Member;
@@ -25,7 +25,7 @@ public class ReservationService {
 
     private final PlantServiceClient plantServiceClient;
 
-    public ReservationResponse addReservation(String memberKey, AddReservationDto dto) {
+    public AddReservationResponse addReservation(String memberKey, AddReservationDto dto) {
         Member member = memberRepository.findByMemberKey(memberKey)
             .orElseThrow(NoSuchElementException::new);
 
@@ -38,6 +38,6 @@ public class ReservationService {
         Reservation reservation = dto.toEntity(member, plantId);
         Reservation savedReservation = reservationRepository.save(reservation);
 
-        return ReservationResponse.of(savedReservation);
+        return AddReservationResponse.of(savedReservation);
     }
 }

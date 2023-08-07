@@ -1,38 +1,36 @@
 package com.kkoch.user.api.controller.reservation.response;
 
-import com.kkoch.user.domain.Grade;
 import com.kkoch.user.domain.reservation.Reservation;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
 public class ReservationResponse {
 
+    private String type;
+    private String name;
+    private String grade;
     private int count;
     private int price;
-    private String grade;
-    private String createdDate;
 
     @Builder
-    private ReservationResponse(int count, int price, String grade, LocalDateTime createdDate) {
+    public ReservationResponse(String type, String name, String grade, int count, int price) {
+        this.type = type;
+        this.name = name;
+        this.grade = grade;
         this.count = count;
         this.price = price;
-        this.grade = grade;
-        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
     }
 
-    public static ReservationResponse of(Reservation reservation) {
+    public static ReservationResponse of(Reservation reservation, String type, String name) {
         return ReservationResponse.builder()
+            .type(type)
+            .name(name)
+            .grade(reservation.getGrade().getText())
             .count(reservation.getCount())
             .price(reservation.getPrice())
-            .grade(reservation.getGrade().getText())
-            .createdDate(reservation.getCreatedDate())
             .build();
     }
 }
