@@ -38,12 +38,9 @@ public class AuctionControllerDocsTest extends RestDocsSupport {
     @Test
     void getAuctionListForMember() throws Exception {
         AuctionForMemberResponse response1 = createAuctionForMemberResponse(1L, "23. 7. 10. 오전 5:00", OPEN, 1);
-        AuctionForMemberResponse response2 = createAuctionForMemberResponse(2L, "23. 7. 12. 오전 5:00", READY, 2);
-        AuctionForMemberResponse response3 = createAuctionForMemberResponse(3L, "23. 7. 14. 오전 5:00", READY, 3);
-        List<AuctionForMemberResponse> responses = List.of(response1, response2, response3);
 
         BDDMockito.given(auctionQueryService.getAuctionForMember())
-            .willReturn(responses);
+            .willReturn(response1);
 
         mockMvc.perform(get("/admin-service/auctions/api"))
             .andDo(print())
