@@ -41,7 +41,7 @@ function App() {
           <Route path={"/auction/liveroom"} element={<AuctionLiveRoom/>}/>
 
           <Route path={"/flowers"} element={<TradingInfo />}/>
-          <Route path={"/flowers/info"} element={<FlowerDetail />}/>
+          <Route path={"/flowers/info/:flower/:variety"} element={<FlowerDetail />}/>
           <Route path={"/customer"} />
  
           {/* 로그인 */}

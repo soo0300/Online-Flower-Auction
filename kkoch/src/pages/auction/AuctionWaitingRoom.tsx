@@ -16,6 +16,12 @@ const AuctionWaitingRoom: React.FC = () => {
 
   const subscriberContainer = useRef<HTMLDivElement | null>(null);
 
+    
+  const response = axios.get('/api/api/admin-service/auction-articles/api?startDateTime=2023-08-06&endDateTime=2023-08-06&code=절화&type&name&region&page=0')
+
+  console.log('여기', response)
+
+
   const initSessionAndToken = async () => {
     try {
       // OpenVidu 서버에 세션 생성 요청 보내기
