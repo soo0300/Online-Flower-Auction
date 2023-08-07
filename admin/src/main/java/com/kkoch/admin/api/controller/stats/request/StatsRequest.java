@@ -5,18 +5,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor
 @Data
 public class StatsRequest {
 
+    @NotEmpty
     private String type;
 
+    @NotEmpty
     private String name;
 
-    private int searchDay;
+    @NotNull
+    private Integer searchDay;
 
     @Builder
-    private StatsRequest(String type, String name, int searchDay) {
+    private StatsRequest(String type, String name, Integer searchDay) {
         this.type = type;
         this.name = name;
         this.searchDay = searchDay;
