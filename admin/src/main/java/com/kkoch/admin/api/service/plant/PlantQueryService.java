@@ -19,4 +19,8 @@ public class PlantQueryService {
     public List<PlantResponse> getPlants(PlantSearchCond plantSearchCond) {
         return plantQueryRepository.findByCondition(plantSearchCond);
     }
+
+    public Long getPlantId(String type, String name) {
+        return plantQueryRepository.findPlantId(type, name);
+    }
 }
