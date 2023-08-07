@@ -6,10 +6,7 @@ import com.kkoch.admin.api.controller.plant.response.PlantResponse;
 import com.kkoch.admin.api.service.plant.PlantQueryService;
 import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +21,13 @@ public class PlantController {
     public ApiResponse<List<PlantResponse>> getPlants(@RequestBody GetPlantRequest request) {
         PlantSearchCond cond = request.toSearchCond();
         return ApiResponse.ok(plantQueryService.getPlants(cond));
+    }
+
+    @GetMapping("/reservation")
+    public Long getPlantId(
+        @RequestParam String type,
+        @RequestParam String name
+    ) {
+        return plantQueryService.getPlantId(type, name);
     }
 }
