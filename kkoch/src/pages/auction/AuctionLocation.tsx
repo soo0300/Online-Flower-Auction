@@ -6,22 +6,23 @@ const ActionReady = () => {
   
 
   return (
-    <section className="gap-16 bg-gray-20 py-10 pt-[150px] md:h-full md:pb-0"> 
-      <div className="mx-auto w-5/6 items-center justify-center md:flex">
+    <section className="gap-16 bg-gray-20 py-10 "> 
+      <div className="flex items-center justify-center">
         <h1>지역을 선택해주세요</h1>
       </div>
-
-      <div className="mx-auto w-5/6 items-center justify-center md:flex md:flex-wrap md:h-5/6">
-        <div className="md:flex">
-          <LocationButton location={location[0]}/>
-          <LocationButton location={location[1]}/>
-          <LocationButton location={location[2]}/>
+      {/* mx-auto w-5/6 items-center justify-center md:flex md:flex-wrap md:h-5/6 */}
+      {/* flex items-center justify-center flex-col md:flex-row mt-[150px] */}
+      <div className="flex items-center justify-center flex-col mt-[150px]">
+        <div>
+          <LocationButton location={location[0]} type="user"/>
+          <LocationButton location={location[1]} type="user"/>
+          <LocationButton location={location[2]} type="user"/>
         </div>
-        <div className="md:flex">
-          <LocationButton location={location[3]}/>
-          <LocationButton location={location[4]}/>
-          <LocationButton location={location[5]}/>
-          <LocationButton location={location[6]}/>
+        <div className="mt-[100px]">
+          <LocationButton location={location[3]} type="user"/>
+          <LocationButton location={location[4]} type="user"/>
+          <LocationButton location={location[5]} type="user"/>
+          <LocationButton location={location[6]} type="user"/>
         </div>
       </div>
     </section>

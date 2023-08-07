@@ -1,9 +1,11 @@
 package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleQueryRepository;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,12 @@ public class AuctionArticleQueryService {
     public Page<AuctionArticleForMemberResponse> getAuctionArticleListForMember(AuctionArticleSearchCond cond, Pageable pageable) {
         List<AuctionArticleForMemberResponse> responses = auctionArticleQueryRepository.getAuctionArticleListForMember(cond, pageable);
         int totalCount = auctionArticleQueryRepository.getTotalCount(cond);
+        return new PageImpl<>(responses, pageable, totalCount);
+    }
+
+    public Page<AuctionArticlePeriodSearchResponse> getAuctionArticlePeriodSearch(AuctionArticlePeriodSearchCond cond, Pageable pageable) {
+        List<AuctionArticlePeriodSearchResponse> responses = auctionArticleQueryRepository.getAuctionArticleListForPeriodSearch(cond, pageable);
+        int totalCount = auctionArticleQueryRepository.getTotalCountForPeriod(cond);
         return new PageImpl<>(responses, pageable, totalCount);
     }
 

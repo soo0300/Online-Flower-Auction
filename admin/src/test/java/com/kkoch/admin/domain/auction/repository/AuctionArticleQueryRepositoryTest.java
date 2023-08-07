@@ -1,6 +1,7 @@
 package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.IntegrationTestSupport;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
@@ -9,6 +10,7 @@ import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import com.kkoch.admin.domain.auction.Auction;
 import com.kkoch.admin.domain.auction.AuctionArticle;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.Plant;
@@ -19,6 +21,7 @@ import com.kkoch.admin.domain.trade.repository.TradeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -110,6 +113,44 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
 
         //then
         assertThat(responses).hasSize(2);
+    }
+
+    @DisplayName("[경매품 조회] 기간 조회")
+    @Test
+    void getAuctionArticlePeriod() {
+        Category code = insertCategory("절화");
+        Category rose = insertCategory("장미");
+        Category fuego = insertCategory("푸에고");
+        Category victoria = insertCategory("빅토리아");
+
+        Plant roseFuego = insertPlant(code, rose, fuego);
+        Plant roseVictoria = insertPlant(code, rose, victoria);
+
+        Admin admin = insertAdmin();
+        Auction savedAuction = insertAuction(admin, LocalDateTime.of(2023, 9, 20, 5, 0));
+
+        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0));
+        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 18, 5, 0));
+        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 16, 5, 0));
+        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 14, 5, 0));
+        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 13, 5, 0));
+        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 12, 5, 0));
+
+        AuctionArticlePeriodSearchCond cond = AuctionArticlePeriodSearchCond.builder()
+                .code("절화")
+                .type("장미")
+                .name(null)
+                .startDateTime(LocalDateTime.of(2023, 9, 13, 5, 0).toLocalDate())
+                .endDateTime(LocalDateTime.of(2023, 9, 20, 5, 0).toLocalDate())
+                .region("광주")
+                .build();
+        PageRequest pageRequest = PageRequest.of(0, 20);
+
+        //when
+        List<AuctionArticlePeriodSearchResponse> responses = auctionArticleQueryRepository.getAuctionArticleListForPeriodSearch(cond, pageRequest);
+
+        //then
+        assertThat(responses).hasSize(5);
     }
 
     @DisplayName("")

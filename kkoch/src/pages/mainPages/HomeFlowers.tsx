@@ -3,11 +3,11 @@ import HomeFlowerChart from "@/assets/HomeFlowerChart.png"
 
 const HomeAuction = () => {
   return (
-    <section className="mx-auto w-5/6 my-10"> 
-      <motion.div>
+    <section className="mx-auto bg-[#fbfbfb]"> 
+      <motion.div className="py-[70px] flex justify-center flex-col">
 				{/* HEADER */}
 				<motion.div
-          className="mx-auto md:my-5 md:w-3/5 flex flex-col items-center"
+          className="mx-auto md:w-3/5 flex flex-col items-center"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.5 }}

@@ -4,12 +4,14 @@ package com.kkoch.admin.api.controller.auction;
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
 import com.kkoch.admin.domain.Grade;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import org.junit.jupiter.api.DisplayName;
@@ -87,6 +89,36 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
 
     @DisplayName("[경매 실적 조회]")
     @Test
+    void getAuctionArticlePeriod() throws Exception {
+        //given
+        List<AuctionArticlePeriodSearchResponse> list = List.of();
+        PageImpl<AuctionArticlePeriodSearchResponse> responses = new PageImpl<>(list);
+
+        BDDMockito.given(auctionArticleQueryService.getAuctionArticlePeriodSearch(any(AuctionArticlePeriodSearchCond.class), any(Pageable.class)))
+                .willReturn(responses);
+
+        //when //then
+        mockMvc.perform(
+
+                        get("/admin-service/auction-articles/api")
+                                .queryParam("startDateTime", "2023-08-01")
+                                .queryParam("endDateTime", "2023-08-05")
+                                .queryParam("code", "절화")
+                                .queryParam("type", "장미")
+                                .queryParam("name", "푸에고")
+                                .queryParam("region", "")
+                                .queryParam("page", "0")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data.content").isArray());
+    }
+
+    @DisplayName("[경매 실적 조회] 기간 고정")
+//    @Test
     void getAuctionArticleForMember() throws Exception {
         //given
         List<AuctionArticleForMemberResponse> list = List.of();

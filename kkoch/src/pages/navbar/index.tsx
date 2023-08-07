@@ -40,7 +40,7 @@ const Navbar = ({isTop} : Props) => {
 
   return <nav>
     <div
-      className={`${navbarBackground} ${flexBetween} fixed top-0 z-30 w-full py-3 border-b-2`}
+      className={`${navbarBackground} ${flexBetween} top-0 z-30 w-full py-3 border-b-2`}
     >
       <div className={`${flexBetween} mx-auto w-5/6`}>
         <div className={`${flexBetween} w-full gap-16`}>

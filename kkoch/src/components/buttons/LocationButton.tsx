@@ -2,25 +2,31 @@ import { useNavigate } from 'react-router-dom';
 import './LocationButton.css';
 
 type Props = {
-    location: React.ReactNode;
-  }
+	location: React.ReactNode;
+	type: string;	
+}
   
 
-const LocationButton = ({location} : Props) => {
+const LocationButton = ({location, type} : Props) => {
 	const navigate = useNavigate();
 
 	// 양재 지역만 활성화 하기 위한 handler
   const handleCheck = () => {
-		console.log(location)
     if (location === "aT화훼공판장(양재동)") {
-       navigate("/auction/waitingroom")
+			if(type==="admin"){
+				navigate("/admin/openSession");
+			}else if(type==="user"){
+				navigate("/auction/waitingroom")
+			}else{
+				alert("잘못된 접근입니다.")
+			}
     } else {
       alert("서비스 준비중 입니다");
     }
   };
 
   return (
-		<button className="btn" onClick={handleCheck}>
+		<button className="btn mx-6" onClick={handleCheck}>
 			<div className="wrapper">
 				<p className="text">{location} </p>
 

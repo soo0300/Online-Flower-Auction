@@ -4,7 +4,6 @@ import com.kkoch.user.api.service.member.dto.JoinMemberDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 
@@ -14,12 +13,16 @@ public class JoinMemberRequest {
 
     @NotBlank
     private String email;
+
     @NotBlank
     private String loginPw;
+
     @NotBlank
     private String name;
+
     @NotBlank
     private String tel;
+
     @NotBlank
     private String businessNumber;
 
@@ -34,13 +37,11 @@ public class JoinMemberRequest {
 
     public JoinMemberDto toJoinMemberDto() {
         return JoinMemberDto.builder()
-                .email(this.email)
-                .loginPw(this.loginPw)
-                .name(this.name)
-                .tel(this.tel)
-                .businessNumber(this.businessNumber)
-                .point(0)
-                .active(true)
-                .build();
+            .email(this.email)
+            .pwd(this.loginPw)
+            .name(this.name)
+            .tel(this.tel)
+            .businessNumber(this.businessNumber)
+            .build();
     }
 }

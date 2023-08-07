@@ -8,6 +8,8 @@ import Login from "@/pages/user/login/LoginPage";
 import Signup from "@/pages/user/signUp/SignUpPage";
 import AuctionLiveRoom from "@/pages/auction/AuctionLiveRoom";
 import MyPage from "@/pages/user/profile/MyPage";
+import SelectArea from "@/pages/admin/SelectArea";
+import OpenSession from "./pages/admin/OpenSession";
 // import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 import TradingInfo from "@/pages/flowerInfo/TradingInfo"
 import FlowerDetail from "./pages/flowerInfo/FlowerDetail";
@@ -41,13 +43,19 @@ function App() {
           <Route path={"/flowers"} element={<TradingInfo />}/>
           <Route path={"/flowers/info"} element={<FlowerDetail />}/>
           <Route path={"/customer"} />
-
+ 
           {/* 로그인 */}
           <Route path={"/login"} element={<Login />}/>
           <Route path={"/signup"} element={<Signup />}/>
 
           {/* 마이페이지 */}
           <Route path={"/mypage"} element={<MyPage />}/>
+
+
+
+          {/* 관리자 경매방 생성 경로 */}
+          <Route path={"/admin/selectArea"} element={<SelectArea/>} />
+          <Route path={"/admin/openSession"} element={<OpenSession/>} />
         </Routes>
         
       </BrowserRouter>

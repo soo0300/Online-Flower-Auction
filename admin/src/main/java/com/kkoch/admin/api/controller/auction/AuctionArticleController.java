@@ -3,11 +3,13 @@ package com.kkoch.admin.api.controller.auction;
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionArticleRequest;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.api.service.auction.dto.AddAuctionArticleDto;
+import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +43,23 @@ public class AuctionArticleController {
     }
 
     @GetMapping("/api")
+    public ApiResponse<Page<AuctionArticlePeriodSearchResponse>> getAuctionArticlesPeriod(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDateTime,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDateTime,
+            @RequestParam(defaultValue = "절화") String code,
+            @RequestParam(defaultValue = "") String type,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String region,
+            @RequestParam(defaultValue = "0") Integer page
+    ) {
+        AuctionArticlePeriodSearchCond cond = AuctionArticlePeriodSearchCond.of(startDateTime, endDateTime, code, type, name, region);
+        PageRequest pageRequest = PageRequest.of(page, 15);
+
+        Page<AuctionArticlePeriodSearchResponse> responses = auctionArticleQueryService.getAuctionArticlePeriodSearch(cond, pageRequest);
+        return ApiResponse.ok(responses);
+    }
+
+    @GetMapping("/apixxx")
     public ApiResponse<Page<AuctionArticleForMemberResponse>> getAuctionArticlesForMember(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDateTime,
             @RequestParam(defaultValue = "절화") String code,

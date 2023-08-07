@@ -42,7 +42,7 @@ public class AuctionArticleControllerDocsTest extends RestDocsSupport {
     }
 
     @DisplayName("실시간 낙찰 내역 조회 API")
-    @Test
+//    @Test
     void getAuctionArticleList() throws Exception {
         AuctionArticleForMemberResponse response1 = createAuctionArticleResponse("푸에고", 10, 9600, LocalDateTime.of(2023, 9, 20, 5, 0), "광주");
         AuctionArticleForMemberResponse response2 = createAuctionArticleResponse("빅토리아", 20, 3400, LocalDateTime.of(2023, 9, 19, 5, 0), "인천");

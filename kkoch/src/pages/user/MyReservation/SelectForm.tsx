@@ -1,9 +1,13 @@
+import axios from 'axios';
 import { useState } from 'react';
 import Select, { components, InputActionMeta, StylesConfig } from 'react-select'
 
 interface flowerOption {
-  flower: string // 품목
-  variety: string // 품종
+  flower: object // 품목
+  variety: object // 품종
+  price: number // 가격
+  quantity: number // 단수
+  location: string // 지역
 }
 
 type Props = {
@@ -22,8 +26,27 @@ const customStyles: StylesConfig = {
   }),
 }
 
+const flowerOption = [
+  { value: 'rose', label: 'Rose'},
+  { value: 'tulip', label: 'Tulip'},
+  { value: 'sumflower', label: 'Sunflower'},
+  { value: 'lavender', label: 'Lavender'},
+  { value: 'hydrangea', label: 'Hydrangea'},
+]
+
 // 실시간 품종, 품목 데이터
 const performSearchRequest = async (searchText: string) => {
+  // 카테고리 가져오기
+  axios({
+    method: "get",
+    url: `/admin-service/categories/type?code=%EC%A0%88%ED%99%94`
+  })
+  .then(res => {
+    console.log(res);
+  })
+  .catch(err => {
+    console.log(err);
+  })
   const response = await fetch(
     `https://countries-api-for-blog.vercel.app/api/countries${
       searchText ? '/' + searchText : ''
