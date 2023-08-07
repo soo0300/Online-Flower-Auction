@@ -30,8 +30,7 @@ public class StatsController {
 
     private final StatsService statsService;
 
-    //    @Scheduled(cron = "0 0 10 * * *") // 매일 오전 10시에 실행/../
-    @Scheduled(cron = "0 47 15 * * *") // 매일 오전 10시에 실행/../
+    @Scheduled(cron = "0 0 10 * * *") // 매일 오전 10시에 실행/../
     public void executeAddStats() {
         log.info("startstart");
         List<AuctionArticleForStatsDto> articles = statsQueryService.getAuctionList();
