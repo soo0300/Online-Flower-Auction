@@ -1,8 +1,10 @@
 package com.kkoch.admin.api.service.category;
 
 import com.kkoch.admin.api.controller.category.response.CategoryForMemberResponse;
+import com.kkoch.admin.api.controller.category.response.CategoryResponse;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.repository.CategoryQueryRepository;
+import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheConfig;
@@ -39,5 +41,12 @@ public class CategoryQueryService {
         return categories.stream()
                 .map(CategoryForMemberResponse::of)
                 .collect(Collectors.toList());
+    }
+
+    @Cacheable(value = "categoryCache")
+    public List<CategoryResponse> getCategoriesByParentId(Long parentId) {
+        return categoryQueryRepository.getCategoriesByParentId(parentId)
+                .stream().map(CategoryResponse::new).collect(Collectors.toList());
+
     }
 }

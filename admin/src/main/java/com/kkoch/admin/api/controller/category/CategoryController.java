@@ -53,6 +53,12 @@ public class CategoryController {
         return ApiResponse.ok(names);
     }
 
+    @GetMapping("/{parentId}")
+    public ApiResponse<List<CategoryResponse>> getCategoriesParentId(@PathVariable Long parentId) {
+        List<CategoryResponse> subCategories = categoryQueryService.getCategoriesByParentId(parentId);
+        return ApiResponse.ok(subCategories);
+    }
+
     @PatchMapping("/{categoryId}")
     public ApiResponse<CategoryResponse> setCategory(@PathVariable Long categoryId
             , @Valid @RequestBody SetCategoryRequest request) {

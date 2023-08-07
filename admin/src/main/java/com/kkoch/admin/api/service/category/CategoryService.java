@@ -66,13 +66,6 @@ public class CategoryService {
         }
     }
 
-    @Cacheable(value = "categoryCache")
-    public List<CategoryResponse> getCategories(Long parentId) {
-        return categoryRepository.findAllById(parentId)
-                .stream().map(CategoryResponse::new).collect(Collectors.toList());
-
-    }
-
     private Category getCategoryEntity(Long categoryId) {
         return categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 카테고리 ID=" + categoryId));
