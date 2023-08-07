@@ -10,10 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -30,30 +27,34 @@ public class TradeService {
         Optional<Trade> findTrade = tradeRepository.findByMemberKey(dto.getMemberKey(), tradeDate);
 
         if (findTrade.isEmpty()) {
-            currnetTrade = createTradeEntity(dto, tradeDate);
+            currnetTrade = tradeRepository.save(createTradeEntity(dto, tradeDate));
         }
 
         if (findTrade.isPresent()) {
             currnetTrade = findTrade.get();
+            currnetTrade.setTotalPrice(dto.getPrice());
         }
 
         AuctionArticle auctionArticle = auctionArticleRepository.findById(dto.getAuctionArticleId())
-            .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchElementException::new);
 
         auctionArticle.bid(dto.getPrice(), tradeDate);
         auctionArticle.createTrade(currnetTrade);
+        currnetTrade.addAuctionArticle(auctionArticle);
 
         return currnetTrade.getId();
     }
 
     private static Trade createTradeEntity(AddTradeDto dto, LocalDateTime tradeDate) {
         return Trade.builder()
-            .totalPrice(dto.getPrice())
-            .tradeTime(tradeDate)
-            .pickupStatus(false)
-            .active(true)
-            .memberKey(dto.getMemberKey())
-            .build();
+                .totalPrice(dto.getPrice())
+                .tradeTime(tradeDate)
+                .pickupStatus(false)
+                .active(true)
+                .memberKey(dto.getMemberKey())
+                // TODO: 2023-08-08 아래 이렇게 해도 되는지 확인
+                .articles(new ArrayList<>())
+                .build();
     }
 
     public Long pickup(Long tradeId) {

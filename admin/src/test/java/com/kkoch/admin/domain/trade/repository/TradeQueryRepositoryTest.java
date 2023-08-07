@@ -43,7 +43,7 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
         PageRequest pageRequest = PageRequest.of(0, 20);
 
         //when
-        List<TradeResponse> responses = tradeQueryRepository.findByCondition(1L, cond, pageRequest);
+        List<TradeResponse> responses = tradeQueryRepository.findByCondition("memberKey", cond, pageRequest);
 
         //then
         assertThat(responses).hasSize(2)
@@ -68,7 +68,7 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
         TradeSearchCond cond = TradeSearchCond.of(currentDate, 7);
 
         //when
-        int totalCount = tradeQueryRepository.getTotalCount(1L, cond);
+        int totalCount = tradeQueryRepository.getTotalCount("memberKey", cond);
 
         //then
         assertThat(totalCount).isEqualTo(2);
@@ -96,7 +96,7 @@ class TradeQueryRepositoryTest extends IntegrationTestSupport {
                 .tradeTime(tradeDate)
                 .pickupStatus(false)
                 .active(active)
-                .memberId(1L)
+                .memberKey("memberKey")
                 .articles(new ArrayList<>())
                 .build();
         return tradeRepository.save(trade);

@@ -60,11 +60,11 @@ class StatsQueryServiceTest extends IntegrationTestSupport {
 
         Trade trade = createTrade();
 
-        createAuctionArticle("00001", LocalDateTime.now().minusHours(11), Grade.Super, plant1, trade);
-        createAuctionArticle("00002", LocalDateTime.now().minusHours(10), Grade.Super, plant1, trade);
-        createAuctionArticle("00003", LocalDateTime.now().minusHours(13), Grade.Advanced, plant1, trade);
-        createAuctionArticle("00004", LocalDateTime.now().minusHours(13), Grade.Super, plant2, trade);
-        createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.Advanced, plant2, trade);
+        createAuctionArticle("00001", LocalDateTime.now().minusHours(11), Grade.SUPER, plant1, trade);
+        createAuctionArticle("00002", LocalDateTime.now().minusHours(10), Grade.SUPER, plant1, trade);
+        createAuctionArticle("00003", LocalDateTime.now().minusHours(13), Grade.ADVANCED, plant1, trade);
+        createAuctionArticle("00004", LocalDateTime.now().minusHours(13), Grade.SUPER, plant2, trade);
+        createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.ADVANCED, plant2, trade);
 
         //when
         List<AuctionArticleForStatsDto> responses = statsQueryService.getAuctionList();
@@ -99,7 +99,7 @@ class StatsQueryServiceTest extends IntegrationTestSupport {
                 .tradeTime(LocalDate.of(2023, 7, 11).atStartOfDay())
                 .pickupStatus(false)
                 .active(true)
-                .memberId(1L)
+                .memberKey("memberKey")
                 .build();
         return tradeRepository.save(trade);
     }

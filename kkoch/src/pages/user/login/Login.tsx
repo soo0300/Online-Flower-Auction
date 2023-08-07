@@ -53,13 +53,13 @@ const Login = () => {
 
 		const data = {
 			"email" : email,
-			"loginPw" : password
+			"password" : password
 		}
 
 		// POST 요청 보내기
 		axios({
 			method: "post",
-			url: "/api/user-service/user/login", // 프록시 경로인 /api를 사용
+			url: "/api/api/user-service/login", // 프록시 경로인 /api를 사용
 			headers: {
 				"Content-Type": "application/json"
 			},
@@ -67,8 +67,9 @@ const Login = () => {
 		})
 		.then(res => {
 			// 로그인 요청이 성공하면 토큰을 저장
-			const token = res.data.data["token"]; 
-			dispatch(login(token));
+			// const token = res.data.data["token"]; 
+			console.log(res.headers)
+			// dispatch(login(token));
 			alert("환영합니다.");
 
 			// 이전에 state에서 왔으면 로그인후 state으로 이동
