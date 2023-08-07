@@ -8,13 +8,16 @@ import lombok.NoArgsConstructor;
 @Data
 public class StatsSearchCond {
 
-    private Long plantId;
+    private String name;
+
+    private String type;
 
     private int searchDay;
 
     @Builder
-    public StatsSearchCond(Long plantId, int searchDay) {
-        this.plantId = plantId;
-        this.searchDay = searchDay-1;
+    public StatsSearchCond(String name, String type, int searchDay) {
+        this.name = name;
+        this.type = type;
+        this.searchDay = searchDay;
     }
 }

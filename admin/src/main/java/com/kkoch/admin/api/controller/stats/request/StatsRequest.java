@@ -9,19 +9,23 @@ import lombok.NoArgsConstructor;
 @Data
 public class StatsRequest {
 
-    private Long plantId;
+    private String name;
+
+    private String type;
 
     private int searchDay;
 
     @Builder
-    private StatsRequest(Long plantId, int searchDay) {
-        this.plantId = plantId;
+    private StatsRequest(String name, String type, int searchDay) {
+        this.name = name;
+        this.type = type;
         this.searchDay = searchDay;
     }
 
     public StatsSearchCond toStatsSearchCond() {
         return StatsSearchCond.builder()
-                .plantId(this.plantId)
+                .name(this.name)
+                .type(this.type)
                 .searchDay(this.searchDay)
                 .build();
     }

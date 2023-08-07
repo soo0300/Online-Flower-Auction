@@ -2,6 +2,7 @@ package com.kkoch.admin.domain.plant.repository;
 
 import com.kkoch.admin.api.controller.stats.response.StatsResponse;
 import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
+import com.kkoch.admin.domain.plant.QCategory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -39,6 +40,9 @@ public class StatsQueryRepository {
     }
 
     public List<StatsResponse> findByCond(StatsSearchCond statsSearchCond) {
+        QCategory code = new QCategory("code");
+        QCategory name = new QCategory("name");
+        QCategory type = new QCategory("type");
         return queryFactory
                 .select(Projections.constructor(StatsResponse.class,
                         stats.priceAvg,
@@ -47,10 +51,15 @@ public class StatsQueryRepository {
                         stats.grade,
                         stats.count,
                         stats.createdDate,
-                        stats.plant
+                        stats.plant.name.name,
+                        stats.plant.type.name
                 )).from(stats)
                 .join(stats.plant, plant)
-                .where(stats.plant.id.eq(statsSearchCond.getPlantId()),
+                .join(plant.code, code)
+                .join(plant.name, name)
+                .join(plant.type, type)
+                .where(stats.plant.name.name.eq(statsSearchCond.getName()),
+                        stats.plant.type.name.eq(statsSearchCond.getType()),
                         stats.createdDate.between(
                                 LocalDateTime.now().minusDays(statsSearchCond.getSearchDay()),
                                 LocalDateTime.now()))
