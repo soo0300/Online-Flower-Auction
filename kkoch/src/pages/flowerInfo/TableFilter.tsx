@@ -11,17 +11,27 @@ import FilterValues from './TableInterface';
 const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValues) => void }) => {
   // 상태관리
   // 처음엔 비어있는 상태
-  const [filter, setFilter] = useState<FilterValues>({ date: dayjs(), flower: '', variety: '', location: '' });
+  const [filter, setFilter] = useState<FilterValues>({ startDate: dayjs(new Date()), endDate: dayjs(new Date()), flower: '', variety: '', location: '' });
 
-  const handleDateChange = (date: dayjs.Dayjs) => {
-    setFilter({ ...filter, date });
-  }
-
-  const handleDatePickerChange = (date: dayjs.Dayjs | null) => {
-    if (date) {
-      handleDateChange(date);
-    }
+  // 시작날짜 바뀌었을 때
+  const handleStartDateChange = (date: dayjs.Dayjs) => {
+    setFilter({ ...filter, startDate: date });
   };
+
+  // 종료날짜 바뀌었을 때
+  const handleEndDateChange = (date: dayjs.Dayjs) => {
+    setFilter({ ...filter, endDate: date });
+  };
+  
+  // const handleDateChange = (date: dayjs.Dayjs) => {
+  //   setFilter({ ...filter, date });
+  // }
+
+  // const handleDatePickerChange = (date: dayjs.Dayjs | null) => {
+  //   if (date) {
+  //     handleDateChange(date);
+  //   }
+  // };
   
 
   // 클릭할 때 선택한 필터정보 저장
@@ -46,6 +56,8 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
     onFilterChange(filter);
   };
 
+  const currentDate = dayjs();
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className='tablecontent'>
@@ -56,8 +68,23 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
             </div>
             <DatePicker
               className='datepicker'
-              value={filter.date}
-              onChange={handleDatePickerChange}
+              value={filter.startDate}
+              label="시작날짜"
+              format="YYYY-MM-DD"
+              maxDate={filter.endDate}
+              onChange={handleStartDateChange}
+              // startDate= {filter.startDate}
+              // endDate= {filter.endDate}
+              slotProps={{ textField: { size: 'small' } }}
+            />
+            <DatePicker
+              className='datepicker'
+              value={filter.endDate}
+              label="종료날짜"
+              onChange={handleEndDateChange}
+              format="YYYY-MM-DD"
+              minDate={filter.startDate}
+              maxDate={currentDate}
               slotProps={{ textField: { size: 'small' } }}
             />
           </div>

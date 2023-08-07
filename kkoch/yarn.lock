@@ -528,16 +528,16 @@
     prop-types "^15.8.1"
 
 "@mui/system@^5.14.1", "@mui/system@^5.4.1", "@mui/system@^5.8.0":
-  version "5.14.1"
-  resolved "https://registry.npmjs.org/@mui/system/-/system-5.14.1.tgz"
-  integrity sha512-u+xlsU34Jdkgx1CxmBnIC4Y08uPdVX5iEd3S/1dggDFtOGp+Lj8xmKRJAQ8PJOOJLOh8pDwaZx4AwXikL4l1QA==
+  version "5.14.3"
+  resolved "https://registry.npmjs.org/@mui/system/-/system-5.14.3.tgz"
+  integrity sha512-b+C+j9+75+/iIYSa+1S4eCMc9MDNrj9hzWfExJqS2GffuNocRagjBZFyjtMqsLWLxMxQIX8Cg6j0hAioiw+WfQ==
   dependencies:
     "@babel/runtime" "^7.22.6"
     "@mui/private-theming" "^5.13.7"
     "@mui/styled-engine" "^5.13.2"
     "@mui/types" "^7.2.4"
-    "@mui/utils" "^5.14.1"
-    clsx "^1.2.1"
+    "@mui/utils" "^5.14.3"
+    clsx "^2.0.0"
     csstype "^3.1.2"
     prop-types "^15.8.1"
 
@@ -546,10 +546,10 @@
   resolved "https://registry.npmjs.org/@mui/types/-/types-7.2.4.tgz"
   integrity sha512-LBcwa8rN84bKF+f5sDyku42w1NTxaPgPyYKODsh01U1fVstTClbUoSA96oyRBnSNyEiAVjKm6Gwx9vjR+xyqHA==
 
-"@mui/utils@^5.13.7", "@mui/utils@^5.14.1":
-  version "5.14.1"
-  resolved "https://registry.npmjs.org/@mui/utils/-/utils-5.14.1.tgz"
-  integrity sha512-39KHKK2JeqRmuUcLDLwM+c2XfVC136C5/yUyQXmO2PVbOb2Bol4KxtkssEqCbTwg87PSCG3f1Tb0keRsK7cVGw==
+"@mui/utils@^5.13.7", "@mui/utils@^5.14.1", "@mui/utils@^5.14.3":
+  version "5.14.3"
+  resolved "https://registry.npmjs.org/@mui/utils/-/utils-5.14.3.tgz"
+  integrity sha512-gZ6Etw+ppO43GYc1HFZSLjwd4DoZoa+RrYTD25wQLfzcSoPjVoC/zZqA2Lkq0zjgwGBQOSxKZI6jfp9uXR+kgw==
   dependencies:
     "@babel/runtime" "^7.22.6"
     "@types/prop-types" "^15.7.5"
@@ -568,17 +568,38 @@
     prop-types "^15.8.1"
     reselect "^4.1.8"
 
-"@mui/x-date-pickers@^6.10.2":
-  version "6.10.2"
-  resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-6.10.2.tgz"
-  integrity sha512-RZHvPj5UYGdV2FoBlTbtAtg1aaJ1sbdD9LM9vSgefQWMW0vFC4fSYtFACS4ptxK/8Q0FHyuVZF5bDO+TUAPxQg==
+"@mui/x-date-pickers-pro@^6.11.0":
+  version "6.11.0"
+  resolved "https://registry.npmjs.org/@mui/x-date-pickers-pro/-/x-date-pickers-pro-6.11.0.tgz"
+  integrity sha512-/f6kCHmj2WtgWtkQrMMDExca5yzyeVkx1AKAlULaQ+Y4/rINRZDzsdGCtF1fHF78ABDazhpBf6KTgw/yZRJHEA==
   dependencies:
     "@babel/runtime" "^7.22.6"
-    "@mui/utils" "^5.13.7"
+    "@mui/utils" "^5.14.1"
+    "@mui/x-date-pickers" "6.11.0"
+    "@mui/x-license-pro" "6.10.2"
+    clsx "^1.2.1"
+    prop-types "^15.8.1"
+    react-transition-group "^4.4.5"
+
+"@mui/x-date-pickers@^6.10.2", "@mui/x-date-pickers@6.11.0":
+  version "6.11.0"
+  resolved "https://registry.npmjs.org/@mui/x-date-pickers/-/x-date-pickers-6.11.0.tgz"
+  integrity sha512-yVGfpH3scUauLaHWvzckD0xswboC48YAaJ4568YTkKozXFSPPkvK7VGSQ+qo1u8K2UjYh1iZoff3k0EoDDPnww==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    "@mui/utils" "^5.14.1"
     "@types/react-transition-group" "^4.4.6"
     clsx "^1.2.1"
     prop-types "^15.8.1"
     react-transition-group "^4.4.5"
+
+"@mui/x-license-pro@6.10.2":
+  version "6.10.2"
+  resolved "https://registry.npmjs.org/@mui/x-license-pro/-/x-license-pro-6.10.2.tgz"
+  integrity sha512-Baw3shilU+eHgU+QYKNPFUKvfS5rSyNJ98pQx02E0gKA22hWp/XAt88K1qUfUMPlkPpvg/uci6gviQSSLZkuKw==
+  dependencies:
+    "@babel/runtime" "^7.22.6"
+    "@mui/utils" "^5.13.7"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1048,6 +1069,11 @@ clsx@^1.2.1:
   version "1.2.1"
   resolved "https://registry.npmjs.org/clsx/-/clsx-1.2.1.tgz"
   integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
+
+clsx@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/clsx/-/clsx-2.0.0.tgz"
+  integrity sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==
 
 clsx@1.1.1:
   version "1.1.1"
