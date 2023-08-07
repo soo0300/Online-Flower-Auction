@@ -13,6 +13,8 @@ endif::[]
 == Member API
 
 include::api/member/my_info.adoc[]
+include::api/member/my_password.adoc[]
+
 
 [[Reservation-API]]
 == Reservation API
