@@ -149,11 +149,11 @@ const SignUp = () => {
 
     axios({
 			method: "post",
-			url: "/api/user-service/user/join", // 프록시 경로인 /api를 사용
+			url: "/api/api/user-service/join", // 프록시 경로인 /api를 사용
 			headers: {
-				"Content-Type": "multipart/form-data"
+				"Content-Type": "application/json"
 			},
-			data: formData
+			data: dto
 		})
 		.then(() => { 
 			if(confirm("회원 가입이 완료 되었습니다. 로그인 해주십시오")) {

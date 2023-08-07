@@ -26,7 +26,7 @@ const MyPage = () => {
   };
 
   return (
-    <section className='pt-[115px]'>
+    <section>
       <MDBContainer className="py-5">
         
       <MDBCard className='mb-4'>
