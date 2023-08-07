@@ -1,25 +1,39 @@
 package com.kkoch.admin.api.controller.trade.request;
 
+import com.kkoch.admin.api.service.trade.dto.AddTradeDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
-import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 public class AddTradeRequest {
 
-    @NonNull
-    private Long memberId;
+    @NotEmpty
+    private String memberToken;
 
-    @NonNull
-    List<AuctionArticleRequest> articles;
+    @NotNull
+    private Long auctionArticleId;
+
+    @NotNull
+    private Integer price;
 
     @Builder
-    private AddTradeRequest(Long memberId, List<AuctionArticleRequest> articles) {
-        this.memberId = memberId;
-        this.articles = articles;
+    private AddTradeRequest(String memberToken, String auctionArticleId, Integer price) {
+        this.memberToken = memberToken;
+        this.auctionArticleId = Long.valueOf(auctionArticleId);
+        this.price = price;
     }
+
+    public AddTradeDto toAddTradeDto() {
+        return AddTradeDto.builder()
+            .memberKey(this.memberToken)
+            .auctionArticleId(this.auctionArticleId)
+            .price(this.price)
+            .build();
+    }
+
 }
