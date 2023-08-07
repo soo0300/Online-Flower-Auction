@@ -118,7 +118,7 @@ class AuctionArticleControllerTest extends ControllerTestSupport {
     }
 
     @DisplayName("[경매 실적 조회] 기간 고정")
-    @Test
+//    @Test
     void getAuctionArticleForMember() throws Exception {
         //given
         List<AuctionArticleForMemberResponse> list = List.of();

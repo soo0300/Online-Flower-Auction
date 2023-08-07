@@ -2,9 +2,9 @@
 === 회원 로그인
 
 ==== HTTP Request
-include::{snippets}/member-login/http-request.adoc[]
-include::{snippets}/member-login/request-fields.adoc[]
+// include::{snippets}/member-login/http-request.adoc[]
+// include::{snippets}/member-login/request-fields.adoc[]
 
 ==== HTTP Response
-include::{snippets}/member-login/http-response.adoc[]
-include::{snippets}/member-login/response-fields.adoc[]
+// include::{snippets}/member-login/http-response.adoc[]
+// include::{snippets}/member-login/response-fields.adoc[]

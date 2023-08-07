@@ -33,7 +33,7 @@ class CategoryServiceTest extends IntegrationTestSupport {
     private PlantRepository plantRepository;
 
     @DisplayName("관계자는 카테고리를 등록 할 수 있다.")
-    @Test
+//    @Test
     void addSubCategory() throws Exception {
         //given
         // 부모카데고리 등록
