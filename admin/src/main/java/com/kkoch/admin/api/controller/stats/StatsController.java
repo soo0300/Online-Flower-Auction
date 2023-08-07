@@ -6,7 +6,6 @@ import com.kkoch.admin.api.service.stats.StatsQueryService;
 import com.kkoch.admin.api.service.stats.StatsService;
 import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
 import com.kkoch.admin.domain.plant.repository.StatsSearchCond;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,7 +21,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin-service/stats")
 @Slf4j
-@Api(tags = {"낙찰 통계 기능"})
 public class StatsController {
 
     private final StatsQueryService statsQueryService;
