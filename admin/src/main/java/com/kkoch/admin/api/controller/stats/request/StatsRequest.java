@@ -5,23 +5,34 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @NoArgsConstructor
 @Data
 public class StatsRequest {
 
-    private Long plantId;
+    @NotEmpty
+    private String type;
 
-    private int searchDay;
+    @NotEmpty
+    private String name;
+
+    @NotNull
+    private Integer searchDay;
 
     @Builder
-    private StatsRequest(Long plantId, int searchDay) {
-        this.plantId = plantId;
+    private StatsRequest(String type, String name, Integer searchDay) {
+        this.type = type;
+        this.name = name;
         this.searchDay = searchDay;
     }
 
+    @Builder
     public StatsSearchCond toStatsSearchCond() {
         return StatsSearchCond.builder()
-                .plantId(this.plantId)
+                .type(this.type)
+                .name(this.name)
                 .searchDay(this.searchDay)
                 .build();
     }

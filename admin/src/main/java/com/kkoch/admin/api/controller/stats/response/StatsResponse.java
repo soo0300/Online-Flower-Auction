@@ -1,7 +1,6 @@
 package com.kkoch.admin.api.controller.stats.response;
 
 import com.kkoch.admin.domain.Grade;
-import com.kkoch.admin.domain.plant.Plant;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,16 +24,19 @@ public class StatsResponse {
 
     private String createdDate;
 
-    private Plant plant;
+    private String type;
+
+    private String name;
 
     @Builder
-    public StatsResponse(int priceAvg, int priceMax, int priceMin, Grade grade, int count, LocalDateTime createdDate, Plant plant) {
+    public StatsResponse(int priceAvg, int priceMax, int priceMin, Grade grade, int count, LocalDateTime createdDate, String type, String name) {
         this.priceAvg = priceAvg;
         this.priceMax = priceMax;
         this.priceMin = priceMin;
         this.grade = grade;
         this.count = count;
         this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
-        this.plant = plant;
+        this.type = type;
+        this.name = name;
     }
 }
