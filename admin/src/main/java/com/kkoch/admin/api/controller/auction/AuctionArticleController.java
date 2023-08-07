@@ -90,6 +90,11 @@ public class AuctionArticleController {
         return ApiResponse.ok(responses);
     }
 
+    /**
+     * 경매 일정에 등록된 경매품 목록 가져오기(경매 시작할 때)
+     * @param auctionId
+     * @return
+     */
     @GetMapping("/{auctionId}")
     public ApiResponse<List<AuctionArticlesResponse>> getAuctionArticlesForAuction(
             @PathVariable Long auctionId) {

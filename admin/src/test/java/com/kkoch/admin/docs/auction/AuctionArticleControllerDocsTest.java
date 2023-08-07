@@ -2,6 +2,7 @@ package com.kkoch.admin.docs.auction;
 
 import com.kkoch.admin.api.controller.auction.AuctionArticleController;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
 import com.kkoch.admin.api.service.auction.AuctionArticleService;
 import com.kkoch.admin.docs.RestDocsSupport;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
@@ -165,6 +167,76 @@ public class AuctionArticleControllerDocsTest extends RestDocsSupport {
                                         .description("리스트가 비어있는지 여부")
                         )
                 ));
+    }
+
+    @DisplayName("경매 시작 시 경매품 목록 가져오기")
+    @Test
+    void getAuctionArticleListForAuction() throws Exception {
+        AuctionArticlesResponse response1 = createAuctionArticleResponse();
+        AuctionArticlesResponse response2 = createAuctionArticleResponse();
+        AuctionArticlesResponse response3 = createAuctionArticleResponse();
+        AuctionArticlesResponse response4 = createAuctionArticleResponse();
+        AuctionArticlesResponse response5 = createAuctionArticleResponse();
+        AuctionArticlesResponse response6 = createAuctionArticleResponse();
+        AuctionArticlesResponse response7 = createAuctionArticleResponse();
+
+        List<AuctionArticlesResponse> responses = List.of(response1, response2, response3, response4, response5, response6, response7);
+
+        BDDMockito.given(auctionArticleQueryService.getAuctionArticleList(anyLong())
+        ).willReturn(responses);
+
+        mockMvc.perform(get("/admin-service/auction-articles/{auctionId}", 1L)
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("auction-article-search",
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.ARRAY)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data[].auctionArticleId").type(JsonFieldType.NUMBER)
+                                        .description("경매품 식별키"),
+                                fieldWithPath("data[].auctionNumber").type(JsonFieldType.STRING)
+                                        .description("경매품 상장번호"),
+                                fieldWithPath("data[].code").type(JsonFieldType.STRING)
+                                        .description("경매품 구분코드"),
+                                fieldWithPath("data[].type").type(JsonFieldType.STRING)
+                                        .description("경매품 품목"),
+                                fieldWithPath("data[].name").type(JsonFieldType.STRING)
+                                        .description("경매품 품종"),
+                                fieldWithPath("data[].count").type(JsonFieldType.NUMBER)
+                                        .description("경매품 단(속)"),
+                                fieldWithPath("data[].startPrice").type(JsonFieldType.NUMBER)
+                                        .description("경매품 시작가"),
+                                fieldWithPath("data[].grade").type(JsonFieldType.STRING)
+                                        .description("경매품 등급"),
+                                fieldWithPath("data[].region").type(JsonFieldType.STRING)
+                                        .description("경매품 지역"),
+                                fieldWithPath("data[].shipper").type(JsonFieldType.STRING)
+                                        .description("경매품 판매자")
+                        )
+                ));
+    }
+
+    private static AuctionArticlesResponse createAuctionArticleResponse() {
+        return AuctionArticlesResponse.builder()
+                .auctionArticleId(1L)
+                .auctionNumber("1-00001")
+                .code("절화")
+                .type("장미")
+                .name("푸에고")
+                .count(20)
+                .startPrice(10000)
+                .grade(Grade.SUPER)
+                .region("광주")
+                .shipper("서용준")
+                .build();
     }
 
     private static AuctionArticleForMemberResponse createAuctionArticleResponse(String name, int count, int bidPrice, LocalDateTime bidTime, String region) {

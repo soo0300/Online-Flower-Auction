@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,10 +22,9 @@ public class AuctionQueryService {
         return auctionQueryRepository.findAllAuction();
     }
 
-    public List<AuctionForMemberResponse> getAuctionForMember() {
-        List<Auction> auctions = auctionQueryRepository.findAuctionForMember();
-        return auctions.stream()
-                .map(AuctionForMemberResponse::of)
-                .collect(Collectors.toList());
+    public AuctionForMemberResponse getAuctionForMember() {
+        Optional<Auction> findAuction = auctionQueryRepository.findAuctionForMember();
+        return findAuction.map(AuctionForMemberResponse::of)
+                .orElse(null);
     }
 }

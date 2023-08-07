@@ -2,6 +2,7 @@ package com.kkoch.admin.domain.auction.repository;
 
 import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
 import com.kkoch.admin.domain.auction.Auction;
+import com.kkoch.admin.domain.auction.QAuction;
 import com.kkoch.admin.domain.auction.Status;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static com.kkoch.admin.domain.auction.QAuction.auction;
 
@@ -36,14 +38,15 @@ public class AuctionQueryRepository {
                 .orderBy(auction.startTime.asc()).fetch();
     }
 
-    public List<Auction> findAuctionForMember() {
-        return queryFactory
-                .select(auction)
-                .from(auction)
+    public Optional<Auction> findAuctionForMember() {
+        Auction auction = queryFactory
+                .select(QAuction.auction)
+                .from(QAuction.auction)
                 .where(
-                        auction.active.isTrue(),
-                        auction.status.ne(Status.CLOSE))
-                .orderBy(auction.startTime.asc())
-                .limit(5).fetch();
+                        QAuction.auction.active.isTrue(),
+                        QAuction.auction.status.eq(Status.OPEN))
+                .orderBy(QAuction.auction.startTime.asc())
+                .fetchOne();
+        return Optional.ofNullable(auction);
     }
 }
