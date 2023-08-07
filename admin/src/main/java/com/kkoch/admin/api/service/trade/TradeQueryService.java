@@ -23,9 +23,9 @@ public class TradeQueryService {
     private final TradeQueryRepository tradeQueryRepository;
     private final AuctionArticleQueryRepository auctionArticleQueryRepository;
 
-    public Page<TradeResponse> getMyTrades(Long memberId, TradeSearchCond cond, Pageable pageable) {
-        List<TradeResponse> responses = tradeQueryRepository.findByCondition(memberId, cond, pageable);
-        int totalCount = tradeQueryRepository.getTotalCount(memberId, cond);
+    public Page<TradeResponse> getMyTrades(String memberKey, TradeSearchCond cond, Pageable pageable) {
+        List<TradeResponse> responses = tradeQueryRepository.findByCondition(memberKey, cond, pageable);
+        int totalCount = tradeQueryRepository.getTotalCount(memberKey, cond);
         return new PageImpl<>(responses, pageable, totalCount);
     }
 

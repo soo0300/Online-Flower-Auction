@@ -39,15 +39,15 @@ public class TradeController {
         return ApiResponse.ok(tradeId);
     }
 
-    @GetMapping("/{memberId}")
+    @GetMapping("/{memberKey}")
     public ApiResponse<Page<TradeResponse>> getMyTrades(
-            @PathVariable Long memberId,
+            @PathVariable String memberKey,
             @RequestParam Integer term,
             @RequestParam(defaultValue = "0") Integer page
     ) {
         TradeSearchCond cond = TradeSearchCond.of(LocalDate.now(), term);
         PageRequest pageRequest = PageRequest.of(page, 20);
-        Page<TradeResponse> data = tradeQueryService.getMyTrades(memberId, cond, pageRequest);
+        Page<TradeResponse> data = tradeQueryService.getMyTrades(memberKey, cond, pageRequest);
         return ApiResponse.ok(data);
     }
 

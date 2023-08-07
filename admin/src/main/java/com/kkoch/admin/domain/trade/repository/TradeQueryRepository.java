@@ -25,12 +25,12 @@ public class TradeQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<TradeResponse> findByCondition(Long memberId, TradeSearchCond cond, Pageable pageable) {
+    public List<TradeResponse> findByCondition(String memberKey, TradeSearchCond cond, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(trade.id)
                 .from(trade)
                 .where(
-                        trade.memberId.eq(memberId),
+                        trade.memberKey.eq(memberKey),
                         trade.active.isTrue(),
                         trade.tradeTime.between(cond.getStartDateTime(), cond.getEndDateTime())
                 )
@@ -57,12 +57,12 @@ public class TradeQueryRepository {
                 .fetch();
     }
 
-    public int getTotalCount(Long memberId, TradeSearchCond cond) {
+    public int getTotalCount(String memberKey, TradeSearchCond cond) {
         return queryFactory
                 .select(trade.id)
                 .from(trade)
                 .where(
-                        trade.memberId.eq(memberId),
+                        trade.memberKey.eq(memberKey),
                         trade.active.isTrue(),
                         trade.tradeTime.between(cond.getStartDateTime(), cond.getEndDateTime())
                 )
