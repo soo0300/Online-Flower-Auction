@@ -10,7 +10,7 @@ const TradingInfo = () => {
 
   return (
 
-    <div className='gap-24 bg-gray-20 py-28 md:h-full md:pb-0'>
+    <div className='gap-24 bg-gray-20 md:h-full md:pb-0'>
       <TradingTable />
       {/* <FlowerChart /> */}
     </div>

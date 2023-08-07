@@ -26,7 +26,7 @@ const LocationButton = ({location, type} : Props) => {
   };
 
   return (
-		<button className="btn" onClick={handleCheck}>
+		<button className="btn mx-6" onClick={handleCheck}>
 			<div className="wrapper">
 				<p className="text">{location} </p>
 

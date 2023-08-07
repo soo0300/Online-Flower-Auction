@@ -143,7 +143,7 @@ const AuctionWaitingRoom: React.FC = () => {
   };
 
   return (
-    <div className="gap-16 bg-gray-20 py-10 pt-[150px] md:h-full md:pb-0">
+    <div className="gap-16 bg-gray-20 py-10">
       <div className="mx-auto w-5/6 items-center md:flex">
         <h1>aT화훼 공판장 (양재동) 경매방</h1>
       </div>
