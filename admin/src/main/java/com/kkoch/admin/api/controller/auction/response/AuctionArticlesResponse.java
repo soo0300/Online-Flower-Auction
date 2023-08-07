@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class AuctionArticlesResponse {
 
     private Long auctionArticleId;
+    // 상장번호
     private String auctionNumber;
 
     // 식물

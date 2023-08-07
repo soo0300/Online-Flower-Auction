@@ -96,6 +96,7 @@ public class AuctionArticleQueryRepository {
                 .fetch();
     }
 
+    // 경매 시작 시 목록
     public List<AuctionArticlesResponse> getAuctionArticleList(Long auctionId) {
         QCategory code = new QCategory("code");
         QCategory type = new QCategory("type");

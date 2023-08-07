@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/redis-server/auctions")
+@RequestMapping("/auction-service/auctions")
 @Slf4j
 public class EventController {
 
