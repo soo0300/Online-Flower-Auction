@@ -10,6 +10,7 @@ import com.kkoch.admin.api.service.category.CategoryService;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin-service/categories")
 @RestController
+@Slf4j
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -35,17 +37,30 @@ public class CategoryController {
 
     @GetMapping("/type")
     public ApiResponse<List<String>> getTypes(
-        @RequestParam(defaultValue = "절화") String code
+            @RequestParam(defaultValue = "절화") String code
     ) {
         List<String> types = categoryQueryService.getTypesForMember(code);
         return ApiResponse.ok(types);
     }
 
+    @GetMapping("/test")
+    public void getTypes() {
+        log.info("카테고리 정보");
+        log.info("no1::" + categoryQueryService.getTypesForMember("절화").toString());
+        log.info("no2::" + categoryQueryService.getTypesForMember("관엽").toString());
+        log.info("no3::" + categoryQueryService.getTypesForMember("난").toString());
+        log.info("no4::" + categoryQueryService.getTypesForMember("춘란").toString());
+
+        // cache를 위한 확인                        .getTypesForMember.toString()()
+        log.info("no1::" + categoryQueryService.getTypesForMember("절화").toString());
+        log.info("no3::" + categoryQueryService.getTypesForMember("난").toString());
+    }
+
     @GetMapping("/name")
     public ApiResponse<List<String>> getNames(
-        @RequestParam(defaultValue = "절화") String code,
-        @RequestParam(defaultValue = "") String type
-        //날짜
+            @RequestParam(defaultValue = "절화") String code,
+            @RequestParam(defaultValue = "") String type
+            //날짜
     ) {
         List<String> names = categoryQueryService.getNamesForMember(code, type);
         return ApiResponse.ok(names);
@@ -67,9 +82,9 @@ public class CategoryController {
 
     }
 
-//    @GetMapping
+    //    @GetMapping
     public ApiResponse<List<CategoryForMemberResponse>> getCategories(
-        @RequestParam String code
+            @RequestParam String code
     ) {
         List<CategoryForMemberResponse> categories = categoryQueryService.getCategories(code);
         return ApiResponse.ok(categories);
