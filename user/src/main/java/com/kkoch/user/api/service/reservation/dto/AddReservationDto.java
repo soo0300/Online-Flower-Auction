@@ -1,5 +1,6 @@
 package com.kkoch.user.api.service.reservation.dto;
 
+import com.kkoch.user.domain.Grade;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.reservation.Reservation;
 import lombok.Builder;
@@ -10,24 +11,30 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddReservationDto {
 
-    private Long plantId;
+    private String type;
+    private String name;
     private int count;
     private int price;
+    private Grade grade;
 
     @Builder
-    public AddReservationDto(Long plantId, int count, int price) {
-        this.plantId = plantId;
+    private AddReservationDto(String type, String name, int count, int price, Grade grade) {
+        this.type = type;
+        this.name = name;
         this.count = count;
         this.price = price;
+        this.grade = grade;
     }
 
-    public Reservation toEntity(Member member) {
+    public Reservation toEntity(Member member, Long plantId) {
         return Reservation.builder()
-                .member(member)
-                .plantId(this.plantId)
-                .count(this.count)
-                .price(this.price)
-                .build();
+            .count(this.count)
+            .price(this.price)
+            .grade(this.grade)
+            .member(member)
+            .plantId(plantId)
+            .build();
     }
+
 }
 
