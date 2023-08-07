@@ -13,10 +13,12 @@ import static lombok.AccessLevel.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
+@Table(name = "members")
 public class Member extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     @Column(unique = true, nullable = false, updatable = false, length = 100)
