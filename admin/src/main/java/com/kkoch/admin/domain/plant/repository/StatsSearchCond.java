@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class StatsSearchCond {
 
-    private String name;
-
     private String type;
+
+    private String name;
 
     private int searchDay;
 

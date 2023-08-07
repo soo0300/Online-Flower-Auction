@@ -24,19 +24,19 @@ public class StatsResponse {
 
     private String createdDate;
 
-    private String name;
-
     private String type;
 
+    private String name;
+
     @Builder
-    public StatsResponse(int priceAvg, int priceMax, int priceMin, Grade grade, int count, LocalDateTime createdDate, String name, String type) {
+    public StatsResponse(int priceAvg, int priceMax, int priceMin, Grade grade, int count, LocalDateTime createdDate, String type, String name) {
         this.priceAvg = priceAvg;
         this.priceMax = priceMax;
         this.priceMin = priceMin;
         this.grade = grade;
         this.count = count;
         this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
-        this.name = name;
         this.type = type;
+        this.name = name;
     }
 }
