@@ -27,6 +27,7 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     private final PlantRepository plantRepository;
+
     @CacheEvict(allEntries = true)
     public Long addCategory(AddCategoryDto dto) {
         Category findCategory = getCategoryEntity(dto.getParentId());
@@ -37,12 +38,14 @@ public class CategoryService {
 
         return category.getId();
     }
+
     @CacheEvict(allEntries = true)
     public CategoryResponse setCategory(Long categoryId, SetCategoryDto setCategoryDto) {
         Category category = getCategoryEntity(categoryId);
         category.changeCategory(setCategoryDto.getChangeName());
         return CategoryResponse.of(category);
     }
+
     @CacheEvict(allEntries = true)
     public Long removeCategory(Long categoryId) {
         Category category = getCategoryEntity(categoryId);
@@ -62,6 +65,7 @@ public class CategoryService {
             subCategory.remove();
         }
     }
+
     @Cacheable(value = "categoryCache")
     public List<CategoryResponse> getCategories(Long parentId) {
         return categoryRepository.findAllById(parentId)

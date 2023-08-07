@@ -43,19 +43,6 @@ public class CategoryController {
         return ApiResponse.ok(types);
     }
 
-    @GetMapping("/test")
-    public void getTypes() {
-        log.info("카테고리 정보");
-        log.info("no1::" + categoryQueryService.getTypesForMember("절화").toString());
-        log.info("no2::" + categoryQueryService.getTypesForMember("관엽").toString());
-        log.info("no3::" + categoryQueryService.getTypesForMember("난").toString());
-        log.info("no4::" + categoryQueryService.getTypesForMember("춘란").toString());
-
-        // cache를 위한 확인                        .getTypesForMember.toString()()
-        log.info("no1::" + categoryQueryService.getTypesForMember("절화").toString());
-        log.info("no3::" + categoryQueryService.getTypesForMember("난").toString());
-    }
-
     @GetMapping("/name")
     public ApiResponse<List<String>> getNames(
             @RequestParam(defaultValue = "절화") String code,

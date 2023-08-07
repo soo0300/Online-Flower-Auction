@@ -24,18 +24,7 @@ public class CategoryQueryService {
 
     @Cacheable(value = "categoryCache")
     public List<String> getTypesForMember(String code) {
-        makeSlowService();
         return categoryQueryRepository.getTypes(code);
-    }
-
-    private void makeSlowService() {
-        log.info("start sleep");
-        try {
-            Thread.sleep(3000L);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        log.info("end sleep");
     }
 
     @Cacheable(value = "categoryCache")
