@@ -9,24 +9,24 @@ import javax.validation.constraints.NotEmpty;
 
 @Data
 @NoArgsConstructor
-public class LoginMemberRequest {
+public class LoginRequest {
 
     @NotEmpty
     private String email;
 
     @NotEmpty
-    private String loginPw;
+    private String password;
 
     @Builder
-    private LoginMemberRequest(String email, String loginPw) {
+    private LoginRequest(String email, String password) {
         this.email = email;
-        this.loginPw = loginPw;
+        this.password = password;
     }
 
     public LoginMemberDto toLoginMemberDto() {
         return LoginMemberDto.builder()
                 .email(this.email)
-                .loginPw(this.loginPw)
+                .loginPw(this.password)
                 .build();
     }
 }

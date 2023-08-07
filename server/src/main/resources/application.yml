@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: discoveryserver
+  cloud:
+    config:
+      uri: http://127.0.0.1:8889
+      nane: kkoch
 
 eureka:
   client:

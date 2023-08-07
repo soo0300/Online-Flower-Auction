@@ -1,42 +1,58 @@
 package com.kkoch.user.api.service.member;
 
-import com.kkoch.user.api.controller.member.response.TokenResponse;
+import com.kkoch.user.api.controller.member.response.MemberResponse;
 import com.kkoch.user.api.service.member.dto.JoinMemberDto;
-import com.kkoch.user.api.service.member.dto.LoginMemberDto;
 import com.kkoch.user.domain.member.Member;
 import com.kkoch.user.domain.member.repository.MemberRepository;
-import com.kkoch.user.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
-    private final JwtProvider jwtProvider;
-    public Long join(JoinMemberDto dto) {
+    private final BCryptPasswordEncoder passwordEncoder;
 
-        Member member = dto.toEntity();
+    public MemberResponse join(JoinMemberDto dto) {
+        dto.setMemberKey(UUID.randomUUID().toString());
+        Member member = dto.toEntity(passwordEncoder.encode(dto.getPwd()));
 
-        memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
 
-        return member.getId();
+        return MemberResponse.of(savedMember);
     }
 
-    public TokenResponse login(LoginMemberDto dto) {
-        Member member = memberRepository.findByEmail(dto.getEmail()).orElseThrow(() ->
-                new BadCredentialsException("잘못된 계정정보입니다."));
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
 
-        if (!isSamePw(dto.getLoginPw(),member.getLoginPw())) {
-            throw new BadCredentialsException("잘못된 계정정보입니다.");
+        if (findMember.isEmpty()) {
+            throw new UsernameNotFoundException("등록되지 않는 사용자입니다.");
         }
-        return new TokenResponse(jwtProvider.createToken(member.getEmail(), member.getRoles()));
+
+        Member member = findMember.get();
+        return new User(member.getEmail(), member.getEncryptedPwd(),
+            true, true, true, true,
+            new ArrayList<>()); //권한
     }
 
-    public boolean isSamePw(String dtoPW, String domainPw){
-        return dtoPW.equals(domainPw);
+    public Member getUserDetailsByEmail(String email) {
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+
+        if (findMember.isEmpty()) {
+            throw new UsernameNotFoundException("등록되지 않는 사용자입니다.");
+        }
+
+        return findMember.get();
     }
 }

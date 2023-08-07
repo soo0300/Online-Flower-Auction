@@ -1,45 +1,7 @@
 import { MDBCard, MDBCardBody, MDBCardTitle } from "mdb-react-ui-kit";
-import { DataGrid, GridRowsProp, GridColDef, gridClasses } from '@mui/x-data-grid';
-import { alpha, styled } from '@mui/material/styles';
+import { GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import MyReservModal from '@/pages/user/MyReservation/MyReservModal'
-
-
-
-const ODD_OPACITY = 0.2;
-
-const StripedDataGrid = styled(DataGrid)(({ theme }) => ({
-  [`& .${gridClasses.row}.even`]: {
-    backgroundColor: theme.palette.grey[200],
-    '&:hover, &.Mui-hovered': {
-      backgroundColor: alpha(theme.palette.primary.main, ODD_OPACITY),
-      '@media (hover: none)': {
-        backgroundColor: 'transparent',
-      },
-    },
-    '&.Mui-selected': {
-      backgroundColor: alpha(
-        theme.palette.primary.main,
-        ODD_OPACITY + theme.palette.action.selectedOpacity,
-      ),
-      '&:hover, &.Mui-hovered': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          ODD_OPACITY +
-            theme.palette.action.selectedOpacity +
-            theme.palette.action.hoverOpacity,
-        ),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: alpha(
-            theme.palette.primary.main,
-            ODD_OPACITY + theme.palette.action.selectedOpacity,
-          ),
-        },
-      },
-    },
-  },
-}));
-
+import StripedDataGrid from "../stripedDataGrid";
 
 const rows: GridRowsProp = [
   { id: 1, col1: '1', col2: '장미', col3: '하젤', col4: '특2', col5: '양재', col6: '10', col7: '1000', col8: '취소'},
