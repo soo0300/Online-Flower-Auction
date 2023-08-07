@@ -1,28 +1,63 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import TableFilter from './TableFilter';
 import './TradingTable.css';
 import columns from './TableColumns'
-import { initialRows } from './TableRows';
 import FilterValues from './TableInterface';
+import axios from 'axios';
 
 const TradingTable = () => {
+
+  const todayDate = new Date();
+  const weekagoDate = new Date(todayDate.getTime());
+  weekagoDate.setDate(weekagoDate.getDate() - 7)
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    
+    day = day >= 10 ? day  : '0' + day;
+    month = month >= 10 ? month : '0' + month;
+    return `${year}-${month}-${day}`
+  }
+
   // 테이블 데이터 초기 상태
-  const [tableData, setTableData] = useState(initialRows); 
+  const [tableData, setTableData] = useState('');
+  const [filteredTableData, setFilteredTableData] = useState('');
   const [selectCategory, setSelectCategory] = useState('');
   const [isClicked, setIsClicked] = useState(false);
+  
+  const response = () => {
+    axios({
+      method: "get",
+      url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=절화`
+    })
+    .then((res) => {
+      const dataWithId = res.data.data.content.map((item, index) => ({
+        ...item,
+        id: index + 1, // Assuming IDs start from 1
+      }));
+      setTableData(dataWithId);
+      setFilteredTableData(dataWithId);
+    })
+  }
+  
+  useEffect(() => {
+    response()
+  },[])
+
 
   // TableFilter에서 필터 정보를 받아와서 테이블 데이터를 필터링하는 함수
   const handleFilterChange = (filter: FilterValues) => {
-    const filterData = initialRows.filter((item) => {
+    const filterData = tableData.filter((item) => {
       return (
-        (!filter.flower || item.flower === filter.flower) &&
-        (!filter.variety || item.variety === filter.variety) &&
-        (!filter.location || item.location === filter.location)
+        (!filter.flower || item.type === filter.flower) &&
+        (!filter.variety || item.name === filter.variety) &&
+        (!filter.location || item.region === filter.location)
         );
       });
-      console.log(filterData);
-      setTableData(filterData);
+      setFilteredTableData(filterData);
     };
 
   const handleCategoryClick = (item: string) => {
@@ -31,7 +66,7 @@ const TradingTable = () => {
   };
 
   const getRowClassName = (params: GridRowParams) => {
-    return params.row.col4 >= 0 ? 'custom-row-sold' : '';
+    return params.row.bidPrice >= 0 ? 'custom-row-sold' : '';
   }
 
   return (
@@ -70,7 +105,7 @@ const TradingTable = () => {
           춘란
         </div>
       </div>
-      <TableFilter onFilterChange={handleFilterChange} />
+      <TableFilter onFilterChange={handleFilterChange} selectedCategory={selectCategory}/>
       <div>
         <div className='table-title'>
           실시간 거래 현황
@@ -82,7 +117,7 @@ const TradingTable = () => {
       <div className='tablecontent'>
         <div className='datagrid-container'>
           <DataGrid 
-            rows={selectCategory ? tableData.filter((item) => item.flower === selectCategory) : tableData}
+            rows={selectCategory ? filteredTableData.filter((item) => item.flower === selectCategory) : filteredTableData}
             columns={columns}
             getRowClassName={ getRowClassName }
             paginationMode='client'

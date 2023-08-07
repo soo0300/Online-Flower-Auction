@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DatePicker } from '@mui/x-date-pickers';
 import { MenuItem, Select, FormControl, SelectChangeEvent } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -6,12 +6,103 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import './TableFilter.css';
 import FilterValues from './TableInterface';
+import axios from 'axios';
+import AsyncSelect from 'react-select/async';
 
 // 테이블 검색 필터 구현
-const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValues) => void }) => {
+const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: string, onFilterChange: (filter: FilterValues) => void }) => {
+
   // 상태관리
   // 처음엔 비어있는 상태
-  const [filter, setFilter] = useState<FilterValues>({ startDate: dayjs(new Date()), endDate: dayjs(new Date()), flower: '', variety: '', location: '' });
+  const [filter, setFilter] = useState<FilterValues>({ category: '절화', startDate: dayjs(new Date()), endDate: dayjs(new Date()), flower: '', variety: '', location: '' });
+
+  const [flowerOptions, setFlowerOptions] = useState([]);
+  const [varietyOptions, setVarietyOptions] = useState([]);
+
+  // 부류가 선택되면 품목을 가져온다
+  const callFlowers = (e) => {
+    // console.log(e)
+    setFilter({ ...filter, flower: e.selectedCategory});
+    setFilter({ ...filter, variety: '' });
+    setFlowerOptions([]);
+    axios({
+      method: "get",
+      url: `/api/api/admin-service/categories/type?code=${e.selectedCategory}`
+    })
+    .then(res => {
+      // console.log(res.data.data);
+      const tmp = res.data.data.map((e) => {
+        return {
+          value: e,
+          label: e
+        }
+      })
+      console.log(tmp);
+      setFlowerOptions(tmp);
+      setFilter({ ...filter, category: e.selectedCategory });
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  };
+
+
+  // 품목이 선택되면 품종을 가져온다
+  const callVarieties = (e) => {
+    console.log("품목", filter.category)
+    // 초기화
+    setFilter({ ...filter, variety: '' });
+    setVarietyOptions([]);
+    e && axios({
+      method: "get",
+      url: `/api/api/admin-service/categories/name?code=${filter.category}&type=${e}`
+    })
+    .then(res => {
+      // console.log(res.data.data);
+      const tmp = res.data.data.map((e) => {
+        return {
+          value: e,
+          label: e
+        }
+      })
+      console.log(tmp);
+      setVarietyOptions(tmp);
+      setFilter({ ...filter, flower: e });
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  useEffect(() => {
+    callFlowers({ selectedCategory });
+  },[selectedCategory])
+
+
+  const filterFlower = (inputValue: string) => {
+    return flowerOptions.filter((i) =>
+      i.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
+
+  const filterVariety = (inputValue: string) => {
+    return varietyOptions.filter((i) =>
+      i.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
+  
+  const loadFlowerOptions = (inputValue, callback) => {
+    setTimeout(() => {
+        callback(filterFlower(inputValue));
+    }, 100);
+  };
+
+  const loadVarietyOptions = (inputValue, callback) => {
+    setTimeout(() => {
+        callback(filterVariety(inputValue));
+    }, 100);
+  };
+
 
   // 시작날짜 바뀌었을 때
   const handleStartDateChange = (date: dayjs.Dayjs) => {
@@ -23,26 +114,16 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
     setFilter({ ...filter, endDate: date });
   };
   
-  // const handleDateChange = (date: dayjs.Dayjs) => {
-  //   setFilter({ ...filter, date });
-  // }
-
-  // const handleDatePickerChange = (date: dayjs.Dayjs | null) => {
-  //   if (date) {
-  //     handleDateChange(date);
-  //   }
-  // };
-  
-
   // 클릭할 때 선택한 필터정보 저장
-  const handleFlowerChange = (event: SelectChangeEvent<string>) => {
+  const handleFlowerChange = (selectedOption) => {
     // 해당 입력 필드의 이름(name)과 변경된 값(value)을 가져옴
-    const { name, value } = event.target;
+    const { name, value } = selectedOption ? selectedOption["value"] : '';
     setFilter({ ...filter, [name]: value });
+    callVarieties(selectedOption ? selectedOption["value"] : '');
   };
 
-  const handleVarietyChange = (event: SelectChangeEvent<string>) => {
-    const { name, value } = event.target;
+  const handleVarietyChange = (selectedOption) => {
+    const { name, value } = selectedOption ? selectedOption["value"] : '';
     setFilter({ ...filter, [name]: value });
   };
 
@@ -53,7 +134,29 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
 
   // 검색을 누르면 선택한 정보 출력하는 변수
   const handleSearch = () => {
-    onFilterChange(filter);
+    axios
+      .get(`/api/api/admin-service/auction-articles/api`, {
+        params: {
+          startDateTime: filter.startDate.format('YYYY-MM-DD'),
+          endDateTime: filter.endDate.format('YYYY-MM-DD'),
+          code: filter.category,
+          type: filter.flower,
+          name: filter.variety,
+          region: filter.location
+        }
+      })
+      .then(res => {
+        const responseData = res.data.data.content;
+
+        // const filter = responseData;
+        // console.log('여기서 필터보냄', filter)
+        // console.log(responseData);
+        onFilterChange(filter);
+        // 검색 결과 처리 또는 상태 업데이트 등을 수행
+      })
+      .catch(err => {
+        console.error(err);
+      });
   };
 
   const currentDate = dayjs();
@@ -73,8 +176,6 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
               format="YYYY-MM-DD"
               maxDate={filter.endDate}
               onChange={handleStartDateChange}
-              // startDate= {filter.startDate}
-              // endDate= {filter.endDate}
               slotProps={{ textField: { size: 'small' } }}
             />
             <DatePicker
@@ -93,18 +194,18 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
               품목
             </div>
             <FormControl className='flowerinput' variant="outlined" size="small">
-              <Select
+              <AsyncSelect
                 id="flower-select"
                 className='flowerinput'
-                name="flower"
-                value={filter.flower}
+                placeholder="품목"
+                defaultOptions={flowerOptions} 
+                isClearable={true}
+                loadOptions={loadFlowerOptions}
                 onChange={handleFlowerChange}
-              >
-                <MenuItem value="">전체</MenuItem>
-                <MenuItem value="장미">장미</MenuItem>
-                <MenuItem value="국화">국화</MenuItem>
-                {/* 추가적인 품목 옵션들 */}
-              </Select>
+                // name="flower"
+                // value={filter.flower}
+                // onChange={handleFlowerChange}
+              />
             </FormControl>
           </div>
           <div className='varietycontent'>
@@ -112,18 +213,17 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
               품종
             </div>
             <FormControl className='varietyinput' variant="outlined" size="small">
-              <Select
+              <AsyncSelect
                 id="variety-select"
                 className='varietyinput'
-                name="variety"
-                value={filter.variety}
+                defaultOptions={varietyOptions} 
+                isClearable={true} 
+                loadOptions={loadVarietyOptions}
                 onChange={handleVarietyChange}
-              >
-                <MenuItem value="">전체</MenuItem>
-                <MenuItem value="스프린트">스프린트</MenuItem>
-                <MenuItem value="다이아몬드">다이아몬드</MenuItem>
-                {/* 추가적인 품종 옵션들 */}
-              </Select>
+                // name="variety"
+                // value={filter.variety}
+                // onChange={handleVarietyChange}
+              />
             </FormControl>
           </div>
           <div className='locationcontent'>
@@ -139,8 +239,13 @@ const TableFilter = ({ onFilterChange } : { onFilterChange: (filter: FilterValue
                 onChange={handleLocationChange}
               >
                 <MenuItem value="">전체</MenuItem>
-                <MenuItem value="양재">양재</MenuItem>
+                <MenuItem value="서울">서울</MenuItem>
                 <MenuItem value="광주">광주</MenuItem>
+                <MenuItem value="부산엄궁">부산엄궁</MenuItem>
+                <MenuItem value="음성">음성</MenuItem>
+                <MenuItem value="과천">과천</MenuItem>
+                <MenuItem value="부산강동">부산강동</MenuItem>
+                <MenuItem value="김해">김해</MenuItem>
               </Select>
             </FormControl>
             <div className='button-search' onClick={handleSearch}>
