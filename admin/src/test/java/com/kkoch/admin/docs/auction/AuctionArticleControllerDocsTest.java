@@ -189,7 +189,7 @@ public class AuctionArticleControllerDocsTest extends RestDocsSupport {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("auction-article-search",
+                .andDo(document("auction-article-list",
                         preprocessResponse(prettyPrint()),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.NUMBER)

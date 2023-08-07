@@ -54,15 +54,15 @@ public class AuctionControllerDocsTest extends RestDocsSupport {
                         .description("상태"),
                     fieldWithPath("message").type(JsonFieldType.STRING)
                         .description("메시지"),
-                    fieldWithPath("data").type(JsonFieldType.ARRAY)
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
                         .description("응답 데이터"),
-                    fieldWithPath("data[].auctionId").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.auctionId").type(JsonFieldType.NUMBER)
                         .description("경매 일정 PK"),
-                    fieldWithPath("data[].title").type(JsonFieldType.STRING)
+                    fieldWithPath("data.title").type(JsonFieldType.STRING)
                         .description("경매 타이틀"),
-                    fieldWithPath("data[].status").type(JsonFieldType.STRING)
+                    fieldWithPath("data.status").type(JsonFieldType.STRING)
                         .description("경매 상태"),
-                    fieldWithPath("data[].code").type(JsonFieldType.NUMBER)
+                    fieldWithPath("data.code").type(JsonFieldType.NUMBER)
                         .description("경매 구분 코드")
                 )
             ));
