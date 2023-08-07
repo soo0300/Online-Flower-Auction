@@ -18,3 +18,4 @@ include::api/member/my_info.adoc[]
 == Reservation API
 
 include::api/reservation/reservation_create.adoc[]
+include::api/reservation/reservation_search.adoc[]
