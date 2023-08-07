@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 // import HomePageAuction from '@/assets/HomePageAuction.png'
 import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
@@ -13,7 +13,7 @@ const AuctionLiveForm = () => {
     provider: "홍승준", // 출하자
     flower: "장미/스프레이", // 품명
     grade: "특", // 등급
-    nowPrice: 50000, // 현재가
+    nowPrice: 5000, // 현재가
     bidPrice: 2000, // 낙찰가
     buyer: "김싸피", // 낙찰자
   }; 
