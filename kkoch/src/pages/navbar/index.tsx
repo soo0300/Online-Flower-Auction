@@ -12,8 +12,6 @@ type Props = {
   isTop: boolean;
 }
 
-const username = localStorage.getItem("username");
-
 const Navbar = ({isTop} : Props) => {
   const flexBetween = "flex items-center justify-between";
   
@@ -28,8 +26,12 @@ const Navbar = ({isTop} : Props) => {
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
-  const isLoggedIn = useSelector((state: RootState) => state.auth.memberkey !== null);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.memberkey);
+  console.log(useSelector((state: RootState) => console.log(state.auth.memberkey)))
   const [isLoggedOut, setIsLoggedOut] = useState(false);
+
+  // 회원 이름 가져오기
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     setIsLoggedOut(!isLoggedIn);
