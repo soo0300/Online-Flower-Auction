@@ -2,20 +2,22 @@ package com.kkoch.admin.api.service.trade.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class AddTradeDto {
 
+    private String memberKey;
     private Long auctionArticleId;
-    private int bidPrice;
-    private LocalDateTime bidTime;
+    private int price;
 
     @Builder
-    private AddTradeDto(Long auctionArticleId, int bidPrice, LocalDateTime bidTime) {
+    private AddTradeDto(String memberKey, Long auctionArticleId, int price) {
+        this.memberKey = memberKey;
         this.auctionArticleId = auctionArticleId;
-        this.bidPrice = bidPrice;
-        this.bidTime = bidTime;
+        this.price = price;
     }
 }

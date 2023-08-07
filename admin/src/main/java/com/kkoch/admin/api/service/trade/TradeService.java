@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,15 +24,36 @@ public class TradeService {
     private final TradeRepository tradeRepository;
     private final AuctionArticleRepository auctionArticleRepository;
 
-    public Long addTrade(Long memberId, List<AddTradeDto> dto) {
-        List<AuctionArticle> auctionArticles = getAuctionArticles(dto);
-        updateBidInfo(dto, auctionArticles);
+    public Long addTrade(AddTradeDto dto, LocalDateTime tradeDate) {
+        Trade currnetTrade = null;
 
-        int totalPrice = getTotalPrice(dto);
+        Optional<Trade> findTrade = tradeRepository.findByMemberKey(dto.getMemberKey(), tradeDate);
 
-        Trade savedTrade = saveTrade(memberId, auctionArticles, totalPrice);
+        if (findTrade.isEmpty()) {
+            currnetTrade = createTradeEntity(dto, tradeDate);
+        }
 
-        return savedTrade.getId();
+        if (findTrade.isPresent()) {
+            currnetTrade = findTrade.get();
+        }
+
+        AuctionArticle auctionArticle = auctionArticleRepository.findById(dto.getAuctionArticleId())
+            .orElseThrow(NoSuchElementException::new);
+
+        auctionArticle.bid(dto.getPrice(), tradeDate);
+        auctionArticle.createTrade(currnetTrade);
+
+        return currnetTrade.getId();
+    }
+
+    private static Trade createTradeEntity(AddTradeDto dto, LocalDateTime tradeDate) {
+        return Trade.builder()
+            .totalPrice(dto.getPrice())
+            .tradeTime(tradeDate)
+            .pickupStatus(false)
+            .active(true)
+            .memberKey(dto.getMemberKey())
+            .build();
     }
 
     public Long pickup(Long tradeId) {
@@ -53,26 +76,26 @@ public class TradeService {
         return auctionArticleRepository.findByIdIn(articleIds);
     }
 
-    private void updateBidInfo(List<AddTradeDto> dto, List<AuctionArticle> auctionArticles) {
-        Map<Long, AuctionArticle> auctionArticleMap = auctionArticles.stream()
-                .collect(Collectors.toMap(AuctionArticle::getId, auctionArticle -> auctionArticle, (a, b) -> b));
+//    private void updateBidInfo(List<AddTradeDto> dto, List<AuctionArticle> auctionArticles) {
+//        Map<Long, AuctionArticle> auctionArticleMap = auctionArticles.stream()
+//                .collect(Collectors.toMap(AuctionArticle::getId, auctionArticle -> auctionArticle, (a, b) -> b));
+//
+//        dto.forEach(addTradeDto -> {
+//            AuctionArticle auctionArticle = auctionArticleMap.get(addTradeDto.getAuctionArticleId());
+//            auctionArticle.bid(addTradeDto.getBidPrice(), addTradeDto.getBidTime());
+//        });
+//    }
+//
+//    private int getTotalPrice(List<AddTradeDto> dto) {
+//        return dto.stream()
+//                .mapToInt(AddTradeDto::getBidPrice)
+//                .sum();
+//    }
 
-        dto.forEach(addTradeDto -> {
-            AuctionArticle auctionArticle = auctionArticleMap.get(addTradeDto.getAuctionArticleId());
-            auctionArticle.bid(addTradeDto.getBidPrice(), addTradeDto.getBidTime());
-        });
-    }
-
-    private int getTotalPrice(List<AddTradeDto> dto) {
-        return dto.stream()
-                .mapToInt(AddTradeDto::getBidPrice)
-                .sum();
-    }
-
-    private Trade saveTrade(Long memberId, List<AuctionArticle> auctionArticles, int totalPrice) {
-        Trade trade = Trade.createTrade(totalPrice, memberId, auctionArticles);
-        return tradeRepository.save(trade);
-    }
+//    private Trade saveTrade(Long memberId, List<AuctionArticle> auctionArticles, int totalPrice) {
+//        Trade trade = Trade.createTrade(totalPrice, memberId, auctionArticles);
+//        return tradeRepository.save(trade);
+//    }
 
     private Trade getTradeEntity(Long tradeId) {
         return tradeRepository.findById(tradeId)

@@ -34,29 +34,29 @@ public class Trade extends TimeBaseEntity {
     @Column(nullable = false)
     private boolean active;
 
-    private Long memberId;
+    private String memberKey;
 
     @OneToMany(mappedBy = "trade", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AuctionArticle> articles = new ArrayList<>();
 
     @Builder
-    private Trade(int totalPrice, LocalDateTime tradeTime, boolean pickupStatus, boolean active, Long memberId, List<AuctionArticle> articles) {
+    private Trade(int totalPrice, LocalDateTime tradeTime, boolean pickupStatus, boolean active, String memberKey, List<AuctionArticle> articles) {
         this.totalPrice = totalPrice;
         this.tradeTime = tradeTime;
         this.pickupStatus = pickupStatus;
         this.active = active;
-        this.memberId = memberId;
+        this.memberKey = memberKey;
         this.articles = articles;
     }
 
     //== 연관관계 편의 메서드 ==//
-    public static Trade createTrade(int totalPrice, Long memberId, List<AuctionArticle> auctionArticles) {
+    public static Trade createTrade(int totalPrice, String memberKey, List<AuctionArticle> auctionArticles) {
         Trade trade = Trade.builder()
                 .totalPrice(totalPrice)
                 .tradeTime(LocalDateTime.now())
                 .pickupStatus(false)
                 .active(true)
-                .memberId(memberId)
+                .memberKey(memberKey)
                 .articles(auctionArticles)
                 .build();
 

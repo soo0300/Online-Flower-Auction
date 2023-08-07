@@ -2,7 +2,6 @@ package com.kkoch.admin.api.controller.trade;
 
 import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.trade.request.AddTradeRequest;
-import com.kkoch.admin.api.controller.trade.request.AuctionArticleRequest;
 import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.api.service.trade.TradeQueryService;
@@ -17,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
@@ -33,9 +31,10 @@ public class TradeController {
 
     @PostMapping
     public ApiResponse<Long> addTrade(@Valid @RequestBody AddTradeRequest request) {
-        List<AddTradeDto> dto = toAddTradeDto(request);
+        AddTradeDto dto = request.toAddTradeDto();
 
-        Long tradeId = tradeService.addTrade(request.getMemberId(), dto);
+        Long tradeId = tradeService.addTrade(dto, LocalDateTime.now());
+
         log.debug("tradeId={}", tradeId);
         return ApiResponse.ok(tradeId);
     }
@@ -68,11 +67,5 @@ public class TradeController {
     public ApiResponse<Long> removeTrade(@PathVariable Long tradeId) {
         Long removedId = tradeService.remove(tradeId);
         return ApiResponse.of(MOVED_PERMANENTLY, "낙찰 내역이 삭제되었습니다.", removedId);
-    }
-
-    private static List<AddTradeDto> toAddTradeDto(AddTradeRequest request) {
-        return request.getArticles().stream()
-                .map(AuctionArticleRequest::toAddTradeDto)
-                .collect(Collectors.toList());
     }
 }
