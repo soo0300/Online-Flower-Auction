@@ -2,6 +2,7 @@ package com.kkoch.admin.domain.plant.repository;
 
 import com.kkoch.admin.api.controller.plant.response.PlantResponse;
 import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
+import com.kkoch.admin.domain.plant.QCategory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -36,6 +37,22 @@ public class PlantQueryRepository {
                         nameEq(cond.getName()))
                 .fetch();
 
+    }
+
+    public Long findPlantId(String type, String name) {
+        QCategory qtype = new QCategory("type");
+        QCategory qname = new QCategory("name");
+
+        return queryFactory
+            .select(plant.id)
+            .from(plant)
+            .join(plant.type, qtype)
+            .join(plant.name, qname)
+            .where(
+                plant.type.name.eq(type),
+                plant.name.name.eq(name)
+            )
+            .fetchFirst();
     }
 
     private BooleanExpression nameEq(String name) {

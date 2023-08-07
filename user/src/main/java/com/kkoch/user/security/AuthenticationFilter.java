@@ -18,7 +18,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         super.setAuthenticationManager(authenticationManager);
         this.memberService = memberService;
         this.env = env;
-        byte[] keyBytes = Decoders.BASE64.decode("VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa");
+        byte[] keyBytes = Decoders.BASE64.decode("dladnxordldPflghdtmdwnsrlatnwlstjdydwnstlstjdwn");
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
@@ -46,14 +45,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         try {
             LoginRequest creds = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
 
-            return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
+            return getAuthenticationManager()
+                .authenticate(new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
         String username = ((User) authResult.getPrincipal()).getUsername();
         Member member = memberService.getUserDetailsByEmail(username);
 
@@ -64,6 +64,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             .compact();
 
         response.addHeader("token", token);
-        response.addHeader("userId", member.getMemberKey());
+        response.addHeader("memberKey", member.getMemberKey());
     }
 }
