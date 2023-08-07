@@ -4,9 +4,10 @@ import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export function DoughnutChart() {
-  const [graph, setGraph] = useState(40); // 초기 그래프 크기 설정
-  
+export function DoughnutChart({isBiddingActive}) {
+  const initialGraph = 40
+  const [graph, setGraph] = useState(initialGraph); // 초기 그래프 크기 설정
+  const [isGraphCreated, setIsGraphCreated] = useState(false);
 
   const calculateColor = (redValue) => {
     // 데이터가 25일 때까지는 파란색
@@ -23,6 +24,10 @@ export function DoughnutChart() {
       return `hsl(0, 100%, 50%)`;
     }
   };
+
+  useEffect(() => {
+    setIsGraphCreated(true);
+  }, []);
 
   const data = {
     datasets: [
@@ -46,27 +51,46 @@ export function DoughnutChart() {
     responsive: false
   };
 
-    const decreaseData = () => {
-      setGraph((prevData) => Math.max(prevData - 0.001, 0)); // 예시로 0.5로 변경
-      // }
-    };
-  
-    const animate = () => {
-      decreaseData();
+  let animationStartTime;
+  const animationDuration = 10000; // 10초
+  const decreaseAmountPerMs = 0.01; // 1초당 감소하는 양
+
+  const decreaseData = (timestamp) => {
+    if (!isBiddingActive) {
+      return ;
+    }
+    if (!animationStartTime) {
+      animationStartTime = timestamp;
+    }
+
+    const elapsedTime = timestamp - animationStartTime;
+    const progress = Math.min(elapsedTime / animationDuration, 1);
+    const updatedGraph = Math.max(graph - progress * decreaseAmountPerMs * animationDuration, 0);
+    setGraph(updatedGraph);
+  };
+
+  const animate = (timestamp) => {
+    if (!isBiddingActive) {
+      return;
+    }
+    decreaseData(timestamp);
+
+    if (graph > 0) {
       requestAnimationFrame(animate);
+    }
+  };
+
+  useEffect(() => {
+    if (isBiddingActive) {
+      requestAnimationFrame(animate);
+    } else {
+      animationStartTime = undefined;
+    }
+
+    return () => {
+      animationStartTime = undefined; // 애니메이션 시작 시간 초기화
     };
-    
-    useEffect(() => {
-      const animationId = requestAnimationFrame(animate);
-      
-      // const stopAnimationTimeout = setTimeout(() => {
-      //   cancelAnimationFrame(animationId);
-      // }, 10000);
-      
-      return () => {
-        cancelAnimationFrame(animationId);
-      }; // 컴포넌트가 unmount될 때 애니메이션 정리
-    }, [graph]);
+  }, [graph, isBiddingActive, isGraphCreated]);
 
   return <Doughnut data={data} options={options} />;
 }

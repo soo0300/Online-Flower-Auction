@@ -9,10 +9,12 @@
 
 .tablecontent-inner {
   background-color: #E4B2BD;
+  flex-direction: row;
   /* The inner container takes the full available width */
   align-items: center;
   justify-content: space-between;
   display: flex;
+  height: 60px;
 }
 
 .datecontent {
@@ -46,7 +48,7 @@
 }
 
 .datepicker {
-  width: 170px;
+  width: 145px;
 }
 
 .varietytitle {
@@ -86,6 +88,7 @@
 }
 
 .button-search {
+  margin-left: 10px;
   color: red;
   margin-right: 20px;
 }

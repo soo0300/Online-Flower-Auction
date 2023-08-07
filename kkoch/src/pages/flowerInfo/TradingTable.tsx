@@ -34,7 +34,6 @@ const TradingTable = () => {
     return params.row.col4 >= 0 ? 'custom-row-sold' : '';
   }
 
-
   return (
     <div className='table-container'>
       <div className='paging-title'>
@@ -86,6 +85,12 @@ const TradingTable = () => {
             rows={selectCategory ? tableData.filter((item) => item.flower === selectCategory) : tableData}
             columns={columns}
             getRowClassName={ getRowClassName }
+            paginationMode='client'
+            initialState={{
+              pagination: {
+                paginationModel: { pageSize: 15, page: 0 }
+              }
+            }}
             disableColumnMenu
           />
         </div>

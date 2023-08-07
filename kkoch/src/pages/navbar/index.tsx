@@ -55,7 +55,6 @@ const Navbar = ({isTop} : Props) => {
               <div className={`${flexBetween} gap-8 text-sm`}>
                 <Link to="/auction"> 경매</Link>
                 <Link to="/flowers"> 화훼정보</Link>
-                <Link to="/flowers/info"> 화훼상세정보</Link>
                 <Link to="/customer" />
               </div>
                 { isLoggedOut ? (

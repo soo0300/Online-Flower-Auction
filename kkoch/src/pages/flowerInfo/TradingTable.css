@@ -3,7 +3,7 @@
   margin-right: 100px;
   font-size: x-small;
   position: absolute;
-  top: 75px;
+  top: 150px;
   right: 10px;
 }
 
@@ -26,7 +26,6 @@
 }
 
 .tablecontent {
-  height: 100%;
   width: 100%;
 }
 
@@ -52,4 +51,13 @@
   background-color: #F25477;
   color: white;
   font-weight: bold;
+}
+
+
+.MuiDataGrid-cell {
+  text-align: center;
+}
+
+.custom-row-sold:hover {
+  background-color: pink; /* 원하는 색상으로 변경 */
 }

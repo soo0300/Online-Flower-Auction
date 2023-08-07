@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 // import HomePageAuction from '@/assets/HomePageAuction.png'
 import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
@@ -13,7 +13,7 @@ const AuctionLiveForm = () => {
     provider: "홍승준", // 출하자
     flower: "장미/스프레이", // 품명
     grade: "특", // 등급
-    nowPrice: 5000, // 현재가
+    nowPrice: 20000, // 현재가
     bidPrice: 2000, // 낙찰가
     buyer: "김싸피", // 낙찰자
   }; 
@@ -24,29 +24,55 @@ const AuctionLiveForm = () => {
 
   // 현재가를 변화시킬 state
   const [currentPrice, setCurrentPrice] = useState(originalPrice);
+  const [isBiddingActive, setIsBiddingActive] = useState(true);
 
+  const clickedPriceRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  
   useEffect(() => {
-    const interval = 10; // 0.01초
     const totalTime = 10000; // 10초
-    const steps = totalTime / interval; // 총 스텝 수
-    const decreaseAmount = (originalPrice - finalPrice) / steps; // 감소량 계산
-
-    // 타이머, 변화량 값 계산하고 반환
-    const timer = setInterval(() => {
-      setCurrentPrice((prevPrice) => 
-      Math.max(prevPrice - decreaseAmount, finalPrice));
-    }, interval);
-
-    setTimeout(() => {
-       // 10초 후에 타이머 중단
-      clearInterval(timer);
-    }, totalTime);
-
-    return () => {
-      // 컴포넌트가 언마운트될 때 타이머 정리
-      clearInterval(timer); 
+    const startTime = Date.now(); // 시작 시간 저장
+    const decreaseAmount = (originalPrice - finalPrice) / totalTime; // 감소량 계산
+  
+    // 현재가 함수 정의
+    const animatePrice = () => {
+      if (!isBiddingActive) {
+        return;
+      }
+      const currentTime = Date.now(); // 현재 시간 구하기
+      const elapsedTime = currentTime - startTime; // 경과 시간 계산
+  
+      // 경과 시간에 따라 현재가 감소시키기
+      const newPrice = originalPrice - decreaseAmount * elapsedTime;
+  
+      // 최소값 제한
+      setCurrentPrice(Math.max(newPrice, finalPrice));
+  
+      // 애니메이션이 끝나지 않았으면 다음 프레임에 애니메이션 함수 호출
+      if (elapsedTime < totalTime && isBiddingActive) {
+        animationFrameRef.current = requestAnimationFrame(animatePrice);
+      } else if (!isBiddingActive) {
+        setCurrentPrice(clickedPriceRef.current); // 클릭한 시점의 현재 가격으로 업데이트
+      }
     };
-  }, []);
+  
+    // 애니메이션 시작
+    animationFrameRef.current = requestAnimationFrame(animatePrice);
+  
+    return () => {
+      // 컴포넌트가 언마운트될 때 애니메이션 정리
+      cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, [isBiddingActive]);
+
+  const handleBiddingButtonClick = () => {
+    setIsBiddingActive(false); // 입찰 프로세스를 비활성화로 설정
+    console.log("낙찰가", currentPrice)
+    console.log("이즈비딩상태", isBiddingActive)
+    // setGraph((prevGraph) => clickedPriceRef.current);
+    clickedPriceRef.current = currentPrice; // 현재 가격을 클릭한 시점의 가격으로 업데이트
+    // 필요한 경우 추가 로직을 이곳에 추가하여 입찰 프로세스를 처리할 수 있음
+  };
 
   return (
     <div className='gap-24 bg-gray-20 py-28 md:h-full md:pb-0'>
@@ -81,7 +107,7 @@ const AuctionLiveForm = () => {
             보유 포인트: { auctionInfo.point }
           </div>
           <div className='auction-border'>
-            <div className='favorite-icon'>
+            {/* <div className='favorite-icon'>
               <button className='favorite-button'>
                 <svg 
                   xmlns="http://www.w3.org/2000/svg"
@@ -97,13 +123,13 @@ const AuctionLiveForm = () => {
                   />
                 </svg>
               </button>
-            </div>
+            </div> */}
             <div className='auction-status'>
               경매중
             </div>
             <div className='auction-container'>
               <div className='graph-container'>
-                <DoughnutChart />
+                <DoughnutChart isBiddingActive={isBiddingActive} />
               </div>
               <div className='auction-status-info'>
                 출하량: { auctionInfo.quantity } <br />
@@ -117,7 +143,7 @@ const AuctionLiveForm = () => {
             <div className='auction-bidding-info'> 
               <div className='auction-bidding-price'>
                 {/* 10원단위까지만 표시될 수 있게 */}
-                현재가: { Math.floor(currentPrice / 10) * 10 } <br />
+                현재가: { Math.floor(isBiddingActive ? currentPrice / 10 : clickedPriceRef.current / 10) * 10 } <br />
                 낙찰자: { auctionInfo.buyer} <br />
                 낙찰단가: {auctionInfo.bidPrice} <br />
               </div>
@@ -146,7 +172,9 @@ const AuctionLiveForm = () => {
           <button className='normal-button'>금일 경매 목록</button>
         </div>
         <div>
-          <button className='bidding-button'>입찰하기</button>
+          <button className='bidding-button' onClick={handleBiddingButtonClick}>
+            입찰하기
+          </button>
         </div>
       </div>
     </div>
