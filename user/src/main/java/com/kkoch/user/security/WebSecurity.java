@@ -35,8 +35,7 @@ public class WebSecurity {
 
         http.authorizeRequests()
             .antMatchers("/error/**", "/join", "/health-check", "/actuator/**", "/h2-console/**").permitAll()
-            .antMatchers("/**")
-            .access("hasIpAddress('192.168.0.16')")
+            .antMatchers("/**").hasIpAddress(env.getProperty("gateway.ip"))
             .and()
             .authenticationManager(authenticationManager)
             .addFilter(authenticationFilter);
