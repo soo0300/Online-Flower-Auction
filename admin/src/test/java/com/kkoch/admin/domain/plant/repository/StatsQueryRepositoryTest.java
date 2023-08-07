@@ -62,11 +62,11 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
 
         Trade trade = createTrade();
 
-        AuctionArticle auctionArticle1 = createAuctionArticle("00001", LocalDateTime.now().minusHours(11), Grade.Super, plant1, trade);
-        AuctionArticle auctionArticle2 = createAuctionArticle("00002", LocalDateTime.now().minusHours(10), Grade.Super, plant1, trade);
-        AuctionArticle auctionArticle3 = createAuctionArticle("00003", LocalDateTime.now().minusHours(13), Grade.Advanced, plant1, trade);
-        AuctionArticle auctionArticle4 = createAuctionArticle("00004", LocalDateTime.now().minusHours(13), Grade.Super, plant2, trade);
-        AuctionArticle auctionArticle5 = createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.Advanced, plant2, trade);
+        AuctionArticle auctionArticle1 = createAuctionArticle("00001", LocalDateTime.now().minusHours(11), Grade.SUPER, plant1, trade);
+        AuctionArticle auctionArticle2 = createAuctionArticle("00002", LocalDateTime.now().minusHours(10), Grade.SUPER, plant1, trade);
+        AuctionArticle auctionArticle3 = createAuctionArticle("00003", LocalDateTime.now().minusHours(13), Grade.ADVANCED, plant1, trade);
+        AuctionArticle auctionArticle4 = createAuctionArticle("00004", LocalDateTime.now().minusHours(13), Grade.SUPER, plant2, trade);
+        AuctionArticle auctionArticle5 = createAuctionArticle("00005", LocalDateTime.now().minusHours(11), Grade.ADVANCED, plant2, trade);
 
         //when
         List<AuctionArticleForStatsDto> responses = statsQueryRepository.findAuctionArticleByTime();
@@ -92,10 +92,10 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
 
         Plant plant1 = createPlant(code, name, type1);
         Plant plant2 = createPlant(code, name, type2);
-        Stats stats1 = createStats(3000, 5000, 2000, Grade.Super, 40, plant1);
-        Stats stats2 = createStats(4000, 4000, 4000, Grade.Super, 30, plant1);
-        Stats stats3 = createStats(2000, 2500, 1000, Grade.Normal, 20, plant1);
-        Stats stats4 = createStats(1000, 1000, 1000, Grade.Normal, 30, plant2);
+        Stats stats1 = createStats(3000, 5000, 2000, Grade.SUPER, 40, plant1);
+        Stats stats2 = createStats(4000, 4000, 4000, Grade.SUPER, 30, plant1);
+        Stats stats3 = createStats(2000, 2500, 1000, Grade.NORMAL, 20, plant1);
+        Stats stats4 = createStats(1000, 1000, 1000, Grade.NORMAL, 30, plant2);
 
         ReflectionTestUtils.setField(stats1, "createdDate", LocalDateTime.now().minusDays(8));
 
