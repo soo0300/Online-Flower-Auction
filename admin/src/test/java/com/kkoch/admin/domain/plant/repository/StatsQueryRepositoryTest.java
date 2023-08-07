@@ -155,7 +155,7 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
                 .tradeTime(LocalDate.of(2023, 7, 11).atStartOfDay())
                 .pickupStatus(false)
                 .active(true)
-                .memberId(1L)
+                .memberKey("memberKey")
                 .build();
         return tradeRepository.save(trade);
     }
