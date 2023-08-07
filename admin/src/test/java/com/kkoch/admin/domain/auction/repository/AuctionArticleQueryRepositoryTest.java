@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -153,79 +152,53 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
         assertThat(responses).hasSize(5);
     }
 
-    @DisplayName("")
+    @DisplayName("[낙찰내역 상세 조회]")
     @Test
     void findByTradeId() {
         //given
-        Category code = createCategory("절화", null);
-        Category name = createCategory("장미(스탠다드)", code);
-        Category type = createCategory("하젤", name);
+        Category code = insertCategory("절화");
+        Category rose = insertCategory("장미");
+        Category fuego = insertCategory("푸에고");
 
-        Plant plant = createPlant(code, name, type);
+        Plant roseFuego = insertPlant(code, rose, fuego);
+        Admin admin = insertAdmin();
+        Auction auction = insertAuction(admin, LocalDateTime.of(2023, 9, 20, 5, 0));
 
-        Trade trade = createTrade();
+        AuctionArticle auctionArticle1 = insertAuctionArticle(roseFuego, auction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        AuctionArticle auctionArticle2 = insertAuctionArticle(roseFuego, auction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
+        AuctionArticle auctionArticle3 = insertAuctionArticle(roseFuego, auction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
 
-        AuctionArticle auctionArticle1 = createAuctionArticle("00001", LocalDate.of(2023, 7, 10).atStartOfDay(), plant, trade);
-        AuctionArticle auctionArticle2 = createAuctionArticle("00002", LocalDate.of(2023, 7, 10).atStartOfDay(), plant, trade);
-        AuctionArticle auctionArticle3 = createAuctionArticle("00003", LocalDate.of(2023, 7, 10).atStartOfDay(), plant, trade);
+        List<AuctionArticle> list = List.of(auctionArticle1, auctionArticle2, auctionArticle3);
+
+        Trade trade = createTrade(list, 30000);
+
+        auctionArticle1.createTrade(trade);
+        auctionArticle2.createTrade(trade);
+        auctionArticle3.createTrade(trade);
 
         //when
         List<SuccessfulBid> responses = auctionArticleQueryRepository.findByTradeId(trade.getId());
 
         //then
         assertThat(responses).hasSize(3)
-                .extracting("code", "name", "type")
+                .extracting("code", "type", "name")
                 .containsExactlyInAnyOrder(
-                        tuple(code.getName(), name.getName(), type.getName()),
-                        tuple(code.getName(), name.getName(), type.getName()),
-                        tuple(code.getName(), name.getName(), type.getName())
+                        tuple(code.getName(), rose.getName(), fuego.getName()),
+                        tuple(code.getName(), rose.getName(), fuego.getName()),
+                        tuple(code.getName(), rose.getName(), fuego.getName())
                 );
     }
 
-    private Category createCategory(String name, Category parent) {
-        Category category = Category.builder()
-                .name(name)
-                .active(true)
-                .parent(parent)
-                .build();
-        return categoryRepository.save(category);
-    }
-
-    private Plant createPlant(Category code, Category name, Category type) {
-        Plant plant = Plant.builder()
-                .active(true)
-                .code(code)
-                .name(name)
-                .type(type)
-                .build();
-        return plantRepository.save(plant);
-    }
-
-    private Trade createTrade() {
+    private Trade createTrade(List<AuctionArticle> auctionArticles, int totalPrice) {
         Trade trade = Trade.builder()
-                .totalPrice(9000)
-                .tradeTime(LocalDate.of(2023, 7, 11).atStartOfDay())
+                .totalPrice(totalPrice)
+                .tradeTime(LocalDateTime.now())
                 .pickupStatus(false)
                 .active(true)
-                .memberId(1L)
+                .memberKey("memberKey")
+                .articles(auctionArticles)
                 .build();
         return tradeRepository.save(trade);
-    }
-
-    private AuctionArticle createAuctionArticle(String auctionNumber, LocalDateTime bidTime, Plant plant, Trade trade) {
-        AuctionArticle auctionArticle = AuctionArticle.builder()
-                .auctionNumber(auctionNumber)
-                .grade(Grade.NONE)
-                .count(10)
-                .bidPrice(3000)
-                .bidTime(bidTime)
-                .region("광주")
-                .shipper("김싸피")
-                .startPrice(5000)
-                .plant(plant)
-                .trade(trade)
-                .build();
-        return auctionArticleRepository.save(auctionArticle);
     }
 
     // TODO: 2023-07-31 코드 합치기
