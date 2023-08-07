@@ -39,10 +39,10 @@ spring:
 
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-#      ddl-auto: none
-      ddl-auto: create
+      ddl-auto: none
+#      ddl-auto: create
     properties:
       hibernate:
         default_batch_fetch_size: 100
