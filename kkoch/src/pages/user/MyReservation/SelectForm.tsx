@@ -1,18 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import Select, { components, InputActionMeta, StylesConfig } from 'react-select'
-
-interface flowerOption {
-  flower: object // 품목
-  variety: object // 품종
-  price: number // 가격
-  quantity: number // 단수
-  location: string // 지역
-}
-
-type Props = {
-  placeholder: string;
-}
+import Select, { components, StylesConfig } from 'react-select'
 
 const customStyles: StylesConfig = {
   control: (base) => ({
@@ -26,91 +14,133 @@ const customStyles: StylesConfig = {
   }),
 }
 
-const flowerOption = [
-  { value: 'rose', label: 'Rose'},
-  { value: 'tulip', label: 'Tulip'},
-  { value: 'sumflower', label: 'Sunflower'},
-  { value: 'lavender', label: 'Lavender'},
-  { value: 'hydrangea', label: 'Hydrangea'},
-]
+export default function SelectForm({
+    onFlowerChange,
+    onVarietyChange
+  }) 
+  {
+  // 부류, 품목, 품종 상태를 useState로 관리
+  const [categoryOptions, setCategoryOptions] = useState([
+    { value: '절화', label: '절화' },
+    { value: '관엽', label: '관엽' },
+    { value: '난', label: '난' },
+    { value: '춘란', label: '춘란' },
+  ]);
+  const [flowerOptions, setFlowerOptions] = useState([]);
+  const [varietyOptions, setVarietyOptions] = useState([]);
 
-// 실시간 품종, 품목 데이터
-const performSearchRequest = async (searchText: string) => {
-  // 카테고리 가져오기
-  axios({
-    method: "get",
-    url: `/admin-service/categories/type?code=%EC%A0%88%ED%99%94`
-  })
-  .then(res => {
-    console.log(res);
-  })
-  .catch(err => {
-    console.log(err);
-  })
-  const response = await fetch(
-    `https://countries-api-for-blog.vercel.app/api/countries${
-      searchText ? '/' + searchText : ''
-    }`
-  )
-  return await response.json()
-}
+  // 부류 선택
+  const [category, setCategory] = useState<string>('')
+  // 품목 선택
+  const [flower, setFlower] = useState<string>('')
+  // 품종 선택
+  const [variety, setVariety] = useState<string>('')
 
-export default function SelectForm({placeholder} : Props) {
-  const [inputText, setInputText] = useState<string>('')
-  const handleInputChange = (inputText: string, meta: InputActionMeta) => {
-    if (meta.action !== 'input-blur' && meta.action !== 'menu-close') {
-      setInputText(inputText)
-      handleSearch(inputText)
-    }
-  }
-  
-  const [flower, setFlower] = useState<flowerOption[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  
-  const handleSearch = async (searchQuery: string) => {
-    if (searchQuery.trim().length === 0) {
-      setFlower([])
-      return
-    }
-  
-    setIsLoading(true)
-  
-    let flowers = []
-    try {
-      flowers = await performSearchRequest(searchQuery)
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setFlower(flowers)
-      setIsLoading(false)
-    }
-  }
+  // 부류가 선택되면 품목을 가져온다
+  const callFlowers = (e) => {
+    setFlower('');
+    setVariety('');
+    setFlowerOptions([]);
+    axios({
+      method: "get",
+      url: `/api/api/admin-service/categories/type?code=${e}`
+    })
+    .then(res => {
+      // console.log(res.data.data);
+      const tmp = res.data.data.map((e) => {
+        return {
+          value: e,
+          label: e
+        }
+      })
+      console.log(tmp);
+      setFlowerOptions(tmp);
+      setCategory(e);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  };
 
-  const noOptionsMessage = (obj: { inputValue: string }) => {
-    if (obj.inputValue.trim().length === 0) {
-      return null
-    }
-    return 'No matching countries'
+  // 품목이 선택되면 품종을 가져온다
+  const callVarieties = (e) => {
+    setVariety('');
+    axios({
+      method: "get",
+      url: `/api/api/admin-service/categories/name?code=${category}&type=${e}`
+    })
+    .then(res => {
+      // console.log(res.data.data);
+      const tmp = res.data.data.map((e) => {
+        return {
+          value: e,
+          label: e
+        }
+      })
+      console.log(tmp);
+      setVarietyOptions(tmp);
+      setFlower(e);
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
 
   return (
     <>
-      <Select 
-        placeholder={placeholder}
-        options={flower} 
-        isClearable={true} 
-        isSearchable={true} 
+      <Select
+        placeholder="부류"
+        options={categoryOptions} 
+        isClearable={true}
         components={{
           IndicatorSeparator: () => null,
           DropdownIndicator,
         }}
         styles={customStyles}
-        inputValue={inputText}
-        onInputChange={handleInputChange}
-        isLoading={isLoading}
         filterOption={null}
-        noOptionsMessage={noOptionsMessage}
+        onChange={(selectedOption) => {
+          setCategory(selectedOption["value"])
+          callFlowers(selectedOption["value"])
+        }} // 셀렉트 변경 핸들러 등록
       />
+      
+      <div className='mt-3 flex justify-between'>
+        <Select 
+          className='w-[48%]'
+          placeholder="품목"
+          options={flowerOptions} 
+          isClearable={true} 
+          components={{
+            IndicatorSeparator: () => null,
+            DropdownIndicator,
+          }}
+          styles={customStyles}
+          filterOption={null}
+          onChange={(selectedOption) => {
+            setFlower(selectedOption["value"]);
+            callVarieties(selectedOption["value"]);
+            onFlowerChange(selectedOption["value"]);
+          }} // 셀렉트 변경 핸들러 등록
+        />
+
+        <Select 
+          className='w-[48%]'
+          placeholder="품종"
+          options={varietyOptions} 
+          isClearable={true} 
+          isSearchable={true} 
+          components={{
+            IndicatorSeparator: () => null,
+            DropdownIndicator,
+          }}
+          styles={customStyles}
+          filterOption={null}
+          onChange={(selectedOption) => {
+            setVariety(selectedOption["value"]);
+            onVarietyChange(selectedOption["value"]);
+          }} // 셀렉트 변경 핸들러 등록
+        />
+      </div>
     </>
   );
 }
