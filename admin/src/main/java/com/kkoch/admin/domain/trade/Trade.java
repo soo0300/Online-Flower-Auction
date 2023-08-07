@@ -73,6 +73,14 @@ public class Trade extends TimeBaseEntity {
         this.pickupStatus = true;
     }
 
+    public void setTotalPrice(int price) {
+        this.totalPrice += price;
+    }
+
+    public void addAuctionArticle(AuctionArticle auctionArticle) {
+        articles.add(auctionArticle);
+    }
+
     public void remove() {
         this.active = false;
     }

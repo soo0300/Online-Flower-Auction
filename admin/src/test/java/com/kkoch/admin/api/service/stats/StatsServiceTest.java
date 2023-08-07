@@ -55,25 +55,25 @@ class StatsServiceTest extends IntegrationTestSupport {
         Assertions.assertThat(results).hasSize(5)
                 .extracting("priceAvg", "priceMax", "priceMin", "grade", "count")
                 .containsExactlyInAnyOrder(
-                        tuple(1750, 2000, 1500, Grade.Super, 20),
-                        tuple(1300, 1300, 1300, Grade.Advanced, 10),
-                        tuple(1000, 1500, 500, Grade.Normal, 30),
-                        tuple(5000, 5000, 5000, Grade.Super, 20),
-                        tuple(3000, 3000, 3000, Grade.Normal, 10)
+                        tuple(1750, 2000, 1500, Grade.SUPER, 20),
+                        tuple(1300, 1300, 1300, Grade.ADVANCED, 10),
+                        tuple(1000, 1500, 500, Grade.NORMAL, 30),
+                        tuple(5000, 5000, 5000, Grade.SUPER, 20),
+                        tuple(3000, 3000, 3000, Grade.NORMAL, 10)
                 );
     }
 
     private List<AuctionArticleForStatsDto> createAuctionArticleList() {
         List<AuctionArticleForStatsDto> lists = new ArrayList<>();
-        lists.add(createDto(1L, Grade.Advanced, 1300, 10));
-        lists.add(createDto(1L, Grade.Super, 2000, 10));
-        lists.add(createDto(1L, Grade.Super, 1500, 10));
-        lists.add(createDto(1L, Grade.Normal, 500, 10));
-        lists.add(createDto(1L, Grade.Normal, 1000, 10));
-        lists.add(createDto(1L, Grade.Normal, 1500, 10));
-        lists.add(createDto(2L, Grade.Super, 5000, 10));
-        lists.add(createDto(2L, Grade.Super, 5000, 10));
-        lists.add(createDto(2L, Grade.Normal, 3000, 10));
+        lists.add(createDto(1L, Grade.ADVANCED, 1300, 10));
+        lists.add(createDto(1L, Grade.SUPER, 2000, 10));
+        lists.add(createDto(1L, Grade.SUPER, 1500, 10));
+        lists.add(createDto(1L, Grade.NORMAL, 500, 10));
+        lists.add(createDto(1L, Grade.NORMAL, 1000, 10));
+        lists.add(createDto(1L, Grade.NORMAL, 1500, 10));
+        lists.add(createDto(2L, Grade.SUPER, 5000, 10));
+        lists.add(createDto(2L, Grade.SUPER, 5000, 10));
+        lists.add(createDto(2L, Grade.NORMAL, 3000, 10));
 
         return lists;
     }
