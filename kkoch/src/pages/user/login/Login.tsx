@@ -7,7 +7,12 @@ import { login } from '@/reducer/store/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-	const [ email, setEmail ] = useState('');
+	// const location = useLocation();	// 이전 라우터 위치정보를 가져온다
+	const { state } = useLocation();	// 이전 라우터 위치정보를 가져온다
+	const navigate = useNavigate();
+
+	// 만약 회원가입에서 넘어왔으면 이메일을 바로 대입
+	const [ email, setEmail ] = useState(state ? state.email : '');
 	const [ password, setPassword] = useState('');
 
 	const [ emailValid, setEmailValid ] = useState(false);
@@ -16,8 +21,6 @@ const Login = () => {
 
 	const dispatch = useDispatch();
   
-	const navigate = useNavigate();
-	const { state } = useLocation();	// 이전 라우터 위치정보를 가져온다
 
 	// 이메일 검증 함수
 	const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,12 +69,12 @@ const Login = () => {
 			data: data
 		})
 		.then(res => {
-			// 로그인 요청이 성공하면 토큰을 저장
-			// const token = res.data.data["token"]; 
-			console.log(res.headers)
-			// dispatch(login(token));
-			alert("환영합니다.");
-
+			// 로그인 요청이 성공하면 받아온 정보를 redux로 호출
+			dispatch(login({
+				"mem_key" : res.headers.memberkey,
+				"mem_token" : res.headers.token
+			}))
+				
 			// 이전에 state에서 왔으면 로그인후 state으로 이동
 			if (state) {
 				navigate(state);
@@ -81,7 +84,8 @@ const Login = () => {
 			}
 		})
 		.catch((err) => {
-			alert(err.response.data)
+			console.log(err);
+			// alert(err.response.data)
 		});
 	}
 
@@ -95,7 +99,7 @@ const Login = () => {
 
   return (
 		//page gap-16 bg-gray-20 py-10 md:h-full md:pb-0 
-		<div className="flex justify-around pt-[150px]">
+		<div className="flex justify-around h-[100%]">
 			<div>
 				<img src={flowerImg} alt="" />
 			</div>
@@ -104,7 +108,7 @@ const Login = () => {
 					로그인
 				</div>
 
-				<div className='signupTitle'>
+				<div className='signupTitle cursor-pointer' onClick={() => navigate("/signup")}>
 					계정이 없으신가요? &nbsp;&nbsp;
 					<span className='signupLink'>
 						회원가입

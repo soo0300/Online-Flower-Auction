@@ -157,7 +157,7 @@ const SignUp = () => {
 		})
 		.then(() => { 
 			if(confirm("회원 가입이 완료 되었습니다. 로그인 해주십시오")) {
-        navigate("/login");
+        navigate("/login", { state: { email: email } });
       }
 
 		})
@@ -194,7 +194,7 @@ const SignUp = () => {
   }
 
   return (
-		<div className="flex justify-around pt-[150px]">
+		<div className="flex justify-around mt-[30px]">
 			<div className='mt-[100px]'>
 				<img src={flowerImg} alt="" />
 			</div>
@@ -205,7 +205,7 @@ const SignUp = () => {
             회원가입
           </div>
 
-          <div className='signupTitle'>
+          <div className='signupTitle cursor-pointer' onClick={() => navigate("/login")}>
             이미 계정이 있으신가요? &nbsp;&nbsp;
             <span className='signupLink'>
               로그인

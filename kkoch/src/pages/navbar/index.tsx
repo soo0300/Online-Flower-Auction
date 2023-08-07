@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"; 
-import { Bars3Icon, XMarkIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon, UserCircleIcon, BellAlertIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
@@ -12,6 +12,8 @@ type Props = {
   isTop: boolean;
 }
 
+const username = localStorage.getItem("username");
+
 const Navbar = ({isTop} : Props) => {
   const flexBetween = "flex items-center justify-between";
   
@@ -20,10 +22,13 @@ const Navbar = ({isTop} : Props) => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
   const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
 
+  // 회원 이모지 누르면 나올 dropdown
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
-  const isLoggedIn = useSelector((state: RootState) => state.auth.token !== null);
+  const isLoggedIn = useSelector((state: RootState) => state.auth.memberkey !== null);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   useEffect(() => {
@@ -34,6 +39,7 @@ const Navbar = ({isTop} : Props) => {
   const handleLogout = () => {
     // 로그아웃
     if(confirm("로그아웃 하시겠습니까?")) {
+      setDropdownOpen(false);
       dispatch(logout());
     }
   }
@@ -63,13 +69,12 @@ const Navbar = ({isTop} : Props) => {
                     <Link to="/signup">회원가입</Link>
                   </div>
                   ) : (
-                    <div>
-                      <a href="" onClick={handleLogout}>로그아웃</a>
-                      <Link to="/mypage">
-                        <button>
-                          <UserCircleIcon />
-                        </button>
-                      </Link>
+                    <div className="flex justify-between">
+                      <BellAlertIcon  className="h-10 w-10 text-blue-500"/>
+                      <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+                        <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
+                        <span>{username}님</span>
+                      </button>
                     </div>
                 )}
             </div>)
@@ -103,6 +108,25 @@ const Navbar = ({isTop} : Props) => {
         </div>
       </div>
     )}
+
+    {/* 회원 메뉴 드롭다운 */}
+    {isDropdownOpen && (
+      <div className="absolute top-16 right-0 bg-white border border-gray-300 rounded shadow-lg">
+        <ul className="py-2">
+          <li>
+            <Link to="/mypage" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setDropdownOpen(false)}>마이페이지</Link>
+          </li>
+          <li>
+            <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100">로그아웃</button>
+          </li>
+          <li>
+            {/* Add an event handler for 회원탈퇴 */}
+            <button className="block px-4 py-2 hover:bg-gray-100">회원탈퇴</button>
+          </li>
+        </ul>
+      </div>
+    )}
+
   </nav>
 }
 
