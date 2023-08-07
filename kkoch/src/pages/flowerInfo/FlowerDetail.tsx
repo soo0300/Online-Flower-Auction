@@ -16,8 +16,8 @@ const FlowerDetail = () => {
         <FlowerPrice />
       </div>
       <div className='chart-container'>
-        <FlowerChart />
-      </div>
+          {/* <FlowerChart /> */}
+        </div>
     </div>
   )
 }
