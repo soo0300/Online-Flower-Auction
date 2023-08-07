@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.kkoch.admin.domain.plant.QCategory.category;
+
 @Repository
 public class CategoryQueryRepository {
 
@@ -63,6 +65,13 @@ public class CategoryQueryRepository {
                 type.parent.name.eq(parentName)
             )
             .fetch();
+    }
+
+    public List<Category> getCategoriesByParentId(Long parentId) {
+        return queryFactory.selectFrom(category)
+                .where(category.parent.id.eq(parentId)
+                        .and(category.active.isTrue()))
+                .fetch();
     }
 
 }

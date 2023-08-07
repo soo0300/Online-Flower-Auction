@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 @Transactional
 class CategoryServiceTest extends IntegrationTestSupport {
@@ -61,26 +60,6 @@ class CategoryServiceTest extends IntegrationTestSupport {
         //then
         assertThat(categories).hasSize(2);
 
-    }
-
-    @DisplayName("카테고리를 선택시 하위 카테고리를 가져온다.")
-    @Test
-    void getCategories() throws Exception {
-        //given
-        Category parentCatgory = createRootCategory("절화");
-        Category catgory1 = createCategory("장미", parentCatgory);
-        Category catgory2 = createCategory("튤립", parentCatgory);
-        //when
-
-        List<CategoryResponse> results = categoryService.getCategories(parentCatgory.getId());
-
-        //then
-        assertThat(results).hasSize(2)
-                .extracting("name", "categoryId", "level")
-                .containsExactlyInAnyOrder(
-                        tuple(catgory1.getName(), catgory1.getId(), catgory1.getLevel()),
-                        tuple(catgory2.getName(), catgory2.getId(), catgory2.getLevel())
-                );
     }
 
     @DisplayName("관계자는 카테고리를 선택해 이름을 변경 할 수 있다.")

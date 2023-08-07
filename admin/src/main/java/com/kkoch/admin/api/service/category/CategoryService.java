@@ -8,6 +8,9 @@ import com.kkoch.admin.domain.plant.Plant;
 import com.kkoch.admin.domain.plant.repository.CategoryRepository;
 import com.kkoch.admin.domain.plant.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -15,6 +18,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CacheConfig(cacheNames = {"categoryCache"})
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -24,6 +28,7 @@ public class CategoryService {
 
     private final PlantRepository plantRepository;
 
+    @CacheEvict(allEntries = true)
     public Long addCategory(AddCategoryDto dto) {
         Category findCategory = getCategoryEntity(dto.getParentId());
         Category category = findCategory.createCategory(dto.getName());
@@ -34,12 +39,14 @@ public class CategoryService {
         return category.getId();
     }
 
+    @CacheEvict(allEntries = true)
     public CategoryResponse setCategory(Long categoryId, SetCategoryDto setCategoryDto) {
         Category category = getCategoryEntity(categoryId);
         category.changeCategory(setCategoryDto.getChangeName());
         return CategoryResponse.of(category);
     }
 
+    @CacheEvict(allEntries = true)
     public Long removeCategory(Long categoryId) {
         Category category = getCategoryEntity(categoryId);
         category.remove();
@@ -57,12 +64,6 @@ public class CategoryService {
         for (Category subCategory : subCategories) {
             subCategory.remove();
         }
-    }
-
-    public List<CategoryResponse> getCategories(Long parentId) {
-        return categoryRepository.findAllById(parentId)
-                .stream().map(CategoryResponse::new).collect(Collectors.toList());
-
     }
 
     private Category getCategoryEntity(Long categoryId) {

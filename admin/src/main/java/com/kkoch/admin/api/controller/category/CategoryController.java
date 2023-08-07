@@ -10,6 +10,7 @@ import com.kkoch.admin.api.service.category.CategoryService;
 import com.kkoch.admin.api.service.category.dto.AddCategoryDto;
 import com.kkoch.admin.api.service.category.dto.SetCategoryDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin-service/categories")
 @RestController
+@Slf4j
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -35,7 +37,7 @@ public class CategoryController {
 
     @GetMapping("/type")
     public ApiResponse<List<String>> getTypes(
-        @RequestParam(defaultValue = "절화") String code
+            @RequestParam(defaultValue = "절화") String code
     ) {
         List<String> types = categoryQueryService.getTypesForMember(code);
         return ApiResponse.ok(types);
@@ -43,12 +45,18 @@ public class CategoryController {
 
     @GetMapping("/name")
     public ApiResponse<List<String>> getNames(
-        @RequestParam(defaultValue = "절화") String code,
-        @RequestParam(defaultValue = "") String type
-        //날짜
+            @RequestParam(defaultValue = "절화") String code,
+            @RequestParam(defaultValue = "") String type
+            //날짜
     ) {
         List<String> names = categoryQueryService.getNamesForMember(code, type);
         return ApiResponse.ok(names);
+    }
+
+    @GetMapping("/{parentId}")
+    public ApiResponse<List<CategoryResponse>> getCategoriesParentId(@PathVariable Long parentId) {
+        List<CategoryResponse> subCategories = categoryQueryService.getCategoriesByParentId(parentId);
+        return ApiResponse.ok(subCategories);
     }
 
     @PatchMapping("/{categoryId}")
@@ -67,9 +75,9 @@ public class CategoryController {
 
     }
 
-//    @GetMapping
+    //    @GetMapping
     public ApiResponse<List<CategoryForMemberResponse>> getCategories(
-        @RequestParam String code
+            @RequestParam String code
     ) {
         List<CategoryForMemberResponse> categories = categoryQueryService.getCategories(code);
         return ApiResponse.ok(categories);
