@@ -1,55 +1,67 @@
 import { OpenVidu } from 'openvidu-browser';
 
 import axios from 'axios';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import UserVideoComponent from './UserVideoComponent';
+// import { useNavigate  } from 'react-router-dom';
+import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
+import { useNavigate } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 const APPLICATION_SERVER_URL = 'http://i9c204.p.ssafy.io:5000/api/sessions';
 
 export default function Video() {
-	const [mySessionId, setMySessionId] = useState('SessionA')
-	const [myUserName, setMyUserName] = useState(`Participant${Math.floor(Math.random() * 100)}`)
-	const [session, setSession] = useState(undefined);
-	const [mainStreamManager, setMainStreamManager] = useState(undefined);
-	const [publisher, setPublisher] = useState(undefined);
-	const [subscribers, setSubscribers] = useState([]);
-	const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
+	const [state, dispatch] = useReducer(videoUserInfo, initialState);
+	const {
+		mySessionId,
+    myUserName,
+    session,
+    mainStreamManager,
+    publisher,
+    subscribers,
+  } = state;
+	// const [mySessionId, setMySessionId] = useState('SessionA')
+	// const [myUserName, setMyUserName] = useState(`Participant${Math.floor(Math.random() * 100)}`)
+	// const [session, setSession] = useState(undefined);
+	// const [mainStreamManager, setMainStreamManager] = useState(undefined);
+	// const [publisher, setPublisher] = useState(undefined);
+	// const [subscribers, setSubscribers] = useState([]);
+
+	// const navigate = useNavigate ();
 
 	const OV = useRef(new OpenVidu());
-
-	const handleChangeSessionId = useCallback((e) => {
-		setMySessionId(e.target.value);
-	}, []);
-
-	const handleChangeUserName = useCallback((e) => {
-		setMyUserName(e.target.value);
-	}, []);
+	const navigate = useNavigate();
 
 	const handleMainVideoStream = useCallback((stream) => {
 		if (mainStreamManager !== stream) {
-			setMainStreamManager(stream);
+			dispatch({ type: 'SET_MAIN_STREAM_MANAGER', payload: stream});
 		}
 	}, [mainStreamManager]);
-
+	
 	const joinSession = useCallback(() => {
 		const mySession = OV.current.initSession();
-
 		mySession.on('streamCreated', (event) => {
 			const subscriber = mySession.subscribe(event.stream, undefined);
-			setSubscribers((subscribers) => [...subscribers, subscriber]);
+			dispatch({ type: 'ADD_SUBSCRIBER', payload: subscriber });
 		});
 
 		mySession.on('streamDestroyed', (event) => {
-			deleteSubscriber(event.stream.streamManager);
+			dispatch({ type: 'REMOVE_SUBSCRIBER', payload: event.stream.streamManager });
 		});
 
 		mySession.on('exception', (exception) => {
 			console.warn(exception);
 		});
 
-		setSession(mySession);
+		dispatch({ type: 'SET_SESSION', payload: mySession });
+		console.log('join세션', state)
 	}, []);
 
+	useEffect(() => {
+		joinSession();
+	}, []);
+	
 	useEffect(() => {
 		if (session) {
 			// Get a token from the OpenVidu deployment
@@ -70,14 +82,20 @@ export default function Video() {
 
 					session.publish(publisher);
 
-					const devices = await OV.current.getDevices();
-					const videoDevices = devices.filter(device => device.kind === 'videoinput');
-					const currentVideoDeviceId = publisher.stream.getMediaStream().getVideoTracks()[0].getSettings().deviceId;
-					const currentVideoDevice = videoDevices.find(device => device.deviceId === currentVideoDeviceId);
+					dispatch({ type: 'SET_MAIN_STREAM_MANAGER', payload: publisher });
+					dispatch({ type: 'SET_PUBLISHER', payload: publisher });
 
-					setMainStreamManager(publisher);
-					setPublisher(publisher);
-					setCurrentVideoDevice(currentVideoDevice);
+					
+					navigate('/auction/liveroom', {
+						state: {
+							mySessionId,
+							myUserName,
+							session,
+							mainStreamManager,
+							publisher,
+							subscribers,
+						}
+					});
 				} catch (error) {
 					console.log('There was an error connecting to the session:', error.code, error.message);
 				}
@@ -94,59 +112,11 @@ export default function Video() {
 
 		// Reset all states and OpenVidu object
 		OV.current = new OpenVidu();
-		setSession(undefined);
-		setSubscribers([]);
-		setMySessionId('SessionA');
-		setMyUserName('Participant' + Math.floor(Math.random() * 100));
-		setMainStreamManager(undefined);
-		setPublisher(undefined);
+		dispatch({ type: 'RESET_STATE' })
 	}, [session]);
 
-	const switchCamera = useCallback(async () => {
-		try {
-			const devices = await OV.current.getDevices();
-			const videoDevices = devices.filter(device => device.kind === 'videoinput');
-
-			if (videoDevices && videoDevices.length > 1) {
-				const newVideoDevice = videoDevices.filter(device => device.deviceId !== currentVideoDevice.deviceId);
-
-				if (newVideoDevice.length > 0) {
-					const newPublisher = OV.current.initPublisher(undefined, {
-						videoSource: newVideoDevice[0].deviceId,
-						publishAudio: true,
-						publishVideo: true,
-						mirror: true,
-					});
-
-					if (session) {
-						await session.unpublish(mainStreamManager);
-						await session.publish(newPublisher);
-						setCurrentVideoDevice(newVideoDevice[0]);
-						setMainStreamManager(newPublisher);
-						setPublisher(newPublisher);
-					}
-				}
-			}
-		} catch (e) {
-			console.error(e);
-		}
-	}, [currentVideoDevice, session, mainStreamManager]);
-
-	const deleteSubscriber = useCallback((streamManager) => {
-		setSubscribers((prevSubscribers) => {
-			const index = prevSubscribers.indexOf(streamManager);
-			if (index > -1) {
-				const newSubscribers = [...prevSubscribers];
-				newSubscribers.splice(index, 1);
-				return newSubscribers;
-			} else {
-				return prevSubscribers;
-			}
-		});
-	}, []);
-
 	useEffect(() => {
-		const handleBeforeUnload = (event) => {
+		const handleBeforeUnload = () => {
 			leaveSession();
 		};
 		window.addEventListener('beforeunload', handleBeforeUnload);
@@ -181,36 +151,10 @@ export default function Video() {
 		<div className="container">
 			{session === undefined ? (
 				<div id="join">
-					<div id="img-div">
-						<img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
-					</div>
 					<div id="join-dialog" className="jumbotron vertical-center">
-						<h1> Join a video session </h1>
 						<form className="form-group" onSubmit={joinSession}>
-							<p>
-								<label>Participant: </label>
-								<input
-									className="form-control"
-									type="text"
-									id="userName"
-									value={myUserName}
-									onChange={handleChangeUserName}
-									required
-								/>
-							</p>
-							<p>
-								<label> Session: </label>
-								<input
-									className="form-control"
-									type="text"
-									id="sessionId"
-									value={mySessionId}
-									onChange={handleChangeSessionId}
-									required
-								/>
-							</p>
 							<p className="text-center">
-								<input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
+								<input className="btn btn-lg btn-success" name="commit" type="submit" value="입장하기" />
 							</p>
 						</form>
 					</div>
@@ -219,7 +163,7 @@ export default function Video() {
 
 			{session !== undefined ? (
 				<div id="session">
-					<div id="session-header">
+					{/* <div id="session-header">
 						<h1 id="session-title">{mySessionId}</h1>
 						<input
 							className="btn btn-large btn-danger"
@@ -228,19 +172,11 @@ export default function Video() {
 							onClick={leaveSession}
 							value="Leave session"
 						/>
-						<input
-							className="btn btn-large btn-success"
-							type="button"
-							id="buttonSwitchCamera"
-							onClick={switchCamera}
-							value="Switch Camera"
-						/>
-					</div>
+					</div> */}
 
 					{mainStreamManager !== undefined ? (
 						<div id="main-video" className="col-md-6">
 							<UserVideoComponent streamManager={mainStreamManager} />
-
 						</div>
 					) : null}
 					<div id="video-container" className="col-md-6">

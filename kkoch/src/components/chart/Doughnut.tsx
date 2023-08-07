@@ -5,24 +5,35 @@ import { Doughnut } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export function DoughnutChart() {
-  const [yellow, setYellow] = useState(10); // 초기 노란색 부분 데이터 설정
-  const [blue, setBlue] = useState(15); // 초기 파란색 부분 데이터 설정
-  const [red, setRed] = useState(20); // 초기 빨간색 부분 데이터 설정
+  const [graph, setGraph] = useState(40); // 초기 그래프 크기 설정
+  
+
+  const calculateColor = (redValue) => {
+    // 데이터가 25일 때까지는 파란색
+    if (redValue >= 25) {
+      const hue = 240;
+      return `hsl(${hue}, 100%, 50%)`;
+    // 데이터가 10일때까지는 노란색
+    } else if (redValue >= 10) {
+      const hue = 60;
+      return `hsl(${hue}, 100%, 50%)`;
+
+    // 그 이하는 빨간색
+    } else {
+      return `hsl(0, 100%, 50%)`;
+    }
+  };
 
   const data = {
     datasets: [
       {
-        data: [red, blue, yellow, 100 - yellow - blue ],
+        data: [graph, 100-graph],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)', // red
-          'rgba(54, 162, 235, 0.2)', // blue
-          'rgba(255, 206, 86, 0.2)', // yellow
+          calculateColor(graph),
           'rgba(0, 0, 0, 0)'
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)', // red
-          'rgba(54, 162, 235, 1)', // blue
-          'rgba(255, 206, 86, 1)', // yellow
+          calculateColor(graph),
           'rgba(0, 0, 0, 0)'
         ],
         borderWidth: 0.5,
@@ -35,34 +46,27 @@ export function DoughnutChart() {
     responsive: false
   };
 
-  // 시간이 지남에 따라 노란색 부분 데이터 업데이트
-  useEffect(() => {
-    const yellowInterval = setInterval(() => {
-      // 노란색 부분 데이터가 1씩 줄어들도록 설정 (여기에서는 1로 가정)
-      setYellow((prevData) => Math.max(prevData - 5, 0));
-    }, 1000); // 1초마다 업데이트 (원하는 시간 간격으로 변경 가능)
-
-    const BlueInterval = setInterval(() => {
-      // 노란색 부분 데이터가 1씩 줄어들도록 설정 (여기에서는 1로 가정)
-      if (yellow === 0 && blue > 0) {
-        setBlue((prevData) => Math.max(prevData - 5, 0));
-      }
-    }, 1000); // 1초마다 업데이트 (원하는 시간 간격으로 변경 가능)
-
-    const RedInterval = setInterval(() => {
-      // 노란색 부분 데이터가 1씩 줄어들도록 설정 (여기에서는 1로 가정)
-      if (yellow === 0 && blue === 0 && red > 0) {
-        setRed((prevData) => Math.max(prevData - 5, 0));
-      }
-    }, 1000); // 1초마다 업데이트 (원하는 시간 간격으로 변경 가능)
+    const decreaseData = () => {
+      setGraph((prevData) => Math.max(prevData - 0.001, 0)); // 예시로 0.5로 변경
+      // }
+    };
+  
+    const animate = () => {
+      decreaseData();
+      requestAnimationFrame(animate);
+    };
     
-
-    return () => {
-      clearInterval(yellowInterval)
-      clearInterval(BlueInterval)
-      clearInterval(RedInterval)
-    }; // 컴포넌트가 unmount될 때 interval 정리
-  }, [yellow, blue, red]);
+    useEffect(() => {
+      const animationId = requestAnimationFrame(animate);
+      
+      // const stopAnimationTimeout = setTimeout(() => {
+      //   cancelAnimationFrame(animationId);
+      // }, 10000);
+      
+      return () => {
+        cancelAnimationFrame(animationId);
+      }; // 컴포넌트가 unmount될 때 애니메이션 정리
+    }, [graph]);
 
   return <Doughnut data={data} options={options} />;
 }

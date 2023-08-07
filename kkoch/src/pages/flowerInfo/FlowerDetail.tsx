@@ -1,6 +1,6 @@
 import React from 'react'
 import FlowerPrice from './FlowerPrice';
-// import FlowerChart from '@/components/chart/FlowerChart';
+import FlowerChart from '@/components/chart/FlowerChart';
 import './FlowerDetail.css';
 
 const FlowerDetail = () => {
@@ -16,8 +16,8 @@ const FlowerDetail = () => {
         <FlowerPrice />
       </div>
       <div className='chart-container'>
-        {/* <FlowerChart /> */}
-      </div>
+          {/* <FlowerChart /> */}
+        </div>
     </div>
   )
 }
