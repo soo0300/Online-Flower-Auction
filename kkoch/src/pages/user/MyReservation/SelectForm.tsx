@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import Select, { components, StylesConfig } from 'react-select'
+import AsyncSelect from 'react-select/async'
 
 const customStyles: StylesConfig = {
   control: (base) => ({
@@ -38,10 +39,12 @@ export default function SelectForm({
 
   // 부류가 선택되면 품목을 가져온다
   const callFlowers = (e) => {
+    // 초기화
     setFlower('');
     setVariety('');
     setFlowerOptions([]);
-    axios({
+    setVarietyOptions([]);
+    e && axios({
       method: "get",
       url: `/api/api/admin-service/categories/type?code=${e}`
     })
@@ -64,8 +67,10 @@ export default function SelectForm({
 
   // 품목이 선택되면 품종을 가져온다
   const callVarieties = (e) => {
+    // 초기화
     setVariety('');
-    axios({
+    setVarietyOptions([]);
+    e && axios({
       method: "get",
       url: `/api/api/admin-service/categories/name?code=${category}&type=${e}`
     })
@@ -86,6 +91,43 @@ export default function SelectForm({
     })
   }
 
+  const filterFlower = (inputValue: string) => {
+    return flowerOptions.filter((i) =>
+      i.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
+
+  const filterVariety = (inputValue: string) => {
+    return varietyOptions.filter((i) =>
+      i.label.toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
+  
+  const loadFlowerOptions = (inputValue, callback) => {
+    setTimeout(() => {
+        callback(filterFlower(inputValue));
+    }, 100);
+  };
+
+  const loadVarietyOptions = (inputValue, callback) => {
+    setTimeout(() => {
+        callback(filterVariety(inputValue));
+    }, 100);
+  };
+
+  const handleSelectFlower = (selectedOption) => {
+    setFlower(selectedOption ? selectedOption["value"] : '');
+    callVarieties(selectedOption ? selectedOption["value"] : '');
+    // 부모 컴포넌트로 값 전송
+    onFlowerChange(selectedOption ? selectedOption["value"] : '');
+  }
+
+  const handleSelectVariety = (selectedOption) => {
+    setVariety(selectedOption ? selectedOption["value"] : '');
+    // 부모 컴포넌트로 값 전송
+    onVarietyChange(selectedOption ? selectedOption["value"] : '');
+  }
+
   return (
     <>
       <Select
@@ -99,52 +141,33 @@ export default function SelectForm({
         styles={customStyles}
         filterOption={null}
         onChange={(selectedOption) => {
-          setCategory(selectedOption["value"])
-          callFlowers(selectedOption["value"])
+          setCategory(selectedOption ? selectedOption["value"] : '')
+          callFlowers(selectedOption ? selectedOption["value"] : '')
         }} // 셀렉트 변경 핸들러 등록
       />
-      
+
       <div className='mt-3 flex justify-between'>
-        <Select 
+        <AsyncSelect 
           className='w-[48%]'
           placeholder="품목"
-          options={flowerOptions} 
-          isClearable={true} 
-          components={{
-            IndicatorSeparator: () => null,
-            DropdownIndicator,
-          }}
-          styles={customStyles}
-          filterOption={null}
-          onChange={(selectedOption) => {
-            setFlower(selectedOption["value"]);
-            callVarieties(selectedOption["value"]);
-            onFlowerChange(selectedOption["value"]);
-          }} // 셀렉트 변경 핸들러 등록
+          defaultOptions={flowerOptions} 
+          isClearable={true}
+          loadOptions={loadFlowerOptions}
+          onChange={handleSelectFlower}
         />
 
-        <Select 
+        <AsyncSelect 
           className='w-[48%]'
           placeholder="품종"
-          options={varietyOptions} 
+          defaultOptions={varietyOptions} 
           isClearable={true} 
-          isSearchable={true} 
-          components={{
-            IndicatorSeparator: () => null,
-            DropdownIndicator,
-          }}
-          styles={customStyles}
-          filterOption={null}
-          onChange={(selectedOption) => {
-            setVariety(selectedOption["value"]);
-            onVarietyChange(selectedOption["value"]);
-          }} // 셀렉트 변경 핸들러 등록
+          loadOptions={loadVarietyOptions}
+          onChange={handleSelectVariety}
         />
       </div>
     </>
   );
 }
-
 
 const DropdownIndicator = (props) => {
   return (
