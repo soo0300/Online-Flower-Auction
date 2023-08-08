@@ -27,6 +27,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
     setFlowerOptions([]);
     axios({
       method: "get",
+      // url: `https://i9c204.p.ssafy.io/api/admin-service/categories/type?code=${e.selectedCategory}`
       url: `/api/api/admin-service/categories/type?code=${e.selectedCategory}`
     })
     .then(res => {
@@ -55,6 +56,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
     setVarietyOptions([]);
     e && axios({
       method: "get",
+      // url: `https://i9c204.p.ssafy.io/api/admin-service/categories/name?code=${filter.category}&type=${e}`
       url: `/api/api/admin-service/categories/name?code=${filter.category}&type=${e}`
     })
     .then(res => {
@@ -135,6 +137,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
   // 검색을 누르면 선택한 정보 출력하는 변수
   const handleSearch = () => {
     axios
+      // .get(`https://i9c204.p.ssafy.io/api/admin-service/auction-articles/api`, {
       .get(`/api/api/admin-service/auction-articles/api`, {
         params: {
           startDateTime: filter.startDate.format('YYYY-MM-DD'),

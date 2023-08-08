@@ -33,6 +33,7 @@ const TestComponent = (props) => {
     setIsLoading(true);
     axios({
       method: "get",
+      // url: `https://i9c204.p.ssafy.io/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
       url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
     })
     .then((res) => {

@@ -24,6 +24,7 @@ const MyReservation = () => {
   function getRows() {
     axios({
       method: 'get',
+      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
       url: `/api/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
       headers: {
         Authorization: `Bearer ${secureLocalStorage.getItem("token")}`

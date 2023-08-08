@@ -64,6 +64,7 @@ export default function MyReservModal({ onReservationAdded }) {
 
     axios({
       method: 'post',
+      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/reservations`,
       url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/reservations`,
       headers: {
         "Content-Type" : "application/json",
