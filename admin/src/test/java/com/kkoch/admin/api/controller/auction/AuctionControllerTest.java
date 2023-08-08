@@ -38,11 +38,15 @@ class AuctionControllerTest extends ControllerTestSupport {
     @MockBean
     private AuctionQueryService auctionQueryService;
 
-    @DisplayName("[경매 일정 조회] 회원용")
+    @DisplayName("[경매 일정 조회] 오픈된거 확인")
     @Test
     void getAuctionListForMember() throws Exception {
         //given
-
+        BDDMockito.given(auctionQueryService.getOpenAuction())
+                .willReturn(AuctionTitleResponse.builder()
+                        .title("title")
+                        .auctionId(1L)
+                        .build());
         //when //then
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/admin-service/auctions/api")
@@ -52,7 +56,7 @@ class AuctionControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.code").value("200"))
                 .andExpect(jsonPath("$.status").value("OK"))
                 .andExpect(jsonPath("$.message").value("SUCCESS"))
-                .andExpect(jsonPath("$.data").isArray());
+                .andExpect(jsonPath("$.data").isNotEmpty());
 
     }
 
