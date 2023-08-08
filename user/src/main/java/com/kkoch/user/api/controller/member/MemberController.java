@@ -33,34 +33,21 @@ public class MemberController {
         return ApiResponse.ok(response);
     }
 
-    @GetMapping("/members")
-    public void getMembers() {
-
-    }
-
-
     @GetMapping("/{memberKey}")
     public ApiResponse<MemberInfoResponse> getMyInfo(@PathVariable String memberKey) {
         MemberInfoResponse response = memberQueryService.getMyInfo(memberKey);
         return ApiResponse.ok(response);
     }
 
-    //내정보수정 - 비밀번호 변경
-    @PatchMapping("/my/login-pw")
-    public ApiResponse<?> editMyLoginPw(@RequestBody EditLoginPwRequest request) {
-        return ApiResponse.of(MOVED_PERMANENTLY, null, null);
+    @PatchMapping("/{memberKey}/pwd")
+    public ApiResponse<MemberResponse> setPassword(@PathVariable String memberKey, @Valid @RequestBody SetPasswordRequest request) {
+        MemberResponse response = memberService.setPassword(memberKey, request.getCurrentPwd(), request.getNewPwd());
+        return ApiResponse.ok(response);
     }
 
-    //내정보수정 - 연락처 변경
-    @PatchMapping("/my/tel")
-    public ApiResponse<?> editMyTel(@RequestBody EditTelRequest request) {
-        return ApiResponse.of(MOVED_PERMANENTLY, null, null);
+    @DeleteMapping("/{memberKey}")
+    public ApiResponse<MemberResponse> withdrawal(@PathVariable String memberKey, @Valid @RequestBody WithdrawalRequest request) {
+        MemberResponse response = memberService.withdrawal(memberKey, request.getPwd());
+        return ApiResponse.ok(response);
     }
-
-    //회원탈퇴
-    @DeleteMapping("/my")
-    public ApiResponse<?> withdrawal(@RequestBody WithdrawalRequest request) {
-        return ApiResponse.of(MOVED_PERMANENTLY, "회원 탈퇴", null);
-    }
-
 }

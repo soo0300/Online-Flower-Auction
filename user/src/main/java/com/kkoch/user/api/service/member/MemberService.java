@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +31,28 @@ public class MemberService implements UserDetailsService {
         Member savedMember = memberRepository.save(member);
 
         return MemberResponse.of(savedMember);
+    }
+
+    public MemberResponse setPassword(String memberKey, String currentPwd, String newPwd) {
+        Member member = memberRepository.findByMemberKey(memberKey)
+            .orElseThrow(NoSuchElementException::new);
+
+        member.changePwd(passwordEncoder.encode(newPwd));
+
+        return MemberResponse.of(member);
+    }
+
+    public MemberResponse withdrawal(String memberKey, String pwd) {
+        Member member = memberRepository.findByMemberKey(memberKey)
+            .orElseThrow(NoSuchElementException::new);
+
+        boolean matches = passwordEncoder.matches(pwd, member.getEncryptedPwd());
+        if (!matches) {
+            throw new IllegalArgumentException();
+        }
+
+        member.withdrawal();
+        return MemberResponse.of(member);
     }
 
     @Override
