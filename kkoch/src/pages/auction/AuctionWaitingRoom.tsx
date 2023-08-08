@@ -17,9 +17,9 @@ const AuctionWaitingRoom: React.FC = () => {
   const subscriberContainer = useRef<HTMLDivElement | null>(null);
 
     
-  const response = axios.get('/api/api/admin-service/auction-articles/api?startDateTime=2023-08-06&endDateTime=2023-08-06&code=절화&type&name&region&page=0')
+  // const response = axios.get('/api/api/admin-service/auction-articles/api?startDateTime=2023-08-06&endDateTime=2023-08-06&code=절화&type&name&region&page=0')
 
-  console.log('여기', response)
+  // console.log('여기', response)
 
 
   const initSessionAndToken = async () => {
@@ -28,7 +28,6 @@ const AuctionWaitingRoom: React.FC = () => {
       const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/api/sessions', null, {
         headers: {
           "Content-Type": "application/json",
-          // 'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
         },
       });
       const sessionId = sessionResponse.data;
@@ -37,10 +36,8 @@ const AuctionWaitingRoom: React.FC = () => {
       const tokenResponse = await axios.post(`https://i9c204.p.ssafy.io:8443/api/sessions/${sessionId}/connections`, null, {
         headers: {
           "Content-Type": "application/json",
-          // 'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
         },
       });
-      // console.log('포트번호', tokenResponse.data)
       setToken(tokenResponse.data.split('&')[1].split('=')[1]);
     }
     catch (error) {
@@ -56,8 +53,8 @@ const AuctionWaitingRoom: React.FC = () => {
     if (token) {
       const OV =  new OpenVidu()
       const mySession = OV.initSession()
-      // setSession(mySession)
       mySession.connect(token);
+      console.log('세션토큰', mySession)
 
       const publisher = OV.initPublisher(subscriberContainer.current,
         {
@@ -113,27 +110,9 @@ const AuctionWaitingRoom: React.FC = () => {
   
   // 스트림 제거 시 구독자 제거
   const handleStreamDestroyed = (event) => {
-    // event.preventDefault(); // 불필요한 코드입니다.
     // subscribers 배열에서 해당 구독자 제거
     setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== event.stream.streamManager));
   };
-
-  // useEffect(() => {
-  //   if (session) {
-  //     console.log("세션이요", session)
-  //     session.on('streamCreated', (e) => {
-  //       console.log(1111111);
-  //       const subscriber = session.subscribe(e.stream, undefined);
-  //       console.log("구독자", subscriber);
-  //       if (!subscriber && e.stream.connection.connectionId !== session.connection.connectionId) {
-  //         setSubscribers(e.stream);
-  //         session.publish(publisher);
-  //         console.log('이거이거이거')
-  //         publisher.addVideoElement(subscriberContainer);
-  //       }
-  //     });
-  //   }
-  // }, [publisher])
 
   // 카메라 상태를 토글하는 함수
   const toggleCamera = () => {
@@ -173,10 +152,6 @@ const AuctionWaitingRoom: React.FC = () => {
             <button>입장하기</button>
           </Link>
         </div>
-        {/* <Video></Video> */}
-        {/* <input className="btn btn-lg btn-success" name="commit" type="submit" value="입장하기" /> */}
-        {/* <Link to='http://localhost:5173/auction/liveroom'>
-        </Link> */}
       </div> 
   )
 }
