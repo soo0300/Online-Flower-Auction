@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 // import { useHistory } from 'react-router-dom';
 // import { Link } from 'react-router-dom';
 
-const APPLICATION_SERVER_URL = 'http://i9c204.p.ssafy.io:5000/api/sessions';
+const APPLICATION_SERVER_URL = 'https://i9c204.p.ssafy.io:8443/api/sessions';
 
 export default function Video() {
 	const [state, dispatch] = useReducer(videoUserInfo, initialState);
@@ -21,14 +21,6 @@ export default function Video() {
     publisher,
     subscribers,
   } = state;
-	// const [mySessionId, setMySessionId] = useState('SessionA')
-	// const [myUserName, setMyUserName] = useState(`Participant${Math.floor(Math.random() * 100)}`)
-	// const [session, setSession] = useState(undefined);
-	// const [mainStreamManager, setMainStreamManager] = useState(undefined);
-	// const [publisher, setPublisher] = useState(undefined);
-	// const [subscribers, setSubscribers] = useState([]);
-
-	// const navigate = useNavigate ();
 
 	const OV = useRef(new OpenVidu());
 	const navigate = useNavigate();
@@ -152,28 +144,12 @@ export default function Video() {
 			{session === undefined ? (
 				<div id="join">
 					<div id="join-dialog" className="jumbotron vertical-center">
-						<form className="form-group" onSubmit={joinSession}>
-							<p className="text-center">
-								<input className="btn btn-lg btn-success" name="commit" type="submit" value="입장하기" />
-							</p>
-						</form>
 					</div>
 				</div>
 			) : null}
 
 			{session !== undefined ? (
 				<div id="session">
-					{/* <div id="session-header">
-						<h1 id="session-title">{mySessionId}</h1>
-						<input
-							className="btn btn-large btn-danger"
-							type="button"
-							id="buttonLeaveSession"
-							onClick={leaveSession}
-							value="Leave session"
-						/>
-					</div> */}
-
 					{mainStreamManager !== undefined ? (
 						<div id="main-video" className="col-md-6">
 							<UserVideoComponent streamManager={mainStreamManager} />

@@ -40,7 +40,8 @@ function App() {
           <Route path={"/auction/waitingroom"} element={<AuctionWaitingRoom/>}/>
           <Route path={"/auction/liveroom"} element={<AuctionLiveRoom/>}/>
 
-          <Route path={"/flowers"} element={<TradingInfo />}/>
+          <Route path={"/flowers/"} element={<TradingInfo />}/>
+          <Route path={"/flowers/:code"} element={<TradingInfo />}/>
           <Route path={"/flowers/info/:flower/:variety"} element={<FlowerDetail />}/>
           <Route path={"/customer"} />
  
