@@ -14,10 +14,7 @@ public class AlamService {
     private final AlarmCommandRepository alarmCommandRepository;
     private final MemberRepository memberRepository;
 
-    public int open(String email) {
-        Long memberId = memberRepository.findIdByEmail(email)
-            .orElseThrow();
-
-        return alarmCommandRepository.updateOpen(memberId);
+    public int open(String memberKey) {
+        return alarmCommandRepository.updateOpen(memberKey);
     }
 }
