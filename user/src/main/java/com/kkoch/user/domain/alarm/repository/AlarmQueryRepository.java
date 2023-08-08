@@ -1,7 +1,6 @@
 package com.kkoch.user.domain.alarm.repository;
 
 import com.kkoch.user.api.controller.alarm.response.AlarmResponse;
-import com.kkoch.user.domain.member.QMember;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public class AlarmQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<AlarmResponse> searchAlarms(String memberKey) {
+    public List<AlarmResponse> findAlarmsByMemberKey(String memberKey) {
         return queryFactory
             .select(Projections.constructor(AlarmResponse.class,
                 alarm.id,
