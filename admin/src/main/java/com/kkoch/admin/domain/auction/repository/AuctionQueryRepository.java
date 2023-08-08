@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static com.kkoch.admin.domain.auction.QAuction.auction;
 
@@ -36,14 +37,15 @@ public class AuctionQueryRepository {
                 .orderBy(auction.startTime.asc()).fetch();
     }
 
-    public List<Auction> findAuctionForMember() {
-        return queryFactory
+    public Optional<Auction> findOpenAuction() {
+        Auction findAuction = queryFactory
                 .select(auction)
                 .from(auction)
                 .where(
                         auction.active.isTrue(),
-                        auction.status.ne(Status.CLOSE))
+                        auction.status.eq(Status.OPEN))
                 .orderBy(auction.startTime.asc())
-                .limit(5).fetch();
+                .fetchFirst();
+        return Optional.ofNullable(findAuction);
     }
 }
