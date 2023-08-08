@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Profile("local")
-@Component
+//@Profile("local")
+//@Component
 @RequiredArgsConstructor
 public class InitData {
 

@@ -45,7 +45,7 @@ class StatsServiceTest extends IntegrationTestSupport {
         Plant plant1 = createPlant(code, name, type1);
         Plant plant2 = createPlant(code, name, type2);
 
-        List<AuctionArticleForStatsDto> dto = createAuctionArticleList();
+        List<AuctionArticleForStatsDto> dto = createAuctionArticleList(plant1.getId(), plant2.getId());
 
         //when
         statsService.saveHistoryBidStats(dto);
@@ -63,17 +63,17 @@ class StatsServiceTest extends IntegrationTestSupport {
                 );
     }
 
-    private List<AuctionArticleForStatsDto> createAuctionArticleList() {
+    private List<AuctionArticleForStatsDto> createAuctionArticleList(long plantId1, long plantId2) {
         List<AuctionArticleForStatsDto> lists = new ArrayList<>();
-        lists.add(createDto(1L, Grade.ADVANCED, 1300, 10));
-        lists.add(createDto(1L, Grade.SUPER, 2000, 10));
-        lists.add(createDto(1L, Grade.SUPER, 1500, 10));
-        lists.add(createDto(1L, Grade.NORMAL, 500, 10));
-        lists.add(createDto(1L, Grade.NORMAL, 1000, 10));
-        lists.add(createDto(1L, Grade.NORMAL, 1500, 10));
-        lists.add(createDto(2L, Grade.SUPER, 5000, 10));
-        lists.add(createDto(2L, Grade.SUPER, 5000, 10));
-        lists.add(createDto(2L, Grade.NORMAL, 3000, 10));
+        lists.add(createDto(plantId1, Grade.ADVANCED, 1300, 10));
+        lists.add(createDto(plantId1, Grade.SUPER, 2000, 10));
+        lists.add(createDto(plantId1, Grade.SUPER, 1500, 10));
+        lists.add(createDto(plantId1, Grade.NORMAL, 500, 10));
+        lists.add(createDto(plantId1, Grade.NORMAL, 1000, 10));
+        lists.add(createDto(plantId1, Grade.NORMAL, 1500, 10));
+        lists.add(createDto(plantId2, Grade.SUPER, 5000, 10));
+        lists.add(createDto(plantId2, Grade.SUPER, 5000, 10));
+        lists.add(createDto(plantId2, Grade.NORMAL, 3000, 10));
 
         return lists;
     }

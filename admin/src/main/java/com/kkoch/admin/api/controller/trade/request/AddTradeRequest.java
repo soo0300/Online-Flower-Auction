@@ -30,10 +30,10 @@ public class AddTradeRequest {
 
     public AddTradeDto toAddTradeDto() {
         return AddTradeDto.builder()
-            .memberKey(this.memberToken)
-            .auctionArticleId(this.auctionArticleId)
-            .price(this.price)
-            .build();
+                .memberKey(this.memberToken)
+                .auctionArticleId(this.auctionArticleId)
+                .price(this.price)
+                .build();
     }
 
 }

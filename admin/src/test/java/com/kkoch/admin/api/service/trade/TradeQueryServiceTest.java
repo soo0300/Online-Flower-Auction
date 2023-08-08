@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -50,11 +51,11 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
         //given
         LocalDate currentDate = LocalDate.of(2023, 7, 10);
 
-        Trade trade1 = createTrade(1L, 3000, LocalDateTime.of(2023, 7, 3, 23, 59, 59), true);
-        Trade trade2 = createTrade(1L, 3000, LocalDateTime.of(2023, 7, 4, 0, 0, 0), true);
-        Trade trade3 = createTrade(1L, 3000, LocalDateTime.of(2023, 7, 7, 0, 0, 0), false);
-        Trade trade4 = createTrade(2L, 3000, LocalDateTime.of(2023, 7, 7, 0, 0, 0), true);
-        Trade trade5 = createTrade(1L, 2000, LocalDateTime.of(2023, 7, 10, 23, 59, 59), true);
+        Trade trade1 = createTrade(1000, LocalDateTime.of(2023, 7, 3, 23, 59, 59), true);
+        Trade trade2 = createTrade(2000, LocalDateTime.of(2023, 7, 4, 0, 0, 0), true);
+        Trade trade3 = createTrade(3000, LocalDateTime.of(2023, 7, 7, 0, 0, 0), false);
+        Trade trade4 = createTrade(4000, LocalDateTime.of(2023, 7, 7, 0, 0, 0), true);
+        Trade trade5 = createTrade(5000, LocalDateTime.of(2023, 7, 10, 23, 59, 59), true);
 
         createAuctionArticle("00001", trade2, null);
         createAuctionArticle("00002", trade2, null);
@@ -66,15 +67,16 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
         PageRequest pageRequest = PageRequest.of(0, 20);
 
         //when
-        Page<TradeResponse> result = tradeQueryService.getMyTrades(1L, cond, pageRequest);
+        Page<TradeResponse> result = tradeQueryService.getMyTrades("memberKey", cond, pageRequest);
 
         //then
         List<TradeResponse> responses = result.getContent();
-        assertThat(responses).hasSize(2)
+        assertThat(responses).hasSize(3)
                 .extracting("totalPrice", "count")
                 .containsExactlyInAnyOrder(
-                        tuple(3000, 3),
-                        tuple(2000, 2)
+                        tuple(2000, 3),
+                        tuple(4000, 0),
+                        tuple(5000, 2)
                 );
     }
 
@@ -88,11 +90,11 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
 
         Plant plant = createPlant(code, name, type);
 
-        Trade trade = createTrade(1L, 3000, LocalDate.of(2023, 7, 10).atStartOfDay(), true);
+        Trade trade = createTrade(3000, LocalDate.of(2023, 7, 10).atStartOfDay(), true);
 
-        AuctionArticle auctionArticle1 = createAuctionArticle("00001", trade, plant);
-        AuctionArticle auctionArticle2 = createAuctionArticle("00002", trade, plant);
-        AuctionArticle auctionArticle3 = createAuctionArticle("00003", trade, plant);
+        createAuctionArticle("00001", trade, plant);
+        createAuctionArticle("00002", trade, plant);
+        createAuctionArticle("00003", trade, plant);
 
         //when
         TradeDetailResponse response = tradeQueryService.getTrade(trade.getId());
@@ -124,12 +126,13 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
         return auctionArticleRepository.save(auctionArticle);
     }
 
-    private Trade createTrade(Long memberId, int totalPrice, LocalDateTime tradeDate, boolean active) {
+    private Trade createTrade(int totalPrice, LocalDateTime tradeDate, boolean active) {
         Trade trade = Trade.builder()
-                .memberId(memberId)
+                .memberKey("memberKey")
                 .totalPrice(totalPrice)
                 .tradeTime(tradeDate)
                 .pickupStatus(false)
+                .articles(new ArrayList<>())
                 .active(active)
                 .build();
         return tradeRepository.save(trade);

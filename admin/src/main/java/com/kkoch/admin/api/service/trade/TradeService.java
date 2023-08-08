@@ -39,8 +39,7 @@ public class TradeService {
                 .orElseThrow(NoSuchElementException::new);
 
         auctionArticle.bid(dto.getPrice(), tradeDate);
-        auctionArticle.createTrade(currnetTrade);
-        currnetTrade.addAuctionArticle(auctionArticle);
+        auctionArticle.updateTrade(currnetTrade);
 
         return currnetTrade.getId();
     }
@@ -52,7 +51,6 @@ public class TradeService {
                 .pickupStatus(false)
                 .active(true)
                 .memberKey(dto.getMemberKey())
-                // TODO: 2023-08-08 아래 이렇게 해도 되는지 확인
                 .articles(new ArrayList<>())
                 .build();
     }

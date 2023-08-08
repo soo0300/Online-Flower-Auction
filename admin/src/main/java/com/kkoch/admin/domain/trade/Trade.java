@@ -60,7 +60,7 @@ public class Trade extends TimeBaseEntity {
                 .articles(auctionArticles)
                 .build();
 
-        auctionArticles.forEach(auctionArticle -> auctionArticle.createTrade(trade));
+        auctionArticles.forEach(auctionArticle -> auctionArticle.updateTrade(trade));
 
         return trade;
     }
