@@ -6,6 +6,7 @@ import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.api.service.trade.TradeQueryService;
 import com.kkoch.admin.api.service.trade.TradeService;
+import com.kkoch.admin.api.service.trade.dto.AddTradeDto;
 import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +19,10 @@ import org.springframework.data.domain.Pageable;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,10 +41,13 @@ class TradeControllerTest extends ControllerTestSupport {
     void addTrade() throws Exception {
         //given
         AddTradeRequest request = AddTradeRequest.builder()
-                .memberToken("memberToken")
-                .auctionArticleId(1L)
-                .price(10000)
-                .build();
+            .memberToken(UUID.randomUUID().toString())
+            .auctionArticleId(1L)
+            .price(2000)
+            .build();
+
+        given(tradeService.addTrade(any(AddTradeDto.class), any(LocalDateTime.class)))
+            .willReturn(2L);
 
         //when //then
         mockMvc.perform(
@@ -64,12 +70,12 @@ class TradeControllerTest extends ControllerTestSupport {
         List<TradeResponse> responses = List.of();
         PageImpl<TradeResponse> tradeResponses = new PageImpl<>(responses);
 
-        BDDMockito.given(tradeQueryService.getMyTrades(anyString(), any(TradeSearchCond.class), any(Pageable.class)))
+        given(tradeQueryService.getMyTrades(anyString(), any(TradeSearchCond.class), any(Pageable.class)))
                 .willReturn(tradeResponses);
 
         //when //then
         mockMvc.perform(
-                        get("/admin-service/trades/{memberId}", 1L)
+                        get("/admin-service/trades/{memberKey}", UUID.randomUUID().toString())
                                 .queryParam("term", "1")
                                 .queryParam("page", "0")
                 )
@@ -91,7 +97,7 @@ class TradeControllerTest extends ControllerTestSupport {
                 .pickupStatus(false)
                 .build();
 
-        BDDMockito.given(tradeQueryService.getTrade(anyLong()))
+        given(tradeQueryService.getTrade(anyLong()))
                 .willReturn(response);
 
         //when //then
@@ -111,7 +117,7 @@ class TradeControllerTest extends ControllerTestSupport {
     @Test
     void pickupWithException() throws Exception {
         //given
-        BDDMockito.given(tradeService.pickup(anyLong()))
+        given(tradeService.pickup(anyLong()))
                 .willThrow(new IllegalArgumentException("이미 픽업한 상품입니다."));
 
         //when //then
@@ -130,7 +136,7 @@ class TradeControllerTest extends ControllerTestSupport {
     @Test
     void pickup() throws Exception {
         //given
-        BDDMockito.given(tradeService.pickup(anyLong()))
+        given(tradeService.pickup(anyLong()))
                 .willReturn(1L);
 
         //when //then
@@ -149,7 +155,7 @@ class TradeControllerTest extends ControllerTestSupport {
     @Test
     void removeTrade() throws Exception {
         //given
-        BDDMockito.given(tradeService.remove(anyLong()))
+        given(tradeService.remove(anyLong()))
                 .willReturn(1L);
 
         //when //then
