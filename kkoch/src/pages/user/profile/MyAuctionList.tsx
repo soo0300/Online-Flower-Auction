@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { MDBCard, MDBCardBody, MDBCardTitle } from "mdb-react-ui-kit";
 import {GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import StripedDataGrid from "../stripedDataGrid";
-import './MyAuctionList.css';
 import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 
@@ -20,14 +19,14 @@ function MyAuctionList() {
     { field: 'col7', headerName: '가격', width: 110 },
     { field: 'col8', headerName: '낙찰 시간', width: 160, align: 'center', headerAlign: 'center' },
     { field: 'col9', headerName: '픽업 현황', width: 110 },
-    {
-      field: 'col10',
-      headerName: '낙찰 내역 삭제',
-      width: 150,
-      renderCell: (params) => (
-        <button className='delete-btn' onClick={() => handleDelete(params.row.id)}>삭제하기</button>
-      ),
-    },
+    // {
+    //   field: 'col10',
+    //   headerName: '낙찰 내역 삭제',
+    //   width: 150,
+    //   renderCell: (params) => (
+    //     <button className='delete-btn' onClick={() => handleDelete(params.row.id)}>삭제하기</button>
+    //   ),
+    // },
   ];
 
   const [rows, setRows] = useState<GridRowsProp>(initialRows);
@@ -67,23 +66,23 @@ function MyAuctionList() {
     })
   }, []);
 
-  const pk = 1
-  const handleDelete = (id) => {
-    // 클릭한 행을 삭제하는 로직 구현
-    axios({
-      method: "delete",
-      url: `/api/admin-service/trades/${pk}/${id}`
-    })
-    .then((res) => {
-      console.log(res);
-      // 서버에서 삭제 성공하면 rows 상태 업데이트하여 화면에서도 삭제
-      // const updatedRows = rows.filter((row) => row.id !== id);
-      // setRows(updatedRows);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  };
+  // const pk = 1
+  // const handleDelete = (id) => {
+  //   // 클릭한 행을 삭제하는 로직 구현
+  //   axios({
+  //     method: "delete",
+  //     url: `/api/admin-service/trades/${pk}/${id}`
+  //   })
+  //   .then((res) => {
+  //     console.log(res);
+  //     // 서버에서 삭제 성공하면 rows 상태 업데이트하여 화면에서도 삭제
+  //     // const updatedRows = rows.filter((row) => row.id !== id);
+  //     // setRows(updatedRows);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
+  // };
   
 
   
