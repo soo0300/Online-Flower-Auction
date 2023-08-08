@@ -69,7 +69,7 @@ const SignUp = () => {
 		setBusinessNumber(newBN);
     
 		// 사업자 번호 정규표현식
-		const regex = /([0-9]{3})-?([0-9]{2})-?([0-9]{5})/
+		const regex = /^([0-9]{3})-?([0-9]{2})-?([0-9]{5})$/
     
 		// 정규표현식이 true 이면
 		if (regex.test(newBN)) {
@@ -336,10 +336,11 @@ const SignUp = () => {
             {/* <LockIcon /> 아이콘 */}
             <input
               className='input'
+              type='text'
               {...register('businessNumber', {
                 required: '사업자등록번호를 입력해주세요.',
                 pattern: {
-                  value: /([0-9]{3})-?([0-9]{2})-?([0-9]{5})/,
+                  value: /^([0-9]{3})-?([0-9]{2})-?([0-9]{5})$/,
                   message: '사업자등록번호를 올바르게 입력해주세요.',
                 },
               })}

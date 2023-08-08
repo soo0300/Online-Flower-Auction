@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import secureLocalStorage  from  "react-secure-storage";
+
 import axios from 'axios';
 
 interface AuthState {
@@ -19,6 +21,9 @@ const authSlice = createSlice({
       state.memberkey = action.payload["mem_key"];
       state.token = action.payload["mem_token"];
 
+      secureLocalStorage.setItem("memberkey", state.memberkey);
+      secureLocalStorage.setItem("token", state.token);
+      
       axios({
         method:"get",
         url: `api/api/user-service/${state.memberkey}`,
@@ -37,6 +42,8 @@ const authSlice = createSlice({
       state.memberkey = null;
       state.token = null;
       localStorage.removeItem('username');
+      secureLocalStorage.removeItem("memberkey");
+      secureLocalStorage.removeItem("token");
     },
     // 다른 액션들...
   },

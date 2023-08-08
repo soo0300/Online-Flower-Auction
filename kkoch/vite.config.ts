@@ -18,4 +18,8 @@ export default defineConfig({
       },
     },
   },
+  // secure local storage 사용을 위한 .env 파일 
+  define: {
+    "process.env" : {},
+  }
 })

@@ -3,9 +3,9 @@ import { Bars3Icon, XMarkIcon, UserCircleIcon, BellAlertIcon } from "@heroicons/
 import Logo from "@/assets/logo.png";
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from '@/reducer/store'; // RootState 추가
+import { useDispatch } from "react-redux";
 import { logout } from '@/reducer/store/authSlice';
+import secureLocalStorage from "react-secure-storage";
 // import ActionButton from "@/shared/ActionButton";
 
 type Props = {
@@ -28,13 +28,12 @@ const Navbar = ({isTop} : Props) => {
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
-  const isLoggedIn = useSelector((state: RootState) => state.auth.memberkey !== null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const isLoggedIn = secureLocalStorage.getItem("memberkey") && secureLocalStorage.getItem("token");
+  const [isLoggedOut, setIsLoggedOut] = useState(true);
 
   useEffect(() => {
     setIsLoggedOut(!isLoggedIn);
   }, [isLoggedIn]);
-
 
   const handleLogout = () => {
     // 로그아웃
@@ -110,10 +109,10 @@ const Navbar = ({isTop} : Props) => {
     )}
 
     {/* 회원 메뉴 드롭다운 */}
-    {isDropdownOpen && (
-      <div className="absolute top-16 right-0 bg-white border border-gray-300 rounded shadow-lg">
-        <ul className="py-2">
-          <li>
+    { isAboveMediumScreens && isDropdownOpen && (
+      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+        <ul className="flex flex-col justify-center pl-0 mb-0">
+          <li >
             <Link to="/mypage" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setDropdownOpen(false)}>마이페이지</Link>
           </li>
           <li>

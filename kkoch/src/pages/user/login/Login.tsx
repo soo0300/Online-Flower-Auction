@@ -12,10 +12,10 @@ const Login = () => {
 	const navigate = useNavigate();
 
 	// 만약 회원가입에서 넘어왔으면 이메일을 바로 대입
-	const [ email, setEmail ] = useState(state ? state.email : '');
+	const [email, setEmail] = useState(state && state.email ? state.email : '');
 	const [ password, setPassword] = useState('');
 
-	const [ emailValid, setEmailValid ] = useState(false);
+	const [ emailValid, setEmailValid ] = useState(state && state.email ? true : false);
 	const [ passwordValid, setPasswordValid ] = useState(false);
 	const [ notAllow, setNotAllow ] = useState(true);
 
@@ -69,13 +69,14 @@ const Login = () => {
 			data: data
 		})
 		.then(res => {
-			// 로그인 요청이 성공하면 받아온 정보를 redux로 호출
+			// 로그인 요청이 성공하면 받아온 정보를 redux로 보냄
 			dispatch(login({
 				"mem_key" : res.headers.memberkey,
 				"mem_token" : res.headers.token
 			}))
 				
 			// 이전에 state에서 왔으면 로그인후 state으로 이동
+			console.log(state);
 			if (state) {
 				navigate(state);
 			} else {
