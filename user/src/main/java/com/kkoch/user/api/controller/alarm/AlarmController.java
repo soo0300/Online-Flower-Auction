@@ -2,6 +2,7 @@ package com.kkoch.user.api.controller.alarm;
 
 import com.kkoch.user.api.controller.ApiResponse;
 import com.kkoch.user.api.controller.alarm.response.AlarmResponse;
+import com.kkoch.user.api.service.alarm.AlamService;
 import com.kkoch.user.api.service.alarm.AlarmQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,24 +14,26 @@ import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user-service/alarms")
+@RequestMapping("/{memberKey}/alarms")
 @Slf4j
 public class AlarmController {
 
+    private final AlamService alamService;
     private final AlarmQueryService alarmQueryService;
 
     @GetMapping
-    public ApiResponse<List<AlarmResponse>> getAlarms() {
-        // TODO: 2023-07-26 임우택 JWT 복호화 과정 생략
-        String email = null;
-        List<AlarmResponse> responses = alarmQueryService.searchAlarms(email);
-        return ApiResponse.ok(responses);
-    }
+    public ApiResponse<List<AlarmResponse>> getAlarms(@PathVariable String memberKey) {
+        log.debug("call AlarmController#getAlarms={}", memberKey);
 
-    // TODO: 2023-07-26 임우택 알림 확인 조회와 병합 여부 결정
-    @PatchMapping("/{alarmId}")
-    public ApiResponse<?> setCheckAlarm(@PathVariable Long alarmId) {
-        return ApiResponse.ok(null);
+        List<AlarmResponse> responses = alarmQueryService.searchAlarms(memberKey);
+
+        log.debug("response size = {}", responses.size());
+
+        int openCount = alamService.open(memberKey);
+
+        log.debug("openCount = {}", openCount);
+
+        return ApiResponse.ok(responses);
     }
 
     // 알림 삭제
