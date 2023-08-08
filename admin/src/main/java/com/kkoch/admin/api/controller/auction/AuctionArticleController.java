@@ -36,9 +36,10 @@ public class AuctionArticleController {
     public ApiResponse<Long> addAuctionArticle(
             @Valid @RequestBody AddAuctionArticleRequest request
     ) {
+        log.info("<경매품 등록> Controller : request = {}", request);
         AddAuctionArticleDto dto = request.toAddAuctionArticleDto();
         Long savedAuctionArticleId = auctionArticleService.addAuctionArticle(request.getPlantId(), request.getAuctionId(), dto);
-        log.debug("[경매품 등록 응답] 경매품 상장번호 = {}", savedAuctionArticleId);
+        log.info("<경매품 등록> 응답 : 경매품 상장번호 = {}", savedAuctionArticleId);
         return ApiResponse.ok(savedAuctionArticleId);
     }
 
@@ -52,6 +53,7 @@ public class AuctionArticleController {
             @RequestParam(defaultValue = "") String region,
             @RequestParam(defaultValue = "0") Integer page
     ) {
+        log.info("<경매품 목록조회(기간별 조회)> Controller");
         AuctionArticlePeriodSearchCond cond = AuctionArticlePeriodSearchCond.of(startDateTime, endDateTime, code, type, name, region);
         PageRequest pageRequest = PageRequest.of(page, 15);
 
@@ -84,6 +86,7 @@ public class AuctionArticleController {
             @RequestParam(defaultValue = "") String region,
             @RequestParam(defaultValue = "") String shipper
     ) {
+        log.info("<경매품 목록조회(관계자용 전체 조회)> Controller");
         AuctionArticleSearchForAdminCond cond = AuctionArticleSearchForAdminCond.of(endDateTime, code, type, name, region, shipper);
 
         List<AuctionArticlesForAdminResponse> responses = auctionArticleQueryService.getAuctionArticleListForAdmin(cond);
@@ -93,7 +96,7 @@ public class AuctionArticleController {
     @GetMapping("/{auctionId}")
     public ApiResponse<List<AuctionArticlesResponse>> getAuctionArticlesForAuction(
             @PathVariable Long auctionId) {
-
+        log.info("<경매품 목록조회(경매시 목록 출력용)> Controller");
         List<AuctionArticlesResponse> response = auctionArticleQueryService.getAuctionArticleList(auctionId);
         return ApiResponse.ok(response);
     }
