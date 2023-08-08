@@ -22,9 +22,9 @@ public class AddTradeRequest {
     private Integer price;
 
     @Builder
-    private AddTradeRequest(String memberToken, String auctionArticleId, Integer price) {
+    private AddTradeRequest(String memberToken, Long auctionArticleId, Integer price) {
         this.memberToken = memberToken;
-        this.auctionArticleId = Long.valueOf(auctionArticleId);
+        this.auctionArticleId = auctionArticleId;
         this.price = price;
     }
 

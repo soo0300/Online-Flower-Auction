@@ -2,18 +2,17 @@ package com.kkoch.admin.docs.trade;
 
 import com.kkoch.admin.api.controller.trade.TradeController;
 import com.kkoch.admin.api.controller.trade.request.AddTradeRequest;
-import com.kkoch.admin.api.controller.trade.request.AuctionArticleRequest;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
 import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.api.service.trade.TradeQueryService;
 import com.kkoch.admin.api.service.trade.TradeService;
+import com.kkoch.admin.api.service.trade.dto.AddTradeDto;
 import com.kkoch.admin.docs.RestDocsSupport;
 import com.kkoch.admin.domain.Grade;
 import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -52,17 +52,13 @@ public class TradeControllerDocsTest extends RestDocsSupport {
     @DisplayName("낙찰 내역을 등록하는 API")
     @Test
     void addTrade() throws Exception {
-        AuctionArticleRequest article1 = createAuctionArticleRequest(1L, 3000);
-        AuctionArticleRequest article2 = createAuctionArticleRequest(2L, 4000);
-        AuctionArticleRequest article3 = createAuctionArticleRequest(3L, 5000);
-        List<AuctionArticleRequest> articles = List.of(article1, article2, article3);
-
         AddTradeRequest request = AddTradeRequest.builder()
-            .memberId(1L)
-            .articles(articles)
+            .memberToken(UUID.randomUUID().toString())
+            .auctionArticleId(1L)
+            .price(3000)
             .build();
 
-        given(tradeService.addTrade(anyLong(), anyList()))
+        given(tradeService.addTrade(any(AddTradeDto.class), any(LocalDateTime.class)))
             .willReturn(4L);
 
         mockMvc.perform(post("/admin-service/trades")
@@ -75,17 +71,12 @@ public class TradeControllerDocsTest extends RestDocsSupport {
                 preprocessRequest(prettyPrint()),
                 preprocessResponse(prettyPrint()),
                 requestFields(
-                    fieldWithPath("memberId").type(JsonFieldType.NUMBER)
-                        .description("회원 PK"),
-                    fieldWithPath("articles").type(JsonFieldType.ARRAY)
-                        .description("경매품 리스트"),
-                    fieldWithPath("articles[].auctionArticleId").type(JsonFieldType.NUMBER)
-                        .description("경매품 PK"),
-                    fieldWithPath("articles[].bidPrice").type(JsonFieldType.NUMBER)
-                        .description("낙찰 가격"),
-                    fieldWithPath("articles[].bidTime").type(JsonFieldType.ARRAY)
-                        .description("낙찰 시간")
-
+                    fieldWithPath("memberToken").type(JsonFieldType.STRING)
+                        .description("회원 고유키"),
+                    fieldWithPath("auctionArticleId").type(JsonFieldType.NUMBER)
+                        .description("경매품 pk"),
+                    fieldWithPath("price").type(JsonFieldType.NUMBER)
+                        .description("낙찰 가격")
                 ),
                 responseFields(
                     fieldWithPath("code").type(JsonFieldType.NUMBER)
@@ -109,7 +100,7 @@ public class TradeControllerDocsTest extends RestDocsSupport {
         List<TradeResponse> responses = List.of(tradeResponse1, tradeResponse2, tradeResponse3);
         PageRequest pageRequest = PageRequest.of(0, 20);
 
-        given(tradeQueryService.getMyTrades(anyLong(), any(TradeSearchCond.class), any(Pageable.class)))
+        given(tradeQueryService.getMyTrades(anyString(), any(TradeSearchCond.class), any(Pageable.class)))
             .willReturn(new PageImpl<>(responses, pageRequest, 100));
 
         mockMvc.perform(get("/admin-service/trades/{memberId}", 1L)
@@ -122,7 +113,6 @@ public class TradeControllerDocsTest extends RestDocsSupport {
                 preprocessResponse(prettyPrint()),
                 requestParameters(
                     parameterWithName("term")
-                        .optional()
                         .description("기간"),
                     parameterWithName("page")
                         .description("페이지")
@@ -331,14 +321,6 @@ public class TradeControllerDocsTest extends RestDocsSupport {
                         .description("응답 데이터")
                 )
             ));
-    }
-
-    private AuctionArticleRequest createAuctionArticleRequest(Long auctionArticleId, int bidPrice) {
-        return AuctionArticleRequest.builder()
-            .auctionArticleId(auctionArticleId)
-            .bidPrice(bidPrice)
-            .bidTime(LocalDateTime.now())
-            .build();
     }
 
     private TradeResponse createTradeResponse(long tradeId, int totalPrice, LocalDateTime tradeDate, boolean pickupStatus, int count) {
