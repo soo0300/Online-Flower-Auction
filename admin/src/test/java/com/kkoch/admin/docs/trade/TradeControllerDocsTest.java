@@ -100,7 +100,7 @@ public class TradeControllerDocsTest extends RestDocsSupport {
         List<TradeResponse> responses = List.of(tradeResponse1, tradeResponse2, tradeResponse3);
         PageRequest pageRequest = PageRequest.of(0, 20);
 
-        given(tradeQueryService.getMyTrades(anyString(), any(TradeSearchCond.class), any(Pageable.class)))
+        given(tradeQueryService.getMyTrades(anyString(), any(Pageable.class)))
             .willReturn(new PageImpl<>(responses, pageRequest, 100));
 
         mockMvc.perform(get("/admin-service/trades/{memberId}", 1L)
@@ -325,10 +325,6 @@ public class TradeControllerDocsTest extends RestDocsSupport {
 
     private TradeResponse createTradeResponse(long tradeId, int totalPrice, LocalDateTime tradeDate, boolean pickupStatus, int count) {
         return TradeResponse.builder()
-            .tradeId(tradeId)
-            .totalPrice(totalPrice)
-            .tradeDate(tradeDate)
-            .pickupStatus(pickupStatus)
             .count(count)
             .build();
     }

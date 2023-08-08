@@ -63,11 +63,10 @@ class TradeQueryServiceTest extends IntegrationTestSupport {
         createAuctionArticle("00004", trade5, null);
         createAuctionArticle("00005", trade5, null);
 
-        TradeSearchCond cond = TradeSearchCond.of(currentDate, 7);
         PageRequest pageRequest = PageRequest.of(0, 20);
 
         //when
-        Page<TradeResponse> result = tradeQueryService.getMyTrades("memberKey", cond, pageRequest);
+        Page<TradeResponse> result = tradeQueryService.getMyTrades("memberKey", pageRequest);
 
         //then
         List<TradeResponse> responses = result.getContent();

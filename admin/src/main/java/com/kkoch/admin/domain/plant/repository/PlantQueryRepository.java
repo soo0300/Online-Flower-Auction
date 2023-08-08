@@ -1,5 +1,6 @@
 package com.kkoch.admin.domain.plant.repository;
 
+import com.kkoch.admin.api.controller.plant.response.PlantNameResponse;
 import com.kkoch.admin.api.controller.plant.response.PlantResponse;
 import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
 import com.kkoch.admin.domain.plant.Plant;
@@ -45,6 +46,23 @@ public class PlantQueryRepository {
                         plant.name.name.eq(name)
                 )
                 .fetchFirst();
+    }
+
+    public List<PlantNameResponse> findPlantNames(List<Long> plantIds) {
+        QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
+
+        return queryFactory
+            .select(Projections.constructor(PlantNameResponse.class,
+                plant.id,
+                plant.type.name,
+                plant.name.name
+            ))
+            .from(plant)
+            .join(plant.type, type)
+            .join(plant.name, name)
+            .where(plant.id.in(plantIds))
+            .fetch();
     }
 
     private BooleanExpression nameEq(String name) {

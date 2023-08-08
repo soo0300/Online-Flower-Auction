@@ -1,5 +1,6 @@
 package com.kkoch.admin.api.service.plant;
 
+import com.kkoch.admin.api.controller.plant.response.PlantNameResponse;
 import com.kkoch.admin.api.controller.plant.response.PlantResponse;
 import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
 import com.kkoch.admin.domain.plant.repository.PlantQueryRepository;
@@ -23,5 +24,9 @@ public class PlantQueryService {
 
     public Long getPlantId(String type, String name) {
         return plantQueryRepository.findPlantId(type, name);
+    }
+
+    public List<PlantNameResponse> getPlantNames(List<Long> plantIds) {
+        return plantQueryRepository.findPlantNames(plantIds);
     }
 }
