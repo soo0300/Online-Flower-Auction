@@ -1,7 +1,7 @@
 package com.kkoch.admin.api.service.auction;
 
-import com.kkoch.admin.api.controller.auction.response.AuctionForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.domain.auction.Auction;
 import com.kkoch.admin.domain.auction.repository.AuctionQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -22,10 +22,9 @@ public class AuctionQueryService {
         return auctionQueryRepository.findAllAuction();
     }
 
-    public List<AuctionForMemberResponse> getAuctionForMember() {
-        List<Auction> auctions = auctionQueryRepository.findAuctionForMember();
-        return auctions.stream()
-                .map(AuctionForMemberResponse::of)
-                .collect(Collectors.toList());
+    public AuctionTitleResponse getOpenAuction() {
+        Auction auction = auctionQueryRepository.findOpenAuction()
+                .orElseThrow(() -> new NoSuchElementException("진행중인 경매가 없습니다."));
+        return AuctionTitleResponse.of(auction);
     }
 }

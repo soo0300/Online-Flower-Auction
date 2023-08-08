@@ -88,7 +88,30 @@ public class TradeControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data").type(JsonFieldType.NUMBER)
                         .description("응답 데이터")
                 )
-            ));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("trade-create",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("memberToken").type(JsonFieldType.STRING)
+                                        .description("회원 토큰"),
+                                fieldWithPath("auctionArticleId").type(JsonFieldType.NUMBER)
+                                        .description("경매품 PK"),
+                                fieldWithPath("price").type(JsonFieldType.NUMBER)
+                                        .description("낙찰 가격")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.NUMBER)
+                                        .description("응답 데이터")
+                        )
+                ));
     }
 
     @DisplayName("낙찰 내역을 조회하는 API")
@@ -183,7 +206,84 @@ public class TradeControllerDocsTest extends RestDocsSupport {
                     fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN)
                         .description("리스트가 비어있는지 여부")
                 )
-            ));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("trade-search",
+                        preprocessResponse(prettyPrint()),
+                        requestParameters(
+                                parameterWithName("term")
+                                        .optional()
+                                        .description("기간"),
+                                parameterWithName("page")
+                                        .description("페이지")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.content").type(JsonFieldType.ARRAY)
+                                        .description("낙찰 내역 데이터"),
+                                fieldWithPath("data.content[].tradeId").type(JsonFieldType.NUMBER)
+                                        .description("낙찰 내역 PK"),
+                                fieldWithPath("data.content[].totalPrice").type(JsonFieldType.NUMBER)
+                                        .description("총 거래 가격"),
+                                fieldWithPath("data.content[].tradeDate").type(JsonFieldType.STRING)
+                                        .description("거래 시간"),
+                                fieldWithPath("data.content[].pickupStatus").type(JsonFieldType.BOOLEAN)
+                                        .description("픽업여부"),
+                                fieldWithPath("data.content[].count").type(JsonFieldType.NUMBER)
+                                        .description("낙찰한 경매품 갯수"),
+                                fieldWithPath("data.pageable").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.sort").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.sort.empty").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.sort.sorted").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.sort.unsorted").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.offset").type(JsonFieldType.NUMBER)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.pageNumber").type(JsonFieldType.NUMBER)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.pageSize").type(JsonFieldType.NUMBER)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.paged").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.pageable.unpaged").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER)
+                                        .description("총 페이지 수"),
+                                fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER)
+                                        .description("DB의 전체 데이터 갯수"),
+                                fieldWithPath("data.last").type(JsonFieldType.BOOLEAN)
+                                        .description("마지막 페이지라면 true"),
+                                fieldWithPath("data.size").type(JsonFieldType.NUMBER)
+                                        .description("페이지 당 나타낼 수 있는 데이터의 갯수"),
+                                fieldWithPath("data.sort").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.sort.empty").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.sort.sorted").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.sort.unsorted").type(JsonFieldType.BOOLEAN)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.number").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지 번호"),
+                                fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER)
+                                        .description("실제 데이터의 갯수"),
+                                fieldWithPath("data.first").type(JsonFieldType.BOOLEAN)
+                                        .description("첫번째 페이지이면 true"),
+                                fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN)
+                                        .description("리스트가 비어있는지 여부")
+                        )
+                ));
     }
 
     @DisplayName("낙찰 내역 상세조회 API")
@@ -191,134 +291,116 @@ public class TradeControllerDocsTest extends RestDocsSupport {
     void getTrade() throws Exception {
         SuccessfulBid auctionArticle = createSuccessfulBid();
         TradeDetailResponse response = TradeDetailResponse.builder()
-            .totalPrice(10000)
-            .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
-            .pickupStatus(false)
-            .build();
+                .totalPrice(10000)
+                .tradeTime(LocalDate.of(2023, 7, 10).atStartOfDay())
+                .pickupStatus(false)
+                .build();
         response.insertAuctionArticles(Collections.singletonList(auctionArticle));
 
         given(tradeQueryService.getTrade(anyLong()))
-            .willReturn(response);
+                .willReturn(response);
 
         mockMvc.perform(
-                get("/admin-service/trades/detail/{tradeId}", 1L)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value("200"))
-            .andExpect(jsonPath("$.status").value("OK"))
-            .andExpect(jsonPath("$.message").value("SUCCESS"))
-            .andExpect(jsonPath("$.data.totalPrice").value(10000))
-            .andExpect(jsonPath("$.data.pickupStatus").value(false))
-            .andDo(document("trade-search-detail",
-                preprocessResponse(prettyPrint()),
-                responseFields(
-                    fieldWithPath("code").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("status").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메시지"),
-                    fieldWithPath("data").type(JsonFieldType.OBJECT)
-                        .description("응답 데이터"),
-                    fieldWithPath("data.totalPrice").type(JsonFieldType.NUMBER)
-                        .description("총 낙찰 가격"),
-                    fieldWithPath("data.tradeTime").type(JsonFieldType.STRING)
-                        .description("거래 시간"),
-                    fieldWithPath("data.pickupStatus").type(JsonFieldType.BOOLEAN)
-                        .description("픽업 여부"),
-                    fieldWithPath("data.successfulBid").type(JsonFieldType.ARRAY)
-                        .description("경매품 정보 리스트"),
-                    fieldWithPath("data.successfulBid[].code").type(JsonFieldType.STRING)
-                        .description("식물 구분 코드"),
-                    fieldWithPath("data.successfulBid[].name").type(JsonFieldType.STRING)
-                        .description("식물 품종 명"),
-                    fieldWithPath("data.successfulBid[].type").type(JsonFieldType.STRING)
-                        .description("식물 품목 명"),
-                    fieldWithPath("data.successfulBid[].grade").type(JsonFieldType.STRING)
-                        .description("경매품 등급"),
-                    fieldWithPath("data.successfulBid[].count").type(JsonFieldType.NUMBER)
-                        .description("경매품 단수"),
-                    fieldWithPath("data.successfulBid[].bidPrice").type(JsonFieldType.NUMBER)
-                        .description("낙찰 가격"),
-                    fieldWithPath("data.successfulBid[].bidTime").type(JsonFieldType.STRING)
-                        .description("낙찰 시간"),
-                    fieldWithPath("data.successfulBid[].region").type(JsonFieldType.STRING)
-                        .description("출하 지역")
+                        get("/admin-service/trades/{memberToken}/{tradeId}", "memberToken", 1L)
                 )
-            ));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data.totalPrice").value(10000))
+                .andExpect(jsonPath("$.data.pickupStatus").value(false))
+                .andDo(document("trade-search-detail",
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.OBJECT)
+                                        .description("응답 데이터"),
+                                fieldWithPath("data.totalPrice").type(JsonFieldType.NUMBER)
+                                        .description("총 낙찰 가격"),
+                                fieldWithPath("data.tradeTime").type(JsonFieldType.STRING)
+                                        .description("거래 시간"),
+                                fieldWithPath("data.pickupStatus").type(JsonFieldType.BOOLEAN)
+                                        .description("픽업 여부"),
+                                fieldWithPath("data.successfulBid").type(JsonFieldType.ARRAY)
+                                        .description("경매품 정보 리스트"),
+                                fieldWithPath("data.successfulBid[].code").type(JsonFieldType.STRING)
+                                        .description("식물 구분 코드"),
+                                fieldWithPath("data.successfulBid[].name").type(JsonFieldType.STRING)
+                                        .description("식물 품종 명"),
+                                fieldWithPath("data.successfulBid[].type").type(JsonFieldType.STRING)
+                                        .description("식물 품목 명"),
+                                fieldWithPath("data.successfulBid[].grade").type(JsonFieldType.STRING)
+                                        .description("경매품 등급"),
+                                fieldWithPath("data.successfulBid[].count").type(JsonFieldType.NUMBER)
+                                        .description("경매품 단수"),
+                                fieldWithPath("data.successfulBid[].bidPrice").type(JsonFieldType.NUMBER)
+                                        .description("낙찰 가격"),
+                                fieldWithPath("data.successfulBid[].bidTime").type(JsonFieldType.STRING)
+                                        .description("낙찰 시간"),
+                                fieldWithPath("data.successfulBid[].region").type(JsonFieldType.STRING)
+                                        .description("출하 지역")
+                        )
+                ));
 
     }
 
     private static SuccessfulBid createSuccessfulBid() {
         return SuccessfulBid.builder()
-            .code("절화")
-            .name("장미(스탠다드)")
-            .type("하젤")
-            .grade(Grade.NONE)
-            .count(10)
-            .bidPrice(10_000)
-            .bidTime(LocalDateTime.of(2023, 7, 10, 11, 30))
-            .region("광주")
-            .build();
+                .code("절화")
+                .name("장미(스탠다드)")
+                .type("하젤")
+                .grade(Grade.NONE)
+                .count(10)
+                .bidPrice(10_000)
+                .bidTime(LocalDateTime.of(2023, 7, 10, 11, 30))
+                .region("광주")
+                .build();
     }
 
     @DisplayName("경매품을 픽업하는 API")
     @Test
     void pickup() throws Exception {
         given(tradeService.pickup(anyLong()))
-            .willReturn(1L);
+                .willReturn(1L);
 
         mockMvc.perform(
-                patch("/admin-service/trades/{tradeId}", 1L)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value("200"))
-            .andExpect(jsonPath("$.status").value("OK"))
-            .andExpect(jsonPath("$.message").value("SUCCESS"))
-            .andExpect(jsonPath("$.data").isNumber())
-            .andDo(document("trade-pickup",
-                preprocessResponse(prettyPrint()),
-                responseFields(
-                    fieldWithPath("code").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("status").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메시지"),
-                    fieldWithPath("data").type(JsonFieldType.NUMBER)
-                        .description("응답 데이터")
+                        patch("/admin-service/trades/{tradeId}", 1L)
                 )
-            ));
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("SUCCESS"))
+                .andExpect(jsonPath("$.data").isNumber())
+                .andDo(document("trade-pickup",
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.NUMBER)
+                                        .description("코드"),
+                                fieldWithPath("status").type(JsonFieldType.STRING)
+                                        .description("상태"),
+                                fieldWithPath("message").type(JsonFieldType.STRING)
+                                        .description("메시지"),
+                                fieldWithPath("data").type(JsonFieldType.NUMBER)
+                                        .description("응답 데이터")
+                        )
+                ));
     }
 
     @DisplayName("낙찰 내역을 삭제하는 API")
     @Test
     void removeTrade() throws Exception {
         given(tradeService.remove(anyLong()))
-            .willReturn(1L);
+                .willReturn(1L);
 
         mockMvc.perform(
-                delete("/admin-service/trades/{tradeId}", 1L)
-            )
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.code").value("301"))
-            .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
-            .andExpect(jsonPath("$.message").value("낙찰 내역이 삭제되었습니다."))
-            .andExpect(jsonPath("$.data").isNumber())
-            .andDo(document("trade-remove",
-                preprocessResponse(prettyPrint()),
-                responseFields(
-                    fieldWithPath("code").type(JsonFieldType.NUMBER)
-                        .description("코드"),
-                    fieldWithPath("status").type(JsonFieldType.STRING)
-                        .description("상태"),
-                    fieldWithPath("message").type(JsonFieldType.STRING)
-                        .description("메시지"),
-                    fieldWithPath("data").type(JsonFieldType.NUMBER)
-                        .description("응답 데이터")
+                        delete("/admin-service/trades/{tradeId}", 1L)
                 )
             ));
     }

@@ -4,7 +4,6 @@ import com.kkoch.admin.api.ApiResponse;
 import com.kkoch.admin.api.controller.admin.LoginAdmin;
 import com.kkoch.admin.api.controller.auction.request.AddAuctionRequest;
 import com.kkoch.admin.api.controller.auction.request.SetAuctionRequest;
-import com.kkoch.admin.api.controller.auction.response.AuctionForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.AuctionQueryService;
@@ -43,8 +42,8 @@ public class AuctionController {
      */
     @PostMapping
     public ApiResponse<AuctionTitleResponse> addAuction(
-        @Valid @RequestBody AddAuctionRequest request,
-        @Login LoginAdmin loginAdmin
+            @Valid @RequestBody AddAuctionRequest request,
+            @Login LoginAdmin loginAdmin
     ) {
 
         timeValidation(request.getStartTime());
@@ -57,9 +56,9 @@ public class AuctionController {
     }
 
     @GetMapping("/api")
-    public ApiResponse<List<AuctionForMemberResponse>> getAuctionListForMember() {
-        List<AuctionForMemberResponse> responses = auctionQueryService.getAuctionForMember();
-        return ApiResponse.ok(responses);
+    public ApiResponse<AuctionTitleResponse> getAuctionListForMember() {
+        AuctionTitleResponse openAuction = auctionQueryService.getOpenAuction();
+        return ApiResponse.ok(openAuction);
     }
 
     @GetMapping
@@ -70,8 +69,8 @@ public class AuctionController {
 
     @PatchMapping("/{auctionId}/{status}")
     public ApiResponse<AuctionTitleResponse> setAuctionStatus(
-        @PathVariable Long auctionId,
-        @PathVariable Status status
+            @PathVariable Long auctionId,
+            @PathVariable Status status
     ) {
 
         AuctionTitleResponse response = auctionService.setStatus(auctionId, status);
@@ -82,8 +81,8 @@ public class AuctionController {
 
     @PatchMapping("/{auctionId}")
     public ApiResponse<AuctionTitleResponse> setAuction(
-        @PathVariable Long auctionId,
-        @Valid @RequestBody SetAuctionRequest request
+            @PathVariable Long auctionId,
+            @Valid @RequestBody SetAuctionRequest request
     ) {
 
         timeValidation(request.getStartTime());

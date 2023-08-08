@@ -1,8 +1,8 @@
 package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.IntegrationTestSupport;
-import com.kkoch.admin.api.controller.auction.response.AuctionForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionResponse;
+import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.domain.admin.Admin;
 import com.kkoch.admin.domain.admin.repository.AdminRepository;
 import com.kkoch.admin.domain.auction.Auction;
@@ -15,9 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static com.kkoch.admin.domain.auction.Status.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @Transactional
@@ -30,28 +32,40 @@ class AuctionQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private AdminRepository adminRepository;
 
-    @DisplayName("[경매 일정 조회] 회원용 조회")
+    @DisplayName("[경매 일정 조회] 진행중인 경매 없음")
     @Test
-    void getAuctionListForMember() {
+    void getAuctionNotExistOpen() {
         //given
         Admin admin = insertAdmin();
-        Auction auction1 = insertAuction(admin, false, READY);
-        Auction auction2 = insertAuction(admin, true, CLOSE);
-        Auction auction3 = insertAuction(admin, true, OPEN);
-        Auction auction4 = insertAuction(admin, true, READY);
-        Auction auction5 = insertAuction(admin, true, READY);
+        Auction auction1 = insertAuction(admin, false, READY, LocalDateTime.of(2023, 9, 15, 5, 0));
+        Auction auction2 = insertAuction(admin, true, CLOSE, LocalDateTime.of(2023, 9, 16, 5, 0));
+        Auction auction3 = insertAuction(admin, true, READY, LocalDateTime.of(2023, 9, 17, 5, 0));
+        Auction auction4 = insertAuction(admin, true, READY, LocalDateTime.of(2023, 9, 18, 5, 0));
+        Auction auction5 = insertAuction(admin, true, READY, LocalDateTime.of(2023, 9, 19, 5, 0));
 
         //when
-        List<AuctionForMemberResponse> auctionSchedule = auctionQueryService.getAuctionForMember();
-
         //then
-        assertThat(auctionSchedule).hasSize(3)
-                .extracting("title")
-                .containsExactlyInAnyOrder(
-                        "23. 9. 20. 오전 5:00 절화 진행 중",
-                        "23. 9. 20. 오전 5:00 절화 준비 중",
-                        "23. 9. 20. 오전 5:00 절화 준비 중"
-                );
+        assertThatThrownBy(() -> auctionQueryService.getOpenAuction())
+                .isInstanceOf(NoSuchElementException.class)
+                .hasMessage("진행중인 경매가 없습니다.");
+
+    }
+
+    @DisplayName("[경매 일정 조회] 진행중인 경매 조회")
+    @Test
+    void getOpenAuction() {
+        //given
+        Admin admin = insertAdmin();
+        Auction auction1 = insertAuction(admin, false, READY, LocalDateTime.of(2023, 9, 15, 5, 0));
+        Auction auction2 = insertAuction(admin, true, CLOSE, LocalDateTime.of(2023, 9, 16, 5, 0));
+        Auction auction3 = insertAuction(admin, true, OPEN, LocalDateTime.of(2023, 9, 17, 5, 0));
+        Auction auction4 = insertAuction(admin, true, READY, LocalDateTime.of(2023, 9, 18, 5, 0));
+        Auction auction5 = insertAuction(admin, true, READY, LocalDateTime.of(2023, 9, 19, 5, 0));
+
+        //when
+        AuctionTitleResponse openAuction = auctionQueryService.getOpenAuction();
+        //then
+        assertThat(openAuction.getTitle()).isEqualTo("23. 9. 17. 오전 5:00 절화 진행 중");
     }
 
     @DisplayName("[경매 일정 조회] 앞으로 열릴 경매 일정 조회")
@@ -87,6 +101,17 @@ class AuctionQueryServiceTest extends IntegrationTestSupport {
         Auction auction = Auction.builder()
                 .code(1)
                 .startTime(LocalDateTime.of(2023, 9, 20, 5, 0))
+                .active(active)
+                .status(status)
+                .admin(admin)
+                .build();
+        return auctionRepository.save(auction);
+    }
+
+    private Auction insertAuction(Admin admin, boolean active, Status status, LocalDateTime startTime) {
+        Auction auction = Auction.builder()
+                .code(1)
+                .startTime(startTime)
                 .active(active)
                 .status(status)
                 .admin(admin)
