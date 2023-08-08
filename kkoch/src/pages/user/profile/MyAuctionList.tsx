@@ -18,9 +18,10 @@ function MyAuctionList() {
     { field: 'col5', headerName: '지역', width: 110 },
     { field: 'col6', headerName: '단수', width: 110 },
     { field: 'col7', headerName: '가격', width: 110 },
-    { field: 'col8', headerName: '픽업 현황', width: 110 },
+    { field: 'col8', headerName: '낙찰 시간', width: 160, align: 'center', headerAlign: 'center' },
+    { field: 'col9', headerName: '픽업 현황', width: 110 },
     {
-      field: 'col9',
+      field: 'col10',
       headerName: '낙찰 내역 삭제',
       width: 150,
       renderCell: (params) => (
@@ -49,13 +50,14 @@ function MyAuctionList() {
       const formattedData = rawData["content"].map((item, idx) => ({
         id: idx + 1,
         col1: idx + 1,
-        col2: item.item,
-        col3: item.type,
+        col2: item.type,
+        col3: item.name,
         col4: item.grade,
-        col5: item.location,
-        col6: item.amount,
-        col7: item.price,
-        col8: item.status,
+        col5: item.region,
+        col6: item.count,
+        col7: item.bidPrice,
+        col8: item.bidTime,
+        col9: "픽업 대기",
       }));
 
       setRows(formattedData);

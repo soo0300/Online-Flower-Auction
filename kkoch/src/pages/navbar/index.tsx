@@ -22,6 +22,8 @@ const Navbar = ({isTop} : Props) => {
 
   // 회원 이모지 누르면 나올 dropdown
   const [isDropdownOpen, setDropdownOpen] = useState(false); 
+  // Navbar 드롭다운
+  const [isNotificationOpen, setNotificationOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -69,7 +71,12 @@ const Navbar = ({isTop} : Props) => {
                   </div>
                   ) : (
                     <div className="flex justify-between">
-                      <BellAlertIcon  className="h-10 w-10 text-blue-500"/>
+                      <button
+                        className="flex justify-between items-center"
+                        onClick={() => setNotificationOpen(!isNotificationOpen)}
+                      >
+                        <BellAlertIcon className="h-10 w-10 text-blue-500"/>
+                      </button>
                       <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
                         <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
                         <span>{username}님</span>
@@ -126,6 +133,14 @@ const Navbar = ({isTop} : Props) => {
       </div>
     )}
 
+    {/* 알림 드롭다운 */}
+    { isAboveMediumScreens && isNotificationOpen && (
+      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+        {/* 알림 내용 */}
+        {/* 이곳에 알림 목록을 렌더링하는 컴포넌트나 요소를 추가하세요 */}
+        ㅁㄴㅇㄹ
+      </div>
+    )}
   </nav>
 }
 
