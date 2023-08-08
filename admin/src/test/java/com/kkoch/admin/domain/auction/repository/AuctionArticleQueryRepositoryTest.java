@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.kkoch.admin.domain.auction.Status.READY;
@@ -168,13 +169,11 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
         AuctionArticle auctionArticle2 = insertAuctionArticle(roseFuego, auction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
         AuctionArticle auctionArticle3 = insertAuctionArticle(roseFuego, auction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
 
-        List<AuctionArticle> list = List.of(auctionArticle1, auctionArticle2, auctionArticle3);
+        Trade trade = insertTrade(30000);
 
-        Trade trade = createTrade(list, 30000);
-
-        auctionArticle1.createTrade(trade);
-        auctionArticle2.createTrade(trade);
-        auctionArticle3.createTrade(trade);
+        auctionArticle1.updateTrade(trade);
+        auctionArticle2.updateTrade(trade);
+        auctionArticle3.updateTrade(trade);
 
         //when
         List<SuccessfulBid> responses = auctionArticleQueryRepository.findByTradeId(trade.getId());
@@ -189,14 +188,14 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
                 );
     }
 
-    private Trade createTrade(List<AuctionArticle> auctionArticles, int totalPrice) {
+    private Trade insertTrade(int totalPrice) {
         Trade trade = Trade.builder()
                 .totalPrice(totalPrice)
                 .tradeTime(LocalDateTime.now())
                 .pickupStatus(false)
                 .active(true)
                 .memberKey("memberKey")
-                .articles(auctionArticles)
+                .articles(new ArrayList<>())
                 .build();
         return tradeRepository.save(trade);
     }

@@ -2,7 +2,6 @@ package com.kkoch.admin.api.controller.trade;
 
 import com.kkoch.admin.ControllerTestSupport;
 import com.kkoch.admin.api.controller.trade.request.AddTradeRequest;
-import com.kkoch.admin.api.controller.trade.request.AuctionArticleRequest;
 import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.api.service.trade.TradeQueryService;
@@ -18,11 +17,9 @@ import org.springframework.data.domain.Pageable;
 
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,14 +37,10 @@ class TradeControllerTest extends ControllerTestSupport {
     @Test
     void addTrade() throws Exception {
         //given
-        AuctionArticleRequest article1 = createAuctionArticleRequest(1L, 3000);
-        AuctionArticleRequest article2 = createAuctionArticleRequest(2L, 4000);
-        AuctionArticleRequest article3 = createAuctionArticleRequest(3L, 5000);
-        List<AuctionArticleRequest> articles = List.of(article1, article2, article3);
-
         AddTradeRequest request = AddTradeRequest.builder()
-                .memberId(4L)
-                .articles(articles)
+                .memberToken("memberToken")
+                .auctionArticleId(1L)
+                .price(10000)
                 .build();
 
         //when //then
@@ -71,7 +64,7 @@ class TradeControllerTest extends ControllerTestSupport {
         List<TradeResponse> responses = List.of();
         PageImpl<TradeResponse> tradeResponses = new PageImpl<>(responses);
 
-        BDDMockito.given(tradeQueryService.getMyTrades(anyLong(), any(TradeSearchCond.class), any(Pageable.class)))
+        BDDMockito.given(tradeQueryService.getMyTrades(anyString(), any(TradeSearchCond.class), any(Pageable.class)))
                 .willReturn(tradeResponses);
 
         //when //then
@@ -170,13 +163,5 @@ class TradeControllerTest extends ControllerTestSupport {
                 .andExpect(jsonPath("$.message").value("낙찰 내역이 삭제되었습니다."))
                 .andExpect(jsonPath("$.data").isNumber());
 
-    }
-
-    private AuctionArticleRequest createAuctionArticleRequest(Long auctionArticleId, int bidPrice) {
-        return AuctionArticleRequest.builder()
-                .auctionArticleId(auctionArticleId)
-                .bidPrice(bidPrice)
-                .bidTime(LocalDateTime.now())
-                .build();
     }
 }

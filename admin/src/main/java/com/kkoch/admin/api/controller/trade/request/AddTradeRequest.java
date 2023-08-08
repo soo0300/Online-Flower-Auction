@@ -22,18 +22,18 @@ public class AddTradeRequest {
     private Integer price;
 
     @Builder
-    private AddTradeRequest(String memberToken, String auctionArticleId, Integer price) {
+    private AddTradeRequest(String memberToken, Long auctionArticleId, Integer price) {
         this.memberToken = memberToken;
-        this.auctionArticleId = Long.valueOf(auctionArticleId);
+        this.auctionArticleId = auctionArticleId;
         this.price = price;
     }
 
     public AddTradeDto toAddTradeDto() {
         return AddTradeDto.builder()
-            .memberKey(this.memberToken)
-            .auctionArticleId(this.auctionArticleId)
-            .price(this.price)
-            .build();
+                .memberKey(this.memberToken)
+                .auctionArticleId(this.auctionArticleId)
+                .price(this.price)
+                .build();
     }
 
 }
