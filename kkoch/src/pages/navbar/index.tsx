@@ -12,8 +12,6 @@ type Props = {
   isTop: boolean;
 }
 
-const username = localStorage.getItem("username");
-
 const Navbar = ({isTop} : Props) => {
   const flexBetween = "flex items-center justify-between";
   
