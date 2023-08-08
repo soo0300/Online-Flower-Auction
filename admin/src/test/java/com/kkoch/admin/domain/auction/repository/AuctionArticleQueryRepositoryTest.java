@@ -172,9 +172,9 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
 
         Trade trade = createTrade(list, 30000);
 
-        auctionArticle1.createTrade(trade);
-        auctionArticle2.createTrade(trade);
-        auctionArticle3.createTrade(trade);
+        auctionArticle1.updateTrade(trade);
+        auctionArticle2.updateTrade(trade);
+        auctionArticle3.updateTrade(trade);
 
         //when
         List<SuccessfulBid> responses = auctionArticleQueryRepository.findByTradeId(trade.getId());

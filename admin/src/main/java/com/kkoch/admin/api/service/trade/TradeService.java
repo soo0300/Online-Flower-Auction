@@ -39,8 +39,7 @@ public class TradeService {
                 .orElseThrow(NoSuchElementException::new);
 
         auctionArticle.bid(dto.getPrice(), tradeDate);
-        auctionArticle.createTrade(currnetTrade);
-        currnetTrade.addAuctionArticle(auctionArticle);
+        auctionArticle.updateTrade(currnetTrade);
 
         return currnetTrade.getId();
     }

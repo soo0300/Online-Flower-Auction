@@ -100,7 +100,8 @@ public class AuctionArticle extends TimeBaseEntity {
         this.bidTime = bidTime;
     }
 
-    public void createTrade(Trade trade) {
+    public void updateTrade(Trade trade) {
         this.trade = trade;
+        this.trade.addAuctionArticle(this);
     }
 }
