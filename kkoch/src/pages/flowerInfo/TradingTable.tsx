@@ -23,15 +23,15 @@ const TradingTable = () => {
   }
 
   // 테이블 데이터 초기 상태
-  const [tableData, setTableData] = useState('');
-  const [filteredTableData, setFilteredTableData] = useState('');
+  const [tableData, setTableData] = useState(null);
+  const [filteredTableData, setFilteredTableData] = useState([]);
   const [selectCategory, setSelectCategory] = useState('');
   const [isClicked, setIsClicked] = useState(false);
   
   const response = () => {
     axios({
       method: "get",
-      url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=절화`
+      url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${selectCategory}`
     })
     .then((res) => {
       const dataWithId = res.data.data.content.map((item, index) => ({
@@ -39,19 +39,21 @@ const TradingTable = () => {
         id: index + 1, // Assuming IDs start from 1
       }));
       setTableData(dataWithId);
+      console.log(tableData)
       setFilteredTableData(dataWithId);
     })
   }
   
   useEffect(() => {
-    response()
+    response();
   },[])
-
 
   // TableFilter에서 필터 정보를 받아와서 테이블 데이터를 필터링하는 함수
   const handleFilterChange = (filter: FilterValues) => {
     const filterData = tableData.filter((item) => {
       return (
+        ((filter.startDate.format('YYYY-MM-DD') <= formatDate(new Date(item.bidTime))) && 
+          (filter.endDate.format('YYYY-MM-DD') >= formatDate(new Date(item.bidTime)))) &&
         (!filter.flower || item.type === filter.flower) &&
         (!filter.variety || item.name === filter.variety) &&
         (!filter.location || item.region === filter.location)
@@ -60,9 +62,11 @@ const TradingTable = () => {
       setFilteredTableData(filterData);
     };
 
+  // 카테고리 클릭
   const handleCategoryClick = (item: string) => {
     setSelectCategory(item);
     setIsClicked(true);
+    response();
   };
 
   const getRowClassName = (params: GridRowParams) => {

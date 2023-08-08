@@ -14,14 +14,14 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
 
   // 상태관리
   // 처음엔 비어있는 상태
-  const [filter, setFilter] = useState<FilterValues>({ category: '절화', startDate: dayjs(new Date()), endDate: dayjs(new Date()), flower: '', variety: '', location: '' });
+  const [filter, setFilter] = useState<FilterValues>({ category: '', startDate: dayjs(new Date()), endDate: dayjs(new Date()), flower: '', variety: '', location: '' });
 
   const [flowerOptions, setFlowerOptions] = useState([]);
   const [varietyOptions, setVarietyOptions] = useState([]);
 
   // 부류가 선택되면 품목을 가져온다
   const callFlowers = (e) => {
-    // console.log(e)
+    console.log(e)
     setFilter({ ...filter, flower: e.selectedCategory});
     setFilter({ ...filter, variety: '' });
     setFlowerOptions([]);
@@ -37,7 +37,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
           label: e
         }
       })
-      console.log(tmp);
+      // console.log(tmp);
       setFlowerOptions(tmp);
       setFilter({ ...filter, category: e.selectedCategory });
     })
@@ -65,7 +65,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
           label: e
         }
       })
-      console.log(tmp);
+      // console.log(tmp);
       setVarietyOptions(tmp);
       setFilter({ ...filter, flower: e });
     })
@@ -145,8 +145,8 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
           region: filter.location
         }
       })
-      .then(res => {
-        const responseData = res.data.data.content;
+      .then(() => {
+        // const responseData = res.data.data.content;
 
         // const filter = responseData;
         // console.log('여기서 필터보냄', filter)
