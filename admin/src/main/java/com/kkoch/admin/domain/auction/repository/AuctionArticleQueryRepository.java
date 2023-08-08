@@ -5,24 +5,28 @@ import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearc
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.controller.trade.response.SuccessfulBid;
+import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import com.kkoch.admin.domain.plant.QCategory;
-import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.kkoch.admin.domain.auction.QAuction.auction;
-import static com.kkoch.admin.domain.auction.QAuctionArticle.*;
-import static com.kkoch.admin.domain.plant.QPlant.*;
-import static org.springframework.util.StringUtils.*;
+import static com.kkoch.admin.domain.auction.QAuctionArticle.auctionArticle;
+import static com.kkoch.admin.domain.plant.QPlant.plant;
+import static com.kkoch.admin.domain.trade.QTrade.trade;
+import static com.querydsl.core.types.Projections.constructor;
+import static org.springframework.util.StringUtils.hasText;
 
 @Repository
 public class AuctionArticleQueryRepository {
@@ -33,12 +37,59 @@ public class AuctionArticleQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    public List<TradeResponse> findByTradeIds(String memberKey, Pageable pageable) {
+        QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
+
+        List<Long> ids = queryFactory
+            .select(auctionArticle.id)
+            .from(auctionArticle)
+            .join(auctionArticle.trade, trade)
+            .where(trade.memberKey.eq(memberKey))
+            .orderBy(auctionArticle.bidTime.desc())
+            .limit(pageable.getPageSize())
+            .offset(pageable.getOffset())
+            .fetch();
+
+        if (CollectionUtils.isEmpty(ids)) {
+            return new ArrayList<>();
+        }
+
+        return queryFactory
+            .select(constructor(TradeResponse.class,
+                auctionArticle.plant.type.name,
+                auctionArticle.plant.name.name,
+                auctionArticle.grade,
+                auctionArticle.count,
+                auctionArticle.bidPrice,
+                auctionArticle.bidTime,
+                auctionArticle.region
+            ))
+            .from(auctionArticle)
+            .join(auctionArticle.plant, plant)
+            .join(plant.type, type)
+            .join(plant.name, name)
+            .where(auctionArticle.id.in(ids))
+            .orderBy(auctionArticle.bidTime.desc())
+            .fetch();
+    }
+
+    public long getTotalCountForTrade(String memberKey) {
+        return queryFactory
+            .select(auctionArticle.id)
+            .from(auctionArticle)
+            .join(auctionArticle.trade, trade)
+            .where(auctionArticle.trade.memberKey.eq(memberKey))
+            .fetch()
+            .size();
+    }
+
     public List<SuccessfulBid> findByTradeId(Long tradeId) {
         QCategory code = new QCategory("code");
         QCategory type = new QCategory("type");
         QCategory name = new QCategory("name");
         return queryFactory
-                .select(Projections.constructor(SuccessfulBid.class,
+                .select(constructor(SuccessfulBid.class,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.type.name,
                         auctionArticle.plant.name.name,
@@ -70,7 +121,7 @@ public class AuctionArticleQueryRepository {
         QCategory type = new QCategory("type");
         QCategory name = new QCategory("name");
 
-        return queryFactory.select(Projections.constructor(AuctionArticlesForAdminResponse.class,
+        return queryFactory.select(constructor(AuctionArticlesForAdminResponse.class,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.type.name,
                         auctionArticle.plant.name.name,
@@ -102,7 +153,7 @@ public class AuctionArticleQueryRepository {
         QCategory type = new QCategory("type");
         QCategory name = new QCategory("name");
 
-        return queryFactory.select(Projections.constructor(AuctionArticlesResponse.class,
+        return queryFactory.select(constructor(AuctionArticlesResponse.class,
                         auctionArticle.id,
                         auctionArticle.auctionNumber,
                         auctionArticle.plant.code.name,
@@ -167,7 +218,7 @@ public class AuctionArticleQueryRepository {
     }
 
     private JPAQuery<AuctionArticlePeriodSearchResponse> getAuctionArticleByPeriodSearchCond(AuctionArticlePeriodSearchCond cond, QCategory code, QCategory type, QCategory name) {
-        return queryFactory.select(Projections.constructor(AuctionArticlePeriodSearchResponse.class,
+        return queryFactory.select(constructor(AuctionArticlePeriodSearchResponse.class,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.type.name,
                         auctionArticle.plant.name.name,
@@ -191,7 +242,7 @@ public class AuctionArticleQueryRepository {
     }
 
     private JPAQuery<AuctionArticleForMemberResponse> getAuctionArticleByCond(AuctionArticleSearchCond cond, QCategory code, QCategory type, QCategory name) {
-        return queryFactory.select(Projections.constructor(AuctionArticleForMemberResponse.class,
+        return queryFactory.select(constructor(AuctionArticleForMemberResponse.class,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.type.name,
                         auctionArticle.plant.name.name,

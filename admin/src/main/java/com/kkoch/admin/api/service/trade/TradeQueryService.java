@@ -23,10 +23,10 @@ public class TradeQueryService {
     private final TradeQueryRepository tradeQueryRepository;
     private final AuctionArticleQueryRepository auctionArticleQueryRepository;
 
-    public Page<TradeResponse> getMyTrades(String memberKey, TradeSearchCond cond, Pageable pageable) {
-        List<TradeResponse> responses = tradeQueryRepository.findByCondition(memberKey, cond, pageable);
-        int totalCount = tradeQueryRepository.getTotalCount(memberKey, cond);
-        return new PageImpl<>(responses, pageable, totalCount);
+    public Page<TradeResponse> getMyTrades(String memberKey, Pageable pageable) {
+        List<TradeResponse> contents = auctionArticleQueryRepository.findByTradeIds(memberKey, pageable);
+        long totalCount = auctionArticleQueryRepository.getTotalCountForTrade(memberKey);
+        return new PageImpl<>(contents, pageable, totalCount);
     }
 
     public TradeDetailResponse getTrade(Long tradeId) {
