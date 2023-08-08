@@ -42,7 +42,7 @@ public class TradeController {
     @GetMapping("/{memberKey}")
     public ApiResponse<Page<TradeResponse>> getMyTrades(
             @PathVariable String memberKey,
-            @RequestParam Integer term,
+            @RequestParam(defaultValue = "7") Integer term,
             @RequestParam(defaultValue = "0") Integer page
     ) {
         TradeSearchCond cond = TradeSearchCond.of(LocalDate.now(), term);
@@ -51,8 +51,8 @@ public class TradeController {
         return ApiResponse.ok(data);
     }
 
-    @GetMapping("/detail/{tradeId}")
-    public ApiResponse<TradeDetailResponse> getTrade(@PathVariable Long tradeId) {
+    @GetMapping("/{memberKey}/{tradeId}")
+    public ApiResponse<TradeDetailResponse> getTrade(@PathVariable Long tradeId, @PathVariable String memberKey) {
         TradeDetailResponse response = tradeQueryService.getTrade(tradeId);
         return ApiResponse.ok(response);
     }
