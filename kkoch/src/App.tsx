@@ -36,7 +36,7 @@ function App() {
         {/* 라우팅 정보 */}
         <Routes>
           <Route path={"/"} element={<MainPage />}/>
-          <Route path={"/auction"} element={<AuctionLocation/>}/>
+          <Route path={"/auction"} element={<AuctionLocation/>} />
           <Route path={"/auction/waitingroom"} element={<AuctionWaitingRoom/>}/>
           <Route path={"/auction/liveroom"} element={<AuctionLiveRoom/>}/>
 
@@ -49,9 +49,7 @@ function App() {
           <Route path={"/signup"} element={<Signup />}/>
 
           {/* 마이페이지 */}
-          <Route path={"/mypage"} element={<MyPage />}/>
-
-
+          <Route path={"/mypage"} element={<MyPage/>}/>
 
           {/* 관리자 경매방 생성 경로 */}
           <Route path={"/admin/selectArea"} element={<SelectArea/>} />

@@ -69,7 +69,7 @@ const SignUp = () => {
 		setBusinessNumber(newBN);
     
 		// 사업자 번호 정규표현식
-		const regex = /([0-9]{3})-?([0-9]{2})-?([0-9]{5})/
+		const regex = /^([0-9]{3})-?([0-9]{2})-?([0-9]{5})$/
     
 		// 정규표현식이 true 이면
 		if (regex.test(newBN)) {
@@ -157,7 +157,7 @@ const SignUp = () => {
 		})
 		.then(() => { 
 			if(confirm("회원 가입이 완료 되었습니다. 로그인 해주십시오")) {
-        navigate("/login");
+        navigate("/login", { state: { email: email } });
       }
 
 		})
@@ -194,7 +194,7 @@ const SignUp = () => {
   }
 
   return (
-		<div className="flex justify-around pt-[150px]">
+		<div className="flex justify-around mt-[30px]">
 			<div className='mt-[100px]'>
 				<img src={flowerImg} alt="" />
 			</div>
@@ -205,7 +205,7 @@ const SignUp = () => {
             회원가입
           </div>
 
-          <div className='signupTitle'>
+          <div className='signupTitle cursor-pointer' onClick={() => navigate("/login")}>
             이미 계정이 있으신가요? &nbsp;&nbsp;
             <span className='signupLink'>
               로그인
@@ -336,10 +336,11 @@ const SignUp = () => {
             {/* <LockIcon /> 아이콘 */}
             <input
               className='input'
+              type='text'
               {...register('businessNumber', {
                 required: '사업자등록번호를 입력해주세요.',
                 pattern: {
-                  value: /([0-9]{3})-?([0-9]{2})-?([0-9]{5})/,
+                  value: /^([0-9]{3})-?([0-9]{2})-?([0-9]{5})$/,
                   message: '사업자등록번호를 올바르게 입력해주세요.',
                 },
               })}
