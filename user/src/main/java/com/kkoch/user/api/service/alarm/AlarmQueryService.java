@@ -16,12 +16,8 @@ import java.util.NoSuchElementException;
 public class AlarmQueryService {
 
     private final AlarmQueryRepository alarmQueryRepository;
-    private final MemberRepository memberRepository;
 
-    public List<AlarmResponse> searchAlarms(String email) {
-        Long memberId = memberRepository.findIdByEmail(email)
-            .orElseThrow(NoSuchElementException::new);
-
-        return alarmQueryRepository.searchAlarms(memberId);
+    public List<AlarmResponse> searchAlarms(String memberKey) {
+        return alarmQueryRepository.searchAlarms(memberKey);
     }
 }
