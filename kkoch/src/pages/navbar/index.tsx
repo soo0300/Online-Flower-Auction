@@ -6,6 +6,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { useDispatch } from "react-redux";
 import { logout } from '@/reducer/store/authSlice';
 import secureLocalStorage from "react-secure-storage";
+import axios from "axios";
 // import ActionButton from "@/shared/ActionButton";
 
 type Props = {
@@ -43,6 +44,21 @@ const Navbar = ({isTop} : Props) => {
       setDropdownOpen(false);
       dispatch(logout());
     }
+  }
+
+  // 로그인 되어 있으면 알림 내역 가져오기
+  if(isLoggedIn) {
+    axios({
+      method: "get",
+      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+      url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+      headers: {
+        Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
+      }
+    })
+    .then((res) => {
+      console.log(res);
+    })
   }
 
   return <nav>
