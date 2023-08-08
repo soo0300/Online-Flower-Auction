@@ -1,5 +1,4 @@
 import {
-  MDBCol,
   MDBContainer,
   MDBTabs,
   MDBTabsItem,
@@ -59,18 +58,6 @@ const MyPage = () => {
             </MDBTabsItem>
           </MDBTabs>
         </MDBCard>
-
-        <MDBCol className='bg-light rounded'>
-          {/* <MDBBreadcrumb className="">
-            <MDBBreadcrumbItem>
-              <a href='#'>프로필 변경</a>
-            </MDBBreadcrumbItem>
-            <MDBBreadcrumbItem>
-              <a href="#">낙찰 현황</a>
-            </MDBBreadcrumbItem>
-            <MDBBreadcrumbItem active>User Profile</MDBBreadcrumbItem>
-          </MDBBreadcrumb> */}
-        </MDBCol>
 
         <MDBTabsContent>
           <MDBTabsPane show={basicActive === 'tab1'}><MyProfile/></MDBTabsPane>
