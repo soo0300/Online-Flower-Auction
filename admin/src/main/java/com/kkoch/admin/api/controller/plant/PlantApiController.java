@@ -20,12 +20,6 @@ public class PlantApiController {
 
     private final PlantService plantService;
 
-    @GetMapping("/{plantId}")
-    public ApiResponse<List<PlantResponse>> getPlant(@RequestBody GetPlantRequest request) {
-        PlantSearchCond cond = request.toSearchCond();
-        return ApiResponse.ok(plantQueryService.getPlant(cond));
-    }
-
     @GetMapping("/reservation")
     public Long getPlantId(
             @RequestParam String type,

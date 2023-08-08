@@ -23,23 +23,6 @@ public class PlantQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<PlantResponse> findByCondition(PlantSearchCond cond) {
-        return queryFactory
-                .select(Projections.constructor(PlantResponse.class,
-                        plant.id,
-                        plant.code.name,
-                        plant.type.name,
-                        plant.name.name))
-                .from(plant)
-                .where(
-                        plant.active.isTrue(),
-                        codeEq(cond.getCode()),
-                        typeEq(cond.getType()),
-                        nameEq(cond.getName()))
-                .fetch();
-
-    }
-
     public List<Plant> getPlants() {
         return queryFactory
                 .select(plant)

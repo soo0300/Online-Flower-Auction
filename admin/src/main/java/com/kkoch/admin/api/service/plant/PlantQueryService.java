@@ -17,10 +17,6 @@ public class PlantQueryService {
 
     private final PlantQueryRepository plantQueryRepository;
 
-    public List<PlantResponse> getPlant(PlantSearchCond plantSearchCond) {
-        return plantQueryRepository.findByCondition(plantSearchCond);
-    }
-
     public List<PlantResponse> getPlants() {
         return plantQueryRepository.getPlants().stream().map(PlantResponse::of).collect(Collectors.toList());
     }
