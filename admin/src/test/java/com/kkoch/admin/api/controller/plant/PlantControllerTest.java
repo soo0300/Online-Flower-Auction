@@ -39,7 +39,7 @@ class PlantControllerTest extends ControllerTestSupport {
 
         List<PlantResponse> responses = List.of();
         //when
-        given(plantQueryService.getPlants(any(PlantSearchCond.class))).willReturn(responses);
+        given(plantQueryService.getPlant(any(PlantSearchCond.class))).willReturn(responses);
 
         //then
         mockMvc.perform(

@@ -88,12 +88,12 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
     void getStatsByPeriod() throws Exception {
         //given
         Category code = createCategory("절화", null);
-        Category name = createCategory("장미(스탠다드)", code);
-        Category type1 = createCategory("하젤", name);
-        Category type2 = createCategory("클레라", name);
+        Category type = createCategory("장미(스탠다드)", code);
+        Category name1 = createCategory("하젤", type);
+        Category name2 = createCategory("클레라", type);
 
-        Plant plant1 = createPlant(code, name, type1);
-        Plant plant2 = createPlant(code, name, type2);
+        Plant plant1 = createPlant(code, type, name1);
+        Plant plant2 = createPlant(code, type, name2);
         Stats stats1 = createStats(3000, 5000, 2000, Grade.SUPER, 40, plant1);
         Stats stats2 = createStats(4000, 4000, 4000, Grade.SUPER, 30, plant1);
         Stats stats3 = createStats(2000, 2500, 1000, Grade.NORMAL, 20, plant1);
@@ -102,7 +102,8 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
         ReflectionTestUtils.setField(stats1, "createdDate", LocalDateTime.now().minusDays(8));
 
         StatsSearchCond statsSearchCond = StatsSearchCond.builder()
-                .plantId(plant1.getId())
+                .type(type.getName())
+                .name(name1.getName())
                 .searchDay(7)
                 .build();
 

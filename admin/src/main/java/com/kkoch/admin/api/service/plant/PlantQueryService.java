@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -16,8 +17,8 @@ public class PlantQueryService {
 
     private final PlantQueryRepository plantQueryRepository;
 
-    public List<PlantResponse> getPlants(PlantSearchCond plantSearchCond) {
-        return plantQueryRepository.findByCondition(plantSearchCond);
+    public List<PlantResponse> getPlants() {
+        return plantQueryRepository.getPlants().stream().map(PlantResponse::of).collect(Collectors.toList());
     }
 
     public Long getPlantId(String type, String name) {
