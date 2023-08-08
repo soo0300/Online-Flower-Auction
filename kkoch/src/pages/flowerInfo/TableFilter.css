@@ -58,7 +58,6 @@
 }
 
 .varietyinput {
-  width: 100px;
   text-align: center;
 }
 
@@ -69,7 +68,6 @@
 }
 
 .flowerinput {
-  width: 100px;
   background-color: white;
   border-radius: 30px;
   text-align: center;
@@ -82,7 +80,6 @@
 }
 
 .locationinput {
-  width: 100px;
   margin-right: 20px;
   text-align: center;
 }
@@ -91,4 +88,20 @@
   margin-left: 10px;
   color: red;
   margin-right: 20px;
+}
+
+@media (max-width: 1080px) {
+  .flowerinput,
+  .varietyinput,
+  .locationinput {
+    width: 100px; /* 원하는 최소 크기 */
+  }
+}
+
+@media (min-width: 1081px) {
+  .flowerinput,
+  .varietyinput,
+  .locationinput {
+    width: calc(100px + 5vw); /* 최소 크기 + 화면 너비의 5% */
+  }
 }
