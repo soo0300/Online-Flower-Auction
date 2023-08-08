@@ -25,7 +25,8 @@ const Navbar = ({isTop} : Props) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false); 
   // Navbar 드롭다운
   const [isNotificationOpen, setNotificationOpen] = useState(false);
-
+  const [notifications, setNotifications] = useState([]);
+  
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
@@ -47,18 +48,47 @@ const Navbar = ({isTop} : Props) => {
   }
 
   // 로그인 되어 있으면 알림 내역 가져오기
-  if(isLoggedIn) {
-    axios({
-      method: "get",
-      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
-      url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
-      headers: {
-        Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
-      }
-    })
-    .then((res) => {
-      console.log(res);
-    })
+  const getNotification = () => {
+    if(isLoggedIn) {
+      axios({
+        method: "get",
+        // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+        url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+        headers: {
+          Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
+        }
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        setNotifications(res.data.data);
+      })
+      .catch(err => console.log(err))
+    }
+  }
+
+  const formattedDate = (date) => {
+    // 알림 생성 시간을 Date 객체로 변환
+    console.log(date)
+    const createdDate = new Date(date);
+    const now = new Date();
+    const timeDifference = now.getTime() - createdDate.getTime();
+    console.log(now.getTime(),createdDate,  timeDifference)
+    let tmpTime;
+
+    // 시간 차이에 따라 표시 포맷 결정
+    if (timeDifference < 60000) {
+      tmpTime = "방금 전";
+    } else if (timeDifference < 3600000) {
+      const minutes = Math.floor(timeDifference / 60000);
+      tmpTime = `${minutes}분 전`;
+    } else if (timeDifference < 86400000) {
+      const hours = Math.floor(timeDifference / 3600000);
+      tmpTime = `${hours}시간 전`;
+    } else {
+      // 월/일 시간:분 포맷으로 변경
+      tmpTime = `${createdDate.getMonth() + 1}.${createdDate.getDate()} ${createdDate.getHours()}:${createdDate.getMinutes()}`;
+    }
+    return tmpTime;
   }
 
   return <nav>
@@ -89,7 +119,10 @@ const Navbar = ({isTop} : Props) => {
                     <div className="flex justify-between">
                       <button
                         className="flex justify-between items-center"
-                        onClick={() => setNotificationOpen(!isNotificationOpen)}
+                        onClick={() => {
+                          setNotificationOpen(!isNotificationOpen)
+                          getNotification()
+                        }}
                       >
                         <BellAlertIcon className="h-10 w-10 text-blue-500"/>
                       </button>
@@ -153,8 +186,12 @@ const Navbar = ({isTop} : Props) => {
     { isAboveMediumScreens && isNotificationOpen && (
       <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
         {/* 알림 내용 */}
-        {/* 이곳에 알림 목록을 렌더링하는 컴포넌트나 요소를 추가하세요 */}
-        ㅁㄴㅇㄹ
+        {notifications.map((noti, index) => (
+          
+          <div key={index} className="p-2 border-b">
+            {formattedDate(noti.createdDate)} - {noti.content}
+          </div>
+        ))}
       </div>
     )}
   </nav>
