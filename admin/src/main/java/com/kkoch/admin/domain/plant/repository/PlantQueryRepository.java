@@ -1,7 +1,9 @@
 package com.kkoch.admin.domain.plant.repository;
 
+import com.kkoch.admin.api.controller.plant.response.PlantNameResponse;
 import com.kkoch.admin.api.controller.plant.response.PlantResponse;
 import com.kkoch.admin.api.service.plant.dto.PlantSearchCond;
+import com.kkoch.admin.domain.plant.Plant;
 import com.kkoch.admin.domain.plant.QCategory;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -22,21 +24,12 @@ public class PlantQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<PlantResponse> findByCondition(PlantSearchCond cond) {
+    public List<Plant> getPlants() {
         return queryFactory
-                .select(Projections.constructor(PlantResponse.class,
-                        plant.id,
-                        plant.code.name,
-                        plant.type.name,
-                        plant.name.name))
+                .select(plant)
                 .from(plant)
-                .where(
-                        plant.active.isTrue(),
-                        codeEq(cond.getCode()),
-                        typeEq(cond.getType()),
-                        nameEq(cond.getName()))
+                .where(plant.active.isTrue())
                 .fetch();
-
     }
 
     public Long findPlantId(String type, String name) {
@@ -44,15 +37,32 @@ public class PlantQueryRepository {
         QCategory qname = new QCategory("name");
 
         return queryFactory
-            .select(plant.id)
+                .select(plant.id)
+                .from(plant)
+                .join(plant.type, qtype)
+                .join(plant.name, qname)
+                .where(
+                        plant.type.name.eq(type),
+                        plant.name.name.eq(name)
+                )
+                .fetchFirst();
+    }
+
+    public List<PlantNameResponse> findPlantNames(List<Long> plantIds) {
+        QCategory type = new QCategory("type");
+        QCategory name = new QCategory("name");
+
+        return queryFactory
+            .select(Projections.constructor(PlantNameResponse.class,
+                plant.id,
+                plant.type.name,
+                plant.name.name
+            ))
             .from(plant)
-            .join(plant.type, qtype)
-            .join(plant.name, qname)
-            .where(
-                plant.type.name.eq(type),
-                plant.name.name.eq(name)
-            )
-            .fetchFirst();
+            .join(plant.type, type)
+            .join(plant.name, name)
+            .where(plant.id.in(plantIds))
+            .fetch();
     }
 
     private BooleanExpression nameEq(String name) {
@@ -66,4 +76,5 @@ public class PlantQueryRepository {
     private BooleanExpression codeEq(String code) {
         return hasText(code) ? plant.code.name.eq(code) : null;
     }
+
 }

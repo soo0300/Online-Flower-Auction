@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -52,17 +53,40 @@ public class TradeControllerDocsTest extends RestDocsSupport {
     @Test
     void addTrade() throws Exception {
         AddTradeRequest request = AddTradeRequest.builder()
-                .memberToken("memberToken")
-                .auctionArticleId(1L)
-                .price(10000)
-                .build();
+            .memberToken(UUID.randomUUID().toString())
+            .auctionArticleId(1L)
+            .price(3000)
+            .build();
 
         given(tradeService.addTrade(any(AddTradeDto.class), any(LocalDateTime.class)))
-                .willReturn(4L);
+            .willReturn(4L);
 
         mockMvc.perform(post("/admin-service/trades")
-                        .content(objectMapper.writeValueAsString(request))
-                        .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("trade-create",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("memberToken").type(JsonFieldType.STRING)
+                        .description("회원 고유키"),
+                    fieldWithPath("auctionArticleId").type(JsonFieldType.NUMBER)
+                        .description("경매품 pk"),
+                    fieldWithPath("price").type(JsonFieldType.NUMBER)
+                        .description("낙찰 가격")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.NUMBER)
+                        .description("응답 데이터")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -99,12 +123,88 @@ public class TradeControllerDocsTest extends RestDocsSupport {
         List<TradeResponse> responses = List.of(tradeResponse1, tradeResponse2, tradeResponse3);
         PageRequest pageRequest = PageRequest.of(0, 20);
 
-        given(tradeQueryService.getMyTrades(anyString(), any(TradeSearchCond.class), any(Pageable.class)))
-                .willReturn(new PageImpl<>(responses, pageRequest, 100));
+        given(tradeQueryService.getMyTrades(anyString(), any(Pageable.class)))
+            .willReturn(new PageImpl<>(responses, pageRequest, 100));
 
-        mockMvc.perform(get("/admin-service/trades/{memberToken}", "memberToken")
-                        .param("term", "1")
-                        .param("page", "0")
+        mockMvc.perform(get("/admin-service/trades/{memberId}", 1L)
+                .param("term", "1")
+                .param("page", "0")
+        )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("trade-search",
+                preprocessResponse(prettyPrint()),
+                requestParameters(
+                    parameterWithName("term")
+                        .description("기간"),
+                    parameterWithName("page")
+                        .description("페이지")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.content").type(JsonFieldType.ARRAY)
+                        .description("낙찰 내역 데이터"),
+                    fieldWithPath("data.content[].tradeId").type(JsonFieldType.NUMBER)
+                        .description("낙찰 내역 PK"),
+                    fieldWithPath("data.content[].totalPrice").type(JsonFieldType.NUMBER)
+                        .description("총 거래 가격"),
+                    fieldWithPath("data.content[].tradeDate").type(JsonFieldType.STRING)
+                        .description("거래 시간"),
+                    fieldWithPath("data.content[].pickupStatus").type(JsonFieldType.BOOLEAN)
+                        .description("픽업여부"),
+                    fieldWithPath("data.content[].count").type(JsonFieldType.NUMBER)
+                        .description("낙찰한 경매품 갯수"),
+                    fieldWithPath("data.pageable").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.sort").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.sort.empty").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.sort.sorted").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.sort.unsorted").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.offset").type(JsonFieldType.NUMBER)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.pageNumber").type(JsonFieldType.NUMBER)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.pageSize").type(JsonFieldType.NUMBER)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.paged").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.pageable.unpaged").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.totalPages").type(JsonFieldType.NUMBER)
+                        .description("총 페이지 수"),
+                    fieldWithPath("data.totalElements").type(JsonFieldType.NUMBER)
+                        .description("DB의 전체 데이터 갯수"),
+                    fieldWithPath("data.last").type(JsonFieldType.BOOLEAN)
+                        .description("마지막 페이지라면 true"),
+                    fieldWithPath("data.size").type(JsonFieldType.NUMBER)
+                        .description("페이지 당 나타낼 수 있는 데이터의 갯수"),
+                    fieldWithPath("data.sort").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.sort.empty").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.sort.sorted").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.sort.unsorted").type(JsonFieldType.BOOLEAN)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.number").type(JsonFieldType.NUMBER)
+                        .description("현재 페이지 번호"),
+                    fieldWithPath("data.numberOfElements").type(JsonFieldType.NUMBER)
+                        .description("실제 데이터의 갯수"),
+                    fieldWithPath("data.first").type(JsonFieldType.BOOLEAN)
+                        .description("첫번째 페이지이면 true"),
+                    fieldWithPath("data.empty").type(JsonFieldType.BOOLEAN)
+                        .description("리스트가 비어있는지 여부")
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -302,34 +402,12 @@ public class TradeControllerDocsTest extends RestDocsSupport {
         mockMvc.perform(
                         delete("/admin-service/trades/{tradeId}", 1L)
                 )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("301"))
-                .andExpect(jsonPath("$.status").value("MOVED_PERMANENTLY"))
-                .andExpect(jsonPath("$.message").value("낙찰 내역이 삭제되었습니다."))
-                .andExpect(jsonPath("$.data").isNumber())
-                .andDo(document("trade-remove",
-                        preprocessResponse(prettyPrint()),
-                        responseFields(
-                                fieldWithPath("code").type(JsonFieldType.NUMBER)
-                                        .description("코드"),
-                                fieldWithPath("status").type(JsonFieldType.STRING)
-                                        .description("상태"),
-                                fieldWithPath("message").type(JsonFieldType.STRING)
-                                        .description("메시지"),
-                                fieldWithPath("data").type(JsonFieldType.NUMBER)
-                                        .description("응답 데이터")
-                        )
-                ));
+            ));
     }
 
     private TradeResponse createTradeResponse(long tradeId, int totalPrice, LocalDateTime tradeDate, boolean pickupStatus, int count) {
         return TradeResponse.builder()
-                .tradeId(tradeId)
-                .totalPrice(totalPrice)
-                .tradeDate(tradeDate)
-                .pickupStatus(pickupStatus)
-                .count(count)
-                .build();
+            .count(count)
+            .build();
     }
 }

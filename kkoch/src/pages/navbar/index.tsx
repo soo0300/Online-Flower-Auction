@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"; 
-import { Bars3Icon, XMarkIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { Bars3Icon, XMarkIcon, UserCircleIcon, BellAlertIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
 import { Link } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from '@/reducer/store'; // RootState 추가
+import { useDispatch } from "react-redux";
 import { logout } from '@/reducer/store/authSlice';
+import secureLocalStorage from "react-secure-storage";
 // import ActionButton from "@/shared/ActionButton";
 
 type Props = {
@@ -20,20 +20,23 @@ const Navbar = ({isTop} : Props) => {
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
   const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
 
+  // 회원 이모지 누르면 나올 dropdown
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
-  const isLoggedIn = useSelector((state: RootState) => state.auth.token !== null);
-  const [isLoggedOut, setIsLoggedOut] = useState(false);
+  const isLoggedIn = secureLocalStorage.getItem("memberkey") && secureLocalStorage.getItem("token");
+  const [isLoggedOut, setIsLoggedOut] = useState(true);
 
   useEffect(() => {
     setIsLoggedOut(!isLoggedIn);
   }, [isLoggedIn]);
 
-
   const handleLogout = () => {
     // 로그아웃
     if(confirm("로그아웃 하시겠습니까?")) {
+      setDropdownOpen(false);
       dispatch(logout());
     }
   }
@@ -54,7 +57,7 @@ const Navbar = ({isTop} : Props) => {
             (<div className={`${flexBetween} w-full`}>
               <div className={`${flexBetween} gap-8 text-sm`}>
                 <Link to="/auction"> 경매</Link>
-                <Link to="/flowers"> 화훼정보</Link>
+                <Link to="/flowers/절화" state ={{ code: "절화"}}> 화훼정보</Link>
                 <Link to="/customer" />
               </div>
                 { isLoggedOut ? (
@@ -63,13 +66,12 @@ const Navbar = ({isTop} : Props) => {
                     <Link to="/signup">회원가입</Link>
                   </div>
                   ) : (
-                    <div>
-                      <a href="" onClick={handleLogout}>로그아웃</a>
-                      <Link to="/mypage">
-                        <button>
-                          <UserCircleIcon />
-                        </button>
-                      </Link>
+                    <div className="flex justify-between">
+                      <BellAlertIcon  className="h-10 w-10 text-blue-500"/>
+                      <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+                        <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
+                        <span>{username}님</span>
+                      </button>
                     </div>
                 )}
             </div>)
@@ -103,6 +105,25 @@ const Navbar = ({isTop} : Props) => {
         </div>
       </div>
     )}
+
+    {/* 회원 메뉴 드롭다운 */}
+    { isAboveMediumScreens && isDropdownOpen && (
+      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+        <ul className="flex flex-col justify-center pl-0 mb-0">
+          <li >
+            <Link to="/mypage" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setDropdownOpen(false)}>마이페이지</Link>
+          </li>
+          <li>
+            <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100">로그아웃</button>
+          </li>
+          <li>
+            {/* Add an event handler for 회원탈퇴 */}
+            <button className="block px-4 py-2 hover:bg-gray-100">회원탈퇴</button>
+          </li>
+        </ul>
+      </div>
+    )}
+
   </nav>
 }
 

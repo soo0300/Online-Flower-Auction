@@ -9,13 +9,20 @@ import {
   MDBCard
 } from 'mdb-react-ui-kit';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MyAuctionList from './MyAuctionList';
 import MyProfile from './MyProfile';
 import MyReservation from '@/pages/user/MyReservation/MyReservation';
+import secureLocalStorage from 'react-secure-storage';
+import { Navigate } from 'react-router-dom';
 
 const MyPage = () => {
   const [basicActive, setBasicActive] = useState('tab1');
+  const isLoggedIn = secureLocalStorage.getItem("memberkey") && secureLocalStorage.getItem("token");
+
+  useEffect(() => {
+    !isLoggedIn && alert("로그인 후 이용 가능합니다.")
+  }, [isLoggedIn])
 
   const handleBasicClick = (value: string) => {
     if (value === basicActive) {
@@ -26,29 +33,32 @@ const MyPage = () => {
   };
 
   return (
-    <section>
+    <div>
+    {
+      isLoggedIn ? 
+      <section>
       <MDBContainer className="py-5">
         
-      <MDBCard className='mb-4'>
-        <h1 className='pl-5 pt-3'>마이페이지</h1>
-        <MDBTabs className='rounded-3'>
-          <MDBTabsItem>
-            <MDBTabsLink onClick={() => handleBasicClick('tab1')} active={basicActive === 'tab1'}>
-              프로필 변경
-            </MDBTabsLink>
-          </MDBTabsItem>
-          <MDBTabsItem>
-            <MDBTabsLink onClick={() => handleBasicClick('tab2')} active={basicActive === 'tab2'}>
-              낙찰 현황
-            </MDBTabsLink>
-          </MDBTabsItem>
-          <MDBTabsItem>
-            <MDBTabsLink onClick={() => handleBasicClick('tab3')} active={basicActive === 'tab3'}>
-              화훼 예약 현황
-            </MDBTabsLink>
-          </MDBTabsItem>
-        </MDBTabs>
-      </MDBCard>
+        <MDBCard className='mb-4'>
+          <h1 className='pl-5 pt-3'>마이페이지</h1>
+          <MDBTabs className='rounded-3'>
+            <MDBTabsItem>
+              <MDBTabsLink onClick={() => handleBasicClick('tab1')} active={basicActive === 'tab1'}>
+                프로필 변경
+              </MDBTabsLink>
+            </MDBTabsItem>
+            <MDBTabsItem>
+              <MDBTabsLink onClick={() => handleBasicClick('tab2')} active={basicActive === 'tab2'}>
+                낙찰 현황
+              </MDBTabsLink>
+            </MDBTabsItem>
+            <MDBTabsItem>
+              <MDBTabsLink onClick={() => handleBasicClick('tab3')} active={basicActive === 'tab3'}>
+                화훼 예약 현황
+              </MDBTabsLink>
+            </MDBTabsItem>
+          </MDBTabs>
+        </MDBCard>
 
         <MDBCol className='bg-light rounded'>
           {/* <MDBBreadcrumb className="">
@@ -68,9 +78,11 @@ const MyPage = () => {
           <MDBTabsPane show={basicActive === 'tab3'}><MyReservation/></MDBTabsPane>
         </MDBTabsContent>
       </MDBContainer>
-
-
-    </section>
+    </section> :
+    
+      <Navigate to='/login' replace={true} />
+    }
+    </div>
   )
 }
 
