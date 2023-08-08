@@ -1,7 +1,5 @@
 package com.kkoch.user.domain.alarm.repository;
 
-import com.kkoch.user.domain.alarm.QAlarm;
-import com.kkoch.user.domain.member.QMember;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +20,17 @@ public class AlarmCommandRepository {
     }
 
     public int updateOpen(String memberKey) {
-        List<Long> alarmIds = queryFactory
+        List<Long> alarmIds = findAlarmIdByMemberKey(memberKey);
+
+        return (int) queryFactory
+            .update(alarm)
+            .where(alarm.id.in(alarmIds))
+            .set(alarm.open, true)
+            .execute();
+    }
+
+    private List<Long> findAlarmIdByMemberKey(String memberKey) {
+        return queryFactory
             .select(alarm.id)
             .from(alarm)
             .join(alarm.member, member)
@@ -31,12 +39,6 @@ public class AlarmCommandRepository {
                 member.memberKey.eq(memberKey)
             )
             .fetch();
-
-        return (int) queryFactory
-            .update(alarm)
-            .where(alarm.id.in(alarmIds))
-            .set(alarm.open, true)
-            .execute();
     }
 
 }
