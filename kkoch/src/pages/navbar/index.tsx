@@ -21,13 +21,15 @@ const Navbar = ({isTop} : Props) => {
   const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
 
   // 회원 이모지 누르면 나올 dropdown
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isDropdownOpen, setDropdownOpen] = useState(false); 
 
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
   const isLoggedIn = secureLocalStorage.getItem("memberkey") && secureLocalStorage.getItem("token");
   const [isLoggedOut, setIsLoggedOut] = useState(true);
+
+  const username = localStorage.getItem("username");
 
   useEffect(() => {
     setIsLoggedOut(!isLoggedIn);

@@ -7,8 +7,31 @@ import {
   MDBCardImage,
   MDBBtn,
 } from 'mdb-react-ui-kit';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import secureLocalStorage from 'react-secure-storage';
 
 const MyProfile = () => {
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [tel, setTel] = useState('');
+  const [bn, setBn] = useState('');
+
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}`,
+      headers: {
+        Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
+      }
+    })
+    .then((res) => {
+      setUsername(res.data.data["name"]);
+      setEmail(res.data.data["email"]);
+      setTel(res.data.data["tel"]);
+      setBn(res.data.data["businessNumber"]);
+    })
+  })
   return (
     <>
       <MDBRow>
@@ -37,7 +60,7 @@ const MyProfile = () => {
                   <MDBCardText>이름</MDBCardText>
                 </MDBCol>
                 <MDBCol sm="9">
-                  <MDBCardText className="text-muted">김싸피</MDBCardText>
+                  <MDBCardText className="text-muted">{username}</MDBCardText>
                 </MDBCol>
               </MDBRow>
               <hr />
@@ -46,7 +69,7 @@ const MyProfile = () => {
                   <MDBCardText>Email</MDBCardText>
                 </MDBCol>
                 <MDBCol sm="9">
-                  <MDBCardText className="text-muted">example@example.com</MDBCardText>
+                  <MDBCardText className="text-muted">{email}</MDBCardText>
                 </MDBCol>
               </MDBRow>
               <hr />
@@ -55,7 +78,7 @@ const MyProfile = () => {
                   <MDBCardText>Phone</MDBCardText>
                 </MDBCol>
                 <MDBCol sm="9">
-                  <MDBCardText className="text-muted">(097) 234-5678</MDBCardText>
+                  <MDBCardText className="text-muted">{tel}</MDBCardText>
                 </MDBCol>
               </MDBRow>
               <hr />
@@ -64,16 +87,18 @@ const MyProfile = () => {
                   <MDBCardText>Mobile</MDBCardText>
                 </MDBCol>
                 <MDBCol sm="9">
-                  <MDBCardText className="text-muted">(098) 765-4321</MDBCardText>
+                  <MDBCardText className="text-muted">{bn}</MDBCardText>
                 </MDBCol>
               </MDBRow>
               <hr />
               <MDBRow>
                 <MDBCol sm="3">
-                  <MDBCardText>Address</MDBCardText>
+                  <MDBCardText>비밀번호 변경</MDBCardText>
                 </MDBCol>
                 <MDBCol sm="9">
-                  <MDBCardText className="text-muted">Bay Area, San Francisco, CA</MDBCardText>
+                  <MDBCardText className="text-muted">
+                    <button>비밀 번호 변경하기</button>
+                  </MDBCardText>
                 </MDBCol>
               </MDBRow>
             </MDBCardBody>
