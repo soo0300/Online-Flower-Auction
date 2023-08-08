@@ -21,3 +21,8 @@ include::api/member/my_password.adoc[]
 
 include::api/reservation/reservation_create.adoc[]
 include::api/reservation/reservation_search.adoc[]
+
+[[Alarm-API]]
+== Alarm API
+
+include::api/alarm/alarm_search.adoc[]
