@@ -5,7 +5,6 @@ import com.kkoch.admin.api.controller.trade.response.TradeDetailResponse;
 import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleQueryRepository;
 import com.kkoch.admin.domain.trade.repository.TradeQueryRepository;
-import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
