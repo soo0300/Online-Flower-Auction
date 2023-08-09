@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"; 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useRef } from "react"; 
 import { Bars3Icon, XMarkIcon, UserCircleIcon, BellAlertIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
 import { Link } from 'react-router-dom';
@@ -35,6 +36,18 @@ const Navbar = ({isTop} : Props) => {
 
   const username = localStorage.getItem("username");
 
+  const dropMenuRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleOutsideClose = (e: {target: any}) => {
+    // useRef current에 담긴 엘리먼트 바깥을 클릭 시 드롭메뉴 닫힘
+      if(isDropdownOpen && (!dropMenuRef.current.contains(e.target))) setDropdownOpen(false);
+      if(isNotificationOpen && (!dropMenuRef.current.contains(e.target))) setNotificationOpen(false);
+    };
+    document.addEventListener('click', handleOutsideClose);
+    
+    return () => document.removeEventListener('click', handleOutsideClose);
+  }, [isDropdownOpen, isNotificationOpen]);
+  
   useEffect(() => {
     setIsLoggedOut(!isLoggedIn);
   }, [isLoggedIn]);
@@ -92,7 +105,7 @@ const Navbar = ({isTop} : Props) => {
   }
 
   return <nav>
-    <div
+    <div ref={dropMenuRef}
       className={`${navbarBackground} ${flexBetween} top-0 z-30 w-full py-3 border-b-2`}
     >
       <div className={`${flexBetween} mx-auto w-5/6`}>
@@ -120,13 +133,22 @@ const Navbar = ({isTop} : Props) => {
                       <button
                         className="flex justify-between items-center"
                         onClick={() => {
+                          setNotificationOpen(!isNotificationOpen);
+
+                          if (isDropdownOpen) setDropdownOpen(!isDropdownOpen);
                           setNotificationOpen(!isNotificationOpen)
+                          
                           getNotification()
                         }}
                       >
                         <BellAlertIcon className="h-10 w-10 text-blue-500"/>
                       </button>
-                      <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+                      <button className="flex justify-between items-center" 
+                              onClick={() => {
+                                if (isNotificationOpen) setNotificationOpen(!isNotificationOpen);
+                                setDropdownOpen(!isDropdownOpen);
+                              }}
+                      >
                         <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
                         <span>{username}님</span>
                       </button>
@@ -166,17 +188,17 @@ const Navbar = ({isTop} : Props) => {
 
     {/* 회원 메뉴 드롭다운 */}
     { isAboveMediumScreens && isDropdownOpen && (
-      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+      <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
         <ul className="flex flex-col justify-center pl-0 mb-0">
-          <li >
+          <li>
             <Link to="/mypage" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setDropdownOpen(false)}>마이페이지</Link>
           </li>
-          <li>
-            <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100">로그아웃</button>
+          <li className="border-t">
+            <a onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">로그아웃</a>
           </li>
-          <li>
+          <li className="border-t">
             {/* Add an event handler for 회원탈퇴 */}
-            <button className="block px-4 py-2 hover:bg-gray-100">회원탈퇴</button>
+            <a className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">회원탈퇴</a>
           </li>
         </ul>
       </div>
@@ -184,12 +206,25 @@ const Navbar = ({isTop} : Props) => {
 
     {/* 알림 드롭다운 */}
     { isAboveMediumScreens && isNotificationOpen && (
-      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+      <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
         {/* 알림 내용 */}
         {notifications.map((noti, index) => (
-          
-          <div key={index} className="p-2 border-b">
-            {formattedDate(noti.createdDate)} - {noti.content}
+          <div key={index} className="p-2 border-b flex justify-between items-center">
+            <div className="mr-6">
+              {formattedDate(noti.createdDate)} - {noti.content}
+            </div>
+            <button
+              className="text-gray-500 hover:text-red-500 mr-2"
+              onClick={() => {
+                  // 해당 알림을 삭제하는 로직을 추가하세요
+                  // notifications 배열에서 해당 알림을 제거하는 방식으로 구현하면 됩니다.
+                  const updatedNotifications = [...notifications];
+                  updatedNotifications.splice(index, 1);
+                  setNotifications(updatedNotifications);
+                }}
+              >
+              X
+            </button>
           </div>
         ))}
       </div>
