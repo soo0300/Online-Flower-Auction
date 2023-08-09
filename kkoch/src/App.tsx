@@ -15,6 +15,7 @@ import TradingInfo from "@/pages/flowerInfo/TradingInfo"
 import FlowerDetail from "./pages/flowerInfo/FlowerDetail";
 import Notice from "./pages/notice/Notice";
 
+
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
 

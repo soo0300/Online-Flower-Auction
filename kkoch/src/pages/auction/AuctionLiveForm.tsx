@@ -4,53 +4,81 @@ import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
 import Video from '../buyer/VideoRoom';
 import { useLocation } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage';
+import axios from 'axios';
+import AuctionModal from './AuctionModal';
+import { toast } from 'react-toastify';
 
 interface auctionInfo {
-  id: number;
-  point: number;
-  count: number;
-  bidPrice: number;
-  shipper: string;
-  region: string;
-  grade: string;
-  startPrice: number;
+  auctionArticleId: number;
+  code: string; // 카테고리
+  name: string; // 품목
+  type: string; // 품종
+  count: number; //단수
+  shipper: string; //출하자
+  region: string; //지역
+  grade: string; //등급
+  startPrice: number; //시작가
+}
+
+interface BidderInfo {
+  memberToken: string;
+  auctionArticleId: number;
+  price: number;
+  message: string;
 }
 
 const AuctionLiveForm = () => {
 
   const auctionArticles = useLocation();
-  console.log("상속", auctionArticles.state.auctionArticles)
+  // console.log("상속", auctionArticles.state.auctionArticles[0][0])
+  const auctionInfos = auctionArticles.state.auctionArticles[0]
+  const [auctionInfoIndex, setAuctionInfoIndex] = useState(0);
+  // console.log(secureLocalStorage.getItem("memberkey"))
+  const memberToken = secureLocalStorage.getItem("memberkey");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  // const [modalMessage, setModalMessage] = useState('');
+  const [bidderInfo, setBidderInfo] = useState<BidderInfo>([]);
+  const [key, setKey] = useState(0);
+
 
   // 경매 정보 
-  const auctionInfo = {
-    point: 100000, // 보유 포인트
-    quantity: 30, // 출하량
-    provider: "홍승준", // 출하자
-    flower: "장미/스프레이", // 품명
-    grade: "특", // 등급
-    nowPrice: 20000, // 현재가
-    bidPrice: 2000, // 낙찰가
-    buyer: "김싸피", // 낙찰자
-  }; 
-  
+  const [auctionInfo, setAuctionInfo] = useState(auctionInfos[0]);
+
+  // const handleNextAuctionInfo = () => {
+  //   if (auctionInfoIndex < auctionInfos.length - 1) {
+  //     setAuctionInfoIndex(auctionInfoIndex + 1); // 다음 경매 정보로 이동
+  //   }
+  // };
+
+
+
   // 원래 가격과 최종 가격을 지정
-  const originalPrice = auctionInfo.nowPrice;
+  const originalPrice = auctionInfo.startPrice;
+  console.log('원래가격', originalPrice)
   const finalPrice = originalPrice / 2; // 최종 가격은 원래 가격의 1/2로 설정
 
   // 현재가를 변화시킬 state
   const [currentPrice, setCurrentPrice] = useState(originalPrice);
   const [isBiddingActive, setIsBiddingActive] = useState(true);
-
+  console.log('현재가', currentPrice)
   const clickedPriceRef = useRef(null);
   const animationFrameRef = useRef(null);
+
+  useEffect(() => {
+    setIsBiddingActive(true);
+    setAuctionInfo(auctionInfos[auctionInfoIndex]); // auctionInfoIndex에 해당하는 정보 할당
+    setCurrentPrice(auctionInfos[auctionInfoIndex].startPrice)
+    setKey((prevKey) => prevKey + 1);
+  }, [auctionInfoIndex, auctionInfos]);
   
   useEffect(() => {
     const totalTime = 10000; // 10초
     const startTime = Date.now(); // 시작 시간 저장
     const decreaseAmount = (originalPrice - finalPrice) / totalTime; // 감소량 계산
-  
-    // 현재가 함수 정의
+
     const animatePrice = () => {
+      console.log("너 계속 실행되지?")
       if (!isBiddingActive) {
         return;
       }
@@ -68,6 +96,15 @@ const AuctionLiveForm = () => {
         animationFrameRef.current = requestAnimationFrame(animatePrice);
       } else if (!isBiddingActive) {
         setCurrentPrice(clickedPriceRef.current); // 클릭한 시점의 현재 가격으로 업데이트
+      } else if (isBiddingActive && auctionInfoIndex < auctionInfos.length - 1) {
+        // 입찰 중이고, 마지막 경매 정보가 아니면 3초 뒤에 다음 경매 정보로 업데이트
+        const updateTimer = setTimeout(() => {
+          setAuctionInfoIndex(auctionInfoIndex + 1);
+        }, 3000);
+        
+        return () => {
+          clearTimeout(updateTimer); // 컴포넌트가 unmount될 때 타이머 정리
+        };
       }
     };
   
@@ -78,10 +115,54 @@ const AuctionLiveForm = () => {
       // 컴포넌트가 언마운트될 때 애니메이션 정리
       cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [isBiddingActive]);
+  }, [auctionInfo, auctionInfoIndex]);
 
   const handleBiddingButtonClick = () => {
+    
+    if (showSuccessModal) {
+      return;
+    }
+
     setIsBiddingActive(false); // 입찰 프로세스를 비활성화로 설정
+    const roundedCurrentPrice = Math.floor(currentPrice / 10) * 10;
+    // console.log("절삭현재가", roundedCurrentPrice)
+
+    axios({
+      method: "post",
+      url: "/api/api/auction-service/auctions/participant",
+      data: {
+        "memberToken": memberToken,
+        "auctionArticleId": auctionInfo.auctionArticleId,
+        "price": roundedCurrentPrice
+      }
+    })
+    .then((res) => {
+      console.log('입찰하기', res.data.data)
+      setBidderInfo(res.data.data)
+      // setShowSuccessModal(true)
+
+      // 모달 열기 로직
+      if (!showSuccessModal && auctionInfoIndex < auctionInfos.length - 1) {
+        setShowSuccessModal(true);
+
+        // 5초 후에 모달 닫고 다음 경매 정보로 업데이트
+        setTimeout(() => {
+          if (auctionInfoIndex < auctionInfos.length - 1) {
+            setAuctionInfoIndex(auctionInfoIndex + 1);
+            setShowSuccessModal(false); // 모달 닫기
+            setBidderInfo([]); // 낙찰 정보 초기화
+            setIsBiddingActive(true); // 입찰 활성화 상태 초기화
+          }
+        }, 5000);
+      }
+      setCurrentPrice(clickedPriceRef.current);
+    })
+    .catch((error) => {
+      console.log("입찰실패",error)
+    })
+
+    setBidderInfo([]);
+    
     console.log("낙찰가", currentPrice)
     console.log("이즈비딩상태", isBiddingActive)
     // setGraph((prevGraph) => clickedPriceRef.current);
@@ -114,12 +195,12 @@ const AuctionLiveForm = () => {
       </div>
       <div className='auction-content'>
         <div className='stream-image'>
-          <Video />
+          {/* <Video /> */}
           {/* <img src={ HomePageAuction } alt="LiveStream" /> */}
         </div>
         <div className='auction-info'>
           <div className='auction-point'>
-            보유 포인트: { auctionInfo.point }
+            {/* 보유 포인트: { auctionInfo.point } */}
           </div>
           <div className='auction-border'>
             <div className='auction-status'>
@@ -127,13 +208,14 @@ const AuctionLiveForm = () => {
             </div>
             <div className='auction-container'>
               <div className='graph-container'>
-                <DoughnutChart isBiddingActive={isBiddingActive} />
+                <DoughnutChart isBiddingActive={isBiddingActive} key={key}/>
               </div>
               <div className='auction-status-info'>
-                출하량: { auctionInfo.quantity } <br />
-                출하자: { auctionInfo.provider } <br />
-                품명: { auctionInfo.flower } <br />
+                출하량: { auctionInfo.count } <br />
+                출하자: { auctionInfo.shipper } <br />
+                품명: { auctionInfo.type } / { auctionInfo.name} <br />
                 등급: { auctionInfo.grade} <br />
+                현재가: { Math.floor(isBiddingActive ? currentPrice / 10 : clickedPriceRef.current / 10) * 10 } <br />
               </div>
             </div>
           </div>
@@ -141,16 +223,15 @@ const AuctionLiveForm = () => {
             <div className='auction-bidding-info'> 
               <div className='auction-bidding-price'>
                 {/* 10원단위까지만 표시될 수 있게 */}
-                현재가: { Math.floor(isBiddingActive ? currentPrice / 10 : clickedPriceRef.current / 10) * 10 } <br />
-                낙찰자: { auctionInfo.buyer} <br />
-                낙찰단가: {auctionInfo.bidPrice} <br />
+                낙찰자: { bidderInfo.memberToken ? bidderInfo.memberToken : ''} <br />
+                낙찰단가: {bidderInfo.price ? bidderInfo.price : ''} <br />
               </div>
               <div className='auction-next-title'>
                 다음 꽃 정보
               </div>
               <div className='auction-next-info'>
-                품명: { auctionInfo.flower } <br />
-                등급: { auctionInfo.grade} <br />
+                품명: {auctionInfos[auctionInfoIndex + 1]?.type + ' /'} {auctionInfos[auctionInfoIndex + 1]?.name} <br />
+                등급: {auctionInfos[auctionInfoIndex + 1]?.grade} <br />
               </div>
             </div>
           </div>
@@ -175,6 +256,10 @@ const AuctionLiveForm = () => {
           </button>
         </div>
       </div>
+       {/* 모달 컴포넌트 */}
+       {showSuccessModal && (
+        <AuctionModal modalMessage={bidderInfo.message} onClose={() => setShowSuccessModal(false)} />
+      )}
     </div>
   )
 }

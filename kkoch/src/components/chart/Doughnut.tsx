@@ -4,10 +4,18 @@ import { Doughnut } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export function DoughnutChart({isBiddingActive}) {
+export function DoughnutChart({ isBiddingActive, key }) {
   const initialGraph = 40
   const [graph, setGraph] = useState(initialGraph); // 초기 그래프 크기 설정
   const [isGraphCreated, setIsGraphCreated] = useState(false);
+
+  useEffect(() => {
+    if (isGraphCreated) {
+      setGraph(initialGraph); // 새로운 경매 정보로 업데이트될 때 그래프 초기화
+    } else {
+      setIsGraphCreated(true);
+    }
+  }, [key, isGraphCreated]);
 
   const calculateColor = (redValue) => {
     // 데이터가 25일 때까지는 파란색
@@ -25,9 +33,10 @@ export function DoughnutChart({isBiddingActive}) {
     }
   };
 
-  useEffect(() => {
-    setIsGraphCreated(true);
-  }, []);
+  // useEffect(() => {
+  //   setIsGraphCreated(true);
+  // }, []);
+
 
   const data = {
     datasets: [
@@ -53,7 +62,7 @@ export function DoughnutChart({isBiddingActive}) {
 
   let animationStartTime;
   const animationDuration = 10000; // 10초
-  const decreaseAmountPerMs = 0.01; // 1초당 감소하는 양
+  const decreaseAmountPerMs = 0.009; // 1초당 감소하는 양
 
   const decreaseData = (timestamp) => {
     if (!isBiddingActive) {
@@ -92,5 +101,5 @@ export function DoughnutChart({isBiddingActive}) {
     };
   }, [graph, isBiddingActive, isGraphCreated]);
 
-  return <Doughnut data={data} options={options} />;
+  return <Doughnut key={key} data={data} options={options} />;
 }
