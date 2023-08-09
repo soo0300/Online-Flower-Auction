@@ -1,6 +1,6 @@
 package com.kkoch.admin.domain.auction;
 
-import com.kkoch.admin.domain.BaseEntity;
+import com.kkoch.admin.domain.TimeBaseEntity;
 import com.kkoch.admin.domain.admin.Admin;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Auction extends BaseEntity {
+public class Auction extends TimeBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,12 +62,12 @@ public class Auction extends BaseEntity {
 
     public static Auction toEntity(int code, LocalDateTime startTime, Admin admin) {
         return Auction.builder()
-            .code(code)
-            .startTime(startTime)
-            .active(true)
-            .status(READY)
-            .admin(admin)
-            .build();
+                .code(code)
+                .startTime(startTime)
+                .active(true)
+                .status(READY)
+                .admin(admin)
+                .build();
     }
 
     //== 비즈니스 로직 ==//
