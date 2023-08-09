@@ -49,7 +49,6 @@ public class AdminController {
     @GetMapping("/admins")
     public String adminPage(@ModelAttribute("form") AddAdminRequest request, Model model) {
         log.info("<관리자 목록 요청> Controller");
-        // TODO: 2023-08-08  AddAdminRequest???
         List<AdminResponse> responses = adminQueryService.getAdmins();
         model.addAttribute("admins", responses);
         return "admin";
