@@ -15,7 +15,6 @@ import java.util.List;
 @Slf4j
 public class PlantApiController {
 
-    private final PlantService plantService;
     private final PlantQueryService plantQueryService;
 
     @GetMapping("/reservation")
@@ -23,12 +22,13 @@ public class PlantApiController {
             @RequestParam String type,
             @RequestParam String name
     ) {
+        log.info("<식물 pk 요청> Controller type={}, name={}", type, name);
         return plantQueryService.getPlantId(type, name);
     }
 
     @GetMapping("/names")
     public List<PlantNameResponse> getPlantNames(
-        @RequestParam List<Long> plantIds
+            @RequestParam List<Long> plantIds
     ) {
         log.info("call PlantApiController.getPlantNames");
         log.info("plantIds={}", plantIds);

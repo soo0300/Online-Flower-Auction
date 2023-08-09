@@ -33,36 +33,38 @@ public class AuctionController {
 
     /**
      * 로그인을 한 관계자만 경매 일정을 등록할 수 있다.
-     * @throws IllegalArgumentException
-     * <pre>
-     *     현재 시간 + 1시간 이전의 일정이 등록되는 경우<br/>
-     *     구분코드가 범위(1 ~ 4)를 벗어나는 경우
-     * </pre>
      *
+     * @throws IllegalArgumentException <pre>
+     *                                                                       현재 시간 + 1시간 이전의 일정이 등록되는 경우<br/>
+     *                                                                       구분코드가 범위(1 ~ 4)를 벗어나는 경우
+     *                                                                   </pre>
      */
     @PostMapping
     public ApiResponse<AuctionTitleResponse> addAuction(
             @Valid @RequestBody AddAuctionRequest request,
             @Login LoginAdmin loginAdmin
     ) {
-
+        log.info("<경매 일정 등록> Controller : 구분코드 = {}", request.getCode());
         timeValidation(request.getStartTime());
 
         AddAuctionDto dto = request.toAddAuctionDto();
 
         AuctionTitleResponse response = auctionService.addAuction(loginAdmin.getId(), dto);
-        log.debug("[경매 일정 등록 응답] 경매방 제목 = {}", response.getTitle());
+        log.info("[경매 일정 등록 응답] 경매방 제목 = {}", response.getTitle());
         return ApiResponse.ok(response);
     }
 
     @GetMapping("/api")
     public ApiResponse<AuctionTitleResponse> getAuctionListForMember() {
+        log.info("<OPEN 상태의 경매 일정 조회> Controller");
         AuctionTitleResponse openAuction = auctionQueryService.getOpenAuction();
+        log.info("<OPEN 상태의 경매 일정 조회> 경매방 이름 = {}", openAuction.getTitle());
         return ApiResponse.ok(openAuction);
     }
 
     @GetMapping
     public ApiResponse<List<AuctionResponse>> getAuctions() {
+        log.info("<모든 경매 일정 조회> Controller");
         List<AuctionResponse> auctionSchedule = auctionQueryService.getAuctionSchedule();
         return ApiResponse.ok(auctionSchedule);
     }
@@ -72,7 +74,7 @@ public class AuctionController {
             @PathVariable Long auctionId,
             @PathVariable Status status
     ) {
-
+        log.info("<경매 일정 상태 변경> Controller. 변경될 상태 = {}", status);
         AuctionTitleResponse response = auctionService.setStatus(auctionId, status);
 
         log.debug("[경매 일정 상태 변경] 경매방 제목 = {}", response.getTitle());
@@ -84,7 +86,7 @@ public class AuctionController {
             @PathVariable Long auctionId,
             @Valid @RequestBody SetAuctionRequest request
     ) {
-
+        log.info("<경매 일정 변경> Controller.");
         timeValidation(request.getStartTime());
 
         SetAuctionDto dto = request.toSetAuctionDto();
@@ -95,7 +97,7 @@ public class AuctionController {
 
     @DeleteMapping("/{auctionId}")
     public ApiResponse<Long> removeAuction(@PathVariable Long auctionId) {
-
+        log.info("<경매 일정 삭제> Controller.");
         Long removedAuctionId = auctionService.remove(auctionId);
 
         return ApiResponse.of(MOVED_PERMANENTLY, "경매 일정이 삭제되었습니다.", removedAuctionId);

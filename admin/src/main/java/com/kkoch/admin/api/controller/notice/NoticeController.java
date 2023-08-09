@@ -24,6 +24,7 @@ public class NoticeController {
 
     @PostMapping("/add")
     public String addNotice(AddNoticeForm form, @Login LoginAdmin loginAdmin) {
+        log.info("<공지 글 작성> Controller");
         AddNoticeDto dto = form.toAddNoticeDto();
         Long noticeId = noticeService.addNotice(loginAdmin.getId(), dto);
         return "redirect:/";
@@ -31,6 +32,7 @@ public class NoticeController {
 
     @PostMapping("/{noticeId}/edit")
     public String setNotice(@PathVariable Long noticeId, SetNoticeForm form) {
+        log.info("<공지 글 수정> Controller");
         SetNoticeDto dto = form.toSetNoticeDto();
         Long id = noticeService.setNotice(noticeId, dto);
         return "redirect:/";
@@ -38,6 +40,7 @@ public class NoticeController {
 
     @PostMapping("/{noticeId}/remove")
     public String removeNotice(@PathVariable Long noticeId) {
+        log.info("<공지 글 삭제> Controller");
         Long id = noticeService.removeNotice(noticeId);
         return "redirect:/";
     }
