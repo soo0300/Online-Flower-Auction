@@ -6,6 +6,7 @@ import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.TradeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,23 +17,28 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class TradeService {
 
     private final TradeRepository tradeRepository;
     private final AuctionArticleRepository auctionArticleRepository;
 
     public Long addTrade(AddTradeDto dto, LocalDateTime tradeDate) {
+        log.info("<낙찰->내역 기록> TradeService. 낙찰 날짜 : {}", tradeDate);
         Trade currnetTrade = null;
 
         Optional<Trade> findTrade = tradeRepository.findByMemberKey(dto.getMemberKey(), tradeDate);
 
         if (findTrade.isEmpty()) {
+            log.info("<낙찰->내역 기록> TradeService. 낙찰내역 생성");
             currnetTrade = tradeRepository.save(createTradeEntity(dto, tradeDate));
         }
 
         if (findTrade.isPresent()) {
+            log.info("<낙찰->내역 기록> TradeService. 기존 낙찰내역에 추가");
             currnetTrade = findTrade.get();
             currnetTrade.setTotalPrice(dto.getPrice());
+            log.info("<낙찰->내역 기록> TradeService. 총 거래 가격={}", currnetTrade.getTotalPrice());
         }
 
         AuctionArticle auctionArticle = auctionArticleRepository.findById(dto.getAuctionArticleId())
