@@ -21,6 +21,7 @@ public class PlantController {
 
     @GetMapping("/plants")
     public String plantPage(Model model) {
+        log.info("<식물 목록 요청> Controller");
         List<PlantResponse> responses = plantQueryService.getPlants();
         model.addAttribute("plants", responses);
         return "category";
