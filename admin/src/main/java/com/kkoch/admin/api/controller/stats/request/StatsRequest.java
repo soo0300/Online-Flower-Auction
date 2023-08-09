@@ -28,7 +28,6 @@ public class StatsRequest {
         this.searchDay = searchDay;
     }
 
-    @Builder
     public StatsSearchCond toStatsSearchCond() {
         return StatsSearchCond.builder()
                 .type(this.type)
