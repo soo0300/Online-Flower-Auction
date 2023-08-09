@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
 import Video from '../buyer/VideoRoom';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
 import AuctionModal from './AuctionModal';
@@ -29,7 +29,7 @@ interface BidderInfo {
 }
 
 const AuctionLiveForm = () => {
-
+  const navigate = useNavigate();
   const auctionArticles = useLocation();
   // console.log("상속", auctionArticles.state.auctionArticles[0][0])
   const auctionInfos = auctionArticles.state.auctionArticles[0]
@@ -171,9 +171,9 @@ const AuctionLiveForm = () => {
   };
 
   return (
-    <div className='gap-24 bg-gray-20 py-28 md:h-full md:pb-0'>
+    <div className=''>
       <div className='auction-top'>
-        <button className='leave-button'>
+        <button className='leave-button' onClick={() => navigate('/auction/waitingroom')}>
           <svg 
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -207,15 +207,36 @@ const AuctionLiveForm = () => {
               경매중
             </div>
             <div className='auction-container'>
-              <div className='graph-container'>
-                <DoughnutChart isBiddingActive={isBiddingActive} key={key}/>
-              </div>
-              <div className='auction-status-info'>
-                출하량: { auctionInfo.count } <br />
-                출하자: { auctionInfo.shipper } <br />
-                품명: { auctionInfo.type } / { auctionInfo.name} <br />
-                등급: { auctionInfo.grade} <br />
-                현재가: { Math.floor(isBiddingActive ? currentPrice / 10 : clickedPriceRef.current / 10) * 10 } <br />
+              <div className='auction-graph-info-container'>
+                <div className='graph-container'>
+                  <DoughnutChart isBiddingActive={isBiddingActive} key={key}/>
+                </div>
+                <div className='auction-status-info'>
+                  <div className='info-row'>
+                    <span className='info-title'>출하량</span>
+                      <span className='red-text'>{auctionInfo.count}</span>
+                  </div>
+                  <div className='info-row'>
+                    <span className='info-title'>출하자</span>
+                    <span className='info-data'>{ auctionInfo.shipper }</span>
+                  </div>
+                  <div className='info-row'>
+                    <span className='info-title'>품명</span>
+                    <span className='info-data'>{ auctionInfo.type } / { auctionInfo.name }</span>
+                  </div>
+                  <div className='info-row'>
+                    <span className='info-title'>등급</span>
+                    <span className='info-data'>{ auctionInfo.grade }</span>
+                  </div>
+                  <div className='info-row'>
+                    <span className='info-title'>현재가</span>
+                    <span className='info-data'>
+                      <span className='red-text'>
+                        {Math.floor(isBiddingActive ? currentPrice / 10 : clickedPriceRef.current / 10) * 10}
+                      </span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -223,15 +244,41 @@ const AuctionLiveForm = () => {
             <div className='auction-bidding-info'> 
               <div className='auction-bidding-price'>
                 {/* 10원단위까지만 표시될 수 있게 */}
-                낙찰자: { bidderInfo.memberToken ? bidderInfo.memberToken : ''} <br />
-                낙찰단가: {bidderInfo.price ? bidderInfo.price : ''} <br />
+                <div>
+                  <span className='info-title'>
+                    낙찰자 
+                  </span>
+                  <span className='red-text'>
+                    { bidderInfo.memberToken ? bidderInfo.memberToken : ''}
+                  </span>  
+                </div> 
+                <div>
+                  <span className='info-title'>
+                    낙찰단가 
+                  </span>
+                  <span className='red-text'>
+                    {bidderInfo.price ? bidderInfo.price : ''}
+                  </span>
+                </div>
               </div>
               <div className='auction-next-title'>
                 다음 꽃 정보
               </div>
               <div className='auction-next-info'>
-                품명: {auctionInfos[auctionInfoIndex + 1]?.type + ' /'} {auctionInfos[auctionInfoIndex + 1]?.name} <br />
-                등급: {auctionInfos[auctionInfoIndex + 1]?.grade} <br />
+                <div>
+                  <span className='info-title'>
+                    품명
+                  </span>
+                  <span className='red-text'>
+                    {auctionInfos[auctionInfoIndex + 1]?.type + ' /'} {auctionInfos[auctionInfoIndex + 1]?.name}
+                  </span>
+                </div>
+                <div>
+                  <span className='info-title'>
+                    등급 
+                  </span>
+                  <span className='red-text'>{auctionInfos[auctionInfoIndex + 1]?.grade}</span>
+                </div>
               </div>
             </div>
           </div>

@@ -19,18 +19,20 @@ const FlowerChart: React.FC<ApexChartProps> = ({ flowerData }) => {
     return `${year}-${month}-${day}`
   }
 
+  console.log("그래프", flowerData)
+
   const response = () => {
     axios({
       url: '/api/api/admin-service/stats',
       method: 'get',
-      data: {
-        "type": flowerData.type,
-        "name": flowerData.name,
-        "searchDay": "7"
+      params: {
+        type: "장미",
+        name: "5번가",
+        searchDay: 7
       }
     })
     .then((res) => {
-      console.log(res.data)
+      console.log("낙찰통계", res.data)
       console.log(11111111111)
     })
   }
