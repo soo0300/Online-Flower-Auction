@@ -2,37 +2,72 @@ import { MDBCard, MDBCardBody, MDBCardTitle } from "mdb-react-ui-kit";
 import { GridRowsProp, GridColDef } from '@mui/x-data-grid';
 import MyReservModal from '@/pages/user/MyReservation/MyReservModal'
 import StripedDataGrid from "../stripedDataGrid";
+import { useState, useEffect } from "react";
+import secureLocalStorage from "react-secure-storage";
+import axios from "axios";
 
-const rows: GridRowsProp = [
-  { id: 1, col1: '1', col2: '장미', col3: '하젤', col4: '특2', col5: '양재', col6: '10', col7: '1000', col8: '취소'},
-  { id: 2, col1: '2', col2: '장미', col3: '스프레이', col4: '특2', col5: '광주', col6: '20', col7: '2500', col8: '취소'},
-  { id: 3, col1: '3', col2: '국화', col3: '다이아몬드', col4: '특2', col5: '양재', col6: '20', col7: '12000', col8: '취소'},
-  { id: 4, col1: '4', col2: '수국', col3: '베레나핑크', col4: '중3', col5: '부산', col6: '30', col7: '3800', col8: '취소'},
-  { id: 5, col1: '5', col2: '수국', col3: '베레나핑크', col4: '상3', col5: '부산', col6: '5', col7: '4950', col8: '취소'},
-];
+const initailRows: GridRowsProp = [];
 
 const columns: GridColDef[] = [
-  { field: 'col1', headerName: 'No', width: 150 },
-  { field: 'col2', headerName: '품목', width: 150 },
-  { field: 'col3', headerName: '품종', width: 150 },
-  { field: 'col4', headerName: '등급', width: 150 },
-  { field: 'col5', headerName: '지역', width: 150 },
-  { field: 'col6', headerName: '단수', width: 150 },
-  { field: 'col7', headerName: '가격', width: 150 },
-  { field: 'col8', headerName: '예약 관리', width: 150 },
+  { field: 'col1', headerName: 'No', width: 110 },
+  { field: 'col2', headerName: '품목', width: 140 },
+  { field: 'col3', headerName: '품종', width: 140 },
+  { field: 'col4', headerName: '등급', width: 140 },
+  { field: 'col5', headerName: '단수', width: 140 },
+  { field: 'col6', headerName: '가격', width: 140 },
+  { field: 'col7', headerName: '예약 관리', width: 140 },
 ];
 
-
 const MyReservation = () => {
+  const [rows, setRows] = useState<GridRowsProp>(initailRows);
+
+  function getRows() {
+    axios({
+      method: 'get',
+      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
+      url: `/api/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
+      headers: {
+        Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
+      }
+    })
+    .then((res) => {
+      const rawData = res.data.data
+      
+      const formattedData = rawData["content"].map((item, idx) => ({
+        id: idx + 1,
+        col1: idx + 1,
+        col2: item.type,
+        col3: item.name,
+        col4: item.grade,
+        col5: item.count,
+        col6: `${item.price} 원`,
+        col7: "낙찰 성공",
+      }))
+      
+      setRows(formattedData);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+  useEffect(() => {
+    getRows()
+  }, [])
+
+  // MyReservModal 컴포넌트에서 예약이 추가되었을 때 실행되는 콜백
+  const handleReservationAdded = () => {
+    getRows(); // 실시간으로 데이터 업데이트
+  };
+
   return (
     <MDBCard>
       <MDBCardBody>
         <MDBCardTitle className="mb-4 font-bold flex justify-between items-start">
           <p>화훼 예약 목록</p>
-          <MyReservModal />
+          <MyReservModal onReservationAdded={handleReservationAdded}/>
         </MDBCardTitle>
 
-        <div style={{ height: 400, width: '100%' }}>
+        <div className="m-auto h-[70%]">
           <StripedDataGrid
             rows={rows} columns={columns}
             getRowClassName={(params) =>

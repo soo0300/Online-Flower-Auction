@@ -1,4 +1,4 @@
-.delete-btn {
+.btn {
   background-color: #FFCD5B;
   color: black;
   border: none;
@@ -12,6 +12,6 @@
 }
 
 /* 버튼에 호버 효과 추가 (선택사항) */
-.delete-btn:hover {
+.btn:hover {
   background-color: #F25477;
 }

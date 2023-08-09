@@ -6,6 +6,7 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { useDispatch } from "react-redux";
 import { logout } from '@/reducer/store/authSlice';
 import secureLocalStorage from "react-secure-storage";
+import axios from "axios";
 // import ActionButton from "@/shared/ActionButton";
 
 type Props = {
@@ -21,13 +22,17 @@ const Navbar = ({isTop} : Props) => {
   const navbarBackground = isTop ? "" : "bg-primary-100 drop-shadow";
 
   // 회원 이모지 누르면 나올 dropdown
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [isDropdownOpen, setDropdownOpen] = useState(false); 
+  // Navbar 드롭다운
+  const [isNotificationOpen, setNotificationOpen] = useState(false);
 
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
   const isLoggedIn = secureLocalStorage.getItem("memberkey") && secureLocalStorage.getItem("token");
   const [isLoggedOut, setIsLoggedOut] = useState(true);
+
+  const username = localStorage.getItem("username");
 
   useEffect(() => {
     setIsLoggedOut(!isLoggedIn);
@@ -39,6 +44,21 @@ const Navbar = ({isTop} : Props) => {
       setDropdownOpen(false);
       dispatch(logout());
     }
+  }
+
+  // 로그인 되어 있으면 알림 내역 가져오기
+  if(isLoggedIn) {
+    axios({
+      method: "get",
+      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+      url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+      headers: {
+        Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
+      }
+    })
+    .then((res) => {
+      console.log(res);
+    })
   }
 
   return <nav>
@@ -58,7 +78,7 @@ const Navbar = ({isTop} : Props) => {
               <div className={`${flexBetween} gap-8 text-sm`}>
                 <Link to="/auction"> 경매</Link>
                 <Link to="/flowers/절화" state ={{ code: "절화"}}> 화훼정보</Link>
-                <Link to="/customer" />
+                <Link to="/notices" >공지사항</Link>
               </div>
                 { isLoggedOut ? (
                   <div className={`${flexBetween} gap-8`}>
@@ -67,7 +87,12 @@ const Navbar = ({isTop} : Props) => {
                   </div>
                   ) : (
                     <div className="flex justify-between">
-                      <BellAlertIcon  className="h-10 w-10 text-blue-500"/>
+                      <button
+                        className="flex justify-between items-center"
+                        onClick={() => setNotificationOpen(!isNotificationOpen)}
+                      >
+                        <BellAlertIcon className="h-10 w-10 text-blue-500"/>
+                      </button>
                       <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
                         <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
                         {/* <span>{username}님</span> */}
@@ -124,6 +149,14 @@ const Navbar = ({isTop} : Props) => {
       </div>
     )}
 
+    {/* 알림 드롭다운 */}
+    { isAboveMediumScreens && isNotificationOpen && (
+      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+        {/* 알림 내용 */}
+        {/* 이곳에 알림 목록을 렌더링하는 컴포넌트나 요소를 추가하세요 */}
+        ㅁㄴㅇㄹ
+      </div>
+    )}
   </nav>
 }
 

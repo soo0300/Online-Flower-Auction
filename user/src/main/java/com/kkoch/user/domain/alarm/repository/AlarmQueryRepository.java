@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.kkoch.user.domain.alarm.QAlarm.*;
+import static com.kkoch.user.domain.member.QMember.*;
 
 @Repository
 public class AlarmQueryRepository {
@@ -19,7 +20,7 @@ public class AlarmQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<AlarmResponse> searchAlarms(Long memberId) {
+    public List<AlarmResponse> findAlarmsByMemberKey(String memberKey) {
         return queryFactory
             .select(Projections.constructor(AlarmResponse.class,
                 alarm.id,
@@ -28,7 +29,8 @@ public class AlarmQueryRepository {
                 alarm.createdDate
             ))
             .from(alarm)
-            .where(alarm.member.id.eq(memberId))
+            .join(alarm.member, member)
+            .where(alarm.member.memberKey.eq(memberKey))
             .orderBy(alarm.createdDate.desc())
             .limit(10)
             .offset(0)

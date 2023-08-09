@@ -22,7 +22,7 @@ public class ReservationQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<Reservation> findReservations(String memberKey, Pageable pageable) {
+    public List<Reservation> findReservationByMemberKey(String memberKey, Pageable pageable) {
         List<Long> ids = queryFactory
             .select(reservation.id)
             .from(reservation)

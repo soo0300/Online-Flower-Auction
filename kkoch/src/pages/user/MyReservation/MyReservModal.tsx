@@ -11,8 +11,17 @@ import {
   MDBInput
 } from 'mdb-react-ui-kit';
 import SelectForm from '@/pages/user/MyReservation/SelectForm';
+import axios from 'axios';
+import secureLocalStorage from 'react-secure-storage';
+import Select from "react-select";
 
-export default function MyReservModal() {
+const gradeOptions = [
+  {value: "SUPER", label: "특"},
+  {value: "ADVANCED", label: "상"},
+  {value: "NORMAL", label: "보"},
+];
+
+export default function MyReservModal({ onReservationAdded }) {
   const [centredModal, setCentredModal] = useState(false);
 
   // Select 컴포넌트에서 받아온 값들 (카테고리 제외)
@@ -32,13 +41,10 @@ export default function MyReservModal() {
   // 예약 submit
   const reservSubmit = () => {
     // 등급이 특, 상, 보가 아니면 다시 입력하라고 경고
-    if (!/^(특|상|보)$/.test(grade)) {
+    if (!grade) {
       setIsGradeValid(false);
       return;
-    } else{
-      setIsGradeValid(true);
-    }
-
+    }   
     // Check if "단수" exceeds 20
     if (parseInt(quantity) > 20) {
       setQuantityWarning(true);
@@ -49,19 +55,35 @@ export default function MyReservModal() {
 
     // Prepare the data to be submitted
     const formData = {
-      type: selectedFlower,
-      name: selectedVariety,
-      grade: grade,
-      count: quantity,
-      price: price,
-      // Add other form inputs here if needed
+      "type": selectedFlower,
+      "name": selectedVariety,
+      "grade": grade,
+      "count": quantity,
+      "price": price,
     };
 
-    console.log(formData)
+    axios({
+      method: 'post',
+      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/reservations`,
+      url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/reservations`,
+      headers: {
+        "Content-Type" : "application/json",
+        Authorization : `Bearer ${secureLocalStorage.getItem("token")}`
+      },
+      data: formData
+    })
+    .then((res) => {
+      console.log(res)
+      alert(`${selectedFlower} - ${selectedVariety} (이)가 예약 되었습니다`);
+      setCentredModal(!centredModal);
+      // 여기서 부모 컴포넌트에다가 실시간으로 회원낙찰 내역을 호출
+      onReservationAdded();
+    })
+    .catch(err => console.log(err)) 
   }
   return (
     <>
-      <MDBBtn onClick={toggleShow}>Vertically centered modal</MDBBtn>
+      <MDBBtn onClick={toggleShow}>화훼 예약 하기</MDBBtn>
 
       <MDBModal tabIndex='-1' show={centredModal} setShow={setCentredModal}>
         <MDBModalDialog centered>
@@ -77,16 +99,14 @@ export default function MyReservModal() {
                   onVarietyChange={setSelectedVariety}
                 />
                 <div className='mt-3 flex justify-between'>
-                  <MDBInput
-                    className='w-[33%]'
-                    label='등급'
-                    value={grade}
-                    type='text'
-                    placeholder='특, 상, 보'
-                    pattern='^(특|상|보)$'
-                    onChange={(e) => {
-                      setGrade(e.target.value)
-                    }}
+                  <Select
+                    className=""
+                    onChange={(e) => setGrade(e.value)}
+                    options={gradeOptions}
+                    placeholder="등급 선택"
+                    value={gradeOptions.filter(function (option) {
+                      return option.value === grade;
+                    })}
                   />
 
                   <MDBInput

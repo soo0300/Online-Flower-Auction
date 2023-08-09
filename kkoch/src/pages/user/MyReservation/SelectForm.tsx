@@ -46,6 +46,7 @@ export default function SelectForm({
     setVarietyOptions([]);
     e && axios({
       method: "get",
+      // url: `https://i9c204.p.ssafy.io/api/admin-service/categories/type?code=${e}`
       url: `/api/api/admin-service/categories/type?code=${e}`
     })
     .then(res => {
@@ -72,6 +73,7 @@ export default function SelectForm({
     setVarietyOptions([]);
     e && axios({
       method: "get",
+      // url: `https://i9c204.p.ssafy.io/api/admin-service/categories/name?code=${category}&type=${e}`
       url: `/api/api/admin-service/categories/name?code=${category}&type=${e}`
     })
     .then(res => {

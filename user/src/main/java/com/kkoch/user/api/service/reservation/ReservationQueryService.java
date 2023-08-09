@@ -27,7 +27,7 @@ public class ReservationQueryService {
     private final PlantServiceClient plantServiceClient;
 
     public Page<ReservationResponse> getMyReservations(String memberKey, Pageable pageable) {
-        List<Reservation> reservations = reservationQueryRepository.findReservations(memberKey, pageable);
+        List<Reservation> reservations = reservationQueryRepository.findReservationByMemberKey(memberKey, pageable);
 
         List<Long> ids = reservations.stream()
             .map(Reservation::getPlantId)

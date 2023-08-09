@@ -13,6 +13,7 @@ import OpenSession from "./pages/admin/OpenSession";
 // import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 import TradingInfo from "@/pages/flowerInfo/TradingInfo"
 import FlowerDetail from "./pages/flowerInfo/FlowerDetail";
+import Notice from "./pages/notice/Notice";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -43,7 +44,8 @@ function App() {
           <Route path={"/flowers/"} element={<TradingInfo />}/>
           <Route path={"/flowers/:code"} element={<TradingInfo />}/>
           <Route path={"/flowers/info/:flower/:variety"} element={<FlowerDetail />}/>
-          <Route path={"/customer"} />
+          
+          <Route path={"/notices"} element={<Notice />}/>
  
           {/* 로그인 */}
           <Route path={"/login"} element={<Login />}/>
