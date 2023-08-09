@@ -3,8 +3,23 @@ import React, { useEffect, useRef, useState } from 'react'
 import { DoughnutChart } from '@/components/chart/Doughnut'
 import './AuctionLiveForm.css';
 import Video from '../buyer/VideoRoom';
+import { useLocation } from 'react-router-dom';
+
+interface auctionInfo {
+  id: number;
+  point: number;
+  count: number;
+  bidPrice: number;
+  shipper: string;
+  region: string;
+  grade: string;
+  startPrice: number;
+}
 
 const AuctionLiveForm = () => {
+
+  const auctionArticles = useLocation();
+  console.log("상속", auctionArticles.state.auctionArticles)
 
   // 경매 정보 
   const auctionInfo = {

@@ -95,7 +95,7 @@ const Navbar = ({isTop} : Props) => {
                       </button>
                       <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
                         <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
-                        <span>{username}님</span>
+                        {/* <span>{username}님</span> */}
                       </button>
                     </div>
                 )}
