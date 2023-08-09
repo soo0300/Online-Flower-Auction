@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"; 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useRef } from "react"; 
 import { Bars3Icon, XMarkIcon, UserCircleIcon, BellAlertIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
 import { Link } from 'react-router-dom';
@@ -25,7 +26,8 @@ const Navbar = ({isTop} : Props) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false); 
   // Navbar 드롭다운
   const [isNotificationOpen, setNotificationOpen] = useState(false);
-
+  const [notifications, setNotifications] = useState([]);
+  
   const dispatch = useDispatch();
 
   // 로그인 여부 확인
@@ -34,6 +36,18 @@ const Navbar = ({isTop} : Props) => {
 
   const username = localStorage.getItem("username");
 
+  const dropMenuRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleOutsideClose = (e: {target: any}) => {
+    // useRef current에 담긴 엘리먼트 바깥을 클릭 시 드롭메뉴 닫힘
+      if(isDropdownOpen && (!dropMenuRef.current.contains(e.target))) setDropdownOpen(false);
+      if(isNotificationOpen && (!dropMenuRef.current.contains(e.target))) setNotificationOpen(false);
+    };
+    document.addEventListener('click', handleOutsideClose);
+    
+    return () => document.removeEventListener('click', handleOutsideClose);
+  }, [isDropdownOpen, isNotificationOpen]);
+  
   useEffect(() => {
     setIsLoggedOut(!isLoggedIn);
   }, [isLoggedIn]);
@@ -47,22 +61,51 @@ const Navbar = ({isTop} : Props) => {
   }
 
   // 로그인 되어 있으면 알림 내역 가져오기
-  if(isLoggedIn) {
-    axios({
-      method: "get",
-      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
-      url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
-      headers: {
-        Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
-      }
-    })
-    .then((res) => {
-      console.log(res);
-    })
+  const getNotification = () => {
+    if(isLoggedIn) {
+      axios({
+        method: "get",
+        // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+        url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+        headers: {
+          Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
+        }
+      })
+      .then((res) => {
+        console.log(res.data.data);
+        setNotifications(res.data.data);
+      })
+      .catch(err => console.log(err))
+    }
+  }
+
+  const formattedDate = (date) => {
+    // 알림 생성 시간을 Date 객체로 변환
+    console.log(date)
+    const createdDate = new Date(date);
+    const now = new Date();
+    const timeDifference = now.getTime() - createdDate.getTime();
+    console.log(now.getTime(),createdDate,  timeDifference)
+    let tmpTime;
+
+    // 시간 차이에 따라 표시 포맷 결정
+    if (timeDifference < 60000) {
+      tmpTime = "방금 전";
+    } else if (timeDifference < 3600000) {
+      const minutes = Math.floor(timeDifference / 60000);
+      tmpTime = `${minutes}분 전`;
+    } else if (timeDifference < 86400000) {
+      const hours = Math.floor(timeDifference / 3600000);
+      tmpTime = `${hours}시간 전`;
+    } else {
+      // 월/일 시간:분 포맷으로 변경
+      tmpTime = `${createdDate.getMonth() + 1}.${createdDate.getDate()} ${createdDate.getHours()}:${createdDate.getMinutes()}`;
+    }
+    return tmpTime;
   }
 
   return <nav>
-    <div
+    <div ref={dropMenuRef}
       className={`${navbarBackground} ${flexBetween} top-0 z-30 w-full py-3 border-b-2`}
     >
       <div className={`${flexBetween} mx-auto w-5/6`}>
@@ -89,11 +132,23 @@ const Navbar = ({isTop} : Props) => {
                     <div className="flex justify-between">
                       <button
                         className="flex justify-between items-center"
-                        onClick={() => setNotificationOpen(!isNotificationOpen)}
+                        onClick={() => {
+                          setNotificationOpen(!isNotificationOpen);
+
+                          if (isDropdownOpen) setDropdownOpen(!isDropdownOpen);
+                          setNotificationOpen(!isNotificationOpen)
+                          
+                          getNotification()
+                        }}
                       >
                         <BellAlertIcon className="h-10 w-10 text-blue-500"/>
                       </button>
-                      <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
+                      <button className="flex justify-between items-center" 
+                              onClick={() => {
+                                if (isNotificationOpen) setNotificationOpen(!isNotificationOpen);
+                                setDropdownOpen(!isDropdownOpen);
+                              }}
+                      >
                         <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
                         <span>{username}님</span>
                       </button>
@@ -133,17 +188,17 @@ const Navbar = ({isTop} : Props) => {
 
     {/* 회원 메뉴 드롭다운 */}
     { isAboveMediumScreens && isDropdownOpen && (
-      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+      <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
         <ul className="flex flex-col justify-center pl-0 mb-0">
-          <li >
+          <li>
             <Link to="/mypage" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setDropdownOpen(false)}>마이페이지</Link>
           </li>
-          <li>
-            <button onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100">로그아웃</button>
+          <li className="border-t">
+            <a onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">로그아웃</a>
           </li>
-          <li>
+          <li className="border-t">
             {/* Add an event handler for 회원탈퇴 */}
-            <button className="block px-4 py-2 hover:bg-gray-100">회원탈퇴</button>
+            <a className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">회원탈퇴</a>
           </li>
         </ul>
       </div>
@@ -151,10 +206,27 @@ const Navbar = ({isTop} : Props) => {
 
     {/* 알림 드롭다운 */}
     { isAboveMediumScreens && isNotificationOpen && (
-      <div className="absolute z-20 top-20 right-10 bg-white border border-gray-300 rounded shadow-lg">
+      <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
         {/* 알림 내용 */}
-        {/* 이곳에 알림 목록을 렌더링하는 컴포넌트나 요소를 추가하세요 */}
-        ㅁㄴㅇㄹ
+        {notifications.map((noti, index) => (
+          <div key={index} className="p-2 border-b flex justify-between items-center">
+            <div className="mr-6">
+              {formattedDate(noti.createdDate)} - {noti.content}
+            </div>
+            <button
+              className="text-gray-500 hover:text-red-500 mr-2"
+              onClick={() => {
+                  // 해당 알림을 삭제하는 로직을 추가하세요
+                  // notifications 배열에서 해당 알림을 제거하는 방식으로 구현하면 됩니다.
+                  const updatedNotifications = [...notifications];
+                  updatedNotifications.splice(index, 1);
+                  setNotifications(updatedNotifications);
+                }}
+              >
+              X
+            </button>
+          </div>
+        ))}
       </div>
     )}
   </nav>
