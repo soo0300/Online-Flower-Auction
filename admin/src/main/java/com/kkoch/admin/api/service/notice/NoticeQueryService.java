@@ -23,6 +23,11 @@ public class NoticeQueryService {
     public Page<NoticeResponse> getNotices(NoticeSearchCond cond, Pageable pageable) {
         List<NoticeResponse> content = noticeQueryRepository.getNoticeByCondition(cond, pageable);
 
+        int startNumber = pageable.getPageNumber() * pageable.getPageSize() + 1;
+        for (NoticeResponse response : content) {
+            response.setNo(startNumber++);
+        }
+
         long totalCount = noticeQueryRepository.getTotalCount(cond);
 
         return new PageImpl<>(content, pageable, totalCount);
