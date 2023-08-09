@@ -7,7 +7,6 @@ import com.kkoch.admin.api.controller.trade.response.TradeResponse;
 import com.kkoch.admin.api.service.trade.TradeQueryService;
 import com.kkoch.admin.api.service.trade.TradeService;
 import com.kkoch.admin.api.service.trade.dto.AddTradeDto;
-import com.kkoch.admin.domain.trade.repository.dto.TradeSearchCond;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
