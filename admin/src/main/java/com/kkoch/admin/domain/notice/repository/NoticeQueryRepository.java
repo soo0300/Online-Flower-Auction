@@ -46,6 +46,7 @@ public class NoticeQueryRepository {
 
         return queryFactory
                 .select(Projections.constructor(NoticeResponse.class,
+                        notice.id,
                         notice.title,
                         notice.content,
                         notice.createdDate
