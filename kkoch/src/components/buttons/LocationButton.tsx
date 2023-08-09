@@ -3,11 +3,12 @@ import './LocationButton.css';
 
 type Props = {
 	location: React.ReactNode;
-	type: string;	
+	type: string;
+	auctionArticles: object;
 }
   
 
-const LocationButton = ({location, type} : Props) => {
+const LocationButton = ({location, type, auctionArticles } : Props) => {
 	const navigate = useNavigate();
 
 	// 양재 지역만 활성화 하기 위한 handler
@@ -16,7 +17,7 @@ const LocationButton = ({location, type} : Props) => {
 			if(type==="admin"){
 				navigate("/admin/openSession");
 			}else if(type==="user"){
-				navigate("/auction/waitingroom")
+				navigate("/auction/waitingroom", { state: auctionArticles })
 			}else{
 				alert("잘못된 접근입니다.")
 			}

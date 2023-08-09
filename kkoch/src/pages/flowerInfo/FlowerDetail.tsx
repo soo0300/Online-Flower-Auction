@@ -1,6 +1,6 @@
 import React from 'react'
 import FlowerPrice from './FlowerPrice';
-// import FlowerChart from '@/components/chart/FlowerChart';
+import FlowerChart from '@/components/chart/FlowerChart';
 import './FlowerDetail.css';
 import { useLocation } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ const FlowerDetail = () => {
         <FlowerPrice />
       </div>
       <div className='chart-container'>
-          {/* <FlowerChart /> */}
+          <FlowerChart flowerData={ flowerData }/>
         </div>
     </div>
   )

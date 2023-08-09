@@ -70,7 +70,7 @@ const Navbar = ({isTop} : Props) => {
                       <BellAlertIcon  className="h-10 w-10 text-blue-500"/>
                       <button className="flex justify-between items-center" onClick={() => setDropdownOpen(!isDropdownOpen)}>
                         <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
-                        <span>{username}님</span>
+                        {/* <span>{username}님</span> */}
                       </button>
                     </div>
                 )}

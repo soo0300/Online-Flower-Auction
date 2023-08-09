@@ -32,7 +32,7 @@ const TestComponent = (props) => {
   const response = () => {
     setIsLoading(true);
     axios({
-      method: "get",
+      method: "GET",
       url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
     })
     .then((res) => {

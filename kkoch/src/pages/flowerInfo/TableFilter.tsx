@@ -197,7 +197,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
               <AsyncSelect
                 id="flower-select"
                 className='flowerinput'
-                placeholder="품목"
+                placeholder=""
                 defaultOptions={flowerOptions} 
                 isClearable={true}
                 loadOptions={loadFlowerOptions}
@@ -216,7 +216,8 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
               <AsyncSelect
                 id="variety-select"
                 className='varietyinput'
-                defaultOptions={varietyOptions} 
+                defaultOptions={varietyOptions}
+                placeholder="" 
                 isClearable={true} 
                 loadOptions={loadVarietyOptions}
                 onChange={handleVarietyChange}
