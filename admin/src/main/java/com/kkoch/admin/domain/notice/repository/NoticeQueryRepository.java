@@ -73,6 +73,7 @@ public class NoticeQueryRepository {
     public Optional<NoticeResponse> getNotice(Long noticeId) {
         NoticeResponse content = queryFactory
                 .select(Projections.constructor(NoticeResponse.class,
+                        notice.id,
                         notice.title,
                         notice.content,
                         notice.createdDate

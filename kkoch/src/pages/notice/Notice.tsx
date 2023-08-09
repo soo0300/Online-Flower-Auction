@@ -1,19 +1,19 @@
 import axios from 'axios';
 import NoticeRow from './NoticeRow';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const Notice = () => {
 
-    const data = {
-        no: 1,
-        title: "title",
-        created: '2023-01-01'
-    }
+    let [responses, setResponses] = useState([]);
+
     useEffect(() => {
         axios
-            .get(`/api/api/admin-service/notices`)
+            // .get(`https://i9c204.p.ssafy.io/api/admin-service/notices`)
+            .get(`/api/api/admin-service/notices?type=1&keyword=&pageNum=1`)
             .then((response) => {
-                console.log(response.data)
+                responses = response.data.data.content;
+                setResponses(responses);
+                // console.log(responses);
             })
         
     } , []);
@@ -32,36 +32,12 @@ const Notice = () => {
                         </tr>
                     </thead>
                     <tbody className='text-center'>
-                        <NoticeRow data={data}/>
-                        
-                        <tr className='border-bottom h-16'>
-                            <td>2</td>
-                            <td className='text-left'>2022년 학교별 졸업예정표(서울,경기,인천)</td>
-                            <td>관리자</td>
-                            <td>2022-12-09</td>
-                        </tr>
-                        <tr className='border-bottom h-16'>
-                            <td>3</td>
-                            <td className='text-left'>2021년 학교별 졸업예정표(서울,경기,인천)</td>
-                            <td>관리자</td>
-                            <td>2022-12-09</td>
-                        </tr>
-                        <tr className='border-bottom h-16'>
-                            <td>4</td>
-                            <td className='text-left'>2020년 학교별 졸업예정표(서울,경기,인천)</td>
-                            <td>관리자</td>
-                            <td>2022-12-09</td>
-                        </tr>
-                        <tr className='border-bottom h-16'>
-                            <td>5</td>
-                            <td className='text-left'>2019년 학교별 졸업예정표(서울,경기,인천)</td>
-                            <td>관리자</td>
-                            <td>2022-12-09</td>
-                        </tr>
+                        {responses.map(data => (
+                            <NoticeRow data={data} key={data.noticeId}/>
+                        ))}
                     </tbody>
                 </table>
             </div>
-
         </div>
     )
 }

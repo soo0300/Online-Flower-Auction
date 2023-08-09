@@ -14,6 +14,7 @@ import OpenSession from "./pages/admin/OpenSession";
 import TradingInfo from "@/pages/flowerInfo/TradingInfo"
 import FlowerDetail from "./pages/flowerInfo/FlowerDetail";
 import Notice from "./pages/notice/Notice";
+import NoticeDetail from "./pages/notice/NoticeDetail";
 
 function App() {
   const [isTop, setIsTopOfPage] = useState<boolean>(true);
@@ -46,6 +47,7 @@ function App() {
           <Route path={"/flowers/info/:flower/:variety"} element={<FlowerDetail />}/>
           
           <Route path={"/notices"} element={<Notice />}/>
+          <Route path={"/notices/:noticeId"} element={<NoticeDetail />}/>
  
           {/* 로그인 */}
           <Route path={"/login"} element={<Login />}/>
