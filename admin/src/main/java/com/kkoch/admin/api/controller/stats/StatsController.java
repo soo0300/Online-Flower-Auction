@@ -35,10 +35,10 @@ public class StatsController {
     }
 
     @GetMapping
-    public ApiResponse<List<StatsResponse>> getStats(@Valid
-                                                     @RequestParam(defaultValue = "") String type,
-                                                     @RequestParam(defaultValue = "") String name,
-                                                     @RequestParam(defaultValue = "7") Integer searchDay
+    public ApiResponse<List<StatsResponse>> getStats(
+            @RequestParam(defaultValue = "") String type,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "7") Integer searchDay
     ) {
         StatsRequest statsRequest = StatsRequest.builder()
                 .type(type)
