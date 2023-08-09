@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -38,8 +35,18 @@ public class StatsController {
     }
 
     @GetMapping
-    public ApiResponse<List<StatsResponse>> getStats(@Valid @RequestBody StatsRequest statsRequest) {
-        log.info("<낙찰 통계 요청> 식물: {} {}", statsRequest.getType(), statsRequest.getName());
+    public ApiResponse<List<StatsResponse>> getStats(
+            @RequestParam(defaultValue = "") String type,
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "7") Integer searchDay
+    ) {
+        StatsRequest statsRequest = StatsRequest.builder()
+                .type(type)
+                .name(name)
+                .searchDay(searchDay)
+                .build();
+
+
         StatsSearchCond cond = statsRequest.toStatsSearchCond();
 
         List<StatsResponse> responses = statsQueryService.getStatsByCond(cond);
