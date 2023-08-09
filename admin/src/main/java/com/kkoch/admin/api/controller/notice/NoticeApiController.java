@@ -24,6 +24,7 @@ public class NoticeApiController {
             @RequestParam String keyword,
             @RequestParam Integer pageNum
     ) {
+        log.info("<공지사항 목록 요청> Controller");
         NoticeSearchCond cond = getCond(type, keyword);
 
         PageRequest request = PageRequest.of(pageNum - 1, 10);
@@ -35,6 +36,7 @@ public class NoticeApiController {
 
     @GetMapping("/{noticeId}")
     public ApiResponse<NoticeResponse> getNotice(@PathVariable Long noticeId) {
+        log.info("<공지사항 상세 조회> Controller");
         NoticeResponse content = noticeQueryService.getNotice(noticeId);
         return ApiResponse.ok(content);
     }

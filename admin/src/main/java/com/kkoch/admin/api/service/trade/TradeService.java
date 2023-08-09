@@ -6,33 +6,38 @@ import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.TradeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class TradeService {
 
     private final TradeRepository tradeRepository;
     private final AuctionArticleRepository auctionArticleRepository;
 
     public Long addTrade(AddTradeDto dto, LocalDateTime tradeDate) {
+        log.info("<낙찰->내역 기록> TradeService. 낙찰 날짜 : {}", tradeDate);
         Trade currnetTrade = null;
 
         Optional<Trade> findTrade = tradeRepository.findByMemberKey(dto.getMemberKey(), tradeDate);
 
         if (findTrade.isEmpty()) {
+            log.info("<낙찰->내역 기록> TradeService. 낙찰내역 생성");
             currnetTrade = tradeRepository.save(createTradeEntity(dto, tradeDate));
         }
 
         if (findTrade.isPresent()) {
+            log.info("<낙찰->내역 기록> TradeService. 기존 낙찰내역에 추가");
             currnetTrade = findTrade.get();
             currnetTrade.setTotalPrice(dto.getPrice());
+            log.info("<낙찰->내역 기록> TradeService. 총 거래 가격={}", currnetTrade.getTotalPrice());
         }
 
         AuctionArticle auctionArticle = auctionArticleRepository.findById(dto.getAuctionArticleId())
@@ -42,17 +47,6 @@ public class TradeService {
         auctionArticle.updateTrade(currnetTrade);
 
         return currnetTrade.getId();
-    }
-
-    private static Trade createTradeEntity(AddTradeDto dto, LocalDateTime tradeDate) {
-        return Trade.builder()
-                .totalPrice(dto.getPrice())
-                .tradeTime(tradeDate)
-                .pickupStatus(false)
-                .active(true)
-                .memberKey(dto.getMemberKey())
-                .articles(new ArrayList<>())
-                .build();
     }
 
     public Long pickup(Long tradeId) {
@@ -67,34 +61,16 @@ public class TradeService {
         return trade.getId();
     }
 
-    private List<AuctionArticle> getAuctionArticles(List<AddTradeDto> dto) {
-        List<Long> articleIds = dto.stream()
-                .map(AddTradeDto::getAuctionArticleId)
-                .collect(Collectors.toList());
-
-        return auctionArticleRepository.findByIdIn(articleIds);
+    private static Trade createTradeEntity(AddTradeDto dto, LocalDateTime tradeDate) {
+        return Trade.builder()
+                .totalPrice(dto.getPrice())
+                .tradeTime(tradeDate)
+                .pickupStatus(false)
+                .active(true)
+                .memberKey(dto.getMemberKey())
+                .articles(new ArrayList<>())
+                .build();
     }
-
-//    private void updateBidInfo(List<AddTradeDto> dto, List<AuctionArticle> auctionArticles) {
-//        Map<Long, AuctionArticle> auctionArticleMap = auctionArticles.stream()
-//                .collect(Collectors.toMap(AuctionArticle::getId, auctionArticle -> auctionArticle, (a, b) -> b));
-//
-//        dto.forEach(addTradeDto -> {
-//            AuctionArticle auctionArticle = auctionArticleMap.get(addTradeDto.getAuctionArticleId());
-//            auctionArticle.bid(addTradeDto.getBidPrice(), addTradeDto.getBidTime());
-//        });
-//    }
-//
-//    private int getTotalPrice(List<AddTradeDto> dto) {
-//        return dto.stream()
-//                .mapToInt(AddTradeDto::getBidPrice)
-//                .sum();
-//    }
-
-//    private Trade saveTrade(Long memberId, List<AuctionArticle> auctionArticles, int totalPrice) {
-//        Trade trade = Trade.createTrade(totalPrice, memberId, auctionArticles);
-//        return tradeRepository.save(trade);
-//    }
 
     private Trade getTradeEntity(Long tradeId) {
         return tradeRepository.findById(tradeId)

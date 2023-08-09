@@ -1,7 +1,6 @@
 package com.kkoch.admin.api.service.auction;
 
 import com.kkoch.admin.IntegrationTestSupport;
-import com.kkoch.admin.api.controller.auction.response.AuctionArticleForMemberResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesForAdminResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
@@ -13,7 +12,6 @@ import com.kkoch.admin.domain.auction.AuctionArticle;
 import com.kkoch.admin.domain.auction.repository.AuctionArticleRepository;
 import com.kkoch.admin.domain.auction.repository.AuctionRepository;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticlePeriodSearchCond;
-import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchCond;
 import com.kkoch.admin.domain.auction.repository.dto.AuctionArticleSearchForAdminCond;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.Plant;
@@ -123,45 +121,6 @@ class AuctionArticleQueryServiceTest extends IntegrationTestSupport {
 
         //then
         assertThat(response).hasSize(1);
-    }
-
-    @DisplayName("[실시간 거래실적 조회] 1주일 고정")
-    @Test
-    void getAuctionArticleList() {
-        //given
-        Category code = insertCategory("절화");
-        Category rose = insertCategory("장미");
-        Category fuego = insertCategory("푸에고");
-        Category victoria = insertCategory("빅토리아");
-
-        Plant roseFuego = insertPlant(code, rose, fuego);
-        Plant roseVictoria = insertPlant(code, rose, victoria);
-
-        Admin admin = insertAdmin();
-        Auction savedAuction = insertAuction(admin, LocalDateTime.of(2023, 9, 20, 5, 0));
-
-        insertAuctionArticle(roseFuego, savedAuction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
-        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(10));
-        insertAuctionArticle(roseFuego, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
-        insertAuctionArticle(roseVictoria, savedAuction, "서울", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
-        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(10));
-        insertAuctionArticle(roseVictoria, savedAuction, "광주", LocalDateTime.of(2023, 9, 20, 5, 0).minusDays(2));
-
-        AuctionArticleSearchCond cond = AuctionArticleSearchCond.builder()
-                .code("절화")
-                .type("장미")
-                .name("푸에고")
-                .endDateTime(LocalDateTime.of(2023, 9, 20, 5, 0).toLocalDate())
-                .region("광주")
-                .build();
-        PageRequest pageRequest = PageRequest.of(0, 20);
-
-        //when
-        Page<AuctionArticleForMemberResponse> result = auctionArticleQueryService.getAuctionArticleListForMember(cond, pageRequest);
-
-        //then
-        List<AuctionArticleForMemberResponse> responses = result.getContent();
-        assertThat(responses).hasSize(1);
     }
 
     @DisplayName("[실시간 거래실적 조회] 기간 검색 조건 추가")

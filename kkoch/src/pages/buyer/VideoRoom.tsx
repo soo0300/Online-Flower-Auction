@@ -3,11 +3,8 @@ import { OpenVidu } from 'openvidu-browser';
 import axios from 'axios';
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import UserVideoComponent from './UserVideoComponent';
-// import { useNavigate  } from 'react-router-dom';
 import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
 import { useNavigate } from 'react-router-dom';
-// import { useHistory } from 'react-router-dom';
-// import { Link } from 'react-router-dom';
 
 const APPLICATION_SERVER_URL = 'https://i9c204.p.ssafy.io:8443/api/sessions';
 

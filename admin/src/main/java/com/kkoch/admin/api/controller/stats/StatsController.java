@@ -29,7 +29,7 @@ public class StatsController {
 
     @Scheduled(cron = "0 0 10 * * *") // 매일 오전 10시에 실행/../
     public void executeAddStats() {
-        log.info("startstart");
+        log.info("<낙찰 통계 스케줄러 작동>");
         List<AuctionArticleForStatsDto> articles = statsQueryService.getAuctionList();
         statsService.saveHistoryBidStats(articles);
     }

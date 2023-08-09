@@ -39,6 +39,7 @@ public class AdminController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute(name = "form") LoginRequest request, HttpSession session) {
+        log.info("<로그인 요청> Controller");
         LoginDto dto = request.toLoginDto();
         LoginAdmin loginAdmin = adminQueryService.loginAdmin(dto);
         session.setAttribute("loginAdmin", loginAdmin);
@@ -47,6 +48,7 @@ public class AdminController {
 
     @GetMapping("/admins")
     public String adminPage(@ModelAttribute("form") AddAdminRequest request, Model model) {
+        log.info("<관리자 목록 요청> Controller");
         List<AdminResponse> responses = adminQueryService.getAdmins();
         model.addAttribute("admins", responses);
         return "admin";
@@ -54,6 +56,7 @@ public class AdminController {
 
     @PostMapping("/admins/add")
     public String addAdmin(AddAdminRequest request) {
+        log.info("<관리자 등록> Controller. position = {}", request.getPosition());
         AddAdminDto dto = request.toAddAdminDto();
         Long adminId = adminService.addAdmin(dto);
         log.info("admin={}", adminId);
