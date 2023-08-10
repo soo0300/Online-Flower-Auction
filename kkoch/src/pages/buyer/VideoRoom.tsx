@@ -21,6 +21,8 @@ export default function Video() {
 
 	const OV = useRef(new OpenVidu());
 	const navigate = useNavigate();
+	console.log("여깅기ㅕ이겨미낭겨-----------------------------------")
+	console.log(mySessionId);
 
 	const handleMainVideoStream = useCallback((stream) => {
 		if (mainStreamManager !== stream) {

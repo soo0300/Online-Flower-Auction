@@ -1,8 +1,12 @@
 import AuctionLiveForm from "./AuctionLiveForm"
+import Video from '../buyer/VideoRoom';
 
 const AuctionLiveRoom = () => {
   return (
-    <AuctionLiveForm/>
+    <>
+      <Video></Video>
+      <AuctionLiveForm/>
+    </>
   )
 }
 

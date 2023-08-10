@@ -29,17 +29,23 @@ const LocationButton = ({location, type, auctionArticles } : Props) => {
 				socket.addEventListener("message", (e) => {
 
 					const message = e.data;
+					console.log("getmessage", message)
 					// 들어갔을때 관리자가 방을 열었으면 sessionId가 포함된 메세지를 받을것이고
 					// Json으로 파싱하여 방 session을 받는다.
 					if (message.includes("sessionId")) {
 							const sessionId = JSON.parse(message).sessionId;
-							dispatch({ type: 'SET_MY_SESSION_ID', payload: sessionId});
-							console.log(sessionId)
+							navigate("/auction/waitingroom", {   
+							state: {
+								auctionArticles: auctionArticles,
+								sessionId: sessionId
+							} })
+							// dispatch({ type: 'SET_MY_SESSION_ID', payload: sessionId});
+							console.log("ㅁㄴㅇㄻㄴㅇㄹ", sessionId)
 						// 원하는 동작 수행 (navigate 등)
 					} else {
 						alert("경매 시작 전입니다.")
 					}
-					navigate("/auction/waitingroom", { state: auctionArticles })
+					// navigate("/auction/waitingroom", { state: auctionArticles })
 				});
 		
 			}else{

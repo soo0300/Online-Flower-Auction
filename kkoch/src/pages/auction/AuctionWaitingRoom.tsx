@@ -1,14 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { OpenVidu, Session } from 'openvidu-browser';
 import CameraOff from '@/assets/cameraOff.png';
 import axios from 'axios';
 // import Video from '../buyer/VideoRoom';
 import { Link, useLocation } from 'react-router-dom';
+import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
 
 
 const AuctionWaitingRoom: React.FC = () => {
-  const auctionArticles = useLocation();
-  console.log(auctionArticles.state)
+  const location = useLocation();
+  
+  console.log("여기 넘어온거 확인")
+  const { auctionArticles, sessionId } = location.state;
 
   const [token, setToken] = useState(''); // openVidu 세션 요청에 필요한 토큰
   const [session, setSession] = useState<Session | null>(null); // openVidu 세션 
@@ -16,7 +19,11 @@ const AuctionWaitingRoom: React.FC = () => {
   const [publisher, setPublisher] = useState(null);
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
   
-
+	// const [state] = useReducer(videoUserInfo, initialState);
+	// const { mySessionId } = state;
+  console.log("asdfasdfasdfasdfasf==============================")
+  console.log(sessionId);
+  const mySessionId=sessionId;
   const subscriberContainer = useRef<HTMLDivElement | null>(null);
 
     
@@ -28,7 +35,7 @@ const AuctionWaitingRoom: React.FC = () => {
   const initSessionAndToken = async () => {
     try {
       // OpenVidu 서버에 세션 생성 요청 보내기
-      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/api/sessions', null, {
+      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/api/sessions', { customSessionId: mySessionId }, {
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
@@ -155,7 +162,7 @@ const AuctionWaitingRoom: React.FC = () => {
         </div>
         
         <div>
-          <Link to='/auction/liveroom' state={{ auctionArticles: auctionArticles.state }}>
+          <Link to='/auction/liveroom' state={{ auctionArticles: auctionArticles }}>
             <button>입장하기</button>
           </Link>
         </div>
