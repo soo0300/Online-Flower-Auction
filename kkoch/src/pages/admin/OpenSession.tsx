@@ -2,9 +2,12 @@ import { OpenVidu } from 'openvidu-browser';
 
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import UserVideoComponent from './UserVideoComponent';
+import { useDispatch } from "react-redux";
 
-export default function App() {
+import UserVideoComponent from './UserVideoComponent';
+import { setAuctionSession } from '@/reducer/store/videoAdmin';
+
+export default function OpenSession() {
   const [mySessionId, setMySessionId] = useState('YangJae1')
   const [myUserName, setMyUserName] = useState(`관리자${Math.floor(Math.random() * 100)}`)
   const [session, setSession] = useState(undefined);
@@ -12,17 +15,24 @@ export default function App() {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
-
+  
+  const dispatch = useDispatch();
+  
   const OV = useRef(new OpenVidu());
-
+  
   // 세션 이름 변경
   const handleChangeSessionId = useCallback((e) => {
-      setMySessionId(e.target.value);
-  }, []);
+    setMySessionId(e.target.value);
 
+    // redux 상태에 session 저장하기(바뀔때마다 최신화)
+    dispatch(setAuctionSession({
+      "session": e.target.value
+    }));
+  }, []);
+  
   // 이름 변경
   const handleChangeUserName = useCallback((e) => {
-      setMyUserName(e.target.value);
+    setMyUserName(e.target.value);
   }, []);
 
   // 메인 화면 변경
@@ -50,6 +60,7 @@ export default function App() {
     });
 
     setSession(mySession);
+
   }, []);
 
   useEffect(() => {
