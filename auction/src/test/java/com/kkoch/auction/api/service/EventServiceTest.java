@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 class EventServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    private EventService eventService;
+    private RedisService rankingService;
 
     @DisplayName("[레디스 테스트] 1등 테스트")
     @Test
@@ -29,9 +29,9 @@ class EventServiceTest extends IntegrationTestSupport {
         EventParticipant participant3 = new EventParticipant("member3", 23L, 9090);
 
         //when
-        boolean result3 = eventService.joinEvent(participant3);
-        boolean result2 = eventService.joinEvent(participant2);
-        boolean result1 = eventService.joinEvent(participant1);
+        boolean result3 = rankingService.joinEvent(participant3);
+        boolean result2 = rankingService.joinEvent(participant2);
+        boolean result1 = rankingService.joinEvent(participant1);
 
         //then
         assertThat(result2).isFalse();
@@ -48,13 +48,13 @@ class EventServiceTest extends IntegrationTestSupport {
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            String memberToken = i + "";
+            String memberKry = i + "";
             Long auctionArticleId = (long) (i / 10);
             Integer price = i + 10000;
 
             executorService.submit(() -> {
                 try {
-                    eventService.joinEvent(new EventParticipant(memberToken, auctionArticleId, price));
+                    rankingService.joinEvent(new EventParticipant(memberKry, auctionArticleId, price));
                 } finally {
                     latch.countDown();
                 }
