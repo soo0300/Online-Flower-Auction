@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './LocationButton.css';
 
@@ -9,7 +10,8 @@ type Props = {
 
 const LocationButton = ({location, type, auctionArticles } : Props) => {
 	const navigate = useNavigate();
-
+	const dispatch = useDispatch();
+	
 	// 양재 지역만 활성화 하기 위한 handler
   const handleCheck = () => {
     if (location === "aT화훼공판장(양재동)") {
@@ -27,16 +29,19 @@ const LocationButton = ({location, type, auctionArticles } : Props) => {
 				socket.addEventListener("message", (e) => {
 
 					const message = e.data;
+					// 들어갔을때 관리자가 방을 열었으면 sessionId가 포함된 메세지를 받을것이고
+					// Json으로 파싱하여 방 session을 받는다.
 					if (message.includes("sessionId")) {
-						console.log("sessionId: ", message);
+							const sessionId = JSON.parse(message).sessionId;
+							dispatch({ type: 'SET_MY_SESSION_ID', payload: sessionId});
+							console.log(sessionId)
 						// 원하는 동작 수행 (navigate 등)
 					} else {
-						console.log("No message received");
-						// 메시지가 없을 때 수행할 동작 처리
+						alert("경매 시작 전입니다.")
 					}
+					navigate("/auction/waitingroom", { state: auctionArticles })
 				});
 		
-				navigate("/auction/waitingroom", { state: auctionArticles })
 			}else{
 				alert("잘못된 접근입니다.")
 			}
