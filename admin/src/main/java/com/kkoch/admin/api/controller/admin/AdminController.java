@@ -34,7 +34,7 @@ public class AdminController {
         if (loginAdmin == null) {
             return "index";
         }
-        return "dashboard";
+        return "login";
     }
 
     @PostMapping("/login")
