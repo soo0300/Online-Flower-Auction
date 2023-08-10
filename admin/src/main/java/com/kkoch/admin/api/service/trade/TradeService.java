@@ -39,7 +39,7 @@ public class TradeService {
         if (findTrade.isPresent()) {
             log.info("<낙찰->내역 기록> TradeService. 기존 낙찰내역에 추가");
             currnetTrade = findTrade.get();
-            currnetTrade.setTotalPrice(dto.getPrice()*auctionArticle.getCount());
+            currnetTrade.setTotalPrice(dto.getPrice() * auctionArticle.getCount());
             log.info("<낙찰->내역 기록> TradeService. 총 거래 가격={}", currnetTrade.getTotalPrice());
         }
         auctionArticle.bid(dto.getPrice(), tradeDate);
