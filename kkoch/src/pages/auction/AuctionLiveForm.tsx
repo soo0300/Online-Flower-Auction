@@ -45,14 +45,6 @@ const AuctionLiveForm = () => {
   // 경매 정보 
   const [auctionInfo, setAuctionInfo] = useState(auctionInfos[0]);
 
-  // const handleNextAuctionInfo = () => {
-  //   if (auctionInfoIndex < auctionInfos.length - 1) {
-  //     setAuctionInfoIndex(auctionInfoIndex + 1); // 다음 경매 정보로 이동
-  //   }
-  // };
-
-
-
   // 원래 가격과 최종 가격을 지정
   const originalPrice = auctionInfo.startPrice;
   console.log('원래가격', originalPrice)
@@ -118,7 +110,6 @@ const AuctionLiveForm = () => {
   }, [auctionInfo, auctionInfoIndex]);
 
   const handleBiddingButtonClick = () => {
-    
     if (showSuccessModal) {
       return;
     }
@@ -135,8 +126,7 @@ const AuctionLiveForm = () => {
         "auctionArticleId": auctionInfo.auctionArticleId,
         "price": roundedCurrentPrice
       }
-    })
-    .then((res) => {
+    })    .then((res) => {
       console.log('입찰하기', res.data.data)
       setBidderInfo(res.data.data)
       // setShowSuccessModal(true)
@@ -173,7 +163,7 @@ const AuctionLiveForm = () => {
   return (
     <div className=''>
       <div className='auction-top'>
-        <button className='leave-button' onClick={() => navigate('/auction/waitingroom')}>
+        <button className='leave-button' onClick={() => navigate('/auction')}>
           <svg 
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
