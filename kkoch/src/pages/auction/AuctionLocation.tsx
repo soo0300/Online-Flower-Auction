@@ -35,9 +35,10 @@ const ActionReady = () => {
       url: "/api/api/admin-service/auctions/api"
     })
     .then((res) => {
-      console.log("경매ID", res.data.data.auctionId)
+      console.log("경매ID", res.data)
       if (res.data.data.auctionId) {
         auctionItems(res.data.data.auctionId)
+        console.log("Data", res.data.data)
       }
     })
     .catch((error) => {

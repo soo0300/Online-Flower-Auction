@@ -121,23 +121,6 @@ const AuctionWaitingRoom: React.FC = () => {
     setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== event.stream.streamManager));
   };
 
-  // useEffect(() => {
-  //   if (session) {
-  //     console.log("세션이요", session)
-  //     session.on('streamCreated', (e) => {
-  //       console.log(1111111);
-  //       const subscriber = session.subscribe(e.stream, undefined);
-  //       console.log("구독자", subscriber);
-  //       if (!subscriber && e.stream.connection.connectionId !== session.connection.connectionId) {
-  //         setSubscribers(e.stream);
-  //         session.publish(publisher);
-  //         console.log('이거이거이거')
-  //         publisher.addVideoElement(subscriberContainer);
-  //       }
-  //     });
-  //   }
-  // }, [publisher])
-
   // 카메라 상태를 토글하는 함수
   const toggleCamera = () => {
     if (publisher) {
