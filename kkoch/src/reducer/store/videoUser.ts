@@ -1,6 +1,6 @@
 const initialState = {
-  mySessionId: 'SessionA',
-  myUserName: `Participant${Math.floor(Math.random() * 100)}`,
+  mySessionId: null,
+  myUserName: `${Math.floor(Math.random() * 100)}`,
   session: undefined,
   mainStreamManager: undefined,
   publisher: undefined,
@@ -32,5 +32,6 @@ const videoUserInfo = (state, action) => {
       return state;
   }
 };
+
 
 export { initialState, videoUserInfo };

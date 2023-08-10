@@ -8,7 +8,9 @@ const ActionReady = () => {
   const location = ["aT화훼공판장(양재동)", "부산화훼공판장(엄궁동)", "광주원예농협(풍암)"
                     , "한국화훼농협(음성)", "부산경남화훼농협(강동동)", "한국화훼농협(과천)", "영남화훼농협(김해)"];
   
+
   const isLoggedIn = secureLocalStorage.getItem("memberkey") && secureLocalStorage.getItem("token");
+  
   useEffect(() => {
     !isLoggedIn && alert("로그인 후 이용 가능합니다.")
   }, [isLoggedIn])
@@ -50,6 +52,7 @@ const ActionReady = () => {
     auctionId()
   }, [])
   
+
   return (
     <div>
       {

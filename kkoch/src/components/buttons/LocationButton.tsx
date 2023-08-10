@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import './LocationButton.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/reducer/store';
 
 type Props = {
 	location: React.ReactNode;
@@ -10,6 +12,7 @@ type Props = {
 
 const LocationButton = ({location, type, auctionArticles } : Props) => {
 	const navigate = useNavigate();
+	const auctionSession = useSelector((state:RootState) => state.videoAdmin.auctionSession);
 
 	// 양재 지역만 활성화 하기 위한 handler
   const handleCheck = () => {
@@ -17,7 +20,16 @@ const LocationButton = ({location, type, auctionArticles } : Props) => {
 			if(type==="admin"){
 				navigate("/admin/openSession");
 			}else if(type==="user"){
-				navigate("/auction/waitingroom", { state: auctionArticles })
+				console.log(auctionSession)
+				if (auctionSession) {
+					// 세션에 참여
+					console.log(`세션 ${auctionSession}에 참여합니다.`);
+					// 세션 참여 로직 작성
+					navigate("/auction/waitingroom", { state: auctionArticles })
+				} else {
+					alert("경매가 준비 중입니다.");
+				}
+
 			}else{
 				alert("잘못된 접근입니다.")
 			}
