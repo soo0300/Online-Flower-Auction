@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>카테고리 선택</title>
+    <!-- Bootstrap CSS를 포함합니다. -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}"/>
+    <link href="dashboard.css" th:href="@{asserts/css/dashboard.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script th:src="@{asserts/js/function.js}"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <div class="select-box">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#codeSelect">Code</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#typeSelect">Type</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#nameSelect">Name</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-3">
+            <div class="tab-pane fade show active" id="codeSelect">
+                <ul class="list-group" id="codeSelectList">
+                    <li class="list-group-item" value="1">절화</li>
+                    <li class="list-group-item" value="2">관엽</li>
+                    <li class="list-group-item" value="3">난</li>
+                    <li class="list-group-item" value="4">춘란</li>
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="typeSelect">
+                <ul class="list-group" id="typeSelectList">
+                    <li class="list-group-item" value="">선택하세요</li>
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="nameSelect">
+                <ul class="list-group" id="nameSelectList">
+                    <li class="list-group-item" value="">선택하세요</li>
+                </ul>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            추가
+        </button>
+    </div>
+
+    <!-- 추가 모달 생략 -->
+</div>
+
+
+<script th:src="@{asserts/js/function.js}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const codeSelectList = document.getElementById('codeSelectList');
+        const typeSelectList = document.getElementById('typeSelectList');
+
+        codeSelectList.addEventListener('click', function (event) {
+            const selectedCode = event.target.getAttribute('value');
+            console.log(selectedCode);
+            updateTypeSelect(selectedCode);
+        });
+
+        typeSelectList.addEventListener('click', function (event) {
+            const selectedType = event.target.getAttribute('value');
+            console.log(selectedType);
+            updateNameSelect(selectedType);
+        });
+
+        const addCategoryButton = document.getElementById('addCategoryButton');
+        addCategoryButton.addEventListener('click', function () {
+            const categoryNameInput = document.getElementById('categoryName');
+            const categoryName = categoryNameInput.value;
+            const selectedCode = document.getElementById('codeSelect').value;
+
+            // 선택한 type 값 가져오기
+            const selectedType = document.getElementById('typeSelect').value;
+            var pId = selectedCode;
+            if (selectedType !== "") {
+                pId = selectedType;
+            }
+
+            // 백엔드 API 호출
+            const uri = '/admin-service/categories'; // 백엔드 API 경로
+            const params = {
+                name: categoryName,
+                parentId: pId
+            };
+
+            callApi(uri, 'post', params);
+
+            $('#addCategoryModal').modal('hide');
+        });
+    });
+
+    function updateTypeSelect(selectedCode) {
+        // 백엔드 API 호출 및 업데이트 로직
+        const uri = `/admin-service/categories/${selectedCode}`;
+        const params = {};
+        const response = getJson(uri, params);
+
+        const typeSelectList = document.getElementById('typeSelectList');
+        typeSelectList.innerHTML = ''; // 리스트 초기화
+        response.data.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            listItem.setAttribute('value', item.typeId);
+            listItem.textContent = item.name;
+            typeSelectList.appendChild(listItem);
+        });
+        console.log(response);
+    }
+
+    function updateNameSelect(selectedType) {
+        // 백엔드 API 호출 및 업데이트 로직
+        const uri = `/admin-service/categories/${selectedType}`;
+        const params = {};
+        const response = getJson(uri, params);
+
+        const nameSelectList = document.getElementById('nameSelectList');
+        nameSelectList.innerHTML = ''; // 리스트 초기화
+        response.data.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+            listItem.setAttribute('value', item.categoryId);
+            listItem.textContent = item.name;
+            nameSelectList.appendChild(listItem);
+        });
+        console.log(response);
+    }
+</script>
+
+<script
+        src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"
+></script>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
+        integrity="sha384-gdQErvCNWvHQZj6XZM0dNsAoY4v+j5P1XDpNkcM3HJG1Yx04ecqIHk7+4VBOCHOG"
+        crossorigin="anonymous"
+></script>
+<script src="dashboard.js" th:src="@{asserts/js/dashboard.js}"></script>
+</body>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"
+></script>
+</html>
