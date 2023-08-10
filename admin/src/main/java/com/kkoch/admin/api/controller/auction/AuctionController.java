@@ -33,7 +33,7 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final AuctionQueryService auctionQueryService;
 
-    @GetMapping
+    @GetMapping("/auctions")
     public String getAuctions(Model model) {
         log.info("<모든 경매 일정 조회> Controller");
         List<AuctionResponse> auctionSchedule = auctionQueryService.getAuctionSchedule();
