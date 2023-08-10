@@ -10,8 +10,8 @@ const AuctionWaitingRoom: React.FC = () => {
   const auctionArticles = useLocation();
   console.log(auctionArticles.state)
 
-  const [token, setToken] = useState('');
-  const [session, setSession] = useState<Session | null>(null);
+  const [token, setToken] = useState(''); // openVidu 세션 요청에 필요한 토큰
+  const [session, setSession] = useState<Session | null>(null); // openVidu 세션 
   const [subscribers, setSubscribers] = useState(null);
   const [publisher, setPublisher] = useState(null);
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
