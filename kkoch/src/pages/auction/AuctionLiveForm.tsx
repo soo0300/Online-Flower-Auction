@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
 import AuctionModal from './AuctionModal';
+
 import { toast } from 'react-toastify';
 
 interface auctionInfo {
@@ -185,7 +186,7 @@ const AuctionLiveForm = () => {
       </div>
       <div className='auction-content'>
         <div className='stream-image'>
-          {/* <Video /> */}
+          <Video />
           {/* <img src={ HomePageAuction } alt="LiveStream" /> */}
         </div>
         <div className='auction-info'>

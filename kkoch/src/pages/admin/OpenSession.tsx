@@ -5,6 +5,7 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import UserVideoComponent from './UserVideoComponent';
+import Clock from '@/components/Clock/Clock';
 
 export default function OpenSession() {
   const [mySessionId, setMySessionId] = useState('YangJae1')
@@ -171,7 +172,7 @@ export default function OpenSession() {
   }, []);
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = () => {
       leaveSession();
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -226,38 +227,39 @@ export default function OpenSession() {
       <div className="container">
           {session === undefined ? (
             <div id="join">
-              <div id="img-div">
-                <img src="" alt="OpenVidu logo" />
-              </div>
-              <div id="join-dialog" className="jumbotron vertical-center">
-                <h1> Join a video session </h1>
-                <form className="form-group" onSubmit={joinSession}>
-                  <p>
-                    <label>Participant: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="userName"
-                      value={myUserName}
-                      onChange={handleChangeUserName}
-                      required
-                    />
-                  </p>
-                  <p>
-                    <label> Session: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="sessionId"
-                      value={mySessionId}
-                      onChange={handleChangeSessionId}
-                      required
-                    />
-                  </p>
-                  <p className="text-center">
-                    <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
-                  </p>
-                </form>
+              <div id="join-dialog" className="container jumbotron vertical-center">
+                <h1 className='my-6 text-center'> 경매방 생성하기 </h1>
+                <hr />
+                <div className='flex justify-around'>
+                  <Clock></Clock>
+                  <form className="form-group w-[50%] border-2 border-[#5E0000] rounded-lg" onSubmit={joinSession}>
+                    <p>
+                      <label>Participant: </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="userName"
+                        value={myUserName}
+                        onChange={handleChangeUserName}
+                        required
+                      />
+                    </p>
+                    <p>
+                      <label> Session: </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="sessionId"
+                        value={mySessionId}
+                        onChange={handleChangeSessionId}
+                        required
+                      />
+                    </p>
+                    <p className="text-center">
+                      <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
+                    </p>
+                  </form>
+                </div>
               </div>
             </div>
           ) : null}

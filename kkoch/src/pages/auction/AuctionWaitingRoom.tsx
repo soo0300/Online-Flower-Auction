@@ -4,7 +4,6 @@ import CameraOff from '@/assets/cameraOff.png';
 import axios from 'axios';
 // import Video from '../buyer/VideoRoom';
 import { Link, useLocation } from 'react-router-dom';
-import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
 
 
 const AuctionWaitingRoom: React.FC = () => {
@@ -19,8 +18,6 @@ const AuctionWaitingRoom: React.FC = () => {
   const [publisher, setPublisher] = useState(null);
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
   
-	// const [state] = useReducer(videoUserInfo, initialState);
-	// const { mySessionId } = state;
   console.log("asdfasdfasdfasdfasf==============================")
   console.log(sessionId);
   const mySessionId=sessionId;
@@ -162,7 +159,7 @@ const AuctionWaitingRoom: React.FC = () => {
         </div>
         
         <div>
-          <Link to='/auction/liveroom' state={{ auctionArticles: auctionArticles }}>
+          <Link to='/auction/liveroom' state={{ auctionArticles: auctionArticles, sessionId: mySessionId}}>
             <button>입장하기</button>
           </Link>
         </div>
