@@ -9,6 +9,7 @@ import axios from 'axios';
 import AuctionModal from './AuctionModal';
 
 import { toast } from 'react-toastify';
+import WebSocketComponent from '@/components/webSocket/webSocket';
 
 interface auctionInfo {
   auctionArticleId: number;
@@ -43,8 +44,8 @@ const AuctionLiveForm = () => {
   const [key, setKey] = useState(0);
   
 
-  // 경매 정보 
-  const [auctionInfo, setAuctionInfo] = useState(auctionInfos[0]);
+  // // 경매 정보 
+  // const [auctionInfo, setAuctionInfo] = useState(auctionInfos[0]);
 
   // 원래 가격과 최종 가격을 지정
   const originalPrice = auctionInfo.startPrice;
@@ -58,17 +59,17 @@ const AuctionLiveForm = () => {
   const clickedPriceRef = useRef(null);
   const animationFrameRef = useRef(null);
 
-  useEffect(() => {
-    setIsBiddingActive(true);
-    setAuctionInfo(auctionInfos[auctionInfoIndex]); // auctionInfoIndex에 해당하는 정보 할당
-    setCurrentPrice(auctionInfos[auctionInfoIndex].startPrice)
-    setKey((prevKey) => prevKey + 1);
-  }, [auctionInfoIndex, auctionInfos]);
+  // useEffect(() => {
+  //   setIsBiddingActive(true);
+  //   setAuctionInfo(auctionInfos[auctionInfoIndex]); // auctionInfoIndex에 해당하는 정보 할당
+  //   setCurrentPrice(auctionInfos[auctionInfoIndex].startPrice)
+  //   setKey((prevKey) => prevKey + 1);
+  // }, [auctionInfoIndex, auctionInfos]);
   
-  useEffect(() => {
-    const totalTime = 10000; // 10초
-    const startTime = Date.now(); // 시작 시간 저장
-    const decreaseAmount = (originalPrice - finalPrice) / totalTime; // 감소량 계산
+  // useEffect(() => {
+  //   const totalTime = 10000; // 10초
+  //   const startTime = Date.now(); // 시작 시간 저장
+  //   const decreaseAmount = (originalPrice - finalPrice) / totalTime; // 감소량 계산
 
     const animatePrice = () => {
       // console.log("너 계속 실행되지?")
@@ -78,88 +79,88 @@ const AuctionLiveForm = () => {
       const currentTime = Date.now(); // 현재 시간 구하기
       const elapsedTime = currentTime - startTime; // 경과 시간 계산
   
-      // 경과 시간에 따라 현재가 감소시키기
-      const newPrice = originalPrice - decreaseAmount * elapsedTime;
+  //     // 경과 시간에 따라 현재가 감소시키기
+  //     const newPrice = originalPrice - decreaseAmount * elapsedTime;
   
-      // 최소값 제한
-      setCurrentPrice(Math.max(newPrice, finalPrice));
+  //     // 최소값 제한
+  //     setCurrentPrice(Math.max(newPrice, finalPrice));
   
-      // 애니메이션이 끝나지 않았으면 다음 프레임에 애니메이션 함수 호출
-      if (elapsedTime < totalTime && isBiddingActive) {
-        animationFrameRef.current = requestAnimationFrame(animatePrice);
-      } else if (!isBiddingActive) {
-        setCurrentPrice(clickedPriceRef.current); // 클릭한 시점의 현재 가격으로 업데이트
-      } else if (isBiddingActive && auctionInfoIndex < auctionInfos.length - 1) {
-        // 입찰 중이고, 마지막 경매 정보가 아니면 3초 뒤에 다음 경매 정보로 업데이트
-        const updateTimer = setTimeout(() => {
-          setAuctionInfoIndex(auctionInfoIndex + 1);
-        }, 3000);
+  //     // 애니메이션이 끝나지 않았으면 다음 프레임에 애니메이션 함수 호출
+  //     if (elapsedTime < totalTime && isBiddingActive) {
+  //       animationFrameRef.current = requestAnimationFrame(animatePrice);
+  //     } else if (!isBiddingActive) {
+  //       setCurrentPrice(clickedPriceRef.current); // 클릭한 시점의 현재 가격으로 업데이트
+  //     } else if (isBiddingActive && auctionInfoIndex < auctionInfos.length - 1) {
+  //       // 입찰 중이고, 마지막 경매 정보가 아니면 3초 뒤에 다음 경매 정보로 업데이트
+  //       const updateTimer = setTimeout(() => {
+  //         setAuctionInfoIndex(auctionInfoIndex + 1);
+  //       }, 3000);
         
-        return () => {
-          clearTimeout(updateTimer); // 컴포넌트가 unmount될 때 타이머 정리
-        };
-      }
-    };
+  //       return () => {
+  //         clearTimeout(updateTimer); // 컴포넌트가 unmount될 때 타이머 정리
+  //       };
+  //     }
+  //   };
   
-    // 애니메이션 시작
-    animationFrameRef.current = requestAnimationFrame(animatePrice);
+  //   // 애니메이션 시작
+  //   animationFrameRef.current = requestAnimationFrame(animatePrice);
   
-    return () => {
-      // 컴포넌트가 언마운트될 때 애니메이션 정리
-      cancelAnimationFrame(animationFrameRef.current);
-    };
-  }, [auctionInfo, auctionInfoIndex]);
+  //   return () => {
+  //     // 컴포넌트가 언마운트될 때 애니메이션 정리
+  //     cancelAnimationFrame(animationFrameRef.current);
+  //   };
+  // }, [auctionInfo, auctionInfoIndex]);
 
-  const handleBiddingButtonClick = () => {
-    if (showSuccessModal) {
-      return;
-    }
+  // const handleBiddingButtonClick = () => {
+  //   if (showSuccessModal) {
+  //     return;
+  //   }
 
-    setIsBiddingActive(false); // 입찰 프로세스를 비활성화로 설정
-    const roundedCurrentPrice = Math.floor(currentPrice / 10) * 10;
-    // console.log("절삭현재가", roundedCurrentPrice)
+  //   setIsBiddingActive(false); // 입찰 프로세스를 비활성화로 설정
+  //   const roundedCurrentPrice = Math.floor(currentPrice / 10) * 10;
+  //   // console.log("절삭현재가", roundedCurrentPrice)
 
-    axios({
-      method: "post",
-      url: "/api/api/auction-service/auctions/participant",
-      data: {
-        "memberToken": memberToken,
-        "auctionArticleId": auctionInfo.auctionArticleId,
-        "price": roundedCurrentPrice
-      }
-    })    .then((res) => {
-      console.log('입찰하기', res.data.data)
-      setBidderInfo(res.data.data)
-      // setShowSuccessModal(true)
+  //   axios({
+  //     method: "post",
+  //     url: "/api/api/auction-service/auctions/participant",
+  //     data: {
+  //       "memberToken": memberToken,
+  //       "auctionArticleId": auctionInfo.auctionArticleId,
+  //       "price": roundedCurrentPrice
+  //     }
+  //   })    .then((res) => {
+  //     console.log('입찰하기', res.data.data)
+  //     setBidderInfo(res.data.data)
+  //     // setShowSuccessModal(true)
 
-      // 모달 열기 로직
-      if (!showSuccessModal && auctionInfoIndex < auctionInfos.length - 1) {
-        setShowSuccessModal(true);
+  //     // 모달 열기 로직
+  //     if (!showSuccessModal && auctionInfoIndex < auctionInfos.length - 1) {
+  //       setShowSuccessModal(true);
 
-        // 5초 후에 모달 닫고 다음 경매 정보로 업데이트
-        setTimeout(() => {
-          if (auctionInfoIndex < auctionInfos.length - 1) {
-            setAuctionInfoIndex(auctionInfoIndex + 1);
-            setShowSuccessModal(false); // 모달 닫기
-            setBidderInfo([]); // 낙찰 정보 초기화
-            setIsBiddingActive(true); // 입찰 활성화 상태 초기화
-          }
-        }, 5000);
-      }
-      setCurrentPrice(clickedPriceRef.current);
-    })
-    .catch((error) => {
-      console.log("입찰실패",error)
-    })
+  //       // 5초 후에 모달 닫고 다음 경매 정보로 업데이트
+  //       setTimeout(() => {
+  //         if (auctionInfoIndex < auctionInfos.length - 1) {
+  //           setAuctionInfoIndex(auctionInfoIndex + 1);
+  //           setShowSuccessModal(false); // 모달 닫기
+  //           setBidderInfo([]); // 낙찰 정보 초기화
+  //           setIsBiddingActive(true); // 입찰 활성화 상태 초기화
+  //         }
+  //       }, 5000);
+  //     }
+  //     setCurrentPrice(clickedPriceRef.current);
+  //   })
+  //   .catch((error) => {
+  //     console.log("입찰실패",error)
+  //   })
 
-    setBidderInfo([]);
+  //   setBidderInfo([]);
     
-    console.log("낙찰가", currentPrice)
-    console.log("이즈비딩상태", isBiddingActive)
-    // setGraph((prevGraph) => clickedPriceRef.current);
-    clickedPriceRef.current = currentPrice; // 현재 가격을 클릭한 시점의 가격으로 업데이트
-    // 필요한 경우 추가 로직을 이곳에 추가하여 입찰 프로세스를 처리할 수 있음
-  };
+  //   console.log("낙찰가", currentPrice)
+  //   console.log("이즈비딩상태", isBiddingActive)
+  //   // setGraph((prevGraph) => clickedPriceRef.current);
+  //   clickedPriceRef.current = currentPrice; // 현재 가격을 클릭한 시점의 가격으로 업데이트
+  //   // 필요한 경우 추가 로직을 이곳에 추가하여 입찰 프로세스를 처리할 수 있음
+  // };
 
   return (
     <div className=''>
