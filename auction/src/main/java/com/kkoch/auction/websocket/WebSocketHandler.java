@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class WebSocketHandler extends TextWebSocketHandler {
 
     private static final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>(); //웹소켓 세션 store
-    private static String videoSessionId; //비디오 세션
-    private static String adminSession; //관리자 세션 -> 최초 소켓 생성자
+    private static String videoSessionId = null; //비디오 세션
+    private static String adminSession = null; //관리자 세션 -> 최초 소켓 생성자
 
     //입장
     @Override
@@ -51,11 +51,20 @@ public class WebSocketHandler extends TextWebSocketHandler {
         //json 객체 변환
         JSONObject json = (JSONObject) obj;
 
-        //관리자 권한 확인
-        String admin = (String) json.get("admin");
+        //권한 확인 추출
+        String role = (String) json.get("role");
+        log.info("role = {}", role);
+
+        //고객인데 경매방이 열리지 않은 경우
+        if (isClient(role) && isNotOpenAuction()) {
+            //세션 제거
+            sessions.remove(currentSessionId);
+            session.sendMessage(new TextMessage("not start auction"));
+            return;
+        }
 
         //관리자인 경우에만 videoSessionId 저장
-        if (isAdmin(admin)) {
+        if (isAdmin(role)) {
             adminSession = currentSessionId;
             videoSessionId = (String) json.get("sessionId");
             log.info("adminSession={}, videoSessionId={}", adminSession, videoSessionId);
@@ -73,7 +82,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     //퇴장
-
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         log.info("WebSocketHandler#afterConnectionClosed");
@@ -101,8 +109,16 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private boolean isAdmin(String admin) {
-        return admin.equals("관리자");
+    private boolean isClient(String role) {
+        return role.equals("client");
+    }
+
+    private boolean isAdmin(String role) {
+        return role.equals("admin");
+    }
+
+    private boolean isNotOpenAuction() {
+        return videoSessionId == null;
     }
 
     private void sendEndMessage() {
