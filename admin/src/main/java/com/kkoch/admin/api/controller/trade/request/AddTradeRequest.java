@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 public class AddTradeRequest {
 
     @NotEmpty
-    private String memberToken;
+    private String memberKey;
 
     @NotNull
     private Long auctionArticleId;
@@ -22,15 +22,15 @@ public class AddTradeRequest {
     private Integer price;
 
     @Builder
-    private AddTradeRequest(String memberToken, Long auctionArticleId, Integer price) {
-        this.memberToken = memberToken;
+    private AddTradeRequest(String memberKey, Long auctionArticleId, Integer price) {
+        this.memberKey = memberKey;
         this.auctionArticleId = auctionArticleId;
         this.price = price;
     }
 
     public AddTradeDto toAddTradeDto() {
         return AddTradeDto.builder()
-                .memberKey(this.memberToken)
+                .memberKey(this.memberKey)
                 .auctionArticleId(this.auctionArticleId)
                 .price(this.price)
                 .build();
