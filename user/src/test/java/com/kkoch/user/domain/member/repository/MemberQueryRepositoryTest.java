@@ -38,6 +38,19 @@ class MemberQueryRepositoryTest extends IntegrationTestSupport {
         assertThat(memberInfo).isNotNull();
     }
 
+    @DisplayName("이메일이 존재하면 true를 반환한다.")
+    @Test
+    void existEmail() {
+        //given
+        Member member = createMember();
+
+        //when
+        Boolean result = memberQueryRepository.existEmail(member.getEmail());
+
+        //then
+        assertThat(result).isTrue();
+    }
+
     private Member createMember() {
         Member member = Member.builder()
             .email("ssafy@ssafy.com")
