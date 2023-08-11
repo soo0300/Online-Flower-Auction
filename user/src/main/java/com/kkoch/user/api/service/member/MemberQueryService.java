@@ -16,4 +16,8 @@ public class MemberQueryService {
     public MemberInfoResponse getMyInfo(String memberKey) {
         return memberQueryRepository.findMyInfoByMemberKey(memberKey);
     }
+
+    public boolean validationEmail(String email) {
+        return memberQueryRepository.existEmail(email);
+    }
 }
