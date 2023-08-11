@@ -39,6 +39,19 @@ class MemberQueryServiceTest extends IntegrationTestSupport {
         assertThat(memberInfo).isNotNull();
     }
 
+    @DisplayName("이메일 존재 여부를 확인할 수 있다.")
+    @Test
+    void validationEmail() {
+        //given
+        Member member = createMember();
+
+        //when
+        boolean result = memberQueryService.validationEmail(member.getEmail());
+
+        //then
+        assertThat(result).isTrue();
+    }
+
     private Member createMember() {
         Member member = Member.builder()
             .email("ssafy@ssafy.com")
