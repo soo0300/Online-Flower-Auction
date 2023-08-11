@@ -4,11 +4,15 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import UserVideoComponent from './UserVideoComponent';
 import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const APPLICATION_SERVER_URL = 'https://i9c204.p.ssafy.io:8443/api/sessions';
 
 export default function Video() {
+	const location = useLocation();
+	const { auctionArticles, sessionId } = location.state;
+
+
 	const [state, dispatch] = useReducer(videoUserInfo, initialState);
 	const {
 		mySessionId,
@@ -21,6 +25,8 @@ export default function Video() {
 
 	const OV = useRef(new OpenVidu());
 	const navigate = useNavigate();
+	console.log("여깅기ㅕ이겨미낭겨-----------------------------------")
+	console.log(sessionId);
 
 	const handleMainVideoStream = useCallback((stream) => {
 		if (mainStreamManager !== stream) {
@@ -116,7 +122,7 @@ export default function Video() {
 	}, [leaveSession]);
 
 	const getToken = useCallback(async () => {
-		return createSession(mySessionId).then(sessionId =>
+		return createSession(sessionId).then(sessionId =>
 			createToken(sessionId),
 		);
 	}, [mySessionId]);
@@ -147,18 +153,18 @@ export default function Video() {
 
 			{session !== undefined ? (
 				<div id="session">
-					{mainStreamManager !== undefined ? (
+					{/* {mainStreamManager !== undefined ? (
 						<div id="main-video" className="col-md-6">
 							<UserVideoComponent streamManager={mainStreamManager} />
 						</div>
-					) : null}
+					) : null} */}
 					<div id="video-container" className="col-md-6">
-						{publisher !== undefined ? (
+						{/* {publisher !== undefined ? (
 							<div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
 								<UserVideoComponent
 									streamManager={publisher} />
 							</div>
-						) : null}
+						) : null} */}
 					{subscribers.map((sub, i) => (
 							<div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
 								<span>{sub.id}</span>

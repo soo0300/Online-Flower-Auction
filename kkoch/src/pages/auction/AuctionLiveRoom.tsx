@@ -2,7 +2,9 @@ import AuctionLiveForm from "./AuctionLiveForm"
 
 const AuctionLiveRoom = () => {
   return (
-    <AuctionLiveForm/>
+    <>
+      <AuctionLiveForm/>
+    </>
   )
 }
 

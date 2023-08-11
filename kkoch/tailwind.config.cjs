@@ -18,10 +18,9 @@ export default {
         "secondary-400": "#FFCD5B",
         "secondary-500": "#FFC132",
       },
-      backgroundImage: (theme) => ({
+      backgroundImage: () => ({
         // figma 를 활용해 css 코드를 가져와 활용
         "gradient-yellowred": "linear-gradient(90deg, #FF616A 0%, #FFC837 100%)",
-        "mobile-home": "url('./assets/HomePageGraphic.png')",
       }),
       fontFamily: {
         dmsans: ["DM Sans", "sans-serif"],

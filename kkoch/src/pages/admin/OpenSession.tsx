@@ -1,11 +1,11 @@
 import { OpenVidu } from 'openvidu-browser';
+// import SocketIO from "socket.io";
 
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch } from "react-redux";
 
 import UserVideoComponent from './UserVideoComponent';
-import { setAuctionSession } from '@/reducer/store/videoAdmin';
+import Clock from '@/components/Clock/Clock';
 
 export default function OpenSession() {
   const [mySessionId, setMySessionId] = useState('YangJae1')
@@ -16,18 +16,11 @@ export default function OpenSession() {
   const [subscribers, setSubscribers] = useState([]);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
   
-  const dispatch = useDispatch();
-  
   const OV = useRef(new OpenVidu());
   
   // 세션 이름 변경
   const handleChangeSessionId = useCallback((e) => {
     setMySessionId(e.target.value);
-
-    // redux 상태에 session 저장하기(바뀔때마다 최신화)
-    dispatch(setAuctionSession({
-      "session": e.target.value
-    }));
   }, []);
   
   // 이름 변경
@@ -42,9 +35,29 @@ export default function OpenSession() {
       }
   }, [mainStreamManager]);
 
+  // 웹 소캣에 전송할 메세지 만들기
+  function makeMessage(type1, type2) {
+    const msg = {
+      sessionId: type1,
+      admin: type2 
+    };
+    return JSON.stringify(msg);
+  } 
+  
   // 세션 열기
   const joinSession = useCallback(() => {
     const mySession = OV.current.initSession();
+    // 웹 소캣도 연결
+    const socket = new WebSocket('wss://i9c204.p.ssafy.io/ws/');
+
+
+    socket.addEventListener('open', () => {
+      console.log("---------------------------------")
+      console.log('WebSocket connected'); // 웹소켓 연결 확인 메시지 출력
+
+      // 서버에 들어가자마자 openVidu 방 코드 전송
+      socket.send(makeMessage(mySessionId, "관리자"));
+    });
 
     mySession.on('streamCreated', (event) => {
         const subscriber = mySession.subscribe(event.stream, undefined);
@@ -159,7 +172,7 @@ export default function OpenSession() {
   }, []);
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = () => {
       leaveSession();
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -214,38 +227,39 @@ export default function OpenSession() {
       <div className="container">
           {session === undefined ? (
             <div id="join">
-              <div id="img-div">
-                <img src="resources/images/openvidu_grey_bg_transp_cropped.png" alt="OpenVidu logo" />
-              </div>
-              <div id="join-dialog" className="jumbotron vertical-center">
-                <h1> Join a video session </h1>
-                <form className="form-group" onSubmit={joinSession}>
-                  <p>
-                    <label>Participant: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="userName"
-                      value={myUserName}
-                      onChange={handleChangeUserName}
-                      required
-                    />
-                  </p>
-                  <p>
-                    <label> Session: </label>
-                    <input
-                      className="form-control"
-                      type="text"
-                      id="sessionId"
-                      value={mySessionId}
-                      onChange={handleChangeSessionId}
-                      required
-                    />
-                  </p>
-                  <p className="text-center">
-                    <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
-                  </p>
-                </form>
+              <div id="join-dialog" className="container jumbotron vertical-center">
+                <h1 className='my-6 text-center'> 경매방 생성하기 </h1>
+                <hr />
+                <div className='flex justify-around'>
+                  <Clock></Clock>
+                  <form className="form-group w-[50%] border-2 border-[#5E0000] rounded-lg" onSubmit={joinSession}>
+                    <p>
+                      <label>Participant: </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="userName"
+                        value={myUserName}
+                        onChange={handleChangeUserName}
+                        required
+                      />
+                    </p>
+                    <p>
+                      <label> Session: </label>
+                      <input
+                        className="form-control"
+                        type="text"
+                        id="sessionId"
+                        value={mySessionId}
+                        onChange={handleChangeSessionId}
+                        required
+                      />
+                    </p>
+                    <p className="text-center">
+                      <input className="btn btn-lg btn-success" name="commit" type="submit" value="JOIN" />
+                    </p>
+                  </form>
+                </div>
               </div>
             </div>
           ) : null}
