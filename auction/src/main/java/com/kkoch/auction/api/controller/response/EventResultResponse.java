@@ -11,15 +11,15 @@ public class EventResultResponse {
 
     private String memberKey;
     private Long auctionArticleId;
-    private int price;
+    private int bidPrice;
     private String winnerNumber;
     private String message;
 
     @Builder
-    public EventResultResponse(String memberKey, String auctionArticleId, int price, String winnerNumber, String message) {
+    private EventResultResponse(String memberKey, String auctionArticleId, int bidPrice, String winnerNumber, String message) {
         this.memberKey = memberKey;
         this.auctionArticleId = Long.valueOf(auctionArticleId);
-        this.price = price;
+        this.bidPrice = bidPrice;
         this.winnerNumber = winnerNumber;
         this.message = message;
     }
@@ -28,7 +28,7 @@ public class EventResultResponse {
         return EventResultResponse.builder()
                 .auctionArticleId(participant.getAuctionArticleId())
                 .memberKey(participant.getMemberKey())
-                .price(winnerPrice)
+                .bidPrice(winnerPrice)
                 .winnerNumber(winnerNumber)
                 .message("이미 낙찰되었습니다.")
                 .build();
@@ -38,7 +38,7 @@ public class EventResultResponse {
         return EventResultResponse.builder()
                 .auctionArticleId(participant.getAuctionArticleId())
                 .memberKey(participant.getMemberKey())
-                .price(Integer.parseInt(winnerPrice))
+                .bidPrice(Integer.parseInt(winnerPrice))
                 .winnerNumber(winnerNumber)
                 .message("낙찰 성공")
                 .build();
