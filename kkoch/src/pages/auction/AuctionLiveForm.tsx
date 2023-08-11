@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
 import AuctionModal from './AuctionModal';
+
 import { toast } from 'react-toastify';
 
 interface auctionInfo {
@@ -40,20 +41,20 @@ const AuctionLiveForm = () => {
   // const [modalMessage, setModalMessage] = useState('');
   const [bidderInfo, setBidderInfo] = useState<BidderInfo>([]);
   const [key, setKey] = useState(0);
-
+  
 
   // 경매 정보 
   const [auctionInfo, setAuctionInfo] = useState(auctionInfos[0]);
 
   // 원래 가격과 최종 가격을 지정
   const originalPrice = auctionInfo.startPrice;
-  console.log('원래가격', originalPrice)
+  // console.log('원래가격', originalPrice)
   const finalPrice = originalPrice / 2; // 최종 가격은 원래 가격의 1/2로 설정
 
   // 현재가를 변화시킬 state
   const [currentPrice, setCurrentPrice] = useState(originalPrice);
   const [isBiddingActive, setIsBiddingActive] = useState(true);
-  console.log('현재가', currentPrice)
+  // console.log('현재가', currentPrice)
   const clickedPriceRef = useRef(null);
   const animationFrameRef = useRef(null);
 
@@ -70,7 +71,7 @@ const AuctionLiveForm = () => {
     const decreaseAmount = (originalPrice - finalPrice) / totalTime; // 감소량 계산
 
     const animatePrice = () => {
-      console.log("너 계속 실행되지?")
+      // console.log("너 계속 실행되지?")
       if (!isBiddingActive) {
         return;
       }
@@ -185,7 +186,7 @@ const AuctionLiveForm = () => {
       </div>
       <div className='auction-content'>
         <div className='stream-image'>
-          {/* <Video /> */}
+          <Video />
           {/* <img src={ HomePageAuction } alt="LiveStream" /> */}
         </div>
         <div className='auction-info'>
