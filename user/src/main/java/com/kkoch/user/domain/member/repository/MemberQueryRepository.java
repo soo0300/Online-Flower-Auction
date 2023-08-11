@@ -35,7 +35,7 @@ public class MemberQueryRepository {
     public Boolean existEmail(String email) {
         Integer content = queryFactory
             .selectOne()
-            .from()
+            .from(member)
             .where(member.email.eq(email))
             .fetchFirst();
 
