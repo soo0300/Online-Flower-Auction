@@ -528,14 +528,7 @@
                             <span class="badge text-bg-primary w-100" th:text="${auction.status}"></span>
                         </td>
                         <td>
-                            <button
-                                    type="button"
-                                    class="btn btn-sm btn-outline-secondary"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#addAuctionArticle"
-                            >
-                                추가
-                            </button>
+                            <a th:href="@{/admin-service/intranet/articles/{auctionId}(auctionId=${auction.auctionId})}">관리</a>
                         </td>
                     </tr>
                     </tbody>
@@ -596,58 +589,6 @@
         </div>
     </div>
 
-    <!-- 경매품 추가 Modal -->
-    <div
-            class="modal fade"
-            id="addAuctionArticle"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabindex="-1"
-            aria-labelledby="addInsertAuctionLabel"
-            aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addInsertAritcleLabel">
-                        경매품 등록
-                    </h1>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="auctionCode" class="form-label"
-                        >구분코드</label
-                        >
-                        <select id="ariticleCode" class="form-select" aria-label="Default select example">
-                            <option value="1" selected>절화</option>
-                            <option value="2">난</option>
-                            <option value="3">관엽</option>
-                            <option value="4">춘란</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="articleTime" class="form-label"
-                        >경매 시간</label
-                        >
-                        <input
-                                type="datetime-local"
-                                id="articleTime"
-                                class="form-control"
-                        />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="addAriticle">등록</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 <script
         src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
@@ -683,6 +624,7 @@
 
         callApi(uri, 'post', params)
 
+        location.href="/admin-service/"
         $('#addAuctionButton').modal('hide');
     });
 
