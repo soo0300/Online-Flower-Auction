@@ -32,9 +32,9 @@ public class AdminController {
     @GetMapping
     public String index(@ModelAttribute(name = "form") LoginRequest request, @Login LoginAdmin loginAdmin) {
         if (loginAdmin == null) {
-            return "index";
+            return "login";
         }
-        return "login";
+        return "index";
     }
 
     @PostMapping("/login")
