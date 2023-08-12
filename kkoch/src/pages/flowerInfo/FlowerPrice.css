@@ -12,6 +12,7 @@
   color: #71717a;
   width: 300px;
   text-align: center;
+  background-color: white;
 }
 
 .lower-price-tag, .higher-price-tag, .average-price-tag {
@@ -25,4 +26,8 @@
   color: #22C55E;
   font-size: 13px;
   font-weight: lighter;
+}
+
+.div-price-title {
+  margin-top: 10px;
 }

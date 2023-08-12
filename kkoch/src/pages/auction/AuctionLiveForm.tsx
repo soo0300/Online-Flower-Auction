@@ -43,17 +43,17 @@ const AuctionLiveForm = ({auctionArticles}) => {
   // 경매 정보 
   const [auctionInfo, setAuctionInfo] = useState(auctionInfos[0]);
 
-  // 원래 가격과 최종 가격을 지정
-  const originalPrice = auctionInfo.startPrice;
-  // console.log('원래가격', originalPrice)
-  const finalPrice = originalPrice / 2; // 최종 가격은 원래 가격의 1/2로 설정
+  // // 원래 가격과 최종 가격을 지정
+  // const originalPrice = auctionInfo.startPrice;
+  // // console.log('원래가격', originalPrice)
+  // const finalPrice = originalPrice / 2; // 최종 가격은 원래 가격의 1/2로 설정
 
-  // 현재가를 변화시킬 state
-  const [currentPrice, setCurrentPrice] = useState(originalPrice);
-  const [isBiddingActive, setIsBiddingActive] = useState(true);
-  // console.log('현재가', currentPrice)
-  const clickedPriceRef = useRef(null);
-  const animationFrameRef = useRef(null);
+  // // 현재가를 변화시킬 state
+  // const [currentPrice, setCurrentPrice] = useState(originalPrice);
+  // const [isBiddingActive, setIsBiddingActive] = useState(true);
+  // // console.log('현재가', currentPrice)
+  // const clickedPriceRef = useRef(null);
+  // const animationFrameRef = useRef(null);
 
   useEffect(() => {
     setIsBiddingActive(true);
@@ -163,7 +163,7 @@ const AuctionLiveForm = ({auctionArticles}) => {
       <div className='auction-content'>
         <div className='auction-info'>
           <div className='auction-point'>
-            {/* 보유 포인트: { auctionInfo.point } */}
+            보유 포인트: { auctionInfo.point }
           </div>
           <div className='auction-border'>
             <div className='auction-status'>
@@ -255,9 +255,9 @@ const AuctionLiveForm = ({auctionArticles}) => {
         </div>
       </div>
        {/* 모달 컴포넌트 */}
-       {showSuccessModal && (
+       {/* {showSuccessModal && (
         <AuctionModal modalMessage={bidderInfo.message} onClose={() => setShowSuccessModal(false)} />
-      )}
+      )} */}
     </div>
   )
 }

@@ -1,76 +1,127 @@
-import FlowerData from '@/pages/flowerInfo/FilterInterface';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+
+// import { flowerSeries } from '@/pages/flowerInfo/FilterInterface';
+import React, { useState } from 'react'
 import ReactApexChart from 'react-apexcharts';
-import secureLocalStorage from 'react-secure-storage';
+import './FlowerChart.css';
+// import ApexCharts from 'react-apexcharts'
 
-interface ApexChartProps {
-  flowerData: FlowerData
-}
 
-const FlowerChart: React.FC<ApexChartProps> = ({ flowerData }) => {
-  const formatDate = (date) => {
+const FlowerChart = ({ flowerSeries }) => {
+  console.log(flowerSeries, "시리즈")
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
     const year = date.getFullYear();
     let month = date.getMonth() + 1;
     let day = date.getDate();
     
-    day = day >= 10 ? day  : '0' + day;
-    month = month >= 10 ? month : '0' + month;
-    return `${year}-${month}-${day}`
-  }
+    day = day >= 10 ? day  :  day;
+    month = month >= 10 ? month : month;
+    return `${year}-${month}-${day}`;
+  };
 
-  console.log("그래프", flowerData)
-
-  const response = () => {
-    axios({
-      url: '/api/api/admin-service/stats',
-      method: 'get',
-      params: {
-        type: "장미",
-        name: "5번가",
-        searchDay: 7
-      }
-    })
-    .then((res) => {
-      console.log("낙찰통계", res.data)
-      console.log(11111111111)
-    })
-  }
-
-  useEffect(() => {
-    response()
-  })
-
-  const series = [
-    {
-      data:[
-        [1, 1]
-      ],
-      color: "#ffe7e6"
-    },
-    {
-      data: [
-        [2,2]
-      ],
-      color: "#FF9994"
+  const getSearchDay = (selection) => {
+    switch (selection) {
+      case 'one-week':
+        return 7;
+      case 'one_month':
+        return 30;
+      case 'six_months':
+        return 180;
+      case 'one_year':
+        return 365;
+      default:
+        return 7; // 기본값은 1주일로 설정
     }
-  ];
+  };
 
-  const options = {
+  const series = flowerSeries;
+  const [selection, setSelection] = useState('one-week');
+  const todayDate = formatDate(new Date());
+
+  // const [series, setSeries] = useState([]);
+  // const todayList = todayList
+
+  // const response = () => {
+  //   axios({
+  //     url: '/api/api/admin-service/stats',
+  //     method: 'get',
+  //     params: {
+  //       type: flowerData.type,
+  //       name: flowerData.name,
+  //       searchDay: 365
+  //     }
+  //   })
+  //   .then((res) => {
+  //     const rawData = res.data.data;
+  //     console.log(rawData)
+  //     // 데이터를 grade별로 나누기
+  //     const dataByGrade = {}; // grade별 데이터를 담을 객체
+
+  //     // rawData를 순회하며 grade별로 데이터를 분류
+  //     rawData.forEach(item => {
+  //       const { grade } = item;
+        
+  //       if (formatDate(new Date(item.createdDate)) === todayDate && item.grade === "SUPER") {
+  //         todayList.push(item)
+  //         console.log(todayList)
+  //       }
+  //       if (!dataByGrade[grade]) {
+  //         dataByGrade[grade] = [];
+  //       }
+  //       dataByGrade[grade].push(item);
+  //     });
+
+  //     console.log("!!!!", formatDate(new Date(rawData[0].createdDate)))
+
+      
+  //     setSeries([
+  //       {
+  //         data: dataByGrade["ADVANCED"] ? dataByGrade["ADVANCED"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
+  //         color: "#ffe7e6",
+  //       },
+  //       {
+  //         data: dataByGrade["NORMAL"] ? dataByGrade["NORMAL"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
+  //         color: "#FF9994",
+  //       },
+  //       {
+  //         data: dataByGrade["SUPER"] ? dataByGrade["SUPER"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
+  //         color: "#FF9994",
+  //       },
+  //     ]);
+  //   })
+  //   .catch(err => {
+  //     console.log(err)
+  //   })
+  // }
+  
+  // useEffect(() => {
+  //   console.log("useEffect is being executed");
+  //   response();
+  // }, [])
+
+  
+  const options:ApexCharts.ApexOptions = {
     chart: {
       id: 'area-datetime',
-      type: 'area',
+      // type: 'area',
       height: 350,
       zoom: {
         autoScaleYaxis: true
       },
+      toolbar: {
+        tools: {
+          download: false,
+          pan: false,
+        }
+      },
+      background: '#FFFFFF'
     },
 
     stroke: {
       // 선 스타일 설정
-      colors: ['#E85757', '#FF9994'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
+      colors: ['#E85757', '#FF9994', '#F25477'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
       curve: 'smooth', // 곡선형 그래프로 설정
-      width: [2, 2], // 데이터 배열에 대한 선 굵기 (0번 인덱스는 2px, 1번 인덱스는 2px)
+      width: [2, 2, 2], // 데이터 배열에 대한 선 굵기 (0번 인덱스는 2px, 1번 인덱스는 2px)
     },
 
     dataLabels: {
@@ -78,18 +129,22 @@ const FlowerChart: React.FC<ApexChartProps> = ({ flowerData }) => {
     },
 
     markers: {
-      size: 0,
-      style: 'hollow',
+      size: 2,
+      colors: ['black', 'pink', 'red']
     },
 
     xaxis: {
       type: 'datetime',
-      min: new Date('01 Mar 2012').getTime(),
-      tickAmount: 6,
+      min: new Date(todayDate).getTime() - getSearchDay(selection) * 24 * 60 * 60 * 1000, // 일수 * 24시간 * 60분 * 60초 단위 계산
+      max: new Date(todayDate).getTime(),
+      tickAmount: 30,
+      labels: {
+        format: 'yyyy-MM-dd', // x축 날짜 포맷
+      },
     },
     tooltip: {
       x: {
-        format: 'dd MMM yyyy'
+        format: 'yyyy-MM-dd'
       }
     },
     fill: {
@@ -103,109 +158,101 @@ const FlowerChart: React.FC<ApexChartProps> = ({ flowerData }) => {
     },
   };
 
-  const [selection, setSelection] = useState('one_year');
-
   const updateData = (timeline: string) => {
     let minTimestamp, maxTimestamp;
     switch (timeline) {
+      case 'one_week':
+        minTimestamp = formatDate(new Date(todayDate).getTime() - 7 * 24 * 60 * 60 * 1000);
+        maxTimestamp = formatDate(new Date(todayDate).getTime());
+        break;
       case 'one_month':
-        minTimestamp = new Date('28 Jan 2013').getTime();
-        maxTimestamp = new Date('27 Feb 2013').getTime();
+        minTimestamp = formatDate(new Date(todayDate).getTime() - 30 * 24 * 60 * 60 * 1000);
+        maxTimestamp = formatDate(new Date(todayDate).getTime());
         break;
       case 'six_months':
-        minTimestamp = new Date('27 Sep 2012').getTime();
-        maxTimestamp = new Date('27 Feb 2013').getTime();
+        minTimestamp = formatDate(new Date(todayDate).getTime() - 180 * 24 * 60 * 60 * 1000);
+        maxTimestamp = formatDate(new Date(todayDate).getTime());
         break;
-      case 'one_year':
-        minTimestamp = new Date('27 Feb 2012').getTime();
-        maxTimestamp = new Date('27 Feb 2013').getTime();
-        break;
-      case 'ytd':
-        minTimestamp = new Date('01 Jan 2013').getTime();
-        maxTimestamp = new Date('27 Feb 2013').getTime();
-        break;
-      case 'all':
-        minTimestamp = new Date('23 Jan 2012').getTime();
-        maxTimestamp = new Date('27 Feb 2013').getTime();
+      case 'one-year':
+        minTimestamp = formatDate(new Date(todayDate).getTime() - 365 * 24 * 60 * 60 * 1000);
+        maxTimestamp = formatDate(new Date(todayDate).getTime());
         break;
       default:
         break;
     }
-  
-    // Get the min and max values of the y-axis data for the selected time range
-    const filteredData = series[0].data.filter(
-      ([timestamp]) => timestamp >= minTimestamp && timestamp <= maxTimestamp
-    );
-    const yValues = filteredData.map(([, value]) => value);
-    const minYValue = Math.min(...yValues);
-    const maxYValue = Math.max(...yValues);
-  
-    // Update the chart with new x-axis and y-axis ranges
-    ApexCharts.exec('area-datetime', 'zoomX', minTimestamp, maxTimestamp);
-    ApexCharts.exec('area-datetime', 'updateOptions', {
-      yaxis: {
-        min: minYValue - 1,
-        max: maxYValue + (maxYValue - minYValue), // Add a buffer for the y-axis range
-      },
-    });
-  };
-  useEffect(() =>  {
-    updateData(selection);
-  }, [selection]);
 
+    if (series.length > 0) {
+      const filteredData = series[0].data.filter(
+        ([timestamp]) => timestamp >= minTimestamp && timestamp <= maxTimestamp
+      );
+    
+      // 데이터가 있을 때만 그래프를 그리도록 처리
+      if (filteredData.length > 0) {
+        const yValues = filteredData.map(([, value]) => value);
+        const minYValue = Math.min(...yValues);
+        const maxYValue = Math.max(...yValues);
+    
+        // x축,y 축 최저, 최고가, 날짜 업데이트
+        ApexCharts.exec('area-datetime', 'zoomX', minTimestamp, maxTimestamp);
+        ApexCharts.exec('area-datetime', 'updateOptions', {
+          xaxis: {
+            min: minTimestamp,
+            max: maxTimestamp,
+          },
+          yaxis: {
+            min: minYValue - 1,
+            max: maxYValue + (maxYValue - minYValue), 
+          },
+        });
+      }
+    }
+  }
   return (
-    <div id="chart">
-      <div className="toolbar">
-        <button 
-          id="one_month"
-          onClick={()=> {
-            updateData('one_month');
-            setSelection('one_month');
-          }}
-          className={ (selection==='one_month' ? 'active' : '')}
-        >
-          1개월
-        </button>
-        <button 
-          id="six_months"
-          onClick={()=> {
-            updateData('six_months');
-            setSelection('six_months');
-          }}
-          className={(selection==='six_months' ? 'active' : '')}
-        >
-          6개월
-        </button>
-        <button
-          id="one_year"
-          onClick={()=> {
-            updateData('one_year');
-            setSelection('one_year');
-          }}
-          className={ (selection==='one_year' ? 'active' : '')}
-        >
-          1년
-        </button>
-        <button
-          id="ytd"
-          onClick={()=> {
-            updateData('ytd');
-            setSelection('ytd');
-          }}
-          className={ (selection==='ytd' ? 'active' : '')}
-        >
-          올해
-        </button>
-        <button
-          id="all"  
-          onClick={()=> {
-            updateData('all');
-            setSelection('all');
-          }}
-          className={ (selection==='all' ? 'active' : '')}
-        >
-          전체
-        </button>
+    <div id="chart" className='chart_container'>
+      <div className="chart-header">
+        <h2 className="chart-title">현재 시세</h2>
+        <div className="toolbar">
+          <button 
+            id="one_week"
+            onClick={()=> {
+              updateData("one-week");
+              setSelection("one-week");
+            }}
+            className={ (selection==='one-week' ? 'active' : '')}
+          >
+            1주일
+          </button>
+          <button 
+            id="one_month"
+            onClick={()=> {
+              updateData('one_month');
+              setSelection('one_month');
+            }}
+            className={(selection==='one_month' ? 'active' : '')}
+          >
+            1개월
+          </button>
+          <button
+            id="six_months"
+            onClick={()=> {
+              updateData('six_months');
+              setSelection('six_months');
+            }}
+            className={ (selection==='six_months' ? 'active' : '')}
+          >
+            6개월
+          </button>
+          <button
+            id="one_year"
+            onClick={()=> {
+              updateData('one_year');
+              setSelection('one_year');
+            }}
+            className={ (selection==='one_year' ? 'active' : '')}
+          >
+            1년
+          </button>
+        </div>
       </div>
       <div id="chart-timeline">
         <ReactApexChart options={options} series={series} type="area" height={350} />
