@@ -40,7 +40,6 @@ const FlowerDetail = () => {
 
   // const series = flowerSeries;
   // const [selection, setSelection] = useState('one-week');
-  const todayDate = formatDate(new Date());
 
   const [series, setSeries] = useState([]);
   const [todayList, setTodayList] = useState([]);
@@ -82,14 +81,14 @@ const FlowerDetail = () => {
       
       setSeries([
         { 
-          name: "상급",
-          data: dataByGrade["ADVANCED"] ? dataByGrade["ADVANCED"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
-          color: "#ffe7e6",
-        },
-        { 
           name: "보통",
           data: dataByGrade["NORMAL"] ? dataByGrade["NORMAL"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
           color: "#FF9994",
+        },
+        { 
+          name: "상급",
+          data: dataByGrade["ADVANCED"] ? dataByGrade["ADVANCED"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
+          color: "#ffe7e6",
         },
         { 
           name: "특급",
@@ -108,7 +107,7 @@ const FlowerDetail = () => {
   }, [])
 
   return (
-    <div className='gap-24 bg-gray-20 pt-3 md:h-full md:pb-0'>
+    <div className='gap-24 bg-gray-20 pt-3 pr-100 md:h-full md:pb-0'>
       <div className="detail-title">
         {flowerData.type}
         <span className='detail-subtitle'>

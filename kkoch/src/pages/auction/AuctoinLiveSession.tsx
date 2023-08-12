@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserVideoComponent from './UserVideoComponent';
 import AuctionLiveForm from './AuctionLiveForm';
+import WebSocketComponent from '@/components/webSocket/webSocket';
 
 const AuctionWaitingRoom: React.FC = () => {
   const location = useLocation();
@@ -238,8 +239,8 @@ const AuctionWaitingRoom: React.FC = () => {
                 )
               ))}
             </div>
-
-            {/* <AuctionLiveForm auctionArticles={auctionArticles}/> */}
+            <WebSocketComponent />
+            <AuctionLiveForm auctionArticles={auctionArticles}/>
           </div>
         </div>
       ) : null}

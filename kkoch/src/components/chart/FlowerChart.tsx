@@ -156,6 +156,14 @@ const FlowerChart = ({ flowerSeries }) => {
         stops: [0, 100]
       }
     },
+    legend: {
+      position: "top",
+      fontSize: '20px',
+      itemMargin: {
+        horizontal: 20,
+        vertical: 0
+    },
+    }
   };
 
   const updateData = (timeline: string) => {

@@ -44,7 +44,6 @@ const LocationButton = ({location, type } : Props) => {
 						alert("경매 시작 전입니다.")
 						socket.close(); // 소캣 연결 종료
 					}
-
 				});
 				
 		
