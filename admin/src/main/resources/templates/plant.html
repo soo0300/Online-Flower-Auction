@@ -60,6 +60,22 @@
     <meta name="theme-color" content="#712cf9"/>
 
     <style>
+        .container {
+            text-align: center;
+        }
+
+        .form-select {
+            width: 100%;
+        }
+
+        .select-box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            padding: 5px;
+        }
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -142,6 +158,11 @@
     />
     <!-- Custom styles for this template -->
     <link href="dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/asserts/js/function.js}"></script>
+
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
@@ -317,16 +338,16 @@
                             <a
                                     class="nav-link d-flex align-items-center gap-2 active"
                                     aria-current="page"
-                                    href="#"
+                                    href="/admin-service/intranet"
                             >
                                 <svg class="bi">
                                     <use xlink:href="#house-fill"/>
                                 </svg>
-                                Dashboard
+                                HOME
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/members">
                                 <svg class="bi">
                                     <use xlink:href="#people"/>
                                 </svg>
@@ -334,7 +355,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/admins" th:herf="@{/admins}">
+                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/admins">
                                 <svg class="bi">
                                     <use xlink:href="#people"/>
                                 </svg>
@@ -342,8 +363,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/plants"
-                               th:herf="@{/admin-service/intranet/plants}">
+                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/plants">
                                 <svg class="bi">
                                     <use xlink:href="#file-earmark"/>
                                 </svg>
@@ -351,7 +371,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/auctions" th:herf="@{/admin-service/intranet/auctions}">
+                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/auctions">
                                 <svg class="bi">
                                     <use xlink:href="#file-earmark"/>
                                 </svg>
@@ -359,91 +379,22 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/trades" th:herf="@{/admin-service/intranet/trades}">
-                                <svg class="bi">
-                                    <use xlink:href="#graph-up"/>
-                                </svg>
-                                낙찰내역관리
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/articles" th:herf="@{/admin-service/intranet/articles}">
-                                <svg class="bi">
-                                    <use xlink:href="#cart"/>
-                                </svg>
-                                경매품관리
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="#" >
+                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/notice">
                                 <svg class="bi">
                                     <use xlink:href="#file-earmark"/>
                                 </svg>
                                 공지사항관리
                             </a>
                         </li>
+
                     </ul>
 
-                    <h6
-                            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase"
-                    >
-                        <span>Saved reports</span>
-                        <a
-                                class="link-secondary"
-                                href="#"
-                                aria-label="Add a new report"
-                        >
-                            <svg class="bi">
-                                <use xlink:href="#plus-circle"/>
-                            </svg>
-                        </a>
-                    </h6>
-                    <ul class="nav flex-column mb-auto">
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="#">
-                                <svg class="bi">
-                                    <use xlink:href="#file-earmark-text"/>
-                                </svg>
-                                Current month
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="#">
-                                <svg class="bi">
-                                    <use xlink:href="#file-earmark-text"/>
-                                </svg>
-                                Last quarter
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="#">
-                                <svg class="bi">
-                                    <use xlink:href="#file-earmark-text"/>
-                                </svg>
-                                Social engagement
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="#">
-                                <svg class="bi">
-                                    <use xlink:href="#file-earmark-text"/>
-                                </svg>
-                                Year-end sale
-                            </a>
-                        </li>
-                    </ul>
+
+
 
                     <hr class="my-3"/>
 
                     <ul class="nav flex-column mb-auto">
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="#">
-                                <svg class="bi">
-                                    <use xlink:href="#gear-wide-connected"/>
-                                </svg>
-                                Settings
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-2" href="#">
                                 <svg class="bi">
@@ -462,6 +413,19 @@
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
             >
                 <h1 class="h2">식물관리</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#selectCategoryModal"
+                        >
+                            카테고리 등록
+                        </button>
+                    </div>
+                </div>
+
             </div>
 
             <div class="table-responsive small">
@@ -489,9 +453,169 @@
                 </table>
             </div>
         </main>
+
+        <div
+                class="modal fade"
+                id="selectCategoryModal"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                            카테고리
+                        </h1>
+                        <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container mb-3">
+                            <label for="nameSelect" class="form-label"
+                            >식물</label>
+                            <div class="container mt-5">
+                                <div class="select-box">
+
+                                    <select id="codeSelect" class="form-select">
+                                        <option value="0" disabled selected>선택하세요</option>
+                                        <option value="1">절화</option>
+                                        <option value="2">관엽</option>
+                                        <option value="3">난</option>
+                                        <option value="4">춘란</option>
+
+                                    </select>
+                                    <select id="typeSelect" name="type" class="form-select">
+                                        <option value="0" disabled selected>선택하세요</option>
+                                    </select>
+
+                                    <select id="nameSelect" name="name" class="form-select">
+                                        <option value="0" disabled selected>선택하세요</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="categoryName" class="form-label"
+                            >하위카테고리</label
+                            >
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="categoryName"
+                                    placeholder="내용을 입력해주세요."
+                            />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="addCategoryButton">등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const codeSelect = document.getElementById('codeSelect');
+        const typeSelect = document.getElementById('typeSelect');
+
+        codeSelect.addEventListener('change', function () {
+            const selectedCode = codeSelect.value;
+            console.log(selectedCode);
+            updateTypeSelect(selectedCode);
+        });
+
+        typeSelect.addEventListener('change', function () {
+            const selectedType = typeSelect.value;
+            console.log(selectedType);
+            updateNameSelect(selectedType);
+        });
+
+        // 추가 버튼 클릭 시 모달 창 열기
+        const addCategoryModal = document.getElementById('addCategoryModal');
+        const addCategoryButton = document.getElementById('addCategoryButton');
+        addCategoryButton.addEventListener('click', function () {
+            const categoryNameInput = document.getElementById('categoryName');
+            const categoryName = categoryNameInput.value;
+            const selecteCode = document.getElementById('codeSelect').value;
+            console.log(selecteCode);
+            // 선택한 type 값 가져오기
+            const selectedType = document.getElementById('typeSelect').value;
+            var pId = selecteCode;
+            if (selectedType !== "") {
+                pId = selectedType
+            }
+
+            console.log("data" + pId);
+
+
+            // 백엔드 API 호출
+            const uri = '/admin-service/categories'; // 백엔드 API 경로
+            const params = {
+                name: categoryName,
+                parentId: pId
+            };
+
+            callApi(uri, 'post', params)
+
+            $('#selectCategoryModal').modal('hide');
+        });
+    });
+
+
+    function updateTypeSelect(selectedCode) {
+        // 댓글 저장
+        const uri = `/admin-service/categories/` + selectedCode;
+        const params = {}
+        const response = getJson(uri, params);
+
+        const typeSelect = document.getElementById('typeSelect');
+        const nameSelect = document.getElementById('nameSelect');
+
+        typeSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>'; // 기본값 추가
+
+        nameSelect.innerHTML = ''; // "nameSelect" 초기화
+        nameSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>'; // 기본값 추가
+        response.data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.categoryId;
+            option.textContent = item.name;
+            typeSelect.appendChild(option);
+        });
+        console.log(response);
+    }
+
+    function updateNameSelect(selectedType) {
+        // 댓글 저장
+        const uri = `/admin-service/categories/` + selectedType;
+        const params = {}
+        const response = getJson(uri, params);
+
+        const nameSelect = document.getElementById('nameSelect');
+
+        nameSelect.innerHTML = ''; // "nameSelect" 초기화
+        nameSelect.innerHTML = '<option value="" disabled selected>선택하세요</option>'; // 기본값
+        response.data.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.categoryId;
+            option.textContent = item.name;
+            nameSelect.appendChild(option);
+        });
+        console.log(response);
+    }
+
+</script>
 <script
         src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
