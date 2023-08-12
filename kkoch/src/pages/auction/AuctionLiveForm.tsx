@@ -56,9 +56,9 @@ const AuctionLiveForm = ({auctionArticles}) => {
   // const animationFrameRef = useRef(null);
 
   useEffect(() => {
-    setIsBiddingActive(true);
+    // setIsBiddingActive(true);
     setAuctionInfo(auctionInfos[auctionInfoIndex]); // auctionInfoIndex에 해당하는 정보 할당
-    setCurrentPrice(auctionInfos[auctionInfoIndex].startPrice)
+    // setCurrentPrice(auctionInfos[auctionInfoIndex].startPrice)
     setKey((prevKey) => prevKey + 1);
   }, [auctionInfoIndex, auctionInfos]);
   

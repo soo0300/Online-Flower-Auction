@@ -29,7 +29,7 @@ const Clock = () => {
   return (
     <div className='mt-[50px]'>
       <h2 className='text-center'>현재 시간</h2>
-      <p className="text-[3vw] text-center">{d}</p>
+      <p className="text-[2vw] text-center">{d}</p>
       <hr className='w-[70%] mx-auto'/>
       <div className='flex justify-center'>
         <h3 className="inline-block text-[5vw] font-light">{h}&nbsp;:</h3>

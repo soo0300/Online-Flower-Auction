@@ -12,7 +12,7 @@ const AuctionWaitingRoom: React.FC = () => {
   const navigate = useNavigate();
 
   console.log("여기 넘어온거 확인")
-  const { auctionArticles, sessionId } = location.state;
+  const { sessionId } = location.state;
 
   const [mySessionId, setMySessionId] = useState(sessionId)
   const [myUserName, setMyUserName] = useState(`${Math.floor(Math.random() * 100)}`)
@@ -239,7 +239,7 @@ const AuctionWaitingRoom: React.FC = () => {
               ))}
             </div>
 
-            <AuctionLiveForm auctionArticles={auctionArticles}/>
+            {/* <AuctionLiveForm auctionArticles={auctionArticles}/> */}
           </div>
         </div>
       ) : null}

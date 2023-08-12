@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Navigate } from 'react-router-dom';
 import LocationButton from "@/components/buttons/LocationButton"
 import secureLocalStorage from 'react-secure-storage';
-import axios from "axios";
 
 const ActionReady = () => {
   const location = ["aT화훼공판장(양재동)", "부산화훼공판장(엄궁동)", "광주원예농협(풍암)"
@@ -14,44 +13,6 @@ const ActionReady = () => {
   useEffect(() => {
     !isLoggedIn && alert("로그인 후 이용 가능합니다.")
   }, [isLoggedIn])
-
-  const auctionArticles = [];
-
-  const auctionItems = (auctionId) => {
-    axios({
-      method: "get",
-      url: `/api/api/admin-service/auction-articles/${auctionId}`
-    })
-    .then((res) => {
-      auctionArticles.push(res.data.data)
-      console.log('품목', auctionArticles)
-    })
-    .catch((error) => {
-      console.error("Error fetching auction items:", error);
-    });
-  }
-  
-  const auctionId = () => {
-    axios({
-      method: "get",
-      url: "/api/api/admin-service/auctions/api"
-    })
-    .then((res) => {
-      console.log("경매ID", res.data)
-      if (res.data.data.auctionId) {
-        auctionItems(res.data.data.auctionId)
-        console.log("Data", res.data.data)
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
-  
-  useEffect(() => {
-    auctionId()
-  }, [])
-  
 
   return (
     <div>
@@ -65,15 +26,15 @@ const ActionReady = () => {
             {/* flex items-center justify-center flex-col md:flex-row mt-[150px] */}
             <div className="flex items-center justify-center flex-col mt-[150px]">
               <div>
-                <LocationButton location={location[0]} type="user" auctionArticles={auctionArticles}/>
-                <LocationButton location={location[1]} type="user" auctionArticles={auctionArticles}/>
-                <LocationButton location={location[2]} type="user" auctionArticles={auctionArticles}/>
+                <LocationButton location={location[0]} type="user"/>
+                <LocationButton location={location[1]} type="user"/>
+                <LocationButton location={location[2]} type="user"/>
               </div>
               <div className="mt-[100px]">
-                <LocationButton location={location[3]} type="user" auctionArticles={auctionArticles}/>
-                <LocationButton location={location[4]} type="user" auctionArticles={auctionArticles}/>
-                <LocationButton location={location[5]} type="user" auctionArticles={auctionArticles}/>
-                <LocationButton location={location[6]} type="user" auctionArticles={auctionArticles}/>
+                <LocationButton location={location[3]} type="user"/>
+                <LocationButton location={location[4]} type="user"/>
+                <LocationButton location={location[5]} type="user"/>
+                <LocationButton location={location[6]} type="user"/>
               </div>
             </div>
           </section>              
