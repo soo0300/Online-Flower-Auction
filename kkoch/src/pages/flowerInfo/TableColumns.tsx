@@ -5,7 +5,7 @@ const CustomLinkCell = (params) => {
   const { value, row } = params;
   return (
     <Link
-      to={`/flowers/info/${row.flower}/${row.variety}`}
+      to={`/flowers/info/${row.type}/${row.name}`}
       state={{ flowerData: row }}
     >
       {value}

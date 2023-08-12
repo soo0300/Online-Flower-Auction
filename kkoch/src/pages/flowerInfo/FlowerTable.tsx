@@ -43,7 +43,7 @@ const TestComponent = (props) => {
       }));
       setFilteredTableData(dataWithId);
       setTableData(dataWithId);
-      console.log(tableData)
+      // console.log(tableData)
     })
     .catch(() => {
       setIsLoading(false); 
@@ -57,11 +57,11 @@ const TestComponent = (props) => {
   const handleFilterChange = (filter: FilterValues) => {
     const filterData = tableData.filter((item) => {
       return (
-        ((filter.startDate.format('YYYY-MM-DD') <= formatDate(new Date(item.bidTime))) && 
-        (filter.endDate.format('YYYY-MM-DD') >= formatDate(new Date(item.bidTime)))) &&
-        (!filter.flower || item.type === filter.flower) &&
-        (!filter.variety || item.name === filter.variety) &&
-        (!filter.location || item.region === filter.location)
+          ((filter.startDate.format('YYYY-MM-DD') <= formatDate(new Date(item.bidTime))) && 
+          (filter.endDate.format('YYYY-MM-DD') >= formatDate(new Date(item.bidTime)))) &&
+          (!filter.flower || item.type === filter.flower) &&
+          (!filter.variety || item.name === filter.variety) &&
+          (!filter.location || item.region === filter.location)
         );
       });
       setFilteredTableData(filterData);

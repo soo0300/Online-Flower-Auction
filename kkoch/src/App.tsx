@@ -45,7 +45,7 @@ function App() {
 
           <Route path={"/flowers/"} element={<TradingInfo />}/>
           <Route path={"/flowers/:code"} element={<TradingInfo />}/>
-          <Route path={"/flowers/info/:flower/:variety"} element={<FlowerDetail />}/>
+          <Route path={"/flowers/info/:type/:name"} element={<FlowerDetail />}/>
           
           <Route path={"/notices"} element={<Notice />}/>
           <Route path={"/notices/:noticeId"} element={<NoticeDetail />}/>
