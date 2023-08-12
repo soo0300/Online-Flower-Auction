@@ -507,8 +507,7 @@
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr class="text-center">
-                        <th scope="col">#</th>
-                        <th scope="col">구분코드</th>
+                            <th scope="col">구분코드</th>
                         <th scope="col">경매시간</th>
                         <th scope="col">일정 생성일</th>
                         <th scope="col">입장</th>
@@ -519,13 +518,21 @@
                     <tbody class="text-center">
 
                     <tr th:each="auction : ${auctions}">
-                        <td th:text="${auction.auctionId}">1</td>
+                        <td style="display:none" th:text="${auction.auctionId}">1</td>
                         <td th:text="${auction.code}">절화</td>
                         <td th:text="${auction.startTime}">23. 9. 13. 오전 11:00</td>
                         <td th:text="${auction.createdDate}">23. 9. 20. 오전 5:00</td>
                         <td>입장</td>
+
                         <td>
-                            <span class="badge text-bg-primary w-100" th:text="${auction.status}"></span>
+                            <label>
+                                <select name="status" class="form-control"
+                                        th:attr="onchange='updateStatus(this.value, ' + ${auction.auctionId} + ')'">
+                                    <option value="CLOSE" th:selected="${auction.status.toString()} == 'CLOSE'" >CLOSE</option>
+                                    <option value="READY" th:selected="${auction.status.toString()} == 'READY'">READY</option>
+                                    <option value="OPEN" th:selected="${auction.status.toString()} == 'OPEN'">OPEN</option>
+                                </select>
+                            </label>
                         </td>
                         <td>
                             <a th:href="@{/admin-service/intranet/articles/{auctionId}(auctionId=${auction.auctionId})}">관리</a>
@@ -590,6 +597,16 @@
     </div>
 
 </div>
+<script th:inline="javascript">
+    function updateStatus(newStatus, auctionId) {
+        // AJAX 요청 생성
+        const uri = '/admin-service/auctions/' + auctionId + "/" + newStatus; // 백엔드 API 경로
+        const params = {};
+
+        callApi(uri, 'patch', params);
+    }
+</script>
+
 <script
         src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
@@ -624,7 +641,7 @@
 
         callApi(uri, 'post', params)
 
-        location.href="/admin-service/"
+        location.href = "/admin-service/"
         $('#addAuctionButton').modal('hide');
     });
 
