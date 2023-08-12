@@ -33,7 +33,7 @@ function App() {
   }, []);
 
   return (
-    <div className="app bg-gray-20 h-[100%]">
+    <div className="app">
       <BrowserRouter>
         <Navbar isTop={isTop}/>
         {/* 라우팅 정보 */}

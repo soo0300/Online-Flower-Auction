@@ -4,10 +4,9 @@ import './LocationButton.css';
 type Props = {
 	location: React.ReactNode;
 	type: string;
-	auctionArticles: object;
 }
 
-const LocationButton = ({location, type, auctionArticles } : Props) => {
+const LocationButton = ({location, type } : Props) => {
 	const navigate = useNavigate();
 
 	// 양재 지역만 활성화 하기 위한 handler
@@ -37,7 +36,6 @@ const LocationButton = ({location, type, auctionArticles } : Props) => {
 							// const sessionId = JSON.parse(message).sessionId;
 							navigate("/auction/liveSession", {   
 							state: {
-								auctionArticles: auctionArticles,
 								sessionId: message,
 							}});
 
