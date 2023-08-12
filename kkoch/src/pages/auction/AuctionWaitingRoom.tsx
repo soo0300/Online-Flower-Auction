@@ -131,6 +131,7 @@ const AuctionWaitingRoom: React.FC = () => {
       // console.log('카메라상태', isCameraOn)
       if (isCameraOn) {
         publisher.publishVideo(false); // 카메라 끄기
+        
       } else {
         publisher.publishVideo(true); // 카메라 켜기
       }
