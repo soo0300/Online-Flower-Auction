@@ -148,7 +148,8 @@
     />
     <!-- Custom styles for this template -->
     <link href="/asserts/css/dashboard.css" rel="stylesheet"/>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script th:src="@{/asserts/js/function.js}"></script>
 
 </head>
@@ -583,7 +584,7 @@
                         >
                         <input
                                 type="datetime-local"
-                                id ="auctionTime"
+                                id="auctionTime"
                                 class="form-control"
                         />
                     </div>
@@ -642,7 +643,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id ="addAriticle">등록</button>
+                    <button type="button" class="btn btn-primary" id="addAriticle">등록</button>
                 </div>
             </div>
         </div>
@@ -668,14 +669,16 @@
         const selecteCode = document.getElementById('auctionCode').value;
         console.log(selecteCode);
         // 선택한 type 값 가져오기
-        const auctionTime = document.getElementById('auctionTime').value;
-        const formattedDated = moment('YYYY-MM-DD[T]HH:mm:ss.SSS')
-        console.log(formattedDated);
+        let auctionTime = document.getElementById('auctionTime').value;
+
+        console.log(auctionTime);
+
+        const formattedTime = moment(auctionTime).format("YYYY-MM-DDTHH:mm:sszz")
         // 백엔드 API 호출
         const uri = '/admin-service/auctions'; // 백엔드 API 경로
         const params = {
             code: selecteCode,
-            startTime: formattedDated
+            startTime: formattedTime
         };
 
         callApi(uri, 'post', params)
