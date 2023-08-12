@@ -35,7 +35,7 @@ const LocationButton = ({location, type, auctionArticles } : Props) => {
 					// Json으로 파싱하여 방 session을 받는다.
 					if (message!=="not start auction") {
 							// const sessionId = JSON.parse(message).sessionId;
-							navigate("/auction/waitingroom", {   
+							navigate("/auction/liveSession", {   
 							state: {
 								auctionArticles: auctionArticles,
 								sessionId: message,

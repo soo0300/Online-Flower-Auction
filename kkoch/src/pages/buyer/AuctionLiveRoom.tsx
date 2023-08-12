@@ -2,8 +2,8 @@ import { OpenVidu } from 'openvidu-browser';
 
 import axios from 'axios';
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
-import UserVideoComponent from './UserVideoComponent';
-import AuctionLiveForm from "./AuctionLiveForm"
+import UserVideoComponent from '../auction/UserVideoComponent';
+import AuctionLiveForm from "../auction/AuctionLiveForm"
 import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Navigate } from "react-router-dom"
