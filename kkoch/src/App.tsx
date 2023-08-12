@@ -2,7 +2,7 @@ import Navbar from "@/pages/navbar";
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import { useEffect, useState } from "react";
 import AuctionLocation from "@/pages/auction/AuctionLocation";
-import AuctionWaitingRoom from "@/pages/auction/AuctionWaitingRoom";
+import AuctionWaitingRoom from "@/pages/auction/AuctoinLiveSession";
 import MainPage from "@/pages/mainPages/MainPage";
 import Login from "@/pages/user/login/LoginPage";
 import Signup from "@/pages/user/signUp/SignUpPage";
@@ -33,7 +33,7 @@ function App() {
   }, []);
 
   return (
-    <div className="app bg-gray-20">
+    <div className="app bg-gray-20 h-[100%]">
       <BrowserRouter>
         <Navbar isTop={isTop}/>
         {/* 라우팅 정보 */}
