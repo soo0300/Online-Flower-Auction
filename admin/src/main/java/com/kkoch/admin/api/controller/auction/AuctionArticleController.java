@@ -52,6 +52,7 @@ public class AuctionArticleController {
         log.info("<경매 일정 당 경매품 목록조회)> AuctionArticleController");
         List<AuctionArticlesResponse> response = auctionArticleQueryService.getAuctionArticleList(auctionId);
         model.addAttribute("articles", response);
+        model.addAttribute("auctionId",auctionId);
         return "article";
     }
 }

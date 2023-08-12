@@ -27,7 +27,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-    <!-- 필요한 스타일시트를 추가할 수 있습니다. -->
     <style>
         .container {
             text-align: center;
@@ -47,7 +46,7 @@
             padding: 15px;
         }
     </style>
-    <script th:src="@{asserts/js/function.js}"></script>
+    <script th:src="@{/asserts/js/function.js}"></script>
 
 </head>
 <body>
@@ -121,7 +120,6 @@
             updateNameSelect(selectedType);
         });
 
-        // 이전 코드 생략
         // 추가 버튼 클릭 시 모달 창 열기
         const addCategoryModal = document.getElementById('addCategoryModal');
         const addCategoryButton = document.getElementById('addCategoryButton');
