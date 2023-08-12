@@ -1,6 +1,6 @@
 package com.kkoch.admin.docs.auction;
 
-import com.kkoch.admin.api.controller.auction.AuctionArticleController;
+import com.kkoch.admin.api.controller.auction.AuctionArticleApiController;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlePeriodSearchResponse;
 import com.kkoch.admin.api.controller.auction.response.AuctionArticlesResponse;
 import com.kkoch.admin.api.service.auction.AuctionArticleQueryService;
@@ -33,14 +33,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuctionArticleControllerDocsTest extends RestDocsSupport {
+public class AuctionArticleApiControllerDocsTest extends RestDocsSupport {
 
     private final AuctionArticleService auctionArticleService = mock(AuctionArticleService.class);
     private final AuctionArticleQueryService auctionArticleQueryService = mock(AuctionArticleQueryService.class);
 
     @Override
     protected Object initController() {
-        return new AuctionArticleController(auctionArticleService, auctionArticleQueryService);
+        return new AuctionArticleApiController(auctionArticleService, auctionArticleQueryService);
     }
 
     @DisplayName("실시간 낙찰 내역(기간) 조회 API")
