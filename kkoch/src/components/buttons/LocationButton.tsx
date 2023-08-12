@@ -9,7 +9,7 @@ type Props = {
 
 const LocationButton = ({location, type, auctionArticles } : Props) => {
 	const navigate = useNavigate();
-	
+
 	// 양재 지역만 활성화 하기 위한 handler
   const handleCheck = () => {
     if (location === "aT화훼공판장(양재동)") {
@@ -23,29 +23,32 @@ const LocationButton = ({location, type, auctionArticles } : Props) => {
 				socket.addEventListener('open', () => {
 					console.log("---------------------------------")
 					console.log('WebSocket connected'); // 웹소켓 연결 확인 메시지 출력
+					socket.send(JSON.stringify({role:"client"}))
 				});
-				
+
 				// 서버에 들어가자마자 openVidu 방 코드 받기
 				socket.addEventListener("message", (e) => {
-					console.log(e);
 					const message = e.data;
 					console.log("getmessage", message)
+					console.log(message ? true:false)
 					// 들어갔을때 관리자가 방을 열었으면 sessionId가 포함된 메세지를 받을것이고
 					// Json으로 파싱하여 방 session을 받는다.
-					if (message) {
+					if (message!=="not start auction") {
 							// const sessionId = JSON.parse(message).sessionId;
 							navigate("/auction/waitingroom", {   
 							state: {
 								auctionArticles: auctionArticles,
-								sessionId: message
+								sessionId: message,
 							}});
 
 							return;
-					}  
+					}  else {
+						alert("경매 시작 전입니다.")
+						socket.close(); // 소캣 연결 종료
+					}
 
-					alert("경매 시작 전입니다.")
-					socket.close(); // 소캣 연결 종료
 				});
+				
 		
 			}else{
 				alert("잘못된 접근입니다.")

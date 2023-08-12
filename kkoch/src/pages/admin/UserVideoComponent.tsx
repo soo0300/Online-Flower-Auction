@@ -1,6 +1,5 @@
 import React from 'react';
 import OpenViduVideoComponent from './OvVideo';
-import './UserVideo.css';
 
 export default function UserVideoComponent({ streamManager }) {
 
@@ -10,13 +9,14 @@ export default function UserVideoComponent({ streamManager }) {
     }
 
     return (
-        <div>
-            {streamManager !== undefined ? (
-                <div className="streamcomponent">
+        <>
+            {streamManager !== undefined && streamManager.stream.connection.data.indexOf('관리자') === -1 ? (
+                <div className="mt-3">
                     <OpenViduVideoComponent streamManager={streamManager} />
-                    <div><p>{getNicknameTag()}</p></div>
+                    <div><p className='font-bold'>{getNicknameTag()}</p></div>
                 </div>
+                    
             ) : null}
-        </div>
+        </>
     );
 }

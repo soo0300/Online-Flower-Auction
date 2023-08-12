@@ -10,7 +10,7 @@ const getNicknameTag = () => {
 
 	return (
 		<div>
-			{streamManager !== undefined && getNicknameTag().includes("관리자") ? (
+			{streamManager !== undefined && getNicknameTag().indexOf("관리자") !== -1 ? (
 				<div className="streamcomponent">
 					<OpenViduVideoComponent streamManager={streamManager} />
 					<div><p>{getNicknameTag()}</p></div>
