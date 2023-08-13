@@ -106,8 +106,8 @@ const WebSocketComponent = () => {
       // memberInfo 갱신 후 JSON 변환 후 전송
       axios({
         method: "post",
-        // url: "/api/auction-service/auctions/participant",
-        url: "/api/api/auction-service/auctions/participant",
+        url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
+        // url: "/api/api/auction-service/auctions/participant",
         data: {
           "memberKey": memberToken,
           "auctionArticleId": auctionNowInfo.auctionArticleId,

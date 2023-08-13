@@ -166,6 +166,8 @@ const AuctionLiveRoom = () => {
             <div className=''>
               {subscribers.map((sub, i) => (
                 JSON.parse(sub.stream.connection.data).clientData >= 0 && (
+
+									
                   <div className="" onClick={() => handleMainVideoStream(sub)}>
                     <UserVideoComponent streamManager={sub} />
                   </div>
