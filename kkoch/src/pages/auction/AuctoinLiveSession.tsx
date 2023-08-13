@@ -2,10 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { OpenVidu } from 'openvidu-browser';
 import CameraOff from '@/assets/cameraOff.png';
 import axios from 'axios';
-// import Video from '../buyer/VideoRoom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserVideoComponent from './UserVideoComponent';
-// import AuctionLiveForm from './AuctionLiveForm';
 import WebSocketComponent from '@/components/webSocket/webSocket';
 import './AuctoinLiveSession.css';
 
@@ -238,7 +236,6 @@ const AuctionWaitingRoom: React.FC = () => {
               ))}
             </div>
             <WebSocketComponent />
-            {/* <AuctionLiveForm auctionArticles={auctionArticles}/> */}
           </div>
         </div>
       ) : null}

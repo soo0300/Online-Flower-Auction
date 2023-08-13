@@ -1,11 +1,9 @@
 import { OpenVidu } from 'openvidu-browser';
-// import SocketIO from "socket.io";
 
 import axios from 'axios';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import UserVideoComponent from './UserVideoComponent';
 import Clock from '@/components/Clock/Clock';
-import { useDispatch } from 'react-redux';
 
 import "./openSessoin.css";
 
@@ -24,7 +22,6 @@ export default function OpenSession() {
   let curSessionId = null;
 
   const videoLog = useRef(null);
-  const dispatch = useDispatch();
 
   const OV = useRef(new OpenVidu());
   
@@ -72,7 +69,8 @@ export default function OpenSession() {
   const handleStartAuction = () => {
     axios({
       method: 'get',
-      url: '/api/api/admin-service/auctions/api'
+      url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
+      // url: '/api/api/admin-service/auctions/api'
     })
     .then((res) => {
       console.log(res.data.data.auctionId)
@@ -131,7 +129,6 @@ export default function OpenSession() {
     mySession.on('streamCreated', (event) => {
       const subscriber = mySession.subscribe(event.stream, undefined);
       const name = JSON.parse(event.stream.connection.data).clientData
-			dispatch({ type: 'ADD_SUBSCRIBER', payload: subscriber });
 
       if (name.indexOf("관리자") === -1) {
         appendToVideoLog(`${name} 번 경매자가 입장 하였습니다.`);
@@ -140,7 +137,6 @@ export default function OpenSession() {
     });
     
     mySession.on('streamDestroyed', (event) => {
-			dispatch({ type: 'REMOVE_SUBSCRIBER', payload: event.stream.streamManager });
       console.log('Stream destroyed:', event.stream.connection.data);
       const name = JSON.parse(event.stream.connection.data).clientData
   
