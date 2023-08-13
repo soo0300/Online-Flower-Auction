@@ -26,15 +26,12 @@ public class NoticeQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<NoticeResponse> getAllNotices(){
+    public List<NoticeResponse> getAllNotices() {
         return queryFactory
                 .select(Projections.constructor(NoticeResponse.class,
-                        notice.id,
-                        notice.title,
-                        notice.content
-//                        notice.createdDate,
-//                        notice.admin,
-//                        notice.lastModifiedDate
+                                notice.id,
+                                notice.title,
+                                notice.content
                         )
                 )
                 .from(notice)
