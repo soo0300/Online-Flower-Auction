@@ -31,4 +31,14 @@ public class MemberQueryRepository {
             .where(member.memberKey.eq(memberKey))
             .fetchFirst();
     }
+
+    public Boolean existEmail(String email) {
+        Integer content = queryFactory
+            .selectOne()
+            .from(member)
+            .where(member.email.eq(email))
+            .fetchFirst();
+
+        return content != null;
+    }
 }

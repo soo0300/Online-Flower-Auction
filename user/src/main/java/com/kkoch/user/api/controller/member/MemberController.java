@@ -50,4 +50,10 @@ public class MemberController {
         MemberResponse response = memberService.withdrawal(memberKey, request.getPwd());
         return ApiResponse.ok(response);
     }
+
+    @PostMapping("/check-email")
+    public ApiResponse<Boolean> checkEmail(@RequestBody CheckEmailRequest request) {
+        boolean result = memberQueryService.validationEmail(request.getEmail());
+        return ApiResponse.ok(result);
+    }
 }

@@ -1,5 +1,5 @@
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
-import { React, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TableFilter from './TableFilter';
 import axios from 'axios';
 import FilterValues from './TableInterface';

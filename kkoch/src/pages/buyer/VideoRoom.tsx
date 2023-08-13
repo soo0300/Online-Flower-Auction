@@ -2,7 +2,7 @@ import { OpenVidu } from 'openvidu-browser';
 
 import axios from 'axios';
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
-import UserVideoComponent from './UserVideoComponent';
+// import UserVideoComponent from './UserVideoComponent';
 
 import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -170,7 +170,7 @@ export default function Video() {
 						{subscribers.map((sub, i) => (
 							<div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
 								<span>{sub.id}</span>
-								<UserVideoComponent streamManager={sub} />
+								{/* <UserVideoComponent streamManager={sub} /> */}
 							</div>
 						))}
 					</div>

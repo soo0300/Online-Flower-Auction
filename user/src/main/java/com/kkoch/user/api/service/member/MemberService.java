@@ -24,37 +24,6 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public MemberResponse join(JoinMemberDto dto) {
-        dto.setMemberKey(UUID.randomUUID().toString());
-        Member member = dto.toEntity(passwordEncoder.encode(dto.getPwd()));
-
-        Member savedMember = memberRepository.save(member);
-
-        return MemberResponse.of(savedMember);
-    }
-
-    public MemberResponse setPassword(String memberKey, String currentPwd, String newPwd) {
-        Member member = memberRepository.findByMemberKey(memberKey)
-            .orElseThrow(NoSuchElementException::new);
-
-        member.changePwd(passwordEncoder.encode(newPwd));
-
-        return MemberResponse.of(member);
-    }
-
-    public MemberResponse withdrawal(String memberKey, String pwd) {
-        Member member = memberRepository.findByMemberKey(memberKey)
-            .orElseThrow(NoSuchElementException::new);
-
-        boolean matches = passwordEncoder.matches(pwd, member.getEncryptedPwd());
-        if (!matches) {
-            throw new IllegalArgumentException();
-        }
-
-        member.withdrawal();
-        return MemberResponse.of(member);
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Member> findMember = memberRepository.findByEmail(email);
@@ -69,6 +38,34 @@ public class MemberService implements UserDetailsService {
             new ArrayList<>()); //권한
     }
 
+    public MemberResponse join(JoinMemberDto dto) {
+        dto.setMemberKey(UUID.randomUUID().toString());
+        Member member = dto.toEntity(passwordEncoder.encode(dto.getPwd()));
+
+        Member savedMember = memberRepository.save(member);
+
+        return MemberResponse.of(savedMember);
+    }
+
+    public MemberResponse setPassword(String memberKey, String currentPwd, String newPwd) {
+        Member member = getMember(memberKey);
+
+        matchCurrentPwd(currentPwd, member);
+
+        member.changePwd(passwordEncoder.encode(newPwd));
+
+        return MemberResponse.of(member);
+    }
+
+    public MemberResponse withdrawal(String memberKey, String pwd) {
+        Member member = getMember(memberKey);
+
+        matchCurrentPwd(pwd, member);
+
+        member.withdrawal();
+        return MemberResponse.of(member);
+    }
+
     public Member getUserDetailsByEmail(String email) {
         Optional<Member> findMember = memberRepository.findByEmail(email);
 
@@ -77,5 +74,17 @@ public class MemberService implements UserDetailsService {
         }
 
         return findMember.get();
+    }
+
+    private Member getMember(String memberKey) {
+        return memberRepository.findByMemberKey(memberKey)
+            .orElseThrow(NoSuchElementException::new);
+    }
+
+    private void matchCurrentPwd(String currentPwd, Member member) {
+        boolean matches = passwordEncoder.matches(currentPwd, member.getEncryptedPwd());
+        if (!matches) {
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
     }
 }

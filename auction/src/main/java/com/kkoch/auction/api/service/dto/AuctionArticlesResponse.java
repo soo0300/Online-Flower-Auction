@@ -38,4 +38,29 @@ public class AuctionArticlesResponse implements Serializable {
         this.region = region;
         this.shipper = shipper;
     }
+
+    public String toJson() {
+        return String.format("{" +
+                "\"auctionArticleId\":%d," +
+                "\"auctionNumber\":\"%s\"," +
+                "\"code\":\"%s\"," +
+                "\"type\":\"%s\"," +
+                "\"name\":\"%s\"," +
+                "\"count\":%d," +
+                "\"startPrice\":%d," +
+                "\"grade\":\"%s\"," +
+                "\"region\":\"%s\"," +
+                "\"shipper\":\"%s\"" +
+                "}", this.auctionArticleId,
+            this.auctionNumber,
+            this.code,
+            this.type,
+            this.name,
+            this.count,
+            this.startPrice,
+            this.grade,
+            this.region,
+            this.shipper);
+    }
+
 }

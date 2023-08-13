@@ -13,15 +13,15 @@ const SelectArea = () => {
 
       <div className="flex items-center justify-center flex-col mt-[150px]">
         <div>
-          <LocationButton location={location[0]} type="admin" auctionArticles={[]}/>
-          <LocationButton location={location[1]} type="admin" auctionArticles={[]}/>
-          <LocationButton location={location[2]} type="admin" auctionArticles={[]}/>
+          <LocationButton location={location[0]} type="admin"/>
+          <LocationButton location={location[1]} type="admin"/>
+          <LocationButton location={location[2]} type="admin"/>
         </div>
         <div className="mt-[100px]">
-          <LocationButton location={location[3]} type="admin" auctionArticles={[]}/>
-          <LocationButton location={location[4]} type="admin" auctionArticles={[]}/>
-          <LocationButton location={location[5]} type="admin" auctionArticles={[]}/>
-          <LocationButton location={location[6]} type="admin" auctionArticles={[]}/>
+          <LocationButton location={location[3]} type="admin"/>
+          <LocationButton location={location[4]} type="admin"/>
+          <LocationButton location={location[5]} type="admin"/>
+          <LocationButton location={location[6]} type="admin"/>
         </div>
       </div>
     </section>
