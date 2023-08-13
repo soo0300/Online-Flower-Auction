@@ -11,7 +11,7 @@
             content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
     />
     <meta name="generator" content="Hugo 0.112.5"/>
-    <title>꽃향기</title>
+    <title>꽃향기 | 경매일정관리</title>
 
     <link
             rel="canonical"
@@ -58,6 +58,12 @@
     />
     <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico"/>
     <meta name="theme-color" content="#712cf9"/>
+
+    <!--CDN START-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <!--CDN END-->
 
     <style>
         .bd-placeholder-img {
@@ -142,6 +148,9 @@
     />
     <!-- Custom styles for this template -->
     <link href="/asserts/css/dashboard.css" rel="stylesheet"/>
+
+    <script th:src="@{/asserts/js/function.js}"></script>
+
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
@@ -240,7 +249,7 @@
     <a
             class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white"
             href="#"
-    >KKOCH</a
+    >꽃향기</a
     >
 
     <ul class="navbar-nav flex-row d-md-none">
@@ -461,8 +470,18 @@
             <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
             >
-                <h1 class="h2">Dashboard</h1>
+                <h1 class="h2">경매일정관리</h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <button
+                                type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#addInsertAuction"
+                        >
+                            일정등록
+                        </button>
+                    </div>
                     <div class="btn-group me-2">
                         <button type="button" class="btn btn-sm btn-outline-secondary">
                             Share
@@ -483,39 +502,150 @@
                 </div>
             </div>
 
-            <canvas
-                    class="my-4 w-100"
-                    id="myChart"
-                    width="900"
-                    height="380"
-            ></canvas>
-
-            <h2>Section title</h2>
             <div class="table-responsive small">
                 <table class="table table-striped table-sm">
                     <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th scope="col">#</th>
                         <th scope="col">구분코드</th>
                         <th scope="col">경매시간</th>
-                        <th scope="col">방상태</th>
                         <th scope="col">일정 생성일</th>
                         <th scope="col">입장</th>
+                        <th scope="col">방상태</th>
+                        <th scope="col">경매품 추가</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>1,001</td>
-                        <td>random</td>
-                        <td>data</td>
-                        <td>placeholder</td>
-                        <td>text</td>
+                    <tbody class="text-center">
+
+                    <tr th:each="auction : ${auctions}">
+                        <td th:text="${auction.auctionId}">1</td>
+                        <td th:text="${auction.code}">절화</td>
+                        <td th:text="${auction.startTime}">23. 9. 13. 오전 11:00</td>
+                        <td th:text="${auction.createdDate}">23. 9. 20. 오전 5:00</td>
+                        <td>입장</td>
+                        <td>
+                            <span class="badge text-bg-primary w-100" th:text="${auction.status}"></span>
+                        </td>
+                        <td>
+                            <button
+                                    type="button"
+                                    class="btn btn-sm btn-outline-secondary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#addAuctionArticle"
+                            >
+                                추가
+                            </button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </main>
+    </div>
+    <!-- 경매 일정 Modal -->
+    <div
+            class="modal fade"
+            id="addInsertAuction"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="addInsertAuctionLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addInsertAuctionLabel">
+                        경매 일정 등록
+                    </h1>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="auctionCode" class="form-label"
+                        >구분코드</label
+                        >
+                        <select id="auctionCode" class="form-select" aria-label="Default select example">
+                            <option value="1" selected>절화</option>
+                            <option value="2">난</option>
+                            <option value="3">관엽</option>
+                            <option value="4">춘란</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="auctionTime" class="form-label"
+                        >경매 시간</label
+                        >
+                        <input
+                                type="datetime-local"
+                                id="auctionTime"
+                                class="form-control"
+                        />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addAuctionButton">등록</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 경매품 추가 Modal -->
+    <div
+            class="modal fade"
+            id="addAuctionArticle"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            tabindex="-1"
+            aria-labelledby="addInsertAuctionLabel"
+            aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addInsertAritcleLabel">
+                        경매품 등록
+                    </h1>
+                    <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                    ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="auctionCode" class="form-label"
+                        >구분코드</label
+                        >
+                        <select id="ariticleCode" class="form-select" aria-label="Default select example">
+                            <option value="1" selected>절화</option>
+                            <option value="2">난</option>
+                            <option value="3">관엽</option>
+                            <option value="4">춘란</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="articleTime" class="form-label"
+                        >경매 시간</label
+                        >
+                        <input
+                                type="datetime-local"
+                                id="articleTime"
+                                class="form-control"
+                        />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addAriticle">등록</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script
@@ -529,8 +659,33 @@
         integrity="sha384-gdQErvCNWvHQZj6XZM0dNsAoY4v+j5P1XDpNkcM3HJG1Yx04ecqIHk7+4VBOCHOG"
         crossorigin="anonymous"
 ></script>
-<script src="/asserts/js/dashboard.js"></script>
+<script src="/assert/js/dashboard.js"></script>
 </body>
+<!--함수 작성-------------------------->
+<script>
+    const addAuctionButton = document.getElementById('addAuctionButton');
+    addAuctionButton.addEventListener('click', function () {
+        const selecteCode = document.getElementById('auctionCode').value;
+        console.log(selecteCode);
+        // 선택한 type 값 가져오기
+        const auctionTime = document.getElementById('auctionTime').value;
+        const formattedDated = moment();
+
+        console.log(formattedDated);
+        // 백엔드 API 호출
+        const uri = '/admin-service/auctions'; // 백엔드 API 경로
+        const params = {
+            code: selecteCode,
+            startTime: formattedDated.format("YYYY-MM-DDTHH:mm:sszz")
+        };
+
+        callApi(uri, 'post', params)
+
+        $('#addAuctionButton').modal('hide');
+    });
+
+</script>
+<!----------------------------------->
 <script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
