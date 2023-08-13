@@ -20,6 +20,8 @@ public class NoticeQueryService {
 
     private final NoticeQueryRepository noticeQueryRepository;
 
+    public List<NoticeResponse> getAllNotices() {return noticeQueryRepository.getAllNotices(); }
+
     public Page<NoticeResponse> getNotices(NoticeSearchCond cond, Pageable pageable) {
         List<NoticeResponse> content = noticeQueryRepository.getNoticeByCondition(cond, pageable);
 
