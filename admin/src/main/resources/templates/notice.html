@@ -502,17 +502,19 @@
                     <tr class="text-center">
                         <th scope="col">#</th>
                         <th scope="col" id="showPk">PK</th>
+                        <th scope="col">공지번호</th>
                         <th scope="col">제목</th>
                         <th scope="col">내용</th>
                         <th scope="col">수정</th>
-                        <th scope="col">삭제</th>
+                        <th scope="col">상태</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
                     <tr th:each="notice, noticeStat : ${notices}">
                         <td th:text="${noticeStat.count}">3</td>
-                        <td th:text="${notice.no}" id="herePk">1</td>
-                        <td th:text="${notice.title}">공지1</td>
+                        <td th:text="${notice.noticeId}" id="herePk">1</td>
+                        <td th:text="${notice.no}" id="hereNum">1</td>
+                        <td th:text="${notice.title}" id="hereTitle">공지1</td>
                         <td th:text="${notice.content}" id="hereContent">공지 content</td>
                         <td>
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
@@ -520,7 +522,7 @@
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger btn-sm deleteButton">삭제</button>
+                            <button class="btn btn-danger btn-sm deleteButton">변경</button>
                         </td>
                     </tr>
                     </tbody>
@@ -564,23 +566,21 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         let findId = 1; // 초기값 설정
-        let adminTelDisplay;
-        let adminPwDisplay;
-        let adminActiveDisplay;
+        let row;
+        let noticeTitleDisplay;
+        let noticeContentDisplay;
 
         const getPkButtons = document.querySelectorAll('.btn-danger[data-bs-toggle="modal"][data-bs-target="#editModal"]');
         const deleteButtons = document.querySelectorAll('.deleteButton');
 
-
         getPkButtons.forEach(button => {
             button.addEventListener('click', async function () {
-                const row = button.closest('tr');
-                const adminIdDisplay = row.querySelector('#herePk');
-                adminTelDisplay = row.querySelector('#hereTel');
-                adminPwDisplay = row.querySelector('#herePw')
-                adminActiveDisplay = row.querySelector('#hereActive');
-                if (adminIdDisplay) {
-                    findId = adminIdDisplay.textContent;
+                row = button.closest('tr');
+                const noticeIdDisplay = row.querySelector('#herePk');
+                noticeTitleDisplay = row.querySelector('#hereTitle');
+                noticeContentDisplay = row.querySelector('#hereContent')
+                if (noticeIdDisplay) {
+                    findId = noticeIdDisplay.textContent;
                     console.log(findId);
                 } else {
                     console.error('Cannot find adminIdDisplay');
@@ -591,7 +591,7 @@
 
         deleteButtons.forEach(button => {
             button.addEventListener('click', async function () {
-                const row = button.closest('tr');
+                row = button.closest('tr');
                 const adminIdDisplay = row.querySelector('#herePk');
                 if (adminIdDisplay) {
                     findId = adminIdDisplay.textContent;
@@ -606,44 +606,48 @@
         const savedTelInput = document.getElementById('savedTel');
         const savedPwInput = document.getElementById('savedPw');
 
-        editAdminButton.addEventListener('click', async function () {
-            const savedTelDisplay = document.getElementById('savedTelDisplay');
-
-            adminTelDisplay = savedTelInput.value;
-            adminPwDisplay = savedPwInput.value;
-            console.log("adminPw" + adminPwDisplay.textContent);
-
-            console.log("in" + findId);
-
-
-            const params = {
-                tel: adminTelDisplay,
-                loginPw: adminPwDisplay
-            };
-
-            try {
-                const response = callApi(`/admin-service/admins/${findId}`, 'patch', params);
-                console.log('API 호출 결과:', response);
-                // 성공적으로 처리된 경우에 대한 로직 추가
-            } catch (error) {
-                console.error('API 호출 에러:', error);
-                // 에러 처리 로직 추가
-            }
-        });
+        // editAdminButton.addEventListener('click', async function () {
+        //     const savedTelDisplay = document.getElementById('savedTelDisplay');
+        //
+        //     adminTelDisplay = savedTelInput.value;
+        //     adminPwDisplay = savedPwInput.value;
+        //     console.log("adminPw" + adminPwDisplay.textContent);
+        //
+        //     console.log("in" + findId);
+        //
+        //
+        //     const params = {
+        //         tel: adminTelDisplay,
+        //         loginPw: adminPwDisplay
+        //     };
+        //
+        //     try {
+        //         const response = callApi(`/admin-service/admins/${findId}`, 'patch', params);
+        //         console.log('API 호출 결과:', response);
+        //         // 성공적으로 처리된 경우에 대한 로직 추가
+        //     } catch (error) {
+        //         console.error('API 호출 에러:', error);
+        //         // 에러 처리 로직 추가
+        //     }
+        // });
 
         deleteButtons.forEach(deleteButton => {
             deleteButton.addEventListener('click', async function () {
-                callApi(`/admin-service/admins/${findId}`, 'delete');
+                console.log(findId);
+                try {
+                    const response = await fetch('/admin-service/intranet/'+findId+'/remove',{
+                        method : 'DELETE',
 
-                const adminActiveDisplay = deleteButton.closest('tr').querySelector('#hereActive');
-                if (adminActiveDisplay.textContent === '활성화 상태') {
-                    adminActiveDisplay.textContent = '비활성화 상태';
-                    adminActiveDisplay.style.color = 'blue';
-                    adminActiveDisplay.classList.add('bold-text');
-                } else {
-                    adminActiveDisplay.textContent = '활성화 상태';
-                    adminActiveDisplay.style.color = 'red';
-                    adminActiveDisplay.classList.add('bold-text');
+                    })
+                    if (response.ok) {
+                        // 성공적으로 삭제된 경우에 대한 로직 추가
+                        row.remove(); // 행을 삭제
+                    } else {
+                        // 삭제 실패한 경우에 대한 로직 추가
+                    }
+                } catch (error) {
+                    console.error('Error deleting notice:', error);
+                    // 에러 처리 로직 추가
                 }
             });
         });
@@ -687,7 +691,7 @@
                         aria-label="Close"
                 ></button>
             </div>
-            <form class="modal-body" th:action="@{/admins/add}" method="post" th:object="${form}">
+            <form class="modal-body" th:action="@{/admin-service/intranet/notice/add}" method="post" th:object="${form}">
                 <div class="mb-3">
                     <label for="title" class="form-label"
                     >제목</label
