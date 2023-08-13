@@ -1,4 +1,4 @@
-## 🧑‍💻👩‍💻 꽃향기
+# 🌹꽃향기
 
 <div align="center">
 <img src="./readme_assets/image/logo-removebg.png" height="200"> <span style="font-size: xx-large; justify-items: center" >실시간 화훼 경매 시스템</span>
@@ -6,13 +6,13 @@
 
 ---
 
-# 서비스 소개
+# 🌻서비스 소개
 
 꽃향기는 화훼 경매에 참여하는 도매상들을 위한 실시간 온라인 화훼 경매 서비스 입니다.
 
 집에서 간편하게 꽃을 보고 구매하세요.
 
-# 프로젝트 소개
+# 🌼프로젝트 소개
 
 - 진행 기간 : 2023.07.10 ~ 2023.08.18
 
@@ -28,11 +28,17 @@
 
 ### Front-end
 
-<br><br><br><br><br><br><br><br>
+| <img src="https://i.namu.wiki/i/R_1GB9wacsgjR61sACBysg_5Y4ygMDZgPOlrT5aVwjJStPixqHfWNZP33qn288cy-KVODo69r2FAbOitrKxwqKsQZ2pl-jHsCckqK2aO97ENVi5_fFCvSHPDez9pmDTwjGiW9PZKUvBK4XZ0MTXpsA.svg" alt="HTML5" width="100px"  height="100px"  /> | <img src="https://i.namu.wiki/i/-YBCCZqpprsMP89vNqcM1dICBjNf-IxRaukuXLJCcp8oQgEM0ARMk_fS0liXZRylAcZoQUg5g7MxrBkove1NmLyAn7t4C-q22LZ0Am-9cas-yJqyZ07b5QZz8SFd4MiWPUhPnW2jTpcuC3ipei6vyw.svg" alt="CSS3" width="100px" height="100px" /> | <img src="https://i.namu.wiki/i/p7DK2MHrcIylZFz4rbq0kp8w0-NZnLwuVAK-vkIpOwLSc9vzLhcZkuWFOXQt-ccDJy6tfJMhwFCV2PTapqzRR9-qnLDlNxxuuP0UDMkZ9-_9RQ1ITQil9tNp9hKt840cGPl92SSkv1wVGAOQuNxTtA.webp" alt="TypeScript" width="100px" height="100px" /> |
+|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                                                                                   HTML5                                                                                                                   |                                                                                                                  CSS3                                                                                                                  |                                                                                                                  TypeScript                                                                                                                   |
 
-| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/200px-React-icon.svg.png" object-fit="contian" width="100" > | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/CSS3_logo_and_wordmark.svg/180px-CSS3_logo_and_wordmark.svg.png"  alt="HTML5" width="100px" height="100px" /> |
-|:-----------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-|                                                                      React                                                                      |                                                                                       CSS3                                                                                        |
+| <img src="https://i.namu.wiki/i/lVfPXZ0dmrpwxPXqoBOzY0QnBABWVduuGjFx_xN2kieYI47MXvoKkUMBLXsa1CyRjq5FEjwsXfcpcoB2lMbgSTwEvE9qgkBMusPRMVrpzFjcAQwjLkbAQofyTZbftvIlrpX-dgUKFQOO715UMQFWrQ.svg" alt="React.js" width="100px" height="100px" /> | <img src="https://profilinator.rishav.dev/skills-assets/redux-original.svg" alt="Redux" width="100px" height="100px" /> | <img src="https://cdn.worldvectorlogo.com/logos/redux-saga.svg" alt="Redux-Saga" width="100px" height="100px" /> | <img src="https://react-query-v2.tanstack.com/_next/static/images/emblem-light-5d1cdce6c8bbb006ac6cefb8e1642877.svg" alt="React-Query" width="100px" height="100px" /> |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                                                                                   React                                                                                                                    |                                                          Redux                                                          |                                                    Redux-Saga                                                    |                                                                              React-Query                                                                               |
+
+| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Socket-io.svg/1200px-Socket-io.svg.png" alt="Socket.io" width="100px" height="100px" /> | <img src="https://raw.githubusercontent.com/emotion-js/emotion/main/emotion.png" alt="Emotion" width="100px" height="100px" /> | <img src="https://mui.com/static/logo.png" alt="MUI" width="100px" height="100px" /> | <img src="https://github.com/mswjs/msw/raw/main/media/msw-logo.svg" alt="Mock Service Worker" width="100px" height="100px" /> |
+|:--------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------:|
+|                                                   Socket.io                                                    |                                                            Emotion                                                             |                                         MUI                                          |                                                      Mock Service Worker                                                      |
 
 ### Back-end
 
@@ -54,7 +60,9 @@
 |:-------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |                                                              NGINX                                                              |                                                                                        aws EC2                                                                                        |                                                                                                                  Docker                                                                                                                   |
 
-### 📂 저장소
+오픈비두
+
+## 📂 저장소
 
 - **[🔎 Front-end 저장소](./kkoch)**
 - **[🔎 Back-end 저장소(관리자 서버)](./admin)**
@@ -62,7 +70,7 @@
 - **[🔎 Back-end 저장소(경매 서버)](./auction)**
 
 ---
-
+<!--
 ## 상세 기능 소개
 
 |   분류   |    기능     | 설명                                                      |
@@ -82,6 +90,7 @@
 |        | 낙찰 통계 기능  | 매일 오전 10시에 당일 진행했던 경매품에 대해 꽃과 등급별 평균을 계산해 기록합니다.        |
 |        | 낙찰 통계 기능  | 매일 오전 10시에 당일 진행했던 경매품에 대해 꽃과 등급별 평균을 계산해 기록합니다.        |
 |        | 낙찰 통계 기능  | 매일 오전 10시에 당일 진행했던 경매품에 대해 꽃과 등급별 평균을 계산해 기록합니다.        |
+-->
 
 ### 아키텍쳐
 
@@ -160,14 +169,16 @@
 
 ## 커밋 컨벤션
 
+규칙 `🎉feat: S09P12C204-이슈번호 내용`
+
 ```
-🎉feat: S09P12C204-000 
-🔨test: S09P12C204-000
-♻️refactor: S09P12C204-000 
-👀code review: S09P12C204-000 
-💿backup: S09P12C204-000 
-🌈style: S09P12C204-000 
-🚑fix: S09P12C204-000 
-📝docs: S09P12C204-000 
-🏗️build: S09P12C204-000 
+🎉feat: 새로운 기능을 추가할 경우
+🌈style: 기능에 영향을 주지 않는 커밋, 코드 순서, CSS등의 포맷에 관한 커밋
+🚑fix: 버그를 고친 경우 🚨
+♻️refactor: 프로덕션 코드 리팩토링
+🔨test: 테스트 코드 작성
+📝docs: main 문서를 수정한 경우, 파일 삭제, 파일명 수정 등
+👀code review: 코드 리뷰 반영
+🏗️build: 빌드 변경
+💿backup: 백업
 ```
