@@ -34,7 +34,7 @@ public class AdminController {
         if (loginAdmin == null) {
             return "index";
         }
-        return "dashboard";
+        return "index";
     }
 
     @PostMapping("/login")
@@ -62,4 +62,11 @@ public class AdminController {
         log.info("admin={}", adminId);
         return "redirect:/admins";
     }
+
+    @GetMapping("/notice")
+    public String adminBoardPage(){
+//        return "redirect:/board";
+        return "notice";
+    }
+
 }

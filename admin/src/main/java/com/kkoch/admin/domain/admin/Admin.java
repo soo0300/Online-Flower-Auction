@@ -33,7 +33,7 @@ public class Admin extends TimeBaseEntity {
     @Column(nullable = false, length = 2)
     private String position;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
     private boolean active;
 
     @Builder
