@@ -240,7 +240,7 @@ const AuctionWaitingRoom: React.FC = () => {
               ))}
             </div>
             <WebSocketComponent />
-            <AuctionLiveForm auctionArticles={auctionArticles}/>
+            <AuctionLiveForm/>
           </div>
         </div>
       ) : null}
