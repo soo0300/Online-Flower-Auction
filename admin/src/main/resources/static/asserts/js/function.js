@@ -5,6 +5,8 @@
  * @param params - Parameters
  * @returns json - 결과 데이터
  */
+
+
 function getJson(uri, params) {
 
     let json = {}
