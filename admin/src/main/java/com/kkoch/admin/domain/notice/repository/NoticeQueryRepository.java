@@ -32,6 +32,9 @@ public class NoticeQueryRepository {
                         notice.id,
                         notice.title,
                         notice.content
+//                        notice.createdDate,
+//                        notice.admin,
+//                        notice.lastModifiedDate
                         )
                 )
                 .from(notice)
