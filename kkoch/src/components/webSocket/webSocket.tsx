@@ -141,7 +141,7 @@ const WebSocketComponent = () => {
         // 마지막 경매품인지 확인
         if (auctionNextInfo) {
           setShowSuccessModal(false); // 모달 닫기
-          setBidderInfo([]); // 낙찰 정보 초기화
+          setBidderInfo(null); // 낙찰 정보 초기화
         }
       }, 5000);
     }
@@ -154,7 +154,7 @@ const WebSocketComponent = () => {
     console.log(newSocket, "소켓생성확인")
 
     // 웹 소켓 열리면 이벤트 핸들러
-    newSocket.onopen = (e) => {
+    newSocket.onopen = () => {
       console.log("웹 소켓 시작");
       setSocket(newSocket);
     };
