@@ -15,13 +15,12 @@ public class NoticeResponse {
     private Long noticeId;
     private String title;
     private String content;
-    private String createdDate;
-
+//    private String createdDate;
     @Builder
-    public NoticeResponse(Long noticeId, String title, String content, LocalDateTime createdDate) {
+    public NoticeResponse(Long noticeId, String title, String content) {
         this.noticeId = noticeId;
         this.title = title;
         this.content = content;
-        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+//        this.createdDate = createdDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     }
 }

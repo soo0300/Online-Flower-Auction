@@ -63,10 +63,4 @@ public class AdminController {
         return "redirect:/admins";
     }
 
-    @GetMapping("/notice")
-    public String adminBoardPage(){
-//        return "redirect:/board";
-        return "notice";
-    }
-
 }
