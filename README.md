@@ -36,7 +36,7 @@
 
 ### Back-end
 
-| <div style="width: 100px; height: 100px;"><img src="https://i.namu.wiki/i/MuCO_ocla-FyadGnRZytkRLggQOcqxv_hXNjN7aYXDOPivIChJNdiRXp6vwSXbM6GcUL3pVTL-5U5TKQ0f1YhA.svg" style="object-fit: contain; width: 100%; height: 100%;"/></div> | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/1920px-Spring_Framework_Logo_2018.svg.png" width="100"> | <div style="width: 100px; height: 100px;"><img src="./readme_assets/image/spring cloud.png" style="object-fit: contain; width: 100%; height: 100%;"/></div> |
+| <div style="width: 100px; height: 100px;"><img src="https://i.namu.wiki/i/MuCO_ocla-FyadGnRZytkRLggQOcqxv_hXNjN7aYXDOPivIChJNdiRXp6vwSXbM6GcUL3pVTL-5U5TKQ0f1YhA.svg" style="object-fit: contain;"/></div> | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Spring_Framework_Logo_2018.svg/1920px-Spring_Framework_Logo_2018.svg.png" width="100"> | <div style="width: 100px; height: 100px;"><img src="./readme_assets/image/spring cloud.png" style="object-fit: contain; width: 100%; height: 100%;"/></div> |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |                                                                                                                 Java                                                                                                                  |                                                                         SpringBoot                                                                         |                                                                         SpringCloud                                                                         |
 
@@ -157,3 +157,17 @@
         </td>
     </tr>
 </table>
+
+
+## 커밋 컨벤션
+```
+🎉feat: S09P12C204-000 
+🔨test: S09P12C204-000
+♻️refactor: S09P12C204-000 
+👀code review: S09P12C204-000 
+💿backup: S09P12C204-000 
+🌈style: S09P12C204-000 
+🚑fix: S09P12C204-000 
+📝docs: S09P12C204-000 
+🏗️build: S09P12C204-000 
+```
