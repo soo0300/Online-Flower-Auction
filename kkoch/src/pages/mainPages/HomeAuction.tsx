@@ -2,13 +2,24 @@ import HomePageAuction from "@/assets/HomePageAuction.png";
 import MiraeLogo from "@/assets/MiraeLogo.png";
 import NongHyupLogo from "@/assets/NongHyupLogo.png";
 import SSAFYLogo from "@/assets/SSAFYLogo.png";
+import SSAFY from "@/assets/SSAFY.png";
 import SamsungLogo from "@/assets/SamsungLogo.png";
+import Logo from "@/assets/logo.png";
+import SAMSUNG from "@/assets/SAMSUNG.png";
+import atflowerlogo from "@/assets/atflowerlogo.png"
+import atcenter from "@/assets/atcenter.png"
 import { motion } from "framer-motion";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import Slider from "react-styled-carousel";
+import ActionButton from "@/components/buttons/ActionButton";
 
 const HomeAuction = () => {
-  const sponsors = "w-[20%] mx-6";
 
+  const responsive = [
+    { breakPoint: 1280, cardsToShow: 5 }, // this will be applied if screen size is greater than 1280px. cardsToShow will become 4.
+    { breakPoint: 760, cardsToShow: 5 },
+  ];
+  
   return (
     <section className="gap-16 bg-gray-20 md:h-full md:pb-0"> 
       {/* 경매 소개 부분 */}
@@ -38,11 +49,7 @@ const HomeAuction = () => {
             </div>
             
             <p className="mt-8 text-sm">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
-              Suscipit sapiente alias rerum provident aspernatur debitis 
-              odit nesciunt dignissimos dicta. 
-              Vitae ad rem soluta laboriosam doloribus 
-              accusamus impedit eaque, amet dolorem!
+              소개
             </p>
           </motion.div>
 
@@ -58,9 +65,7 @@ const HomeAuction = () => {
             }}
           >
             
-            <button>
-              Join Now
-            </button>
+            <ActionButton msg={"경매 하러 가기"}/>
           </motion.div>
         </div>
         
@@ -70,18 +75,28 @@ const HomeAuction = () => {
         </div>
       </motion.div>
       
-      <div className="border-b-2"></div>
-
       {/* SPONSORS */}
       {useMediaQuery("(min-width:1060px)") && (
-        <div className="h-[139px] w-full bg-primary-100 py-10">
-          <div className="mx-auto w-5/6">
-            <div className="flex w-3/5 items-center justify-between gap-8">
-              <img alt="MiraeLogo" src={MiraeLogo} className={sponsors}/>
-              <img alt="NongHyupLogo" src={NongHyupLogo} className={sponsors}/>
-              <img alt="SSAFYLogo" src={SSAFYLogo} className={sponsors}/>
-              <img alt="SamsungLogo" src={SamsungLogo} className={sponsors}/>
-            </div>
+        <div className="bg-primary-100 pb-3">
+          <div className="mx-auto w-auto h-[130px]">
+            <Slider 
+              className="h-[100px]"
+              slidesPerPage={4}
+              responsive={responsive}
+              autoPlay={2000}
+              showArrows={false}
+              showDots={false}
+            >
+              <img alt="MiraeLogo" src={MiraeLogo} className="p-[50px] relative h-[150px]"/>
+              <img alt="SSAFYLogo" src={SSAFYLogo} className="p-[30px] relative h-[150px]"/>
+              <img alt="SamsungLogo"  src={SamsungLogo} className="p-[50px] ml-[-50px] relative h-[150px]"/>
+              <img alt="SAMSUNG" src={SAMSUNG} className="p-[40px] relative h-[150px]"/>
+              <img alt="SSAFY" src={SSAFY} className="p-[30px] relative h-[150px]"/>
+              <img alt="NongHyupLogo" src={NongHyupLogo} className="p-[50px] relative h-[150px]"/>
+              <img alt="Logo"  src={Logo} className="p-[10px] relative h-[150px]"/>
+              <img alt="atflowerlogo"  src={atflowerlogo} className="ml-[-70px] p-[10px] relative h-[150px]"/>
+              <img alt="atcenter"  src={atcenter} className="ml-[-50px] p-[10px] relative h-[150px]"/>
+            </Slider>
           </div>
         </div>
       )}
