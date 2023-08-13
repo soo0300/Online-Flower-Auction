@@ -504,6 +504,8 @@
                         <th scope="col" id="showPk">PK</th>
                         <th scope="col">제목</th>
                         <th scope="col">내용</th>
+                        <th scope="col">수정</th>
+                        <th scope="col">삭제</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
@@ -514,7 +516,7 @@
                         <td th:text="${notice.content}" id="hereContent">공지 content</td>
                         <td>
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#editModal">수정
+                                    data-bs-target="#editModal">상세
                             </button>
                         </td>
                         <td>
