@@ -644,6 +644,23 @@
             }
         });
 
+        deleteButtons.forEach(deleteButton => {
+            deleteButton.addEventListener('click', async function () {
+                callApi(`/admin-service/admins/${findId}`, 'delete');
+
+                const adminActiveDisplay = deleteButton.closest('tr').querySelector('#hereActive');
+                if (adminActiveDisplay.textContent === '활성화 상태') {
+                    adminActiveDisplay.textContent = '비활성화 상태';
+                    adminActiveDisplay.style.color = 'blue';
+                    adminActiveDisplay.classList.add('bold-text');
+                } else {
+                    adminActiveDisplay.textContent = '활성화 상태';
+                    adminActiveDisplay.style.color = 'red';
+                    adminActiveDisplay.classList.add('bold-text');
+                }
+            });
+        });
+
 
 
     });
