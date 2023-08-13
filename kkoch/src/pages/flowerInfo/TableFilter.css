@@ -107,6 +107,6 @@
   .flowerinput,
   .varietyinput,
   .locationinput {
-    width: calc(100px + 5vw); /* 최소 크기 + 화면 너비의 5% */
+    width: calc(100px + 0.5vw); /* 최소 크기 + 화면 너비 */
   }
 }
