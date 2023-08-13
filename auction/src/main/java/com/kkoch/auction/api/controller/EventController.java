@@ -75,6 +75,7 @@ public class EventController {
     public ApiResponse<EventResultResponse> joinEvent(@RequestBody EventParticipant participant) {
         int memberNumber = redisService.getNumber(participant.getMemberKey());
         log.info("{}의 회원번호 = {}", participant.getMemberKey(), memberNumber);
+        log.info("debug request={}", participant);
         String auctionArticleId = participant.getAuctionArticleId();
         boolean isWinner = redisService.joinEvent(participant);
         if (isWinner) {

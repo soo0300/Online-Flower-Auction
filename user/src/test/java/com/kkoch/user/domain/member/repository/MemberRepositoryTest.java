@@ -1,24 +1,20 @@
-package com.kkoch.user.api.service.member;
+package com.kkoch.user.domain.member.repository;
 
 import com.kkoch.user.IntegrationTestSupport;
-import com.kkoch.user.api.controller.member.response.MemberInfoResponse;
 import com.kkoch.user.domain.member.Member;
-import com.kkoch.user.domain.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
-class MemberQueryServiceTest extends IntegrationTestSupport {
-
-    @Autowired
-    private MemberQueryService memberQueryService;
+class MemberRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     private MemberRepository memberRepository;
@@ -26,30 +22,30 @@ class MemberQueryServiceTest extends IntegrationTestSupport {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @DisplayName("회원은 본인의 정보를 조회할 수 있다.")
+    @DisplayName("이메일로 회원을 조회할 수 있다.")
     @Test
-    void getMyInfo() {
+    void findByEmail() {
         //given
         Member member = createMember();
 
         //when
-        MemberInfoResponse memberInfo = memberQueryService.getMyInfo(member.getMemberKey());
+        Optional<Member> findMember = memberRepository.findByEmail(member.getEmail());
 
         //then
-        assertThat(memberInfo).isNotNull();
+        assertThat(findMember).isPresent();
     }
 
-    @DisplayName("이메일 존재 여부를 확인할 수 있다.")
+    @DisplayName("회원 고유키로 회원을 조회할 수 있다.")
     @Test
-    void validationEmail() {
+    void findByMemberKey() {
         //given
         Member member = createMember();
 
         //when
-        boolean result = memberQueryService.validationEmail(member.getEmail());
+        Optional<Member> findMember = memberRepository.findByMemberKey(member.getMemberKey());
 
         //then
-        assertThat(result).isTrue();
+        assertThat(findMember).isPresent();
     }
 
     private Member createMember() {
