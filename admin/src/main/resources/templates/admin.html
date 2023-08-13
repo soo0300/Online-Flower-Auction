@@ -135,13 +135,18 @@
         }
     </style>
 
-    <!-- Custom styles for this template -->
+
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
             rel="stylesheet"
     />
     <!-- Custom styles for this template -->
     <link href="dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet"/>
+
+    <script src=."https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script th:src="@{/asserts/js/function.js}"></script>
+
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
@@ -317,16 +322,16 @@
                             <a
                                     class="nav-link d-flex align-items-center gap-2 active"
                                     aria-current="page"
-                                    href="/admin-service/intranet"
+                                    href="#"
                             >
                                 <svg class="bi">
                                     <use xlink:href="#house-fill"/>
                                 </svg>
-                                HOME
+                                Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/members">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
                                 <svg class="bi">
                                     <use xlink:href="#people"/>
                                 </svg>
@@ -334,7 +339,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/admins">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#" th:herf="@{/admins}">
                                 <svg class="bi">
                                     <use xlink:href="#people"/>
                                 </svg>
@@ -342,7 +347,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/plants">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
                                 <svg class="bi">
                                     <use xlink:href="#file-earmark"/>
                                 </svg>
@@ -350,7 +355,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/auctions">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
                                 <svg class="bi">
                                     <use xlink:href="#file-earmark"/>
                                 </svg>
@@ -358,22 +363,91 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2" href="/admin-service/intranet/logout">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                                <svg class="bi">
+                                    <use xlink:href="#graph-up"/>
+                                </svg>
+                                낙찰내역관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                                <svg class="bi">
+                                    <use xlink:href="#cart"/>
+                                </svg>
+                                경매품관리
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
                                 <svg class="bi">
                                     <use xlink:href="#file-earmark"/>
                                 </svg>
                                 공지사항관리
                             </a>
                         </li>
-
                     </ul>
 
-
-
+                    <h6
+                            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase"
+                    >
+                        <span>Saved reports</span>
+                        <a
+                                class="link-secondary"
+                                href="#"
+                                aria-label="Add a new report"
+                        >
+                            <svg class="bi">
+                                <use xlink:href="#plus-circle"/>
+                            </svg>
+                        </a>
+                    </h6>
+                    <ul class="nav flex-column mb-auto">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                                <svg class="bi">
+                                    <use xlink:href="#file-earmark-text"/>
+                                </svg>
+                                Current month
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                                <svg class="bi">
+                                    <use xlink:href="#file-earmark-text"/>
+                                </svg>
+                                Last quarter
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                                <svg class="bi">
+                                    <use xlink:href="#file-earmark-text"/>
+                                </svg>
+                                Social engagement
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                                <svg class="bi">
+                                    <use xlink:href="#file-earmark-text"/>
+                                </svg>
+                                Year-end sale
+                            </a>
+                        </li>
+                    </ul>
 
                     <hr class="my-3"/>
 
                     <ul class="nav flex-column mb-auto">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#">
+                                <svg class="bi">
+                                    <use xlink:href="#gear-wide-connected"/>
+                                </svg>
+                                Settings
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center gap-2" href="#">
                                 <svg class="bi">
@@ -384,7 +458,6 @@
                         </li>
                     </ul>
                 </div>
-
             </div>
         </div>
 
@@ -429,35 +502,37 @@
                     <thead>
                     <tr class="text-center">
                         <th scope="col">#</th>
+                        <th scope="col" id = "showPk">PK</th>
                         <th scope="col">아이디</th>
+                        <th scope="col">비밀번호</th>
                         <th scope="col">이름</th>
                         <th scope="col">연락처</th>
                         <th scope="col">권한</th>
                         <th scope="col">입사일</th>
-                        <th scope="col">활성화</th>
+                        <th scope="col">활동 상태</th>
+                        <th scope="col">수정</th>
+                        <th scope="col">상태 변경</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
-                    <tr>
-                        <td>1</td>
-                        <td>lyt1228</td>
-                        <td>임우택</td>
-                        <td>010-1111-1111</td>
-                        <td>00</td>
-                        <td>2023.01.01</td>
-                        <td>
-                            <span class="badge text-bg-primary w-100">활성화</span>
+                    <tr th:each="admin, adminStat : ${admins}">
+                        <td th:text="${adminStat.count}">3</td>
+                        <td th:text="${admin.adminId}" id="herePk">1</td>
+                        <td th:text="${admin.loginId}">lyt1228</td>
+                        <td th:text="${admin.loginPw}" id="herePw">lsdsjgkj!</td>
+                        <td th:text="${admin.name}">임우택</td>
+                        <td th:text="${admin.tel}"  id="hereTel">010-1111-1111</td>
+                        <td th:text="${admin.position}">00</td>
+                        <td th:text="${admin.createdDate}">2023.01.01</td>
+                        <td id="hereActive">
+                            <span th:if="${admin.active}" style="font-weight: bold; color: red;">활성화 상태</span>
+                            <span th:unless="${admin.active}" style="font-weight: bold; color: blue;">비활성화 상태</span>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>leeyr0412</td>
-                        <td>이예리</td>
-                        <td>010-2222-2222</td>
-                        <td>10</td>
-                        <td>2023.01.01</td>
                         <td>
-                            <span class="badge text-bg-secondary w-100">비활성화</span>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">수정</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-sm deleteButton">변경</button>
                         </td>
                     </tr>
                     </tbody>
@@ -467,6 +542,127 @@
     </div>
 </div>
 <!-- Modal -->
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">관계자 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 정보 입력 폼 -->
+                <div>
+                    <label class="form-label">전화번호 수정</label>
+                    <input type="text" class="form-control" id="savedTel">
+                </div>
+                <div>
+                    <label class="form-label">비밀번호 수정</label>
+                    <input type="text" class="form-control" id="savedPw">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="editAdminButton">수정</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 관계자 수정 버튼눌렀을 떄, 값 바꾸기-->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let findId = 1; // 초기값 설정
+        let adminTelDisplay;
+        let adminPwDisplay;
+        let adminActiveDisplay;
+
+        const getPkButtons = document.querySelectorAll('.btn-danger[data-bs-toggle="modal"][data-bs-target="#editModal"]');
+        const deleteButtons = document.querySelectorAll('.deleteButton');
+
+
+
+        getPkButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const row = button.closest('tr');
+                const adminIdDisplay = row.querySelector('#herePk');
+                adminTelDisplay = row.querySelector('#hereTel');
+                adminPwDisplay = row.querySelector('#herePw')
+                adminActiveDisplay = row.querySelector('#hereActive');
+                if (adminIdDisplay) {
+                    findId = adminIdDisplay.textContent;
+                    console.log(findId);
+                } else {
+                    console.error('Cannot find adminIdDisplay');
+                }
+            });
+        });
+
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const row = button.closest('tr');
+                const adminIdDisplay = row.querySelector('#herePk');
+                if (adminIdDisplay) {
+                    findId = adminIdDisplay.textContent;
+                } else {
+                    console.error('Cannot find adminIdDisplay');
+                }
+            });
+        });
+
+        const editAdminButton = document.getElementById('editAdminButton');
+        const deleteButton = document.getElementById('deleteButton');
+        const savedTelInput = document.getElementById('savedTel');
+        const savedPwInput = document.getElementById('savedPw');
+
+        editAdminButton.addEventListener('click', async function () {
+            const savedTelDisplay = document.getElementById('savedTelDisplay');
+
+            adminTelDisplay = savedTelInput.value;
+            adminPwDisplay = savedPwInput.value;
+            console.log("adminPw"+adminPwDisplay.textContent);
+
+            console.log("in"+findId);
+
+
+            const params = {
+                tel: adminTelDisplay,
+                loginPw: adminPwDisplay
+            };
+
+            try {
+                const response = callApi(`/admin-service/admins/${findId}`, 'patch', params);
+                console.log('API 호출 결과:', response);
+                // 성공적으로 처리된 경우에 대한 로직 추가
+            } catch (error) {
+                console.error('API 호출 에러:', error);
+                // 에러 처리 로직 추가
+            }
+        });
+
+
+
+    });
+</script>
+
+<style>
+    #showPk {
+        display: none;
+    }
+
+    #herePk {
+        display: none;
+    }
+    .bold-text {
+        font-weight: bold;
+    }
+</style>
+
+
 <div
         class="modal fade"
         id="staticBackdrop"
@@ -489,12 +685,13 @@
                         aria-label="Close"
                 ></button>
             </div>
-            <div class="modal-body">
+            <form class="modal-body" th:action="@{/admins/add}" method="post" th:object="${form}">
                 <div class="mb-3">
                     <label for="loginId" class="form-label"
                     >아이디</label
                     >
                     <input
+                            th:field="*{loginId}"
                             type="text"
                             class="form-control"
                             id="loginId"
@@ -506,6 +703,7 @@
                     >비밀번호</label
                     >
                     <input
+                            th:field="*{loginPw}"
                             type="password"
                             class="form-control"
                             id="loginPw"
@@ -517,6 +715,7 @@
                     >이름</label
                     >
                     <input
+                            th:field="*{name}"
                             type="text"
                             class="form-control"
                             id="name"
@@ -528,6 +727,7 @@
                     >연락처</label
                     >
                     <input
+                            th:field="*{tel}"
                             type="text"
                             class="form-control"
                             id="tel"
@@ -539,19 +739,22 @@
                     >권한</label
                     >
                     <input
-                            type="email"
+                            th:field="*{position}"
+                            type="text"
                             class="form-control"
                             id="position"
                             placeholder="내용을 입력해주세요."
+                            maxlength="2"
                     />
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">.</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">등록</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 <script
         src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"

@@ -62,4 +62,11 @@ public class AdminController {
         log.info("admin={}", adminId);
         return "redirect:/admins";
     }
+
+    @GetMapping("/notice")
+    public String adminBoardPage(){
+//        return "redirect:/board";
+        return "notice";
+    }
+
 }
