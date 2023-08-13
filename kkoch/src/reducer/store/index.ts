@@ -1,7 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import authReducer from './authSlice';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // 로컬 스토리지 사용
+import authReducer from './authSlice';
 
 const rootReducer = combineReducers({
   // 여기에 각 리듀서를 추가하세요 (ex: authReducer, ... )

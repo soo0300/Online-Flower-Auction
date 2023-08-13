@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useReducer } from 'react';
 import { OpenVidu, Session } from 'openvidu-browser';
 import CameraOff from '@/assets/cameraOff.png';
 import axios from 'axios';
@@ -7,16 +7,20 @@ import { Link, useLocation } from 'react-router-dom';
 
 
 const AuctionWaitingRoom: React.FC = () => {
-  const auctionArticles = useLocation();
-  console.log(auctionArticles.state)
+  const location = useLocation();
+  
+  console.log("여기 넘어온거 확인")
+  const { auctionArticles, sessionId } = location.state;
 
-  const [token, setToken] = useState('');
-  const [session, setSession] = useState<Session | null>(null);
+  const [token, setToken] = useState(''); // openVidu 세션 요청에 필요한 토큰
+  const [session, setSession] = useState<Session | null>(null); // openVidu 세션 
   const [subscribers, setSubscribers] = useState(null);
   const [publisher, setPublisher] = useState(null);
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
   
-
+  console.log("asdfasdfasdfasdfasf==============================")
+  console.log(sessionId);
+  const mySessionId=sessionId;
   const subscriberContainer = useRef<HTMLDivElement | null>(null);
 
     
@@ -28,7 +32,7 @@ const AuctionWaitingRoom: React.FC = () => {
   const initSessionAndToken = async () => {
     try {
       // OpenVidu 서버에 세션 생성 요청 보내기
-      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/api/sessions', null, {
+      const sessionResponse = await axios.post('https://i9c204.p.ssafy.io:8443/api/sessions', { customSessionId: mySessionId }, {
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
@@ -121,29 +125,13 @@ const AuctionWaitingRoom: React.FC = () => {
     setSubscribers((prevSubscribers) => prevSubscribers.filter((sub) => sub !== event.stream.streamManager));
   };
 
-  // useEffect(() => {
-  //   if (session) {
-  //     console.log("세션이요", session)
-  //     session.on('streamCreated', (e) => {
-  //       console.log(1111111);
-  //       const subscriber = session.subscribe(e.stream, undefined);
-  //       console.log("구독자", subscriber);
-  //       if (!subscriber && e.stream.connection.connectionId !== session.connection.connectionId) {
-  //         setSubscribers(e.stream);
-  //         session.publish(publisher);
-  //         console.log('이거이거이거')
-  //         publisher.addVideoElement(subscriberContainer);
-  //       }
-  //     });
-  //   }
-  // }, [publisher])
-
   // 카메라 상태를 토글하는 함수
   const toggleCamera = () => {
     if (publisher) {
       // console.log('카메라상태', isCameraOn)
       if (isCameraOn) {
         publisher.publishVideo(false); // 카메라 끄기
+        
       } else {
         publisher.publishVideo(true); // 카메라 켜기
       }
@@ -172,7 +160,7 @@ const AuctionWaitingRoom: React.FC = () => {
         </div>
         
         <div>
-          <Link to='/auction/liveroom' state={{ auctionArticles: auctionArticles.state }}>
+          <Link to='/auction/liveroom' state={{ auctionArticles: auctionArticles, sessionId: mySessionId}}>
             <button>입장하기</button>
           </Link>
         </div>

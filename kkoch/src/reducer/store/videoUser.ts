@@ -1,6 +1,6 @@
 const initialState = {
-  mySessionId: 'SessionA',
-  myUserName: `Participant${Math.floor(Math.random() * 100)}`,
+  mySessionId: null,
+  myUserName: `${Math.floor(Math.random() * 100)}`,
   session: undefined,
   mainStreamManager: undefined,
   publisher: undefined,
@@ -10,6 +10,9 @@ const initialState = {
 const videoUserInfo = (state, action) => {
   switch (action.type) {
     case 'SET_MY_SESSION_ID':
+      console.log("여기보세요 이 함수 출력됨");
+      console.log(action.payload);
+      state.mySessionId = action.payload
       return { ...state, mySessionId: action.payload };
     case 'SET_MY_USER_NAME':
       return { ...state, myUserName: action.payload };
@@ -32,5 +35,6 @@ const videoUserInfo = (state, action) => {
       return state;
   }
 };
+
 
 export { initialState, videoUserInfo };

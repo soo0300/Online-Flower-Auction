@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddTradeRequest {
 
-    private String memberToken;
+    private String memberKey;
     private Long auctionArticleId;
     private Integer price;
 
     @Builder
-    private AddTradeRequest(String memberToken, String auctionArticleId, Integer price) {
-        this.memberToken = memberToken;
+    private AddTradeRequest(String memberKey, String auctionArticleId, Integer price) {
+        this.memberKey = memberKey;
         this.auctionArticleId = Long.valueOf(auctionArticleId);
         this.price = price;
     }

@@ -28,6 +28,9 @@ public class TradeService {
 
         Optional<Trade> findTrade = tradeRepository.findByMemberKey(dto.getMemberKey(), tradeDate);
 
+        AuctionArticle auctionArticle = auctionArticleRepository.findById(dto.getAuctionArticleId())
+                .orElseThrow(NoSuchElementException::new);
+
         if (findTrade.isEmpty()) {
             log.info("<낙찰->내역 기록> TradeService. 낙찰내역 생성");
             currnetTrade = tradeRepository.save(createTradeEntity(dto, tradeDate));
@@ -36,13 +39,9 @@ public class TradeService {
         if (findTrade.isPresent()) {
             log.info("<낙찰->내역 기록> TradeService. 기존 낙찰내역에 추가");
             currnetTrade = findTrade.get();
-            currnetTrade.setTotalPrice(dto.getPrice());
+            currnetTrade.setTotalPrice(dto.getPrice() * auctionArticle.getCount());
             log.info("<낙찰->내역 기록> TradeService. 총 거래 가격={}", currnetTrade.getTotalPrice());
         }
-
-        AuctionArticle auctionArticle = auctionArticleRepository.findById(dto.getAuctionArticleId())
-                .orElseThrow(NoSuchElementException::new);
-
         auctionArticle.bid(dto.getPrice(), tradeDate);
         auctionArticle.updateTrade(currnetTrade);
 

@@ -8,8 +8,9 @@ html,
 body,
 #root,
 .app {
-    height: auto;
+    height: 100%;
     width: 100%;
     font-family: "DM Sans", sans-serif;
+    @apply bg-gray-20;
     @apply text-gray-500;
 }

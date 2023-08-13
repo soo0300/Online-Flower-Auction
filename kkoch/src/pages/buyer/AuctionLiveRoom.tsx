@@ -2,17 +2,17 @@ import { OpenVidu } from 'openvidu-browser';
 
 import axios from 'axios';
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
-import UserVideoComponent from './UserVideoComponent';
-
+import UserVideoComponent from '../auction/UserVideoComponent';
+import AuctionLiveForm from "../auction/AuctionLiveForm"
 import { initialState, videoUserInfo } from '@/reducer/store/videoUser';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom"
 
 const APPLICATION_SERVER_URL = 'https://i9c204.p.ssafy.io:8443/api/sessions';
 
-export default function Video() {
+const AuctionLiveRoom = () => {
 	const location = useLocation();
 	const { auctionArticles, sessionId } = location.state;
-
 
 	const [state, dispatch] = useReducer(videoUserInfo, initialState);
 	const {
@@ -35,6 +35,7 @@ export default function Video() {
 		}
 	}, [mainStreamManager]);
 	
+
 	const joinSession = useCallback(() => {
 		const mySession = OV.current.initSession();
 
@@ -106,7 +107,7 @@ export default function Video() {
 		if (session) {
 			session.disconnect();
 		}
-
+		
 		// Reset all states and OpenVidu object
 		OV.current = new OpenVidu();
 		dispatch({ type: 'RESET_STATE' })
@@ -145,37 +146,45 @@ export default function Video() {
 	};
 
 	return (
-		<div className="container">
-			{session === undefined ? (
-				<div id="join">
-					<div id="join-dialog" className="jumbotron vertical-center">
-					</div>
-				</div>
-			) : null}
-
-			{session !== undefined ? (
-				<div id="session">
-					{/* {mainStreamManager !== undefined ? (
-						<div id="main-video" className="col-md-6">
-							<UserVideoComponent streamManager={mainStreamManager} />
-						</div>
-					) : null} */}
-					<div id="video-container" className="col-md-6">
-						{/* {publisher !== undefined ? (
-							<div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
-								<UserVideoComponent
-									streamManager={publisher} />
-							</div>
-						) : null} */}
-						{subscribers.map((sub, i) => (
-							<div key={sub.id} className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(sub)}>
-								<span>{sub.id}</span>
-								<UserVideoComponent streamManager={sub} />
-							</div>
-						))}
-					</div>
-				</div>
-			) : null}
-		</div>
+    <div>
+      {session !== undefined ? (
+        <div className='mt-3'>
+          <div className='flex justify-between items-center'>
+            <h1 id="session-title">{mySessionId}</h1>
+            <input
+              className="btn btn-large btn-danger"
+              type="button"
+              id="buttonLeaveSession"
+              onClick={leaveSession}
+              value="경매 종료"
+            />
+          </div>
+  
+          <hr />
+    
+          <div className="flex justify-between w-full h-[100%] mt-6">
+            <div className=''>
+              {subscribers.map((sub, i) => (
+                JSON.parse(sub.stream.connection.data).clientData >= 0 && (
+                  <div className="" onClick={() => handleMainVideoStream(sub)}>
+                    <UserVideoComponent streamManager={sub} />
+                  </div>
+                )
+              ))}
+            </div>
+          </div>
+  
+  
+          {/* {publisher !== undefined ? (
+              <div className="stream-container col-md-6 col-xs-6" onClick={() => handleMainVideoStream(publisher)}>
+                <UserVideoComponent
+                  streamManager={publisher} />
+              </div>
+            ) : null} */}
+        </div>
+      ) : null}
+    </div>
 	);
 }
+
+export default AuctionLiveRoom

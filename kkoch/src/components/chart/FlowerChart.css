@@ -1,0 +1,39 @@
+.chart-container {
+  background-color: white;
+}
+
+.chart-title {
+  color: black;
+  font-size: large;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.toolbar {
+  display: flex; /* Flexbox 사용 */
+  gap: 10px; /* 버튼 사이의 간격 */
+}
+
+.toolbar button {
+  margin-right: 30px;
+  padding: 5px 10px;
+  font-size: 1rem;
+  border: 1px solid #A1A1AA;
+  color: #71717a;
+  border-radius: 10px;
+  
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toolbar button.active {
+  color: black;
+  font-weight: bold;
+}
