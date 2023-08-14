@@ -26,3 +26,10 @@ include::api/reservation/reservation_search.adoc[]
 == Alarm API
 
 include::api/alarm/alarm_search.adoc[]
+
+[[Point-History-API]]
+== Point History API
+
+include::api/pointhistory/point_history_charge.adoc[]
+include::api/pointhistory/point_history_use.adoc[]
+include::api/pointhistory/point_history_search.adoc[]

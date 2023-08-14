@@ -8,6 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 알림 Query 서비스
+ *
+ * @author 임우택
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -15,6 +20,12 @@ public class AlarmQueryService {
 
     private final AlarmQueryRepository alarmQueryRepository;
 
+    /**
+     * 알림 조회
+     *
+     * @param memberKey 회원 고유키
+     * @return 알림 정보 리스트
+     */
     public List<AlarmResponse> searchAlarms(String memberKey) {
         return alarmQueryRepository.findAlarmsByMemberKey(memberKey);
     }

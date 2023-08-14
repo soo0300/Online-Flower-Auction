@@ -10,6 +10,11 @@ import java.util.List;
 import static com.kkoch.user.domain.alarm.QAlarm.alarm;
 import static com.kkoch.user.domain.member.QMember.*;
 
+/**
+ * Alarm bulk command Repository
+ *
+ * @author 임우택
+ */
 @Repository
 public class AlarmCommandRepository {
 
@@ -19,6 +24,12 @@ public class AlarmCommandRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 알림 열람 상태 벌크 업데이트
+     *
+     * @param memberKey 회원 고유키
+     * @return 열람된 알림의 갯수
+     */
     public int updateOpen(String memberKey) {
         List<Long> alarmIds = findAlarmIdByMemberKey(memberKey);
 

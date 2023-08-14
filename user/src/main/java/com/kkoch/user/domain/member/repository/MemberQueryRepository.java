@@ -11,6 +11,11 @@ import java.util.List;
 
 import static com.kkoch.user.domain.member.QMember.member;
 
+/**
+ * Member 조회용 Repository
+ *
+ * @author 임우택
+ */
 @Repository
 public class MemberQueryRepository {
 
@@ -20,6 +25,12 @@ public class MemberQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 회원 정보 조회
+     *
+     * @param memberKey 회원 고유키
+     * @return 회원 정보 객체
+     */
     public MemberInfoResponse findMyInfoByMemberKey(String memberKey) {
         return queryFactory
                 .select(Projections.constructor(MemberInfoResponse.class,
@@ -33,6 +44,12 @@ public class MemberQueryRepository {
                 .fetchFirst();
     }
 
+    /**
+     * 이메일 중복 조회
+     *
+     * @param email 검사할 이메일
+     * @return 존재 하면 true
+     */
     public Boolean existEmail(String email) {
         Integer content = queryFactory
                 .selectOne()

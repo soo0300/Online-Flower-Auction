@@ -12,6 +12,11 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
 
+/**
+ * 알림 API 컨트롤러
+ *
+ * @author 임우택
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/{memberKey}/alarms")
@@ -21,6 +26,12 @@ public class AlarmController {
     private final AlamService alamService;
     private final AlarmQueryService alarmQueryService;
 
+    /**
+     * 알림 조회 및 열람 API
+     *
+     * @param memberKey 회원 식별키
+     * @return 알림 정보 리스트
+     */
     @GetMapping
     public ApiResponse<List<AlarmResponse>> getAlarms(@PathVariable String memberKey) {
         log.debug("call AlarmController#getAlarms={}", memberKey);
@@ -34,11 +45,5 @@ public class AlarmController {
         log.debug("openCount = {}", openCount);
 
         return ApiResponse.ok(responses);
-    }
-
-    // 알림 삭제
-    @DeleteMapping("/{alarmId}")
-    public ApiResponse<?> removeAlarm(@PathVariable Long alarmId) {
-        return ApiResponse.of(MOVED_PERMANENTLY, "알림 삭제", null);
     }
 }

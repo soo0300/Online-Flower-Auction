@@ -58,7 +58,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         //고객인데 경매방이 열리지 않은 경우
         if (isClient(role)) {
-            client(session);
+            client(session, message);
         }
 
         if (isAdmin(role)) {
@@ -142,13 +142,17 @@ public class WebSocketHandler extends TextWebSocketHandler {
         return (String) json.get(key);
     }
 
-    private void client(WebSocketSession session) throws IOException {
+    private void client(WebSocketSession session, TextMessage message) throws IOException {
         String currentSessionId = session.getId();
 
         if (isNotOpenAuction()) {
             sessions.remove(currentSessionId);
             session.sendMessage(new TextMessage("not start auction"));
+            return;
         }
+
+        log.info("send message all session");
+        sendMessageAll(message.getPayload());
     }
 
     private void admin(WebSocketSession session, JSONObject json) {
