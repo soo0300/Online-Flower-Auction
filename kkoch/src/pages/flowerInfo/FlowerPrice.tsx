@@ -2,9 +2,9 @@ import React from 'react'
 import './FlowerPrice.css'
 
 const FlowerPrice = ({ todayList }) => {
-  const LowerPrice : number = todayList.priceMin
-  const HigherPrice : number = todayList.priceMax
-  const AveragePrice : number = todayList.priceAvg
+  const LowerPrice : number = todayList.priceMin.toLocaleString();
+  const HigherPrice : number = todayList.priceMax.toLocaleString();
+  const AveragePrice : number = todayList.priceAvg.toLocaleString();
 
   console.log("오늘가격", todayList)
 

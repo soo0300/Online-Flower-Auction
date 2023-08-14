@@ -3,12 +3,17 @@ import { Link } from 'react-router-dom';
 
 const CustomLinkCell = (params) => {
   const { value, row } = params;
+   // 단위 통화 표시
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat('ko-KR').format(number);
+  };
   return (
     <Link
       to={`/flowers/info/${row.type}/${row.name}`}
       state={{ flowerData: row }}
     >
-      {value}
+      {/* {value} */}
+      {params.colDef.field === 'bidPrice' ? formatNumber(value) : value}
     </Link>
   );
 };

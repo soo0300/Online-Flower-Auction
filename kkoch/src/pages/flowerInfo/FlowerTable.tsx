@@ -37,11 +37,6 @@ const TestComponent = (props) => {
     return `${year}-${month}-${day} ${hours}:${minutes}`;
   }
 
-  // 단위 통화 표시
-  const formatNumber = (number) => {
-    return new Intl.NumberFormat('ko-KR').format(number);
-  };
-
   // 테이블 데이터 초기 상태
   const [tableData, setTableData] = useState(null);
   const [filteredTableData, setFilteredTableData] = useState([]);
@@ -62,7 +57,6 @@ const TestComponent = (props) => {
         ...item,
         id: index + 1,
         bidTime: formatTime(new Date(item.bidTime)),
-        bidPrice: formatNumber(item.bidPrice)
       }));
       setFilteredTableData(dataWithId);
       setTableData(dataWithId);
