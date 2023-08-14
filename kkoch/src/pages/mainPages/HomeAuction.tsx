@@ -70,7 +70,7 @@ const HomeAuction = () => {
         </div>
         
         <div className="flex justify-center">
-          <img className="my-5 w-[800px] " src={FlowerAuction} alt="HomePageAuction" />
+          <img className="my-5 w-[700px] " src={FlowerAuction} alt="HomePageAuction" />
         </div>
       </motion.div>
       
