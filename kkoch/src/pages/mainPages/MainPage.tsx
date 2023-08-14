@@ -9,7 +9,7 @@
 
     return (
       <div className="app bg-gray-20">
-        <img src={gif1} alt="Loading GIF" className="w-[100%] h-[100%] absolute top-0 left-0 pointer-events-none"/>
+        {/* <img src={gif1} alt="Loading GIF" className="w-[100%] h-[100%] absolute top-0 left-0 pointer-events-none"/> */}
         <HomeAuction />
         <img src={gif2} alt="Loading GIF" className="w-[100%] h-[100%] absolute top-[100px] left-0 pointer-events-none"/>
         <HomeFlowers />

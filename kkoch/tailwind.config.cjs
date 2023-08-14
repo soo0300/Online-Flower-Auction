@@ -27,7 +27,7 @@ export default {
         montserrat: ["Montserrat", "sans-serif"],
       },
       content: {
-        backgroundImage: "url('./assets/BackGroundText.png')",
+        // backgroundImage: "url('./assets/BackGroundText.png')",
         abstractwaves: "url('./assets/AbstractWaves.png')",
         sparkles: "url('./assets/Sparkles.png')",
         circles: "url('./assets/Circles.png')",

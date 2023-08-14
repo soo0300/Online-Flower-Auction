@@ -1,4 +1,4 @@
-import HomePageAuction from "@/assets/HomePageAuction.png";
+import FlowerAuction from "@/assets/FlowerAuction.png";
 import MiraeLogo from "@/assets/MiraeLogo.png";
 import NongHyupLogo from "@/assets/NongHyupLogo.png";
 import SSAFYLogo from "@/assets/SSAFYLogo.png";
@@ -65,13 +65,12 @@ const HomeAuction = () => {
             }}
           >
             
-            <ActionButton msg={"경매 하러 가기"}/>
+            <ActionButton link={"auction"} msg={"경매 하러 가기"}/>
           </motion.div>
         </div>
         
-        <div className="flex basis-3/5 justify-center md:z-10
-          md:ml-40 md:mt-16 md:justify-items-end">
-          <img className="my-5" src={HomePageAuction} alt="HomePageAuction" />
+        <div className="flex justify-center">
+          <img className="my-5 w-[800px] " src={FlowerAuction} alt="HomePageAuction" />
         </div>
       </motion.div>
       
@@ -87,15 +86,15 @@ const HomeAuction = () => {
               showArrows={false}
               showDots={false}
             >
-              <img alt="MiraeLogo" src={MiraeLogo} className="p-[50px] relative h-[150px]"/>
-              <img alt="SSAFYLogo" src={SSAFYLogo} className="p-[30px] relative h-[150px]"/>
-              <img alt="SamsungLogo"  src={SamsungLogo} className="p-[50px] ml-[-50px] relative h-[150px]"/>
-              <img alt="SAMSUNG" src={SAMSUNG} className="p-[40px] relative h-[150px]"/>
-              <img alt="SSAFY" src={SSAFY} className="p-[30px] relative h-[150px]"/>
-              <img alt="NongHyupLogo" src={NongHyupLogo} className="p-[50px] relative h-[150px]"/>
-              <img alt="Logo"  src={Logo} className="p-[10px] relative h-[150px]"/>
-              <img alt="atflowerlogo"  src={atflowerlogo} className="ml-[-70px] p-[10px] relative h-[150px]"/>
-              <img alt="atcenter"  src={atcenter} className="ml-[-50px] p-[10px] relative h-[150px]"/>
+              <img alt="MiraeLogo" src={MiraeLogo} className="p-[50px] mt-[-13px] relative h-[150px]"/>
+              <img alt="SSAFYLogo" src={SSAFYLogo} className="p-[40px] mt-[-8px] ml-[10px] relative h-[150px]"/>
+              <img alt="SamsungLogo"  src={SamsungLogo} className="p-[50px] mt-[-10px] ml-[-50px] relative h-[150px]"/>
+              <img alt="SAMSUNG" src={SAMSUNG} className="p-[40px] mt-[-8px] relative h-[150px]"/>
+              <img alt="SSAFY" src={SSAFY} className="p-[30px] mt-[-8px] relative h-[150px]"/>
+              <img alt="NongHyupLogo" src={NongHyupLogo} className="p-[50px] mt-[-10px] relative h-[150px]"/>
+              <img alt="Logo"  src={Logo} className="p-[20px] mt-[-13px] relative h-[150px]"/>
+              <img alt="atflowerlogo"  src={atflowerlogo} className="ml-[-70px] p-[10px] mt-[-10px] relative h-[150px]"/>
+              <img alt="atcenter"  src={atcenter} className="ml-[-50px] mt-[-10px] p-[10px] relative h-[150px]"/>
             </Slider>
           </div>
         </div>
