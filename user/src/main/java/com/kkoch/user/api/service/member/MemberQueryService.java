@@ -1,10 +1,13 @@
 package com.kkoch.user.api.service.member;
 
 import com.kkoch.user.api.controller.member.response.MemberInfoResponse;
+import com.kkoch.user.api.controller.member.response.MemberResponseForAdmin;
 import com.kkoch.user.domain.member.repository.MemberQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -19,5 +22,9 @@ public class MemberQueryService {
 
     public boolean validationEmail(String email) {
         return memberQueryRepository.existEmail(email);
+    }
+
+    public List<MemberResponseForAdmin> getUsers() {
+        return memberQueryRepository.findAllUser();
     }
 }

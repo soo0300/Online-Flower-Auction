@@ -34,11 +34,11 @@ public class WebSecurity {
         http.csrf().disable();
 
         http.authorizeRequests()
-            .antMatchers("/error/**", "/join", "/health-check", "/actuator/**", "/h2-console/**").permitAll()
-            .antMatchers("/**").hasIpAddress(env.getProperty("gateway.ip"))
-            .and()
-            .authenticationManager(authenticationManager)
-            .addFilter(authenticationFilter);
+                .antMatchers("/error/**","/members", "/join", "/health-check", "/actuator/**", "/h2-console/**").permitAll()
+                .antMatchers("/**").hasIpAddress(env.getProperty("gateway.ip"))
+                .and()
+                .authenticationManager(authenticationManager)
+                .addFilter(authenticationFilter);
 
         http.headers().frameOptions().disable();
 

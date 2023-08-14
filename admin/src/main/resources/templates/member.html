@@ -11,7 +11,7 @@
             content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
     />
     <meta name="generator" content="Hugo 0.112.5"/>
-    <title>꽃향기 | 경매일정관리</title>
+    <title>꽃향기 | 회원 관리</title>
 
     <link
             rel="canonical"
@@ -400,149 +400,39 @@
             <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
             >
-                <h1 class="h2">경매일정관리</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group me-2">
-                        <button
-                                type="button"
-                                class="btn btn-sm btn-outline-secondary"
-                                data-bs-toggle="modal"
-                                data-bs-target="#addInsertAuction"
-                        >
-                            일정등록
-                        </button>
-                    </div>
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                            Share
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                            Export
-                        </button>
-                    </div>
-                    <button
-                            type="button"
-                            class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1"
-                    >
-                        <svg class="bi">
-                            <use xlink:href="#calendar3"/>
-                        </svg>
-                        This week
-                    </button>
-                </div>
+                <h1 class="h2">회원관리</h1>
+
             </div>
 
             <div class="table-responsive small">
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr class="text-center">
-                        <th scope="col">구분코드</th>
-                        <th scope="col">경매시간</th>
-                        <th scope="col">일정 생성일</th>
-                        <th scope="col">입장</th>
-                        <th scope="col">방상태</th>
-                        <th scope="col">경매품 추가</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">전화번호</th>
+                        <th scope="col">사업자번호</th>
+                        <th scope="col">포인트</th>
+                        <th scope="col">상태</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
 
-                    <tr th:each="auction : ${auctions}">
-                        <td style="display:none" th:text="${auction.auctionId}">1</td>
-                        <td th:switch="${auction.code}">
-                            <span th:case="1">절화</span>
-                            <span th:case="2">관엽</span>
-                            <span th:case="3">난</span>
-
-                        </td>
-                        <td th:text="${auction.startTime}">23. 9. 13. 오전 11:00</td>
-                        <td th:text="${auction.createdDate}">23. 9. 20. 오전 5:00</td>
-                        <td>입장</td>
-
-                        <td>
-                            <label>
-                                <select name="status" class="form-control"
-                                        th:attr="onchange='updateStatus(this.value, ' + ${auction.auctionId} + ')'">
-                                    <option value="CLOSE" th:selected="${auction.status.toString()} == 'CLOSE'">CLOSE
-                                    </option>
-                                    <option value="READY" th:selected="${auction.status.toString()} == 'READY'">READY
-                                    </option>
-                                    <option value="OPEN" th:selected="${auction.status.toString()} == 'OPEN'">OPEN
-                                    </option>
-                                </select>
-                            </label>
-                        </td>
-                        <td>
-                            <a th:href="@{/admin-service/intranet/articles/{auctionId}(auctionId=${auction.auctionId})}">관리</a>
-                        </td>
+                    <tr th:each="member : ${members}">
+                        <td th:text="${member.email}">1</td>
+                        <td th:text="${member.name}">1</td>
+                        <td th:text="${member.tel}">1</td>
+                        <td th:text="${member.businessNumber}">1</td>
+                        <td th:text="${member.point}"></td>
+                        <td><span style="font-weight: bold; color: blue" th:text="${member.active}"></span>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
-    <!-- 경매 일정 Modal -->
-    <div
-            class="modal fade"
-            id="addInsertAuction"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabindex="-1"
-            aria-labelledby="addInsertAuctionLabel"
-            aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addInsertAuctionLabel">
-                        경매 일정 등록
-                    </h1>
-                    <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="auctionCode" class="form-label"
-                        >구분코드</label
-                        >
-                        <select id="auctionCode" class="form-select" aria-label="Default select example">
-                            <option value="1" selected>절화</option>
-                            <option value="2">난</option>
-                            <option value="3">관엽</option>
-                            <option value="4">춘란</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="auctionTime" class="form-label"
-                        >경매 시간</label
-                        >
-                        <input
-                                type="datetime-local"
-                                id="auctionTime"
-                                class="form-control"
-                        />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="addAuctionButton">등록</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
-<script th:inline="javascript">
-    function updateStatus(newStatus, auctionId) {
-        // AJAX 요청 생성
-        const uri = '/admin-service/auctions/' + auctionId + "/" + newStatus; // 백엔드 API 경로
-        const params = {};
-
-        callApi(uri, 'patch', params);
-    }
-</script>
 
 <script
         src="/docs/5.3/dist/js/bootstrap.bundle.min.js"

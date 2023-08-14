@@ -7,6 +7,7 @@ import com.kkoch.admin.api.service.admin.AdminQueryService;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.LoginDto;
+import com.kkoch.admin.client.response.MemberResponseForAdmin;
 import com.kkoch.admin.login.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +69,14 @@ public class AdminController {
         Long adminId = adminService.addAdmin(dto);
         log.info("admin={}", adminId);
         return "redirect:/admins";
+    }
+
+    @GetMapping("/members")
+    public String getUsers(Model model) {
+        log.info("<회원조회 컨트롤러> Controller");
+        List<MemberResponseForAdmin> responses = adminQueryService.getUsers();
+        model.addAttribute("members", responses);
+        return "member";
     }
 
 }
