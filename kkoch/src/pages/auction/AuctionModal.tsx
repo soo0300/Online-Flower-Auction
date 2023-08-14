@@ -4,14 +4,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const AuctionModal = ({ modalMessage, onClose }) => {
   React.useEffect(() => {
+    console.log("모달창 몇번 열리니?", modalMessage)
     if (modalMessage === "낙찰 성공") {
       toast.success("낙찰 성공!", {
         position: toast.POSITION.TOP_CENTER,
       });
-    } else {
+    } else if (modalMessage === "이미 낙찰되었습니다.") {
       toast.error("낙찰 실패!", {
         position: toast.POSITION.TOP_LEFT,
       });
+    } else {
+      return ;
     }
   }, [modalMessage]);
   
