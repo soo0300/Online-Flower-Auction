@@ -16,5 +16,13 @@ public class ReservationForAuctionResponse {
         this.reservationId = reservationId;
         this.price = price;
     }
+
+    public String toJson() {
+        return String.format("{" +
+            "\"memberKey\":\"%s\"," +
+            "\"reservationId\":%d," +
+            "\"price\":%d" +
+            "}", this.memberKey, this.reservationId, this.price);
+    }
 }
 
