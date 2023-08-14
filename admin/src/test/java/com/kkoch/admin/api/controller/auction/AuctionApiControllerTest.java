@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {AuctionController.class})
-class AuctionControllerTest extends ControllerTestSupport {
+@WebMvcTest(controllers = {AuctionApiController.class})
+class AuctionApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private AuctionService auctionService;
