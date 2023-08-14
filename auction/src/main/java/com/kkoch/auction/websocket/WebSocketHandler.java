@@ -15,6 +15,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,6 +31,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private static final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>(); //웹소켓 세션 store
     private static String videoSessionId = null; //비디오 세션
     private static String adminSession = null; //관리자 세션 -> 최초 소켓 생성자
+
+    private final Deque<AuctionArticlesResponse> queue = new LinkedList<>(); //경매 순서 확인 큐
 
     //입장
     @Override
@@ -182,13 +186,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
             redisService.insertList(responses);
             AuctionArticlesResponse nextArticle = redisService.getNextArticle();
 
-            String data = nextArticle.toJson();
+            String data = nextArticle.toJson("start");
             log.info("send first json data = {}", data);
             sendMessageAll(data);
 
             nextArticle = redisService.getNextArticle();
 
-            data = nextArticle.toJson();
+            data = nextArticle.toJson("next");
             log.info("send second json data = {}", data);
             sendMessageAll(data);
         }
@@ -196,7 +200,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         //next
         if (command.equals("next")) {
             AuctionArticlesResponse nextArticle = redisService.getNextArticle();
-            String data = nextArticle.toJson();
+            String data = nextArticle.toJson("next");
             log.info("send next json data = {}", data);
             sendMessageAll(data);
         }

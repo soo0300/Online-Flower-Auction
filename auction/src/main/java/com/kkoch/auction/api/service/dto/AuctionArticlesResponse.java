@@ -39,7 +39,7 @@ public class AuctionArticlesResponse implements Serializable {
         this.shipper = shipper;
     }
 
-    public String toJson() {
+    public String toJson(String command) {
         return String.format("{" +
                 "\"auctionArticleId\":%d," +
                 "\"auctionNumber\":\"%s\"," +
@@ -50,7 +50,8 @@ public class AuctionArticlesResponse implements Serializable {
                 "\"startPrice\":%d," +
                 "\"grade\":\"%s\"," +
                 "\"region\":\"%s\"," +
-                "\"shipper\":\"%s\"" +
+                "\"shipper\":\"%s\"," +
+                "\"command\":\"%s\"" +
                 "}", this.auctionArticleId,
             this.auctionNumber,
             this.code,
@@ -60,7 +61,9 @@ public class AuctionArticlesResponse implements Serializable {
             this.startPrice,
             this.grade,
             this.region,
-            this.shipper);
+            this.shipper,
+            command
+        );
     }
 
 }
