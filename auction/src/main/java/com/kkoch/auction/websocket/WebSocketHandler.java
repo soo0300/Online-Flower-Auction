@@ -201,9 +201,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             log.info("send second json data = {}", data);
             sendMessageAll(data);
 
-            // TODO: 2023/08/14 임우택 null 변경
             AuctionArticlesResponse auctionArticlesResponse = queue.pollFirst();
-            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(null);
+            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(auctionArticlesResponse.getPlantId());
             admin.sendMessage(new TextMessage(response.toJson()));
         }
 
@@ -216,9 +215,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             log.info("send next json data = {}", data);
             sendMessageAll(data);
 
-            // TODO: 2023/08/14 임우택 null 변경
             AuctionArticlesResponse auctionArticlesResponse = queue.pollFirst();
-            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(null);
+            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(auctionArticlesResponse.getPlantId());
             admin.sendMessage(new TextMessage(response.toJson()));
         }
 
