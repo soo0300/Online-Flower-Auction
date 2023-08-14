@@ -4,6 +4,7 @@ import secureLocalStorage from 'react-secure-storage';
 import { DoughnutChart } from '../chart/Doughnut';
 import axios from 'axios';
 import './webSocket.css';
+import { current } from '@reduxjs/toolkit';
 
 interface BidderInfo {
   memberToken: string;
@@ -93,21 +94,22 @@ const WebSocketComponent = () => {
 
     // 그래프 멈추는 변수 소켓 전송
     const stopGraph = {
+      role: "client",
       message: "press",
       isBiddingActive: false
     };
     socket.send(JSON.stringify(stopGraph));
-
+    // console.log("버튼소켓1111111111111111111", socket, "그래프멈춰라", stopGraph)
     if (socket) {
       // 현재가 10원 단위 절삭
       const roundedCurrentPrice = Math.floor(currentPrice / 10) * 10;
-      console.log("절삭현재가", roundedCurrentPrice);
+      // console.log("절삭현재가", roundedCurrentPrice);
 
       // memberInfo 갱신 후 JSON 변환 후 전송
       axios({
         method: "post",
-        url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
-        // url: "/api/api/auction-service/auctions/participant",
+        // url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
+        url: "/api/api/auction-service/auctions/participant",
         data: {
           "memberKey": memberToken,
           "auctionArticleId": auctionNowInfo.auctionArticleId,
@@ -115,14 +117,16 @@ const WebSocketComponent = () => {
         }
       }).then((res) => {
         const bidder = res.data.data
+        // console.log("데이터포스트", res)
         setCurrentPrice(-1);
+        // console.log('낙찰후 현재가', currentPrice)
         getBidderInfo(bidder)
         if (bidder.message === "낙찰 성공") {
           const winnerInfo = {
             message: "success",
             winnerNumber: bidder.winnerNumber,
             auctionArticleId: bidder.auctionArticleId,
-            price: bidder.price,
+            price: bidder.bidPrice,
             role: "client"
           }
           socket.send(JSON.stringify(winnerInfo));
@@ -140,7 +144,7 @@ const WebSocketComponent = () => {
     if (!showSuccessModal) {
       // 낙찰자 정보 갱신
       setBidderInfo(e)
-      console.log("11111111111111")
+      // console.log("11111111111111")
       // 모달 창 오픈
       setShowSuccessModal(true);
       // 5초 딜레이
@@ -158,6 +162,7 @@ const WebSocketComponent = () => {
   useEffect(() => {
     // 웹 소켓 링크 설정
     const newSocket = new WebSocket('wss://i9c204.p.ssafy.io/ws/');
+    setSocket(newSocket);
     console.log(newSocket, "소켓생성확인")
 
     // 웹 소켓 열리면 이벤트 핸들러
@@ -184,15 +189,20 @@ const WebSocketComponent = () => {
       //   setIsBiddingActive(true);
       // }
       // 누구든 낙찰버튼 누르면
-      else if (message.message === "success") {
+      else if (message.message === "press") {
         // 경매 비활성화
         setIsBiddingActive(false);
-        setBidderInfo(message);
+        // console.log("입찰메시지11111111111111111111111111", message);
+        // console.log("입찰버튼상태", isBiddingActive);
+        setCurrentPrice(-1);
+        // setBidderInfo(message);
       }
       // 낙찰자 나오면 
-      else if (message === "winner") {
+      else if (message.message === "success") {
+        console.log("메시지들어왔니", message)
         // 낙찰자 정보 업데이트
-        setBidderInfo(message)
+        setBidderInfo(message);
+        console.log("메시지오자마자 낙찰자정보", bidderInfo);
       }
       console.log(msg.data)
     });
@@ -210,14 +220,26 @@ const WebSocketComponent = () => {
 
   // 경매 물품이 하나씩 갱신되면 실행
   useEffect(() => {
-    // console.log("비어있지", auctionNowInfo)
     if (auctionNowInfo) {
       getNowList(auctionNowInfo)
     }
   }, [auctionNowInfo])
 
   useEffect(() => {
-    if (startPrice !== 0 && currentPrice !== -1 && isBiddingActive) {
+    if (currentPrice === -1 && !isBiddingActive) {
+      // console.log("입찰누르고 데이터 받기전1111")
+      console.log("갱신되고 낙찰자정보", bidderInfo)
+      if (bidderInfo) {
+        console.log("입찰후위너갱신1111", bidderInfo)
+        setBidderInfo(null);
+        auctionInfos.shift();
+        divideArticle(auctionInfos);
+        setKey((prevKey) => prevKey + 1);
+        console.log(divideArticle);
+      }
+      return;
+    }
+    else if (startPrice !== 0 && currentPrice !== -1 && isBiddingActive) {
       const totalTime = 10000; // 10초
       const startTime = Date.now(); // 시작 시간 저장
       const decreaseAmount = (startPrice - finalPrice) / totalTime; // 감소량 계산
@@ -225,6 +247,8 @@ const WebSocketComponent = () => {
       const animatePrice = () => {
         console.log("너 계속 실행되지?")
         if (!isBiddingActive) {
+          setCurrentPrice(-1);
+          console.log("", currentPrice)
           return;
         }
         const currentTime = Date.now(); // 현재 시간 구하기
@@ -241,7 +265,7 @@ const WebSocketComponent = () => {
           animationFrameRef.current = requestAnimationFrame(animatePrice);
         } else if (!isBiddingActive) {
           setCurrentPrice(-1); // 클릭한 시점의 현재 가격을 집계중으로 바꾸기 위해 -1로 셋팅
-          // console.log("빠지기전", auctionInfos);
+          // console.log("1111111111111111111111", auctionInfos);
           auctionInfos.shift();
           // setAuctionNowInfo(auctionInfos[0]);
           // setAuctionNextInfo(auctionInfos[1]);
@@ -267,7 +291,7 @@ const WebSocketComponent = () => {
           // setAuctionNextInfo(auctionInfos[1]);
           setIsBiddingActive(false);
           const updateTimer = setTimeout(() => {
-            console.log("마지막 안에서", auctionNextInfo)
+            // console.log("마지막 안에서", auctionNextInfo)
             divideArticle(auctionInfos);
             setKey((prevKey) => prevKey + 1);
           }, 3000);
@@ -363,7 +387,7 @@ const WebSocketComponent = () => {
                   품명
                 </span>
                 <span className='red-text'>
-                  {auctionNextInfo?.type + ' /'} {auctionNextInfo?.name}
+                  {auctionNextInfo? auctionNextInfo.type + ' /' : ''} {auctionNextInfo?.name}
                 </span>
               </div>
               <div>

@@ -11,7 +11,7 @@ const NoticeDetail = () => {
 
     useEffect(() => {
         axios
-            .get(`https://i9c204.p.ssafy.io/api/api/admin-service/notices/${noticeId}`)
+            .get(`https://i9c204.p.ssafy.io/api/admin-service/notices/${noticeId}`)
             // .get(`/api/api/admin-service/notices/${noticeId}`)
             .then((response) => {       
                 console.log(response.data.data);
