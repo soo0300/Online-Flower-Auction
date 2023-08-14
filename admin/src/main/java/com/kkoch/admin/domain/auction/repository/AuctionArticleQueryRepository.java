@@ -57,6 +57,7 @@ public class AuctionArticleQueryRepository {
         return queryFactory.select(constructor(AuctionArticlesResponse.class,
                         auctionArticle.id,
                         auctionArticle.auctionNumber,
+                        auctionArticle.plant.id,
                         auctionArticle.plant.code.name,
                         auctionArticle.plant.type.name,
                         auctionArticle.plant.name.name,

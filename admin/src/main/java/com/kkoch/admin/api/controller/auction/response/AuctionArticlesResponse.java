@@ -14,6 +14,8 @@ public class AuctionArticlesResponse {
     private String auctionNumber;
 
     // 식물
+    private Long plantId;
+
     private String code;
     private String type;
     private String name;
@@ -25,9 +27,10 @@ public class AuctionArticlesResponse {
     private String shipper;
 
     @Builder
-    public AuctionArticlesResponse(Long auctionArticleId, String auctionNumber, String code, String type, String name, int count, int startPrice, Grade grade, String region, String shipper) {
+    public AuctionArticlesResponse(Long auctionArticleId, String auctionNumber, Long plantId, String code, String type, String name, int count, int startPrice, Grade grade, String region, String shipper) {
         this.auctionArticleId = auctionArticleId;
         this.auctionNumber = auctionNumber;
+        this.plantId = plantId;
         this.code = code;
         this.type = type;
         this.name = name;

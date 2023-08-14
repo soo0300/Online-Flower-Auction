@@ -25,15 +25,15 @@ public class EventController {
 
     @PostMapping("/{auctionId}")
     public ApiResponse<AuctionArticlesResponse> getFirstArticle(@PathVariable Long auctionId) throws IOException {
-        List<AuctionArticlesResponse> articles = adminServiceClient.getAuctionArticlesForAuction(auctionId).getData();
-//        AuctionArticlesResponse article1 = getArticle(1L);
-//        AuctionArticlesResponse article2 = getArticle(2L);
-//        AuctionArticlesResponse article3 = getArticle(3L);
-//        AuctionArticlesResponse article4 = getArticle(4L);
-//        AuctionArticlesResponse article5 = getArticle(5L);
-//        AuctionArticlesResponse article6 = getArticle(6L);
-//        AuctionArticlesResponse article7 = getArticle(7L);
-//        List<AuctionArticlesResponse> articles = List.of(article1, article2, article3, article4, article5, article6, article7);
+//        List<AuctionArticlesResponse> articles = adminServiceClient.getAuctionArticlesForAuction(auctionId).getData();
+        AuctionArticlesResponse article1 = getArticle(1L);
+        AuctionArticlesResponse article2 = getArticle(2L);
+        AuctionArticlesResponse article3 = getArticle(3L);
+        AuctionArticlesResponse article4 = getArticle(4L);
+        AuctionArticlesResponse article5 = getArticle(5L);
+        AuctionArticlesResponse article6 = getArticle(6L);
+        AuctionArticlesResponse article7 = getArticle(7L);
+        List<AuctionArticlesResponse> articles = List.of(article1, article2, article3, article4, article5, article6, article7);
         redisService.insertList(articles);
         AuctionArticlesResponse nextArticle = redisService.getNextArticle();
         return ApiResponse.ok(nextArticle);
@@ -41,16 +41,16 @@ public class EventController {
 
     @GetMapping("/{auctionId}")
     public ApiResponse<AuctionArticlesResponse> getNextArticle(@PathVariable Long auctionId) throws IOException {
-//        List<AuctionArticlesResponse> articles = adminServiceClient.getAuctionArticlesForAuction(auctionId).getData();
-//        AuctionArticlesResponse article1 = getArticle(1L);
-//        AuctionArticlesResponse article2 = getArticle(2L);
-//        AuctionArticlesResponse article3 = getArticle(3L);
-//        AuctionArticlesResponse article4 = getArticle(4L);
-//        AuctionArticlesResponse article5 = getArticle(5L);
-//        AuctionArticlesResponse article6 = getArticle(6L);
-//        AuctionArticlesResponse article7 = getArticle(7L);
+        List<AuctionArticlesResponse> articles = adminServiceClient.getAuctionArticlesForAuction(auctionId).getData();
+        AuctionArticlesResponse article1 = getArticle(1L);
+        AuctionArticlesResponse article2 = getArticle(2L);
+        AuctionArticlesResponse article3 = getArticle(3L);
+        AuctionArticlesResponse article4 = getArticle(4L);
+        AuctionArticlesResponse article5 = getArticle(5L);
+        AuctionArticlesResponse article6 = getArticle(6L);
+        AuctionArticlesResponse article7 = getArticle(7L);
 //        List<AuctionArticlesResponse> articles = List.of(article1, article2, article3, article4, article5, article6, article7);
-//        redisService.insertList(articles);
+        redisService.insertList(articles);
         AuctionArticlesResponse nextArticle = redisService.getNextArticle();
         return ApiResponse.ok(nextArticle);
     }
