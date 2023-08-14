@@ -23,11 +23,12 @@ const authSlice = createSlice({
 
       secureLocalStorage.setItem("memberkey", state.memberkey);
       secureLocalStorage.setItem("token", state.token);
+      secureLocalStorage.setItem("loginTime", new Date());
       
       axios({
         method:"get",
-        url: `https://i9c204.p.ssafy.io/api/user-service/${state.memberkey}`,
-        // url: `/api/api/user-service/${state.memberkey}`,
+        // url: `https://i9c204.p.ssafy.io/api/user-service/${state.memberkey}`,
+        url: `/api/api/user-service/${state.memberkey}`,
         headers:{
           Authorization : `Bearer ${state.token}`
         }
@@ -45,8 +46,8 @@ const authSlice = createSlice({
       localStorage.removeItem('username');
       secureLocalStorage.removeItem("memberkey");
       secureLocalStorage.removeItem("token");
+      secureLocalStorage.removeItem("loginTime");
     },
-    // 다른 액션들...
   },
 });
 

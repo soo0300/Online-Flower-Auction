@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react"; 
 import { Bars3Icon, XMarkIcon, UserCircleIcon, BellAlertIcon } from "@heroicons/react/24/solid";
 import Logo from "@/assets/logo.png";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { useDispatch } from "react-redux";
 import { logout } from '@/reducer/store/authSlice';
@@ -13,9 +13,10 @@ import "./index.css"
 
 type Props = {
   isTop: boolean;
+  showNavbar: boolean;
 }
 
-const Navbar = ({isTop} : Props) => {
+const Navbar = ({isTop, showNavbar} : Props) => {
   const flexBetween = "flex items-center justify-between";
   
   // 모바일 용 토글버튼은 false로 초기화 
@@ -30,6 +31,7 @@ const Navbar = ({isTop} : Props) => {
   const [notifications, setNotifications] = useState([]);
   
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // 로그인 여부 확인
   const isLoggedIn = secureLocalStorage.getItem("memberkey") && secureLocalStorage.getItem("token");
@@ -58,6 +60,8 @@ const Navbar = ({isTop} : Props) => {
     if(confirm("로그아웃 하시겠습니까?")) {
       setDropdownOpen(false);
       dispatch(logout());
+      navigate("/");
+      window.location.reload();
     }
   }
 
@@ -105,132 +109,138 @@ const Navbar = ({isTop} : Props) => {
     return tmpTime;
   }
 
-  return <nav>
-    <div ref={dropMenuRef}
-      className={`${navbarBackground} ${flexBetween} top-0 z-30 w-full py-3 border-b-2`}
-    >
-      <div className={`${flexBetween} mx-auto w-5/6`}>
-        <div className={`${flexBetween} w-full gap-16`}>
-          {/* 로고 이미지 */}
-          <Link to="/">
-            <img src={Logo} alt="logo" className="h-20"/>
-          </Link>
+  return (
+    <>
+      {showNavbar === true ? (
+      <nav>
+        <div ref={dropMenuRef}
+          className={`${navbarBackground} ${flexBetween} top-0 z-30 w-full py-3 border-b-2`}
+        >
+          <div className={`${flexBetween} mx-auto w-5/6`}>
+            <div className={`${flexBetween} w-full gap-16`}>
+              {/* 로고 이미지 */}
+              <Link to="/">
+                <img src={Logo} alt="logo" className="h-20"/>
+              </Link>
 
-          {/* 메뉴 */}
-          {isAboveMediumScreens ? // PC화면일때 : 모바일 화면일때 
-            (<div className={`${flexBetween} w-full `}>
-              <div className={`${flexBetween} gap-8 text-xl`}>
-                <Link to="/auction" className="nav-link"> 경매</Link>
-                <Link to="/flowers/절화" state ={{ code: "절화"}} className="nav-link"> 화훼정보</Link>
-                <Link to="/notices" className="nav-link">공지사항</Link>
-              </div>
-                { isLoggedOut ? (
-                  <div className={`${flexBetween} gap-8`}>
-                    <Link to="/login" className="nav-link">로그인</Link>
-                    <Link to="/signup" className="nav-link">회원가입</Link>
+              {/* 메뉴 */}
+              {isAboveMediumScreens ? // PC화면일때 : 모바일 화면일때 
+                (<div className={`${flexBetween} w-full `}>
+                  <div className={`${flexBetween} gap-8 text-xl`}>
+                    <Link to="/auction" className="nav-link"> 경매</Link>
+                    <Link to="/flowers/절화" state ={{ code: "절화"}} className="nav-link"> 화훼정보</Link>
+                    <Link to="/notices" className="nav-link">공지사항</Link>
                   </div>
-                  ) : (
-                    <div className="flex justify-between">
-                      <button
-                        className="flex justify-between items-center"
-                        onClick={() => {
-                          setNotificationOpen(!isNotificationOpen);
+                    { isLoggedOut ? (
+                      <div className={`${flexBetween} gap-8 text-xl`}>
+                        <Link to="/login" className="nav-link">로그인</Link>
+                        <Link to="/signup" className="nav-link">회원가입</Link>
+                      </div>
+                      ) : (
+                        <div className="flex justify-between">
+                          <button
+                            className="flex justify-between items-center"
+                            onClick={() => {
+                              setNotificationOpen(!isNotificationOpen);
 
-                          if (isDropdownOpen) setDropdownOpen(!isDropdownOpen);
-                          setNotificationOpen(!isNotificationOpen)
-                          
-                          getNotification()
-                        }}
-                      >
-                        <BellAlertIcon className="h-10 w-10 text-blue-500"/>
-                      </button>
-                      <button className="flex justify-between items-center" 
-                              onClick={() => {
-                                if (isNotificationOpen) setNotificationOpen(!isNotificationOpen);
-                                setDropdownOpen(!isDropdownOpen);
-                              }}
-                      >
-                        <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
-                        <span className="text-xl">{username}님</span>
-                      </button>
-                    </div>
+                              if (isDropdownOpen) setDropdownOpen(!isDropdownOpen);
+                              setNotificationOpen(!isNotificationOpen)
+                              
+                              getNotification()
+                            }}
+                          >
+                            <BellAlertIcon className="h-10 w-10 text-blue-500"/>
+                          </button>
+                          <button className="flex justify-between items-center" 
+                                  onClick={() => {
+                                    if (isNotificationOpen) setNotificationOpen(!isNotificationOpen);
+                                    setDropdownOpen(!isDropdownOpen);
+                                  }}
+                          >
+                            <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
+                            <span className="text-xl">{username}님</span>
+                          </button>
+                        </div>
+                    )}
+                </div>)
+                : (
+                    <button
+                      className="rounded-full bg-secondary-500 p-2"
+                      onClick={() => menuToggle(!isMenuToggled)}
+                    >
+                      <Bars3Icon className="h-6 w-6 text-white" />
+                    </button>
                 )}
-            </div>)
-            : (
-                <button
-                  className="rounded-full bg-secondary-500 p-2"
-                  onClick={() => menuToggle(!isMenuToggled)}
-                >
-                  <Bars3Icon className="h-6 w-6 text-white" />
-                </button>
-            )}
-        </div>
-      </div>
-    </div>  
-    
-    {/* 모바일 화면 부분 */}
-    {!isAboveMediumScreens && isMenuToggled && (
-      <div className="fixed right-0 bottom-0 z-40 h-full w-[300px] bg-primary-100 drop-shadow-xl">
-        
-        {/* 메뉴 닫기 */}
-        <div className="flex justify-end p-12 ">
-          <button onClick={() => menuToggle(!isMenuToggled)}>
-            <XMarkIcon className="h-6 w-6 text-gray-400" />
-          </button>
-        </div>
-
-        {/* 메뉴 목록 */}
-        <div className="ml-[33%] flex flex-col gap-10 text-2xl">
-          <Link to="/auction"> 경매</Link>
-          
-        </div>
-      </div>
-    )}
-
-    {/* 회원 메뉴 드롭다운 */}
-    { isAboveMediumScreens && isDropdownOpen && (
-      <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
-        <ul className="flex flex-col justify-center pl-0 mb-0">
-          <li>
-            <Link to="/mypage" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setDropdownOpen(false)}>마이페이지</Link>
-          </li>
-          <li className="border-t">
-            <a onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">로그아웃</a>
-          </li>
-          <li className="border-t">
-            {/* Add an event handler for 회원탈퇴 */}
-            <a className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">회원탈퇴</a>
-          </li>
-        </ul>
-      </div>
-    )}
-
-    {/* 알림 드롭다운 */}
-    { isAboveMediumScreens && isNotificationOpen && (
-      <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
-        {/* 알림 내용 */}
-        {notifications.map((noti, index) => (
-          <div key={index} className="p-2 border-b flex justify-between items-center">
-            <div className="mr-6">
-              {formattedDate(noti.createdDate)} - {noti.content}
             </div>
-            <button
-              className="text-gray-500 hover:text-red-500 mr-2"
-              onClick={() => {
-                  // 해당 알림을 삭제하는 로직을 추가하세요
-                  // notifications 배열에서 해당 알림을 제거하는 방식으로 구현하면 됩니다.
-                  const updatedNotifications = [...notifications];
-                  updatedNotifications.splice(index, 1);
-                  setNotifications(updatedNotifications);
-                }}
-              >
-              X
-            </button>
           </div>
-        ))}
-      </div>
-    )}
-  </nav>
+        </div>  
+        
+        {/* 모바일 화면 부분 */}
+        {!isAboveMediumScreens && isMenuToggled && (
+          <div className="fixed right-0 bottom-0 z-40 h-full w-[300px] bg-primary-100 drop-shadow-xl">
+            
+            {/* 메뉴 닫기 */}
+            <div className="flex justify-end p-12 ">
+              <button onClick={() => menuToggle(!isMenuToggled)}>
+                <XMarkIcon className="h-6 w-6 text-gray-400" />
+              </button>
+            </div>
+
+            {/* 메뉴 목록 */}
+            <div className="ml-[33%] flex flex-col gap-10 text-2xl">
+              <Link to="/auction"> 경매</Link>
+              
+            </div>
+          </div>
+        )}
+
+        {/* 회원 메뉴 드롭다운 */}
+        { isAboveMediumScreens && isDropdownOpen && (
+          <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
+            <ul className="flex flex-col justify-center pl-0 mb-0">
+              <li>
+                <Link to="/mypage" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setDropdownOpen(false)}>마이페이지</Link>
+              </li>
+              <li className="border-t">
+                <a onClick={handleLogout} className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">로그아웃</a>
+              </li>
+              <li className="border-t">
+                {/* Add an event handler for 회원탈퇴 */}
+                <a className="block px-4 py-2 hover:bg-gray-100 cursor-pointer">회원탈퇴</a>
+              </li>
+            </ul>
+          </div>
+        )}
+
+        {/* 알림 드롭다운 */}
+        { isAboveMediumScreens && isNotificationOpen && (
+          <div className="absolute z-20 top-20 right-20 bg-white border border-gray-300 rounded shadow-lg">
+            {/* 알림 내용 */}
+            {notifications.map((noti, index) => (
+              <div key={index} className="p-2 border-b flex justify-between items-center">
+                <div className="mr-6">
+                  {formattedDate(noti.createdDate)} - {noti.content}
+                </div>
+                <button
+                  className="text-gray-500 hover:text-red-500 mr-2"
+                  onClick={() => {
+                      // 해당 알림을 삭제하는 로직을 추가하세요
+                      // notifications 배열에서 해당 알림을 제거하는 방식으로 구현하면 됩니다.
+                      const updatedNotifications = [...notifications];
+                      updatedNotifications.splice(index, 1);
+                      setNotifications(updatedNotifications);
+                    }}
+                  >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </nav>
+      ) : null }
+    </>
+  )
 }
 
 export default Navbar

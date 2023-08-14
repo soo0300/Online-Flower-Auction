@@ -6,7 +6,6 @@ import UserVideoComponent from './UserVideoComponent';
 import Clock from '@/components/Clock/Clock';
 
 import "./openSessoin.css";
-import { current } from 'immer';
 
 export default function OpenSession() {
   // const socketRef = useRef(new WebSocket('wss://i9c204.p.ssafy.io/ws/')); // useRef로 WebSocket 인스턴스 생성
