@@ -15,6 +15,8 @@ public class AuctionArticlesResponse implements Serializable {
     private String auctionNumber;
 
     // 식물
+    private Long plantId;
+
     private String code;
     private String type;
     private String name;
@@ -26,9 +28,10 @@ public class AuctionArticlesResponse implements Serializable {
     private String shipper;
 
     @Builder
-    public AuctionArticlesResponse(Long auctionArticleId, String auctionNumber, String code, String type, String name, int count, int startPrice, String grade, String region, String shipper) {
+    public AuctionArticlesResponse(Long auctionArticleId, String auctionNumber, Long plantId, String code, String type, String name, int count, int startPrice, String grade, String region, String shipper) {
         this.auctionArticleId = auctionArticleId;
         this.auctionNumber = auctionNumber;
+        this.plantId = plantId;
         this.code = code;
         this.type = type;
         this.name = name;
@@ -41,26 +44,28 @@ public class AuctionArticlesResponse implements Serializable {
 
     public String toJson() {
         return String.format("{" +
-                "\"auctionArticleId\":%d," +
-                "\"auctionNumber\":\"%s\"," +
-                "\"code\":\"%s\"," +
-                "\"type\":\"%s\"," +
-                "\"name\":\"%s\"," +
-                "\"count\":%d," +
-                "\"startPrice\":%d," +
-                "\"grade\":\"%s\"," +
-                "\"region\":\"%s\"," +
-                "\"shipper\":\"%s\"" +
-                "}", this.auctionArticleId,
-            this.auctionNumber,
-            this.code,
-            this.type,
-            this.name,
-            this.count,
-            this.startPrice,
-            this.grade,
-            this.region,
-            this.shipper);
+                        "\"auctionArticleId\":%d," +
+                        "\"auctionNumber\":\"%s\"," +
+                        "\"plantId\":\"%d\"," +
+                        "\"code\":\"%s\"," +
+                        "\"type\":\"%s\"," +
+                        "\"name\":\"%s\"," +
+                        "\"count\":%d," +
+                        "\"startPrice\":%d," +
+                        "\"grade\":\"%s\"," +
+                        "\"region\":\"%s\"," +
+                        "\"shipper\":\"%s\"" +
+                        "}", this.auctionArticleId,
+                this.auctionNumber,
+                this.plantId,
+                this.code,
+                this.type,
+                this.name,
+                this.count,
+                this.startPrice,
+                this.grade,
+                this.region,
+                this.shipper);
     }
 
 }
