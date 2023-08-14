@@ -7,6 +7,7 @@ import com.kkoch.admin.api.service.admin.AdminQueryService;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.LoginDto;
+import com.kkoch.admin.client.response.MemberResponseForAdmin;
 import com.kkoch.admin.login.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,13 @@ public class AdminController {
         return "redirect:/";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        log.info("<로그아웃 요청> Controller");
+        session.invalidate();
+        return "login";
+    }
+
     @GetMapping("/admins")
     public String adminPage(@ModelAttribute("form") AddAdminRequest request, Model model) {
         log.info("<관리자 목록 요청> Controller");
@@ -61,6 +69,14 @@ public class AdminController {
         Long adminId = adminService.addAdmin(dto);
         log.info("admin={}", adminId);
         return "redirect:/admins";
+    }
+
+    @GetMapping("/members")
+    public String getUsers(Model model) {
+        log.info("<회원조회 컨트롤러> Controller");
+        List<MemberResponseForAdmin> responses = adminQueryService.getUsers();
+        model.addAttribute("members", responses);
+        return "member";
     }
 
 }

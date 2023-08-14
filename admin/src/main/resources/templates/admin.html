@@ -374,8 +374,6 @@
                     </ul>
 
 
-
-
                     <hr class="my-3"/>
 
                     <ul class="nav flex-column mb-auto">
@@ -407,23 +405,6 @@
                             관계자등록
                         </button>
                     </div>
-                    <div class="btn-group me-2">
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                            Share
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-secondary">
-                            Export
-                        </button>
-                    </div>
-                    <button
-                            type="button"
-                            class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1"
-                    >
-                        <svg class="bi">
-                            <use xlink:href="#calendar3"/>
-                        </svg>
-                        This week
-                    </button>
                 </div>
             </div>
 
@@ -432,7 +413,7 @@
                     <thead>
                     <tr class="text-center">
                         <th scope="col">#</th>
-                        <th scope="col" id = "showPk">PK</th>
+                        <th scope="col" id="showPk">PK</th>
                         <th scope="col">아이디</th>
                         <th scope="col">비밀번호</th>
                         <th scope="col">이름</th>
@@ -441,7 +422,7 @@
                         <th scope="col">입사일</th>
                         <th scope="col">활동 상태</th>
                         <th scope="col">수정</th>
-                        <th scope="col">상태 변경</th>
+                        <th scope="col">삭제</th>
                     </tr>
                     </thead>
                     <tbody class="text-center">
@@ -451,18 +432,20 @@
                         <td th:text="${admin.loginId}">lyt1228</td>
                         <td th:text="${admin.loginPw}" id="herePw">lsdsjgkj!</td>
                         <td th:text="${admin.name}">임우택</td>
-                        <td th:text="${admin.tel}"  id="hereTel">010-1111-1111</td>
+                        <td th:text="${admin.tel}" id="hereTel">010-1111-1111</td>
                         <td th:text="${admin.position}">00</td>
                         <td th:text="${admin.createdDate}">2023.01.01</td>
                         <td id="hereActive">
-                            <span th:if="${admin.active}" style="font-weight: bold; color: red;">활성화 상태</span>
-                            <span th:unless="${admin.active}" style="font-weight: bold; color: blue;">비활성화 상태</span>
+                            <span th:if="${admin.active}" style="font-weight: bold; color: red;">활성화</span>
+                            <span th:unless="${admin.active}" style="font-weight: bold; color: blue;">비활성화</span>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#editModal">수정</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#editModal">수정
+                            </button>
                         </td>
                         <td>
-                            <button class="btn btn-danger btn-sm deleteButton">변경</button>
+                            <button class="btn btn-danger btn-sm deleteButton">삭제</button>
                         </td>
                     </tr>
                     </tbody>
@@ -514,7 +497,6 @@
         const deleteButtons = document.querySelectorAll('.deleteButton');
 
 
-
         getPkButtons.forEach(button => {
             button.addEventListener('click', async function () {
                 const row = button.closest('tr');
@@ -554,9 +536,9 @@
 
             adminTelDisplay = savedTelInput.value;
             adminPwDisplay = savedPwInput.value;
-            console.log("adminPw"+adminPwDisplay.textContent);
+            console.log("adminPw" + adminPwDisplay.textContent);
 
-            console.log("in"+findId);
+            console.log("in" + findId);
 
 
             const params = {
@@ -577,20 +559,10 @@
         deleteButtons.forEach(deleteButton => {
             deleteButton.addEventListener('click', async function () {
                 callApi(`/admin-service/admins/${findId}`, 'delete');
+                window.location.reload();
 
-                const adminActiveDisplay = deleteButton.closest('tr').querySelector('#hereActive');
-                if (adminActiveDisplay.textContent === '활성화 상태') {
-                    adminActiveDisplay.textContent = '비활성화 상태';
-                    adminActiveDisplay.style.color = 'blue';
-                    adminActiveDisplay.classList.add('bold-text');
-                } else {
-                    adminActiveDisplay.textContent = '활성화 상태';
-                    adminActiveDisplay.style.color = 'red';
-                    adminActiveDisplay.classList.add('bold-text');
-                }
             });
         });
-
 
 
     });
@@ -604,6 +576,7 @@
     #herePk {
         display: none;
     }
+
     .bold-text {
         font-weight: bold;
     }

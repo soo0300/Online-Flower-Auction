@@ -1,12 +1,8 @@
 package com.kkoch.admin.api.controller.notice.response;
 
-import com.kkoch.admin.domain.admin.Admin;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -16,14 +12,13 @@ public class NoticeResponse {
     private Long noticeId;
     private String title;
     private String content;
-//    private Boolean active;
-//    private Admin admin;
+    private Boolean active;
+
     @Builder
-    public NoticeResponse(Long noticeId, String title, String content) {
+    public NoticeResponse(Long noticeId, String title, String content, Boolean active) {
         this.noticeId = noticeId;
         this.title = title;
         this.content = content;
-//        this.admin = admin;
-//        this.active = active;
+        this.active = active;
     }
 }
