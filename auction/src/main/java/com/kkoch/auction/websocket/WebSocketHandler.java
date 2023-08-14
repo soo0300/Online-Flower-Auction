@@ -1,8 +1,10 @@
 package com.kkoch.auction.websocket;
 
-import com.kkoch.auction.api.service.AdminServiceClient;
+import com.kkoch.auction.client.AdminServiceClient;
 import com.kkoch.auction.api.service.RedisService;
 import com.kkoch.auction.api.service.dto.AuctionArticlesResponse;
+import com.kkoch.auction.client.UserServiceClient;
+import com.kkoch.auction.client.response.ReservationForAuctionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.parser.ParseException;
@@ -15,9 +17,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RequiredArgsConstructor
@@ -27,10 +27,12 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     private final RedisService redisService;
     private final AdminServiceClient adminServiceClient;
+    private final UserServiceClient userServiceClient;
 
     private static final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>(); //웹소켓 세션 store
     private static String videoSessionId = null; //비디오 세션
     private static String adminSession = null; //관리자 세션 -> 최초 소켓 생성자
+    private static WebSocketSession admin = null;
 
     private final Deque<AuctionArticlesResponse> queue = new LinkedList<>(); //경매 순서 확인 큐
 
@@ -159,13 +161,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
         sendMessageAll(message.getPayload());
     }
 
-    private void admin(WebSocketSession session, JSONObject json) {
+    private void admin(WebSocketSession session, JSONObject json) throws IOException {
         String currentSessionId = session.getId();
         String command = getDataForJson(json, "command");
 
         //open
         if (command.equals("open")) {
             log.info("open web socket");
+            admin = session;
             adminSession = currentSessionId;
             videoSessionId = getDataForJson(json, "sessionId");
             log.info("adminSession={}, videoSessionId={}", adminSession, videoSessionId);
@@ -185,24 +188,38 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
             redisService.insertList(responses);
             AuctionArticlesResponse nextArticle = redisService.getNextArticle();
+            queue.add(nextArticle);
 
             String data = nextArticle.toJson("start");
             log.info("send first json data = {}", data);
             sendMessageAll(data);
 
             nextArticle = redisService.getNextArticle();
+            queue.add(nextArticle);
 
             data = nextArticle.toJson("next");
             log.info("send second json data = {}", data);
             sendMessageAll(data);
+
+            // TODO: 2023/08/14 임우택 null 변경
+            AuctionArticlesResponse auctionArticlesResponse = queue.pollFirst();
+            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(null);
+            admin.sendMessage(new TextMessage(response.toJson()));
         }
 
         //next
         if (command.equals("next")) {
             AuctionArticlesResponse nextArticle = redisService.getNextArticle();
+            queue.add(nextArticle);
+
             String data = nextArticle.toJson("next");
             log.info("send next json data = {}", data);
             sendMessageAll(data);
+
+            // TODO: 2023/08/14 임우택 null 변경
+            AuctionArticlesResponse auctionArticlesResponse = queue.pollFirst();
+            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(null);
+            admin.sendMessage(new TextMessage(response.toJson()));
         }
 
         //close
