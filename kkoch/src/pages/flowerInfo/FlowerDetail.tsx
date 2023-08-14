@@ -45,8 +45,8 @@ const FlowerDetail = () => {
 
   const response = () => {
     axios({
-      // url: '/api/api/admin-service/stats',
-      url: 'https://i9c204.p.ssafy.io/api/admin-service/stats',
+      url: '/api/api/admin-service/stats',
+      // url: 'https://i9c204.p.ssafy.io/api/admin-service/stats',
       method: 'get',
       params: {
         type: flowerData.type,

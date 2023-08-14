@@ -37,6 +37,11 @@ const TestComponent = (props) => {
     return `${year}-${month}-${day} ${hours}:${minutes}`;
   }
 
+  // 단위 통화 표시
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat('ko-KR').format(number);
+  };
+
   // 테이블 데이터 초기 상태
   const [tableData, setTableData] = useState(null);
   const [filteredTableData, setFilteredTableData] = useState([]);
@@ -49,14 +54,15 @@ const TestComponent = (props) => {
     setIsLoading(true);
     axios({
       method: "get",
-      url: `https://i9c204.p.ssafy.io/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
-      // url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
+      // url: `https://i9c204.p.ssafy.io/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
+      url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
     })
     .then((res) => {
       const dataWithId = res.data.data.content.map((item, index) => ({
         ...item,
         id: index + 1,
         bidTime: formatTime(new Date(item.bidTime)),
+        bidPrice: formatNumber(item.bidPrice)
       }));
       setFilteredTableData(dataWithId);
       setTableData(dataWithId);
@@ -106,7 +112,7 @@ const TestComponent = (props) => {
       </div>
       <div className='tablecontent'>
       {isLoading ? (
-          <div className='loading-message'>데이터를 불러오는 중...</div>
+          <div className='loading-message'></div>
         ) : (
           <div className='datagrid-container'>
             <DataGrid 

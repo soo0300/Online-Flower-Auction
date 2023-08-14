@@ -23,10 +23,14 @@
   cursor: pointer;
 }
 
-.paging-title a:hover,
-.paging-title a:active {
+.paging-title a:hover{
   font-weight: bold;
   color: #F25477; /* 클릭된 상태의 글자색을 변경합니다. 원하는 색상으로 변경하세요. */
+}
+
+.paging-title a.active-link {
+  font-weight: bold;
+  color: #F25477;
 }
 
 .tablecontent {
@@ -55,11 +59,28 @@
   background-color: #F25477;
   color: white;
   font-weight: bold;
+  margin-bottom: 4px;
 }
 
 
-.MuiDataGrid-cell {
+.MuiDataGrid-cell{
+  background-color: white;
   text-align: center;
+}
+
+.MuiDataGrid-virtualScroller {
+  background-color: white;
+}
+
+.MuiDataGrid-row {
+  border: 1px solid #FFB7C5;
+  /* margin-top: 2px;
+  margin-bottom: 2px; */
+}
+
+.MuiDataGrid-cell a{
+  color: black;
+  font-weight: bold;
 }
 
 .custom-row-sold:hover {

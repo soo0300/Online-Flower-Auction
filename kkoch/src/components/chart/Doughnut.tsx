@@ -5,6 +5,7 @@ import { Doughnut } from 'react-chartjs-2';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export function DoughnutChart({ isBiddingActive, key }) {
+  // console.log("그래프활성화확인", isBiddingActive)
   const initialGraph = 40
   const [graph, setGraph] = useState(initialGraph); // 초기 그래프 크기 설정
   const [isGraphCreated, setIsGraphCreated] = useState(false);
