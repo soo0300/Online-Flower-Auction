@@ -1,5 +1,6 @@
 package com.kkoch.user.api.service.reservation;
 
+import com.kkoch.user.api.controller.reservation.response.ReservationForAuctionResponse;
 import com.kkoch.user.api.controller.reservation.response.ReservationResponse;
 import com.kkoch.user.client.PlantServiceClient;
 import com.kkoch.user.client.response.PlantNameResponse;
@@ -50,5 +51,9 @@ public class ReservationQueryService {
         long totalCount = reservationQueryRepository.getTotalCount(memberKey);
 
         return new PageImpl<>(responses, pageable, totalCount);
+    }
+
+    public ReservationForAuctionResponse getReservation(Long plantId) {
+        return reservationQueryRepository.findByPlantId(plantId);
     }
 }
