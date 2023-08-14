@@ -11,6 +11,11 @@ import java.util.List;
 import static com.kkoch.user.domain.alarm.QAlarm.*;
 import static com.kkoch.user.domain.member.QMember.*;
 
+/**
+ * Alarm 조회용 Repository
+ *
+ * @author 임우택
+ */
 @Repository
 public class AlarmQueryRepository {
 
@@ -20,6 +25,12 @@ public class AlarmQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 최근 알림 10건 조회
+     *
+     * @param memberKey 회원 고유키
+     * @return 알림 정보 리스트 객체
+     */
     public List<AlarmResponse> findAlarmsByMemberKey(String memberKey) {
         return queryFactory
             .select(Projections.constructor(AlarmResponse.class,
