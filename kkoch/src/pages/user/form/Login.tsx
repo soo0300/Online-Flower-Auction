@@ -2,26 +2,27 @@ import React, { useEffect, useState } from 'react';
 import './Login.css';
 import axios from 'axios';
 import { useDispatch } from "react-redux";
-import flowerImg from "@/assets/flowerBackImg.png"
 import { login } from '@/reducer/store/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Logo from "@/assets/logo.png";
 
-const Login = () => {
-	// const location = useLocation();	// 이전 라우터 위치정보를 가져온다
-	const { state } = useLocation();	// 이전 라우터 위치정보를 가져온다
+const Login = ({propsEmail}) => {
 	const navigate = useNavigate();
-
+	const { state } = useLocation();
+	
 	// 만약 회원가입에서 넘어왔으면 이메일을 바로 대입
-	const [email, setEmail] = useState(state && state.email ? state.email : '');
+	const [email, setEmail] = useState(propsEmail ? propsEmail : '');
 	const [ password, setPassword] = useState('');
 
-	const [ emailValid, setEmailValid ] = useState(state && state.email ? true : false);
+	const [ emailValid, setEmailValid ] = useState(propsEmail ? true : false);
 	const [ passwordValid, setPasswordValid ] = useState(false);
 	const [ notAllow, setNotAllow ] = useState(true);
 
 	const dispatch = useDispatch();
-  
 
+	const goTohome = () => {
+		navigate("/");
+	}
 	// 이메일 검증 함수
 	const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newEmail = e.target.value
@@ -62,8 +63,8 @@ const Login = () => {
 		// POST 요청 보내기
 		axios({
 			method: "post",
-			url: "https://i9c204.p.ssafy.io/api/user-service/login", // 프록시 경로인 /api를 사용
-			// url: "/api/api/user-service/login", // 프록시 경로인 /api를 사용
+			// url: "https://i9c204.p.ssafy.io/api/user-service/login", // 프록시 경로인 /api를 사용
+			url: "/api/api/user-service/login", // 프록시 경로인 /api를 사용
 			headers: {
 				"Content-Type": "application/json"
 			},
@@ -100,72 +101,51 @@ const Login = () => {
 	}, [emailValid, passwordValid]);
 
   return (
-		//page gap-16 bg-gray-20 py-10 md:h-full md:pb-0 
-		<div className="flex justify-around h-[100%]">
-			<div>
-				<img src={flowerImg} alt="" />
+		<form className='login_form' onSubmit={loginSubmit}>
+			<img src={Logo} alt="" onClick={goTohome} className='w-[30%] cursor-pointer' />
+
+			<div className="login_title">
+				로그인
 			</div>
-			<form className='w-[35%] flex flex-col' onSubmit={loginSubmit}>
-				<div className="titleWrap">
-					로그인
-				</div>
+		
+			<input 
+				type='text'
+				className="login_input"
+				placeholder='이메일 형식을 맞춰주세요'
+				value={email}
+				onChange={handleEmail} 
+			/>
+			<div className="errorMessageWrap">
+				{
+					!emailValid && email.length > 0 && (
+						<div>
+							올바른 이메일을 입력해주세요.
+						</div>
+					)
+				}
+			</div>
 
-				<div className='signupTitle cursor-pointer' onClick={() => navigate("/signup")}>
-					계정이 없으신가요? &nbsp;&nbsp;
-					<span className='signupLink'>
-						회원가입
-					</span>
-				</div>
-
-				<div className="mt-4">
-					<div className="inputTitle">이메일 주소</div>
-					<div className="inputWrap">
-						<input 
-							type='text'
-							className="input"
-							placeholder='test@naver.com'
-							value={email}
-							onChange={handleEmail} 
-						/>
-					</div>
-					<div className="errorMessageWrap">
-						{
-							!emailValid && email.length > 0 && (
-								<div>
-									올바른 이메일을 입력해주세요.
-								</div>
-							)
-						}
-					</div>
-
-					<div className="inputTitle" style={{ marginTop: "26px" }}>비밀번호</div>
-					<div className="inputWrap">
-						<input
-							type="password"
-							className="input"
-							placeholder="영문, 숫자, 특수문자 포함 8자 이상" 
-							value={ password }
-							onChange={ handlePassword }
-						/>
-					</div>
-					<div className="errorMessageWrap">
-						{
-							!passwordValid && password.length > 0 && (
-								<div>
-									영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.
-								</div>
-							)
-						}
-					</div>
-				</div>
-				
-				<div>
-					<button type="submit" className='mt-5 bottomButton bg-orange-400' disabled={ notAllow }>
-						확인
-					</button>
-				</div>
-			</form>
-		</div>
+			<input
+				type="password"
+				className="login_input t-[10px]"
+				placeholder="영문, 숫자, 특수문자 포함 8자 이상" 
+				value={ password }
+				onChange={ handlePassword }
+			/>
+			<div className="errorMessageWrap">
+				{
+					!passwordValid && password.length > 0 && (
+						<div>
+							영문, 숫자, 특수문자 포함 8자 이상 입력해주세요.
+						</div>
+					)
+				}
+			</div>
+		
+			<button type="submit" className='login_button w-[60%]' disabled={ notAllow }>
+				확인
+			</button>
+		</form>
   )
 }
 

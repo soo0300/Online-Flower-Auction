@@ -4,23 +4,48 @@ import { useEffect, useState } from "react";
 import AuctionLocation from "@/pages/auction/AuctionLocation";
 import AuctionLiveSession from "@/pages/auction/AuctoinLiveSession";
 import MainPage from "@/pages/mainPages/MainPage";
-import Login from "@/pages/user/login/LoginPage";
-import Signup from "@/pages/user/signUp/SignUpPage";
-// import AuctionLiveRoom from "@/pages/buyer/AuctionLiveRoom";
+import Form from "./pages/user/form/Form";
 import MyPage from "@/pages/user/profile/MyPage";
 import SelectArea from "@/pages/admin/SelectArea";
 import OpenSession from "./pages/admin/OpenSession";
-// import AuctionLiveRoom from "./pages/auction/AuctionLiveRoom";
 import TradingInfo from "@/pages/flowerInfo/TradingInfo"
 import FlowerDetail from "./pages/flowerInfo/FlowerDetail";
 import Notice from "./pages/notice/Notice";
 import NoticeDetail from "./pages/notice/NoticeDetail";
+import secureLocalStorage from "react-secure-storage";
+import { useDispatch } from "react-redux";
+import { logout } from "./reducer/store/authSlice";
 
 
 function App() {
-  const [isTop, setIsTopOfPage] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    
+    const checkLoginStatus = () => {
+      const loginTime = secureLocalStorage.getItem('loginTime');
+      
+      console.log(loginTime);
+
+      // 3시간 자동 로그인 시간이 지나면 자동 로그아웃
+      if (loginTime && Date.now() - Number(loginTime) < 3*60*60*1000) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+        dispatch(logout());
+      }
+    };
+    
+    checkLoginStatus();
+  }, []);
+
+  const [isTop, setIsTopOfPage] = useState<boolean>(true);
+  const showNavbar = ["/login", "/signup"].includes(location.pathname) ? false : true;
+  console.log(showNavbar);
+
+  useEffect(() => {
+
     const handleScroll = () => {
       if (window.scrollY === 0) {
         setIsTopOfPage(true);
@@ -31,11 +56,11 @@ function App() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+  
   return (
     <div className="app">
       <BrowserRouter>
-        <Navbar isTop={isTop}/>
+        <Navbar isTop={isTop} showNavbar={showNavbar}/>
         {/* 라우팅 정보 */}
         <Routes>
           <Route path={"/"} element={<MainPage />}/>
@@ -52,8 +77,8 @@ function App() {
           <Route path={"/notices/:noticeId"} element={<NoticeDetail />}/>
  
           {/* 로그인 */}
-          <Route path={"/login"} element={<Login />}/>
-          <Route path={"/signup"} element={<Signup />}/>
+          <Route path={"/login"} element={<Form props={true}/>}/>
+          <Route path={"/signup"} element={<Form props={false}/>}/>
 
           {/* 마이페이지 */}
           <Route path={"/mypage"} element={<MyPage/>}/>
