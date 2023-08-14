@@ -1,4 +1,4 @@
-package com.kkoch.admin.domain.plant.repository;
+package com.kkoch.admin.domain.plant.repository.dto;
 
 import lombok.Builder;
 import lombok.Data;

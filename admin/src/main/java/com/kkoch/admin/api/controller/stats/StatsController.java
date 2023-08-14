@@ -6,14 +6,13 @@ import com.kkoch.admin.api.controller.stats.response.StatsResponse;
 import com.kkoch.admin.api.service.stats.StatsQueryService;
 import com.kkoch.admin.api.service.stats.StatsService;
 import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
-import com.kkoch.admin.domain.plant.repository.StatsSearchCond;
+import com.kkoch.admin.domain.plant.repository.dto.StatsSearchCond;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor

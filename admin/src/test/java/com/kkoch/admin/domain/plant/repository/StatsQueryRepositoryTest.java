@@ -10,6 +10,7 @@ import com.kkoch.admin.domain.auction.repository.AuctionRepository;
 import com.kkoch.admin.domain.plant.Category;
 import com.kkoch.admin.domain.plant.Plant;
 import com.kkoch.admin.domain.plant.Stats;
+import com.kkoch.admin.domain.plant.repository.dto.StatsSearchCond;
 import com.kkoch.admin.domain.trade.Trade;
 import com.kkoch.admin.domain.trade.repository.TradeRepository;
 import org.junit.jupiter.api.DisplayName;
