@@ -13,8 +13,6 @@ const AuctionModal = ({ modalMessage, onClose }) => {
       toast.error("낙찰 실패!", {
         position: toast.POSITION.TOP_LEFT,
       });
-    } else {
-      return ;
     }
   }, [modalMessage]);
   

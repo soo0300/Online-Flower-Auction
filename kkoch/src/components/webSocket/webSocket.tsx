@@ -108,11 +108,11 @@ const WebSocketComponent = () => {
       }).then((res) => {
         const bidder = res.data.data
         // console.log("데이터포스트", res)
-        setCurrentPrice(-1);
         // console.log('낙찰후 현재가', currentPrice)
+        // console.log("낙찰버튼 누른 놈", bidder)
+        setCurrentPrice(-1);
         getBidderInfo(bidder)
-        console.log("낙찰버튼 누른 놈", bidder)
-        if (bidder.message === "낙찰 성공") {
+        if (bidder && bidder.message === "낙찰 성공") {
           const winnerInfo = {
             message: "success",
             winnerNumber: bidder.winnerNumber,
@@ -144,8 +144,8 @@ const WebSocketComponent = () => {
         if (auctionNextInfo) {
           setShowSuccessModal(false); // 모달 닫기
           setBidderInfo(null); // 낙찰 정보 초기화
-          auctionInfos.shift();
-          divideArticle(auctionNowInfo);
+          // auctionInfos.shift();
+          // divideArticle(auctionNowInfo);
         }
       }, 5000);
     }
@@ -185,7 +185,11 @@ const WebSocketComponent = () => {
       else if (message.message === "success") {
         console.log("메시지들어왔니", message)
         // 낙찰자 정보 업데이트
-        setBidderInfo(message);
+        if (!bidderInfo) {
+          console.log('11111111111111111')
+          setBidderInfo(message);
+          console.log("낙찰자정보업데이트", message, bidderInfo)
+        }
         console.log("메시지오자마자 낙찰자정보", bidderInfo);
       }
       console.log(msg.data)
@@ -218,12 +222,13 @@ const WebSocketComponent = () => {
       console.log("입찰후위너갱신1111", bidderInfo)
       setTimeout(() => {
         setBidderInfo(null);
+        console.log("여기 현재목록", auctionNowInfo)
         auctionInfos.shift();
         divideArticle(auctionInfos);
         setKey((prevKey) => prevKey + 1);
-        console.log(divideArticle);
+        console.log("여기 현재목록", auctionNowInfo)
+        // console.log(divideArticle);
       }, 5000);
-      return;
     }
     else if (startPrice !== 0 && currentPrice !== -1 && isBiddingActive) {
       const totalTime = 10000; // 10초
@@ -269,7 +274,6 @@ const WebSocketComponent = () => {
         } 
         // else if (isBiddingActive && auctionNextInfo) {
         else if (elapsedTime >= totalTime) {
-          // 입찰 중이고, 마지막 경매 정보가 아니면 3초 뒤에 다음 경매 정보로 업데이트
           // console.log("마지막", auctionNextInfo)
 
           auctionInfos.shift();
@@ -405,7 +409,7 @@ const WebSocketComponent = () => {
           </button>
         </div>
       </div>
-       {showSuccessModal && (
+       {showSuccessModal && bidderInfo && (
         <AuctionModal modalMessage={bidderInfo.message} onClose={() => setShowSuccessModal(false)} />
       )}
     </div>
