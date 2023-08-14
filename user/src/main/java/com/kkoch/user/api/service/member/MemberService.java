@@ -11,14 +11,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
 @RequiredArgsConstructor
+@Service
+@Transactional
 public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
@@ -38,6 +40,11 @@ public class MemberService implements UserDetailsService {
             new ArrayList<>()); //권한
     }
 
+    /**
+     * 회원 가입
+     * @param dto 회원 정보
+     * @return 가입된 회원의 정보
+     */
     public MemberResponse join(JoinMemberDto dto) {
         dto.setMemberKey(UUID.randomUUID().toString());
         Member member = dto.toEntity(passwordEncoder.encode(dto.getPwd()));
@@ -47,6 +54,14 @@ public class MemberService implements UserDetailsService {
         return MemberResponse.of(savedMember);
     }
 
+    /**
+     * 회원 비밀번호 변경
+     *
+     * @param memberKey 회원 고유키
+     * @param currentPwd 현재 비밀번호
+     * @param newPwd 변경할 비밀번호
+     * @return 변경된 회원의 정보
+     */
     public MemberResponse setPassword(String memberKey, String currentPwd, String newPwd) {
         Member member = getMember(memberKey);
 
@@ -57,6 +72,13 @@ public class MemberService implements UserDetailsService {
         return MemberResponse.of(member);
     }
 
+    /**
+     * 회원 탈퇴
+     *
+     * @param memberKey 회원 고유키
+     * @param pwd 현재 비밀번호
+     * @return 탈퇴한 회원의 정보
+     */
     public MemberResponse withdrawal(String memberKey, String pwd) {
         Member member = getMember(memberKey);
 

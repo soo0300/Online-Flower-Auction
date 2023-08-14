@@ -10,6 +10,11 @@ import javax.persistence.*;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+/**
+ * 회원 엔티티
+ *
+ * @author 임우택
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
