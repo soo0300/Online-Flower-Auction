@@ -9,14 +9,14 @@ import MyPointRow from "./MyPointRow";
 
 const MyPoint = () => {
 
-    let [responses, setReponses] = useState([]);
+    const [responses, setReponses] = useState([]);
 
     useEffect(() => {
         axios
             // .get(`/api/api/user-service/${secureLocalStorage.getItem('memberkey')}/points`)
             .get(`https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem('memberkey')}/points`)
             .then((response) => {
-                responses = response.data.data.content;
+                const responses = response.data.data.content;
                 setReponses(responses);
             })
     }, []);

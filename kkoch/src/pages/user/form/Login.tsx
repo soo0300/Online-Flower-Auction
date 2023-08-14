@@ -63,8 +63,8 @@ const Login = ({propsEmail}) => {
 		// POST 요청 보내기
 		axios({
 			method: "post",
-			// url: "https://i9c204.p.ssafy.io/api/user-service/login", // 프록시 경로인 /api를 사용
-			url: "/api/api/user-service/login", // 프록시 경로인 /api를 사용
+			url: "https://i9c204.p.ssafy.io/api/user-service/login", // 프록시 경로인 /api를 사용
+			// url: "/api/api/user-service/login", // 프록시 경로인 /api를 사용
 			headers: {
 				"Content-Type": "application/json"
 			},
