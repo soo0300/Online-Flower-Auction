@@ -56,7 +56,11 @@ const LocationButton = ({location, type } : Props) => {
   };
 
   return (
-		<button className="locationBtn mx-6" onClick={handleCheck}> {location} </button>
+		<button className='locationBtn mx-6' onClick={handleCheck}>
+			<span className="button_top text-2xl font-black"> {location}
+			</span>
+		</button>
+		// <button className="locationBtn mx-6" onClick={handleCheck}>  </button>
   )
 }
 

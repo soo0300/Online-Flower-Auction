@@ -1,45 +1,33 @@
 .locationBtn {
-  font-size: 18px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  display: inline-block;
-  text-align: center;
+  /* Variables */
+  --button_radius: 0.75em;
+  --button_color: #FBE5D6;
+  --button_outline_color: #575457;
+  font-size: 17px;
   font-weight: bold;
-  padding: 0.7em 2em;
-  border: 3px solid #FF0072;
-  border-radius: 2px;
-  position: relative;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.1);
-  color: #FF0072;
-  text-decoration: none;
-  transition: 0.3s ease all;
-  z-index: 1;
+  border: none;
+  border-radius: var(--button_radius);
+  background: var(--button_outline_color);
 }
 
-.locationBtn:before {
-  transition: 0.5s all ease;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  right: 50%;
-  bottom: 0;
-  opacity: 0;
-  content: '';
-  background-color: text-gray-500;
-  z-index: -1;
+.button_top {
+  display: block;
+  box-sizing: border-box;
+  border: 2px solid var(--button_outline_color);
+  border-radius: var(--button_radius);
+  padding: 0.75em 1.5em;
+  background: var(--button_color);
+  color: var(--button_outline_color);
+  transform: translateY(-0.2em);
+  transition: transform 0.1s ease;
 }
 
-.locationBtn:hover, .locationBtn:focus {
-  color: white;
+.locationBtn:hover .button_top {
+  /* Pull the button upwards when hovered */
+  transform: translateY(-0.33em);
 }
 
-.locationBtn:hover:before, .locationBtn:focus:before {
-  transition: 0.5s all ease;
-  left: 0;
-  right: 0;
-  opacity: 1;
-}
-
-.locationBtn:active {
-  transform: scale(0.9);
+.locationBtn:active .button_top {
+  /* Push the button downwards when pressed */
+  transform: translateY(0);
 }

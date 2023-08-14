@@ -6,6 +6,7 @@ import UserVideoComponent from './UserVideoComponent';
 import Clock from '@/components/Clock/Clock';
 
 import "./openSessoin.css";
+import { current } from 'immer';
 
 export default function OpenSession() {
   // const socketRef = useRef(new WebSocket('wss://i9c204.p.ssafy.io/ws/')); // useRef로 WebSocket 인스턴스 생성
@@ -69,8 +70,8 @@ export default function OpenSession() {
   const handleStartAuction = () => {
     axios({
       method: 'get',
-      url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
-      // url: '/api/api/admin-service/auctions/api'
+      // url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
+      url: '/api/api/admin-service/auctions/api'
     })
     .then((res) => {
       console.log(res.data.data.auctionId)
@@ -89,8 +90,12 @@ export default function OpenSession() {
 
   // 로그 찍기
   const appendToVideoLog = (text) => {
+    const now = new Date();
+    const currentTime = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    // const logText = `${currentTime}: ${text}`;
+
     if (videoLog.current) {
-      videoLog.current.value += text + '\n';
+      videoLog.current.value += `[${currentTime}] - ` + text + '\n';
     }
   };
 
@@ -116,13 +121,22 @@ export default function OpenSession() {
       }));
     });
 
+    // 소캣 실시간 통신
+    newSocket.addEventListener('message', (e) => {
+      const message = JSON.parse(e.data);
+      
+      console.log(message);
+
+      if(message?.message === "success") {
+        console.log("비딩 성공")
+        console.log(message.message)
+        appendToVideoLog(`${message.auctionArticleId}번 경매품: ${message.winnerNumber}번 경매자 ${message.bidPrice}원 낙찰!!`)
+      }
+    });
+
     
     setSocket(newSocket);
     
-    // 소캣 실시간 통신
-    newSocket.addEventListener('message', (e) => {
-      console.log(e.data);
-    });
 
     const mySession = OV.current.initSession();
     
