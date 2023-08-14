@@ -1,18 +1,25 @@
 package com.kkoch.user.docs.pointhistory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.kkoch.user.api.controller.pointhistory.PointHistoryController;
+import com.kkoch.user.api.controller.pointhistory.request.AddPointHistoryRequest;
+import com.kkoch.user.api.controller.pointhistory.response.AddPointHistoryResponse;
 import com.kkoch.user.api.controller.pointhistory.response.PointHistoryResponse;
 import com.kkoch.user.api.service.pointhistory.PointHistoryQueryService;
+import com.kkoch.user.api.service.pointhistory.PointHistoryService;
+import com.kkoch.user.api.service.pointhistory.dto.AddPointHistoryDto;
 import com.kkoch.user.docs.RestDocsSupport;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,23 +28,141 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * PointHistory REST Docs 테스트
+ * @author 임우택
+ */
 public class PointHistoryControllerDocsTest extends RestDocsSupport {
 
+    private final PointHistoryService pointHistoryService = mock(PointHistoryService.class);
     private final PointHistoryQueryService pointHistoryQueryService = mock(PointHistoryQueryService.class);
 
     @Override
     protected Object initController() {
-        return new PointHistoryController(pointHistoryQueryService);
+        return new PointHistoryController(pointHistoryService, pointHistoryQueryService);
+    }
+
+    @DisplayName("포인트 충전 API")
+    @Test
+    void chargePointHistory() throws Exception {
+        AddPointHistoryRequest request = AddPointHistoryRequest.builder()
+            .bank("신한은행")
+            .amount(10_000_000)
+            .build();
+
+        AddPointHistoryResponse response = AddPointHistoryResponse.builder()
+            .bank("신한은행")
+            .amount(10_000_000)
+            .status(1)
+            .createdDate(LocalDateTime.of(2023, 8, 1, 18, 0).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)))
+            .build();
+
+        given(pointHistoryService.addPointHistory(anyString(), any(AddPointHistoryDto.class)))
+            .willReturn(response);
+
+        mockMvc.perform(
+                post("/{memberKey}/points/charge", UUID.randomUUID().toString())
+                    .header("Authorization", "token")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("point-history-charge",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("bank").type(JsonFieldType.STRING)
+                        .description("은행명"),
+                    fieldWithPath("amount").type(JsonFieldType.NUMBER)
+                        .description("금액")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.bank").type(JsonFieldType.STRING)
+                        .description("은행명"),
+                    fieldWithPath("data.amount").type(JsonFieldType.NUMBER)
+                        .description("금액"),
+                    fieldWithPath("data.status").type(JsonFieldType.NUMBER)
+                        .description("구분"),
+                    fieldWithPath("data.createdDate").type(JsonFieldType.STRING)
+                        .description("등록일")
+                )
+            ));
+
+    }
+
+    @DisplayName("포인트 내역 API")
+    @Test
+    void usePointHistory() throws Exception {
+        AddPointHistoryRequest request = AddPointHistoryRequest.builder()
+            .bank("신한은행")
+            .amount(5_000_000)
+            .build();
+
+        AddPointHistoryResponse response = AddPointHistoryResponse.builder()
+            .bank("신한은행")
+            .amount(5_000_000)
+            .status(2)
+            .createdDate(LocalDateTime.of(2023, 8, 1, 18, 0).format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)))
+            .build();
+
+        given(pointHistoryService.addPointHistory(anyString(), any(AddPointHistoryDto.class)))
+            .willReturn(response);
+
+        mockMvc.perform(
+                post("/{memberKey}/points/use", UUID.randomUUID().toString())
+                    .header("Authorization", "token")
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andDo(document("point-history-use",
+                preprocessRequest(prettyPrint()),
+                preprocessResponse(prettyPrint()),
+                requestFields(
+                    fieldWithPath("bank").type(JsonFieldType.STRING)
+                        .description("은행명"),
+                    fieldWithPath("amount").type(JsonFieldType.NUMBER)
+                        .description("금액")
+                ),
+                responseFields(
+                    fieldWithPath("code").type(JsonFieldType.NUMBER)
+                        .description("코드"),
+                    fieldWithPath("status").type(JsonFieldType.STRING)
+                        .description("상태"),
+                    fieldWithPath("message").type(JsonFieldType.STRING)
+                        .description("메시지"),
+                    fieldWithPath("data").type(JsonFieldType.OBJECT)
+                        .description("응답 데이터"),
+                    fieldWithPath("data.bank").type(JsonFieldType.STRING)
+                        .description("은행명"),
+                    fieldWithPath("data.amount").type(JsonFieldType.NUMBER)
+                        .description("금액"),
+                    fieldWithPath("data.status").type(JsonFieldType.NUMBER)
+                        .description("구분"),
+                    fieldWithPath("data.createdDate").type(JsonFieldType.STRING)
+                        .description("등록일")
+                )
+            ));
+
     }
 
     @DisplayName("포인트 내역 조회 API")
@@ -131,7 +256,6 @@ public class PointHistoryControllerDocsTest extends RestDocsSupport {
                         .description("리스트가 비어있는지 여부")
                 )
             ));
-
     }
 
     private PointHistoryResponse createPointHistoryResponse() {
