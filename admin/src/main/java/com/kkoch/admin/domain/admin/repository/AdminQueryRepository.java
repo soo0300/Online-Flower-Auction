@@ -24,7 +24,9 @@ public class AdminQueryRepository {
     public List<AdminResponse> getAdmins() {
         return queryFactory
             .select(Projections.constructor(AdminResponse.class,
+                admin.id,
                 admin.loginId,
+                admin.loginPw,
                 admin.name,
                 admin.tel,
                 admin.position,

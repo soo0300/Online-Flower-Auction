@@ -1,6 +1,6 @@
-package com.kkoch.admin.api.controller.notice.form;
+package com.kkoch.admin.api.controller.notice.request;
 
-import com.kkoch.admin.api.service.notice.dto.AddNoticeDto;
+import com.kkoch.admin.api.service.notice.dto.SetNoticeDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 
 @Data
 @NoArgsConstructor
-public class AddNoticeForm {
+public class SetNoticeRequest {
 
     @NotBlank
     private String title;
@@ -16,8 +16,8 @@ public class AddNoticeForm {
     @NotBlank
     private String content;
 
-    public AddNoticeDto toAddNoticeDto() {
-        return AddNoticeDto.builder()
+    public SetNoticeDto toSetNoticeDto() {
+        return SetNoticeDto.builder()
                 .title(this.title)
                 .content(this.content)
                 .build();

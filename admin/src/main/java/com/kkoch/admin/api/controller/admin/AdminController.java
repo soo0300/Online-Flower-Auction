@@ -62,4 +62,5 @@ public class AdminController {
         log.info("admin={}", adminId);
         return "redirect:/admins";
     }
+
 }

@@ -26,6 +26,19 @@ public class NoticeQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    public List<NoticeResponse> getAllNotices() {
+        return queryFactory
+                .select(Projections.constructor(NoticeResponse.class,
+                                notice.id,
+                                notice.title,
+                                notice.content
+                        )
+                )
+                .from(notice)
+                .orderBy(notice.id.desc())
+                .fetch();
+    }
+
     public List<NoticeResponse> getNoticeByCondition(NoticeSearchCond cond, Pageable pageable) {
         List<Long> ids = queryFactory
                 .select(notice.id)
