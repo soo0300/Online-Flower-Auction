@@ -21,7 +21,4 @@ public interface AdminServiceClient {
 
     @PostMapping("/admin-service/trades")
     ApiResponse<Long> addTrade(@RequestBody AddTradeRequest request);
-
-    @GetMapping("/admin-service/plants/plant")
-    Long getPlantId(@SpringQueryMap Map<String, String> param);
 }
