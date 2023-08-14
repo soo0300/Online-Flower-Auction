@@ -26,8 +26,8 @@ const authSlice = createSlice({
       
       axios({
         method:"get",
-        // url: `https://i9c204.p.ssafy.io/api/user-service/${state.memberkey}`,
-        url: `/api/api/user-service/${state.memberkey}`,
+        url: `https://i9c204.p.ssafy.io/api/user-service/${state.memberkey}`,
+        // url: `/api/api/user-service/${state.memberkey}`,
         headers:{
           Authorization : `Bearer ${state.token}`
         }

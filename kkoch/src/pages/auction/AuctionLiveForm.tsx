@@ -27,7 +27,7 @@ interface BidderInfo {
   message: string;
 }
 
-const AuctionLiveForm = ({auctionArticles}) => {
+const AuctionLiveForm = () => {
   
   // console.log("상속", auctionArticles.state.auctionArticles[0][0])
   // const auctionInfos = auctionArticles[0]

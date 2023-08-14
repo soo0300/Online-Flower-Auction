@@ -10,8 +10,9 @@ import java.time.format.DateTimeFormatter;
 @Data
 @NoArgsConstructor
 public class AdminResponse {
-
+    private  Long adminId;
     private String loginId;
+    private String loginPw;
     private String name;
     private String tel;
     private String position;
@@ -19,8 +20,10 @@ public class AdminResponse {
     private boolean active;
 
     @Builder
-    public AdminResponse(String loginId, String name, String tel, String position, LocalDateTime createdDate, boolean active) {
+    public AdminResponse(Long adminId, String loginId, String loginPw, String name, String tel, String position, LocalDateTime createdDate, boolean active) {
+        this.adminId = adminId;
         this.loginId = loginId;
+        this.loginPw = loginPw;
         this.name = name;
         this.tel = tel;
         this.position = position;

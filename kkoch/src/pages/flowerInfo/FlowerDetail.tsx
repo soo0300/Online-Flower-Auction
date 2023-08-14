@@ -9,8 +9,7 @@ const FlowerDetail = () => {
   const location = useLocation();
   const flowerData = location.state?.flowerData;
   const [loading, setLoading] = useState(true);
-  // console.log('클릭한 꽃 정보', flowerData);
-  
+
 
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -47,6 +46,7 @@ const FlowerDetail = () => {
   const response = () => {
     axios({
       url: '/api/api/admin-service/stats',
+      // url: 'https://i9c204.p.ssafy.io/api/admin-service/stats',
       method: 'get',
       params: {
         type: flowerData.type,

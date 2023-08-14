@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { logout } from '@/reducer/store/authSlice';
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
+import "./index.css"
 // import ActionButton from "@/shared/ActionButton";
 
 type Props = {
@@ -65,8 +66,8 @@ const Navbar = ({isTop} : Props) => {
     if(isLoggedIn) {
       axios({
         method: "get",
-        // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
-        url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+        url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
+        // url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}/alarms`,
         headers: {
           Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
         }
@@ -117,16 +118,16 @@ const Navbar = ({isTop} : Props) => {
 
           {/* 메뉴 */}
           {isAboveMediumScreens ? // PC화면일때 : 모바일 화면일때 
-            (<div className={`${flexBetween} w-full`}>
-              <div className={`${flexBetween} gap-8 text-sm`}>
-                <Link to="/auction"> 경매</Link>
-                <Link to="/flowers/절화" state ={{ code: "절화"}}> 화훼정보</Link>
-                <Link to="/notices" >공지사항</Link>
+            (<div className={`${flexBetween} w-full `}>
+              <div className={`${flexBetween} gap-8 text-xl`}>
+                <Link to="/auction" className="nav-link"> 경매</Link>
+                <Link to="/flowers/절화" state ={{ code: "절화"}} className="nav-link"> 화훼정보</Link>
+                <Link to="/notices" className="nav-link">공지사항</Link>
               </div>
                 { isLoggedOut ? (
                   <div className={`${flexBetween} gap-8`}>
-                    <Link to="/login">로그인</Link>
-                    <Link to="/signup">회원가입</Link>
+                    <Link to="/login" className="nav-link">로그인</Link>
+                    <Link to="/signup" className="nav-link">회원가입</Link>
                   </div>
                   ) : (
                     <div className="flex justify-between">
@@ -150,7 +151,7 @@ const Navbar = ({isTop} : Props) => {
                               }}
                       >
                         <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
-                        <span>{username}님</span>
+                        <span className="text-xl">{username}님</span>
                       </button>
                     </div>
                 )}

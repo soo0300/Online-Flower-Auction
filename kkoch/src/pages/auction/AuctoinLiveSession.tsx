@@ -2,11 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { OpenVidu } from 'openvidu-browser';
 import CameraOff from '@/assets/cameraOff.png';
 import axios from 'axios';
-// import Video from '../buyer/VideoRoom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserVideoComponent from './UserVideoComponent';
-import AuctionLiveForm from './AuctionLiveForm';
 import WebSocketComponent from '@/components/webSocket/webSocket';
+import './AuctoinLiveSession.css';
 
 const AuctionWaitingRoom: React.FC = () => {
   const location = useLocation();
@@ -186,7 +185,7 @@ const AuctionWaitingRoom: React.FC = () => {
 
   return (
     <div className="container gap-16 bg-gray-20 py-10">
-      <h1 className='text-center'>aT화훼 공판장 (양재동) 경매방</h1>
+      <h1 className='title-content-center'>aT화훼 공판장 (양재동) 경매방</h1>
 
       {session === undefined ? (
         <div id="join">
@@ -201,12 +200,9 @@ const AuctionWaitingRoom: React.FC = () => {
           {subscribers && subscribers.map((sub, index) => (
             <div key={index} ref={subscriberContainer} className='w-full flex justify-center'></div>
           ))}
-          <div>
-            <button onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
-          </div>
-          
-          <div>
-            <button onClick={joinSession}>입장하기</button>
+          <div className='button-container'>
+            <button className='camera-button' onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
+            <button className='join-button' onClick={joinSession}>입장하기</button>
             {/* <Link to='/auction/liveroom' state={{ auctionArticles: auctionArticles, sessionId: mySessionId}}>
             </Link> */}
           </div>
@@ -240,10 +236,10 @@ const AuctionWaitingRoom: React.FC = () => {
               ))}
             </div>
             <WebSocketComponent />
-            <AuctionLiveForm auctionArticles={auctionArticles}/>
           </div>
         </div>
       ) : null}
+      {/* <div className='button-container'>
         <div>
           <button className='normal-button'>마이크 켜기</button>
         </div>
@@ -256,6 +252,7 @@ const AuctionWaitingRoom: React.FC = () => {
         <div>
           <button className='normal-button'>금일 경매 목록</button>
         </div>
+      </div> */}
     </div> 
   )
 }

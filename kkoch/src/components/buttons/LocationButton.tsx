@@ -56,49 +56,11 @@ const LocationButton = ({location, type } : Props) => {
   };
 
   return (
-		<button className="btn mx-6" onClick={handleCheck}>
-			<div className="wrapper">
-				<p className="text">{location} </p>
-
-				<div className="flower flower1">
-					<div className="petal one"></div>
-					<div className="petal two"></div>
-					<div className="petal three"></div>
-					<div className="petal four"></div>
-				</div>
-				<div className="flower flower2">
-					<div className="petal one"></div>
-					<div className="petal two"></div>
-					<div className="petal three"></div>
-					<div className="petal four"></div>
-				</div>
-				<div className="flower flower3">
-					<div className="petal one"></div>
-					<div className="petal two"></div>
-					<div className="petal three"></div>
-					<div className="petal four"></div>
-				</div>
-				<div className="flower flower4">
-					<div className="petal one"></div>
-					<div className="petal two"></div>
-					<div className="petal three"></div>
-					<div className="petal four"></div>
-				</div>
-				<div className="flower flower5">
-					<div className="petal one"></div>
-					<div className="petal two"></div>
-					<div className="petal three"></div>
-					<div className="petal four"></div>
-				</div>
-				<div className="flower flower6">
-					<div className="petal one"></div>
-					<div className="petal two"></div>
-					<div className="petal three"></div>
-					<div className="petal four"></div>
-				</div>
-			</div>
+		<button className='locationBtn mx-6' onClick={handleCheck}>
+			<span className="button_top text-2xl font-black"> {location}
+			</span>
 		</button>
-
+		// <button className="locationBtn mx-6" onClick={handleCheck}>  </button>
   )
 }
 

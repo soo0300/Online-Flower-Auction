@@ -7,6 +7,7 @@ import com.kkoch.admin.api.service.admin.AdminQueryService;
 import com.kkoch.admin.api.service.admin.AdminService;
 import com.kkoch.admin.api.service.admin.dto.AddAdminDto;
 import com.kkoch.admin.api.service.admin.dto.LoginDto;
+import com.kkoch.admin.client.response.MemberResponseForAdmin;
 import com.kkoch.admin.login.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +33,9 @@ public class AdminController {
     @GetMapping
     public String index(@ModelAttribute(name = "form") LoginRequest request, @Login LoginAdmin loginAdmin) {
         if (loginAdmin == null) {
-            return "index";
+            return "login";
         }
-        return "dashboard";
+        return "index";
     }
 
     @PostMapping("/login")
@@ -44,6 +45,13 @@ public class AdminController {
         LoginAdmin loginAdmin = adminQueryService.loginAdmin(dto);
         session.setAttribute("loginAdmin", loginAdmin);
         return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        log.info("<로그아웃 요청> Controller");
+        session.invalidate();
+        return "login";
     }
 
     @GetMapping("/admins")
@@ -62,4 +70,13 @@ public class AdminController {
         log.info("admin={}", adminId);
         return "redirect:/admins";
     }
+
+    @GetMapping("/members")
+    public String getUsers(Model model) {
+        log.info("<회원조회 컨트롤러> Controller");
+        List<MemberResponseForAdmin> responses = adminQueryService.getUsers();
+        model.addAttribute("members", responses);
+        return "member";
+    }
+
 }

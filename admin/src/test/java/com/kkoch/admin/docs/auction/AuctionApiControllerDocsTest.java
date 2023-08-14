@@ -1,12 +1,10 @@
 package com.kkoch.admin.docs.auction;
 
-import com.kkoch.admin.api.controller.auction.AuctionController;
-import com.kkoch.admin.api.controller.auction.response.AuctionForMemberResponse;
+import com.kkoch.admin.api.controller.auction.AuctionApiController;
 import com.kkoch.admin.api.controller.auction.response.AuctionTitleResponse;
 import com.kkoch.admin.api.service.auction.AuctionQueryService;
 import com.kkoch.admin.api.service.auction.AuctionService;
 import com.kkoch.admin.docs.RestDocsSupport;
-import com.kkoch.admin.domain.auction.Status;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -22,14 +20,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class AuctionControllerDocsTest extends RestDocsSupport {
+public class AuctionApiControllerDocsTest extends RestDocsSupport {
 
     private final AuctionService auctionService = mock(AuctionService.class);
     private final AuctionQueryService auctionQueryService = mock(AuctionQueryService.class);
 
     @Override
     protected Object initController() {
-        return new AuctionController(auctionService, auctionQueryService);
+        return new AuctionApiController(auctionService, auctionQueryService);
     }
 
     @DisplayName("오픈되어있는 경매 일정 조회")

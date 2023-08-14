@@ -8,8 +8,8 @@ const Notice = () => {
 
     useEffect(() => {
         axios
-            // .get(`https://i9c204.p.ssafy.io/api/admin-service/notices`)
-            .get(`/api/api/admin-service/notices?type=1&keyword=&pageNum=1`)
+            .get(`https://i9c204.p.ssafy.io/api/admin-service/notices`)
+            // .get(`/api/api/admin-service/notices?type=1&keyword=&pageNum=1`)
             .then((response) => {
                 responses = response.data.data.content;
                 setResponses(responses);

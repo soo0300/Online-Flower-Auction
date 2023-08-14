@@ -2,6 +2,7 @@ package com.kkoch.user.domain.member.repository;
 
 import com.kkoch.user.IntegrationTestSupport;
 import com.kkoch.user.api.controller.member.response.MemberInfoResponse;
+import com.kkoch.user.api.controller.member.response.MemberResponseForAdmin;
 import com.kkoch.user.domain.member.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
@@ -50,6 +52,18 @@ class MemberQueryRepositoryTest extends IntegrationTestSupport {
         //then
         assertThat(result).isTrue();
     }
+    @DisplayName("전체 회원을 조회 할 수 있다.")
+    @Test
+    void getUsers() throws Exception {
+        //given
+        Member member = createMember();
+        //when
+
+        List<MemberResponseForAdmin> responses = memberQueryRepository.findAllUser();
+        //then
+        assertThat(responses).hasSize(1);
+    }
+
 
     private Member createMember() {
         Member member = Member.builder()

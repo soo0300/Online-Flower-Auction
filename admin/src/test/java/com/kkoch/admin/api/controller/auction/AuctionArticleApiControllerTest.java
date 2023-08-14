@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = {AuctionArticleController.class})
-class AuctionArticleControllerTest extends ControllerTestSupport {
+@WebMvcTest(controllers = {AuctionArticleApiController.class})
+class AuctionArticleApiControllerTest extends ControllerTestSupport {
 
     @MockBean
     private AuctionArticleService auctionArticleService;

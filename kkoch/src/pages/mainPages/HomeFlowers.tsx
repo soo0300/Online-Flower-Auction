@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import HomeFlowerChart from "@/assets/HomeFlowerChart.png"
+import ActionButton from "@/components/buttons/ActionButton";
 
 const HomeAuction = () => {
   return (
@@ -22,9 +23,7 @@ const HomeAuction = () => {
             실시간 화훼 경매 현황과 시세를 확인하여 
 						낙찰 가격을 정해보세요. 
           </p>
-          <button>
-            Join Now
-          </button>
+          <ActionButton link={"flowers"} msg={"데이터 확인하러 가기"} />
         </motion.div>
 
 				<motion.div

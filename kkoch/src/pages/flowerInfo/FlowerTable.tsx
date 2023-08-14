@@ -1,5 +1,5 @@
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
-import { React, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import TableFilter from './TableFilter';
 import axios from 'axios';
 import FilterValues from './TableInterface';
@@ -21,6 +21,26 @@ const TestComponent = (props) => {
     month = month >= 10 ? month : '0' + month;
     return `${year}-${month}-${day}`
   }
+    
+  const formatTime = (date) => {
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+
+    day = day >= 10 ? day  : '0' + day;
+    month = month >= 10 ? month : '0' + month;
+    hours = hours >= 10 ? hours : '0' + hours;
+    minutes = minutes >= 10 ? minutes : '0' + minutes;
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  }
+
+  // 단위 통화 표시
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat('ko-KR').format(number);
+  };
 
   // 테이블 데이터 초기 상태
   const [tableData, setTableData] = useState(null);
@@ -28,6 +48,7 @@ const TestComponent = (props) => {
   const [selectCategory, setSelectCategory] = useState('');
   // const [isClicked, setIsClicked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   
   const response = () => {
     setIsLoading(true);
@@ -40,10 +61,12 @@ const TestComponent = (props) => {
       const dataWithId = res.data.data.content.map((item, index) => ({
         ...item,
         id: index + 1,
+        bidTime: formatTime(new Date(item.bidTime)),
+        bidPrice: formatNumber(item.bidPrice)
       }));
       setFilteredTableData(dataWithId);
       setTableData(dataWithId);
-      // console.log(tableData)
+      console.log(dataWithId,"테이블 데이터")
     })
     .catch(() => {
       setIsLoading(false); 
@@ -64,6 +87,7 @@ const TestComponent = (props) => {
           (!filter.location || item.region === filter.location)
         );
       });
+     
       setFilteredTableData(filterData);
     };
 
@@ -88,7 +112,7 @@ const TestComponent = (props) => {
       </div>
       <div className='tablecontent'>
       {isLoading ? (
-          <div className='loading-message'>데이터를 불러오는 중...</div>
+          <div className='loading-message'></div>
         ) : (
           <div className='datagrid-container'>
             <DataGrid 

@@ -1,9 +1,13 @@
 package com.kkoch.user.api.controller.member;
 
 import com.kkoch.user.api.controller.ApiResponse;
-import com.kkoch.user.api.controller.member.request.*;
+import com.kkoch.user.api.controller.member.request.CheckEmailRequest;
+import com.kkoch.user.api.controller.member.request.JoinMemberRequest;
+import com.kkoch.user.api.controller.member.request.SetPasswordRequest;
+import com.kkoch.user.api.controller.member.request.WithdrawalRequest;
 import com.kkoch.user.api.controller.member.response.MemberInfoResponse;
 import com.kkoch.user.api.controller.member.response.MemberResponse;
+import com.kkoch.user.api.controller.member.response.MemberResponseForAdmin;
 import com.kkoch.user.api.service.member.MemberQueryService;
 import com.kkoch.user.api.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import static org.springframework.http.HttpStatus.MOVED_PERMANENTLY;
+import java.util.List;
 
 /**
  * 회원 API 컨트롤러
@@ -93,4 +96,6 @@ public class MemberController {
         boolean result = memberQueryService.validationEmail(request.getEmail());
         return ApiResponse.ok(result);
     }
+
+
 }

@@ -74,6 +74,9 @@ dependencies {
 //    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 //    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 
+    // feign client
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
     //prometheus
     implementation 'io.micrometer:micrometer-registry-prometheus'
 }

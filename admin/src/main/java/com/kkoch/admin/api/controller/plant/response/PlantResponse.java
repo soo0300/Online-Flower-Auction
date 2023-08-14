@@ -34,7 +34,7 @@ public class PlantResponse {
     }
 
     public static PlantResponse of(Plant plant){
-        String act = String.valueOf(plant.getName());
+        String act = String.valueOf(plant.isActive());
         String creDate = plant.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy.MM.dd hh:mm"));
         return PlantResponse.builder()
                 .plantId(plant.getId())
