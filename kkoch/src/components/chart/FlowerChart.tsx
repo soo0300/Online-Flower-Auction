@@ -19,6 +19,10 @@ const FlowerChart = ({ flowerSeries }) => {
     return `${year}-${month}-${day}`;
   };
 
+  const formatNumberCommas = (number) => {
+    return number.toLocaleString();
+  };
+
   const getSearchDay = (selection) => {
     switch (selection) {
       case 'one-week':
@@ -119,7 +123,7 @@ const FlowerChart = ({ flowerSeries }) => {
 
     stroke: {
       // 선 스타일 설정
-      colors: ['#E85757', '#FF9994', '#F25477'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
+      colors: ['#fba1b7', '#ffd1da', '#ffdbaa'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
       curve: 'smooth', // 곡선형 그래프로 설정
       width: [2, 2, 2], // 데이터 배열에 대한 선 굵기 (0번 인덱스는 2px, 1번 인덱스는 2px)
     },
@@ -130,7 +134,7 @@ const FlowerChart = ({ flowerSeries }) => {
 
     markers: {
       size: 2,
-      colors: ['black', 'pink', 'red']
+      colors: ['#e5869d', '#ffadc4', '#ffae70']
     },
 
     xaxis: {
@@ -140,8 +144,27 @@ const FlowerChart = ({ flowerSeries }) => {
       tickAmount: 30,
       labels: {
         format: 'yyyy-MM-dd', // x축 날짜 포맷
+        style: {
+          fontWeight: 700,
+          fontSize: '14px',
+        }
       },
     },
+
+    yaxis: {
+      tickAmount: 6,
+      labels: {
+        formatter: (value) => {
+          // 숫자를 3자리 구분기호와 함께 단위를 붙여서 반환
+          return '￦'+ formatNumberCommas(value);
+        },
+        style: {
+          fontWeight: 700,
+          fontSize: '14px',
+        }
+      },
+    },
+
     tooltip: {
       x: {
         format: 'yyyy-MM-dd'
@@ -159,11 +182,14 @@ const FlowerChart = ({ flowerSeries }) => {
     legend: {
       position: "top",
       fontSize: '20px',
+      offsetX: 0,
+      offsetY: -5,
+      floating: true,
       itemMargin: {
         horizontal: 20,
         vertical: 0
+      },
     },
-    }
   };
 
   const updateData = (timeline: string) => {
@@ -197,8 +223,8 @@ const FlowerChart = ({ flowerSeries }) => {
       // 데이터가 있을 때만 그래프를 그리도록 처리
       if (filteredData.length > 0) {
         const yValues = filteredData.map(([, value]) => value);
-        const minYValue = Math.min(...yValues);
-        const maxYValue = Math.max(...yValues);
+        // const minYValue = Math.min(...yValues);
+        const maxYValue = Math.ceil(Math.max(...yValues) / 100) * 100 + 1000;
     
         // x축,y 축 최저, 최고가, 날짜 업데이트
         ApexCharts.exec('area-datetime', 'zoomX', minTimestamp, maxTimestamp);
@@ -208,8 +234,8 @@ const FlowerChart = ({ flowerSeries }) => {
             max: maxTimestamp,
           },
           yaxis: {
-            min: minYValue - 1,
-            max: maxYValue + (maxYValue - minYValue), 
+            min: 0,
+            max: maxYValue
           },
         });
       }

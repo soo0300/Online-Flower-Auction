@@ -98,8 +98,8 @@ const WebSocketComponent = () => {
       // memberInfo 갱신 후 JSON 변환 후 전송
       axios({
         method: "post",
-        // url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
-        url: "/api/api/auction-service/auctions/participant",
+        url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
+        // url: "/api/api/auction-service/auctions/participant",
         data: {
           "memberKey": memberToken,
           "auctionArticleId": auctionNowInfo.auctionArticleId,
@@ -143,7 +143,7 @@ const WebSocketComponent = () => {
         // 마지막 경매품인지 확인
         if (auctionNextInfo) {
           setShowSuccessModal(false); // 모달 닫기
-          setBidderInfo(null); // 낙찰 정보 초기화
+          // setBidderInfo(null); // 낙찰 정보 초기화
           // auctionInfos.shift();
           // divideArticle(auctionNowInfo);
         }
@@ -169,9 +169,21 @@ const WebSocketComponent = () => {
       const message = JSON.parse(msg.data);
       // console.log("경매품목록", message)
       // 최초 경매 시작시 경매물품
-      if (message.auctionNumber) {
+      // if (message.auctionNumber) {
+      //   auctionInfos.push(message);
+      //   // divideArticle(auctionInfos);
+      // }
+
+      if (message.command === "start") {
+        // auctionInfos.shift();
         auctionInfos.push(message);
         divideArticle(auctionInfos);
+      }
+      else if (message.command === "next") {
+        setBidderInfo(null);
+        auctionInfos.push(message);
+        divideArticle(auctionInfos);
+        auctionInfos.shift();
       }
       // 누구든 낙찰버튼 누르면
       else if (message.message === "press") {
@@ -220,15 +232,15 @@ const WebSocketComponent = () => {
       // console.log("입찰누르고 데이터 받기전1111")
       console.log("갱신되고 낙찰자정보", bidderInfo)
       console.log("입찰후위너갱신1111", bidderInfo)
-      setTimeout(() => {
-        setBidderInfo(null);
-        console.log("여기 현재목록", auctionNowInfo)
-        auctionInfos.shift();
-        divideArticle(auctionInfos);
-        setKey((prevKey) => prevKey + 1);
-        console.log("여기 현재목록", auctionNowInfo)
+      // setTimeout(() => {
+      // setBidderInfo(null);
+      console.log("여기 현재목록", auctionNowInfo)
+        // auctionInfos.shift();
+        // divideArticle(auctionInfos);
+      setKey((prevKey) => prevKey + 1);
+      console.log("여기 현재목록", auctionNowInfo)
         // console.log(divideArticle);
-      }, 5000);
+      // }, 5000);
     }
     else if (startPrice !== 0 && currentPrice !== -1 && isBiddingActive) {
       const totalTime = 10000; // 10초
@@ -257,13 +269,13 @@ const WebSocketComponent = () => {
         } else if (!isBiddingActive) {
           setCurrentPrice(-1); // 클릭한 시점의 현재 가격을 집계중으로 바꾸기 위해 -1로 셋팅
           // console.log("1111111111111111111111", auctionInfos);
-          auctionInfos.shift();
+          // auctionInfos.shift();
           // setAuctionNowInfo(auctionInfos[0]);
           // setAuctionNextInfo(auctionInfos[1]);
           setIsBiddingActive(false);
           const updateTimer = setTimeout(() => {
             console.log("마지막 안에서", auctionNextInfo)
-            divideArticle(auctionInfos);
+            // divideArticle(auctionInfos);
             setKey((prevKey) => prevKey + 1);
           }, 3000);
           
@@ -275,14 +287,13 @@ const WebSocketComponent = () => {
         // else if (isBiddingActive && auctionNextInfo) {
         else if (elapsedTime >= totalTime) {
           // console.log("마지막", auctionNextInfo)
-
-          auctionInfos.shift();
+          // auctionInfos.shift();
           // setAuctionNowInfo(auctionInfos[0]);
           // setAuctionNextInfo(auctionInfos[1]);
           setIsBiddingActive(false);
           const updateTimer = setTimeout(() => {
             // console.log("마지막 안에서", auctionNextInfo)
-            divideArticle(auctionInfos);
+            // divideArticle(auctionInfos);
             setKey((prevKey) => prevKey + 1);
           }, 3000);
           

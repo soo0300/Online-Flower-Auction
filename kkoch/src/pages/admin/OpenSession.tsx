@@ -69,8 +69,8 @@ export default function OpenSession() {
   const handleStartAuction = () => {
     axios({
       method: 'get',
-      // url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
-      url: '/api/api/admin-service/auctions/api'
+      url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
+      // url: '/api/api/admin-service/auctions/api'
     })
     .then((res) => {
       console.log(res.data.data.auctionId)

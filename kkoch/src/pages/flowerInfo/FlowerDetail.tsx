@@ -83,17 +83,17 @@ const FlowerDetail = () => {
         { 
           name: "보통",
           data: dataByGrade["NORMAL"] ? dataByGrade["NORMAL"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
-          color: "#FF9994",
+          color: "#fba1b7",
         },
         { 
           name: "상급",
           data: dataByGrade["ADVANCED"] ? dataByGrade["ADVANCED"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
-          color: "#ffe7e6",
+          color: "#ffd1da",
         },
         { 
           name: "특급",
           data: dataByGrade["SUPER"] ? dataByGrade["SUPER"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
-          color: "#F25477",
+          color: "#ffdbaa",
         },
       ]);
     })
