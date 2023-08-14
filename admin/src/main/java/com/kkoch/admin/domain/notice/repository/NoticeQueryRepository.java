@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.kkoch.admin.domain.notice.QNotice.*;
-import static org.springframework.util.StringUtils.*;
+import static com.kkoch.admin.domain.notice.QNotice.notice;
+import static org.springframework.util.StringUtils.hasText;
 
 @Repository
 public class NoticeQueryRepository {
@@ -31,7 +31,8 @@ public class NoticeQueryRepository {
                 .select(Projections.constructor(NoticeResponse.class,
                                 notice.id,
                                 notice.title,
-                                notice.content
+                                notice.content,
+                                notice.active
                         )
                 )
                 .from(notice)
