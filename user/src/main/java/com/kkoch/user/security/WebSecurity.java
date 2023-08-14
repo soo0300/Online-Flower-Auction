@@ -34,7 +34,7 @@ public class WebSecurity {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/error/**","/members", "/join", "/health-check", "/actuator/**", "/h2-console/**").permitAll()
+                .antMatchers("/error/**","/members", "/join", "/health-check", "/actuator/**", "/h2-console/**", "/reservations/**").permitAll()
                 .antMatchers("/**").hasIpAddress(env.getProperty("gateway.ip"))
                 .and()
                 .authenticationManager(authenticationManager)

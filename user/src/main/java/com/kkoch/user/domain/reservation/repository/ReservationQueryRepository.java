@@ -1,6 +1,8 @@
 package com.kkoch.user.domain.reservation.repository;
 
+import com.kkoch.user.api.controller.reservation.response.ReservationForAuctionResponse;
 import com.kkoch.user.domain.reservation.Reservation;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
@@ -57,5 +59,18 @@ public class ReservationQueryRepository {
             )
             .fetch()
             .size();
+    }
+
+    public ReservationForAuctionResponse findByPlantId(Long plantId) {
+        return queryFactory
+            .select(Projections.constructor(ReservationForAuctionResponse.class,
+                reservation.member.memberKey,
+                reservation.id,
+                reservation.price
+            ))
+            .from(reservation)
+            .where(reservation.plantId.eq(plantId))
+            .orderBy(reservation.price.desc(), reservation.createdDate.asc())
+            .fetchOne();
     }
 }

@@ -5,7 +5,7 @@ import com.kkoch.auction.api.controller.request.AddTradeRequest;
 import com.kkoch.auction.api.controller.request.EventParticipant;
 import com.kkoch.auction.api.controller.response.EventResultResponse;
 import com.kkoch.auction.api.service.RedisService;
-import com.kkoch.auction.api.service.AdminServiceClient;
+import com.kkoch.auction.client.AdminServiceClient;
 import com.kkoch.auction.api.service.dto.AuctionArticlesResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

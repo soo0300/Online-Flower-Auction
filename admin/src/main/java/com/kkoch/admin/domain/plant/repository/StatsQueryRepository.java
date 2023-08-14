@@ -3,6 +3,7 @@ package com.kkoch.admin.domain.plant.repository;
 import com.kkoch.admin.api.controller.stats.response.StatsResponse;
 import com.kkoch.admin.api.service.stats.dto.AuctionArticleForStatsDto;
 import com.kkoch.admin.domain.plant.QCategory;
+import com.kkoch.admin.domain.plant.repository.dto.StatsSearchCond;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
