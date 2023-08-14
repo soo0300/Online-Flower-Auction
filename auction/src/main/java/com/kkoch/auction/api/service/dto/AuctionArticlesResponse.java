@@ -42,30 +42,31 @@ public class AuctionArticlesResponse implements Serializable {
         this.shipper = shipper;
     }
 
-    public String toJson() {
+    public String toJson(String command) {
         return String.format("{" +
-                        "\"auctionArticleId\":%d," +
-                        "\"auctionNumber\":\"%s\"," +
-                        "\"plantId\":\"%d\"," +
-                        "\"code\":\"%s\"," +
-                        "\"type\":\"%s\"," +
-                        "\"name\":\"%s\"," +
-                        "\"count\":%d," +
-                        "\"startPrice\":%d," +
-                        "\"grade\":\"%s\"," +
-                        "\"region\":\"%s\"," +
-                        "\"shipper\":\"%s\"" +
-                        "}", this.auctionArticleId,
-                this.auctionNumber,
-                this.plantId,
-                this.code,
-                this.type,
-                this.name,
-                this.count,
-                this.startPrice,
-                this.grade,
-                this.region,
-                this.shipper);
+                "\"auctionArticleId\":%d," +
+                "\"auctionNumber\":\"%s\"," +
+                "\"code\":\"%s\"," +
+                "\"type\":\"%s\"," +
+                "\"name\":\"%s\"," +
+                "\"count\":%d," +
+                "\"startPrice\":%d," +
+                "\"grade\":\"%s\"," +
+                "\"region\":\"%s\"," +
+                "\"shipper\":\"%s\"," +
+                "\"command\":\"%s\"" +
+                "}", this.auctionArticleId,
+            this.auctionNumber,
+            this.code,
+            this.type,
+            this.name,
+            this.count,
+            this.startPrice,
+            this.grade,
+            this.region,
+            this.shipper,
+            command
+        );
     }
 
 }
