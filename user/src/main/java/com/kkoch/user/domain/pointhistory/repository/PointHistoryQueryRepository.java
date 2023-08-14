@@ -17,6 +17,11 @@ import java.util.List;
 import static com.kkoch.user.domain.member.QMember.member;
 import static com.kkoch.user.domain.pointhistory.QPointHistory.*;
 
+/**
+ * PointHistory 조회용 Repository
+ *
+ * @author 임우택
+ */
 @Repository
 public class PointHistoryQueryRepository {
 
@@ -26,6 +31,12 @@ public class PointHistoryQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    /**
+     * 포인트 내역 페이징 조회
+     * @param memberKey 회원 고유키
+     * @param pageable 페이징 정보
+     * @return 포인트 내역 응답 리스트
+     */
     public List<PointHistoryResponse> findByMemberKey(String memberKey, Pageable pageable) {
         List<Long> ids = queryFactory
             .select(pointHistory.id)
@@ -56,6 +67,11 @@ public class PointHistoryQueryRepository {
             .fetch();
     }
 
+    /**
+     * 포인트 내역 전체 갯수 조회
+     * @param memberKey 회원 고유키
+     * @return 포인트 내역 전체 갯수
+     */
     public long getTotalCount(String memberKey) {
         return queryFactory
             .select(pointHistory.id)

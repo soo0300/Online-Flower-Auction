@@ -12,6 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
+/**
+ * 포인트 내역 Command 서비스
+ *
+ * @author 임우택
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -20,6 +25,13 @@ public class PointHistoryService {
     private final PointHistoryRepository pointHistoryRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 포인트 내역 등록
+     *
+     * @param memberKey 회원 고유키
+     * @param dto 저장할 데이터
+     * @return 저장된 포인트 내역 결과
+     */
     public AddPointHistoryResponse addPointHistory(String memberKey, AddPointHistoryDto dto) {
         Member member = memberRepository.findByMemberKey(memberKey)
             .orElseThrow(NoSuchElementException::new);
