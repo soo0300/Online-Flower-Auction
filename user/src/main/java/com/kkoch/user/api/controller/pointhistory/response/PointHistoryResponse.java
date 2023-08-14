@@ -1,5 +1,6 @@
 package com.kkoch.user.api.controller.pointhistory.response;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ public class PointHistoryResponse {
     private int status;
     private String createdDate;
 
+    @Builder
     public PointHistoryResponse(String bank, int amount, int status, LocalDateTime createdDate) {
         this.bank = bank;
         this.amount = amount;
