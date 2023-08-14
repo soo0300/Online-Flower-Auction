@@ -1,6 +1,6 @@
 package com.kkoch.admin.api.controller.stats.request;
 
-import com.kkoch.admin.domain.plant.repository.StatsSearchCond;
+import com.kkoch.admin.domain.plant.repository.dto.StatsSearchCond;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
