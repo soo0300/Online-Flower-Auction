@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import HomeFlowerChart from "@/assets/HomeFlowerChart.png"
 import ActionButton from "@/components/buttons/ActionButton";
+import "./HomeFlowers.css";
 
 const HomeAuction = () => {
   return (
-    <section className="mx-auto bg-[#fbfbfb]"> 
+    <section className="mx-auto bg-[#fbfbfb] homeflower"> 
       <motion.div className="py-[70px] flex justify-center flex-col">
 				{/* HEADER */}
 				<motion.div

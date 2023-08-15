@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import AuctionLocation from "@/pages/auction/AuctionLocation";
 import AuctionLiveSession from "@/pages/auction/AuctoinLiveSession";
 import MainPage from "@/pages/mainPages/MainPage";
-import Form from "./pages/user/form/Form";
+import Form from "@/pages/user/form/Form";
 import MyPage from "@/pages/user/profile/MyPage";
 import SelectArea from "@/pages/admin/SelectArea";
-import OpenSession from "./pages/admin/OpenSession";
+import OpenSession from "@/pages/admin/OpenSession";
 import TradingInfo from "@/pages/flowerInfo/TradingInfo"
-import FlowerDetail from "./pages/flowerInfo/FlowerDetail";
-import Notice from "./pages/notice/Notice";
-import NoticeDetail from "./pages/notice/NoticeDetail";
+import FlowerDetail from "@/pages/flowerInfo/FlowerDetail";
+import Notice from "@/pages/notice/Notice";
+import NoticeDetail from "@/pages/notice/NoticeDetail";
+import NotFound404 from "@/pages/NotFound404/NotFound404";
 import secureLocalStorage from "react-secure-storage";
 import { useDispatch } from "react-redux";
 import { logout } from "./reducer/store/authSlice";
@@ -89,6 +90,9 @@ function App() {
           {/* 관리자 경매방 생성 경로 */}
           <Route path={"/admin/selectArea"} element={<SelectArea/>} />
           <Route path={"/admin/openSession"} element={<OpenSession/>} />
+
+          {/* 나머지 경로는 404 페이지로 */}
+          <Route path={"*"}  element={<NotFound404 />}  />
         </Routes>
         
       </BrowserRouter>
