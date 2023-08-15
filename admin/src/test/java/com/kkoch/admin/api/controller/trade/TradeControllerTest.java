@@ -42,7 +42,7 @@ class TradeControllerTest extends ControllerTestSupport {
     void addTrade() throws Exception {
         //given
         AddTradeRequest request = AddTradeRequest.builder()
-            .memberToken(UUID.randomUUID().toString())
+            .memberKey(UUID.randomUUID().toString())
             .auctionArticleId(1L)
             .price(2000)
             .build();
@@ -71,7 +71,7 @@ class TradeControllerTest extends ControllerTestSupport {
         List<TradeResponse> responses = List.of();
         PageImpl<TradeResponse> tradeResponses = new PageImpl<>(responses);
 
-        given(tradeQueryService.getMyTrades(anyString(), any(TradeSearchCond.class), any(Pageable.class)))
+        given(tradeQueryService.getMyTrades(anyString(), any(Pageable.class)))
                 .willReturn(tradeResponses);
 
         //when //then

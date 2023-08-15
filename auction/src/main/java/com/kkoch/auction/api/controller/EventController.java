@@ -41,7 +41,7 @@ public class EventController {
 
     @GetMapping("/{auctionId}")
     public ApiResponse<AuctionArticlesResponse> getNextArticle(@PathVariable Long auctionId) throws IOException {
-        List<AuctionArticlesResponse> articles = adminServiceClient.getAuctionArticlesForAuction(auctionId).getData();
+//        List<AuctionArticlesResponse> articles = adminServiceClient.getAuctionArticlesForAuction(auctionId).getData();
         AuctionArticlesResponse article1 = getArticle(1L);
         AuctionArticlesResponse article2 = getArticle(2L);
         AuctionArticlesResponse article3 = getArticle(3L);
@@ -50,7 +50,7 @@ public class EventController {
         AuctionArticlesResponse article6 = getArticle(6L);
         AuctionArticlesResponse article7 = getArticle(7L);
 //        List<AuctionArticlesResponse> articles = List.of(article1, article2, article3, article4, article5, article6, article7);
-        redisService.insertList(articles);
+//        redisService.insertList(articles);
         AuctionArticlesResponse nextArticle = redisService.getNextArticle();
         return ApiResponse.ok(nextArticle);
     }
@@ -60,6 +60,7 @@ public class EventController {
         return AuctionArticlesResponse.builder()
                 .auctionArticleId(auctionArticleId)
                 .auctionNumber("1-0000" + auctionArticleId)
+                .plantId(1L)
                 .code("절화")
                 .type("장미")
                 .name("푸에고")
