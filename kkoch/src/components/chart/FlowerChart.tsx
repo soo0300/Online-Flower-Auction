@@ -1,4 +1,3 @@
-
 // import { flowerSeries } from '@/pages/flowerInfo/FilterInterface';
 import React, { useState } from 'react'
 import ReactApexChart from 'react-apexcharts';
@@ -123,7 +122,7 @@ const FlowerChart = ({ flowerSeries }) => {
 
     stroke: {
       // 선 스타일 설정
-      colors: ['#fba1b7', '#ffd1da', '#ffdbaa'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
+      colors: ['#fba1b7', '#CBC3D2', '#ffdbaa'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
       curve: 'smooth', // 곡선형 그래프로 설정
       width: [2, 2, 2], // 데이터 배열에 대한 선 굵기 (0번 인덱스는 2px, 1번 인덱스는 2px)
     },
@@ -189,6 +188,7 @@ const FlowerChart = ({ flowerSeries }) => {
         horizontal: 20,
         vertical: 0
       },
+      fontFamily: 'IM_Hyemin-Bold'
     },
   };
 
@@ -219,7 +219,8 @@ const FlowerChart = ({ flowerSeries }) => {
       const filteredData = series[0].data.filter(
         ([timestamp]) => timestamp >= minTimestamp && timestamp <= maxTimestamp
       );
-    
+        
+      console.log(filteredData)
       // 데이터가 있을 때만 그래프를 그리도록 처리
       if (filteredData.length > 0) {
         const yValues = filteredData.map(([, value]) => value);
