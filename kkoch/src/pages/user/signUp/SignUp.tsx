@@ -15,7 +15,7 @@ interface ISignUpForm {
   extraError: string;
 }
 
-const SignUp = () => {
+const SignUp = ({onSignUpSuccess}) => {
   const [ name, setName ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ businessNumber, setBusinessNumber ] = useState('');
@@ -149,8 +149,8 @@ const SignUp = () => {
 
     axios({
 			method: "post",
-			url: "https://i9c204.p.ssafy.io/api/user-service/join", // 프록시 경로인 /api를 사용
-			// url: "/api/api/user-service/join", // 프록시 경로인 /api를 사용
+			// url: "https://i9c204.p.ssafy.io/api/user-service/join", // 프록시 경로인 /api를 사용
+			url: "/api/api/user-service/join", // 프록시 경로인 /api를 사용
 			headers: {
 				"Content-Type": "application/json"
 			},
@@ -158,6 +158,7 @@ const SignUp = () => {
 		})
 		.then(() => { 
 			if(confirm("회원 가입이 완료 되었습니다. 로그인 해주십시오")) {
+        onSignUpSuccess(email);
         navigate("/login", { state: { email: email } });
       }
 

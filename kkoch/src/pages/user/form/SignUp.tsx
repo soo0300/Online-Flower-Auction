@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import './SignUp.css';
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 
 interface ISignUpForm {
   name: string;
@@ -14,7 +13,7 @@ interface ISignUpForm {
   extraError: string;
 }
 
-const SignUp = () => {
+const SignUp = ({onSignUpSuccess}) => {
   const [ name, setName ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ businessNumber, setBusinessNumber ] = useState('');
@@ -30,8 +29,6 @@ const SignUp = () => {
 	const [ pwValid, setPwValid ] = useState(false);
 	const [ pwCheckValid, setPwCheckValid ] = useState(false);
 	const [ notAllow, setNotAllow ] = useState(true);
-
-  const navigate = useNavigate();
 
   // 이름 검증 함수
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,8 +145,8 @@ const SignUp = () => {
 
     axios({
 			method: "post",
-			url: "https://i9c204.p.ssafy.io/api/user-service/join", // 프록시 경로인 /api를 사용
-			// url: "/api/api/user-service/join", // 프록시 경로인 /api를 사용
+			// url: "https://i9c204.p.ssafy.io/api/user-service/join", // 프록시 경로인 /api를 사용
+			url: "/api/api/user-service/join", // 프록시 경로인 /api를 사용
 			headers: {
 				"Content-Type": "application/json"
 			},
@@ -157,8 +154,7 @@ const SignUp = () => {
 		})
 		.then(() => { 
       alert("회원 가입이 완료 되었습니다. 로그인 해주십시오")
-      window.location.reload();
-      navigate("/login", { state: { email: email } });
+      onSignUpSuccess(email);
 		})
 		.catch((err) => {
 			console.log(err.response.data)
