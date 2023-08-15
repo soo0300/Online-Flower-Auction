@@ -12,9 +12,24 @@
   flex-direction: row;
   /* The inner container takes the full available width */
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   display: flex;
   height: 60px;
+}
+
+.datecontent,
+.flowercontent,
+.varietycontent,
+.locationcontent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  margin: 0 5px;
+}
+
+.datecontent {
+  flex-grow: 2; /* 2:1:1:1 비율로 나누기 위해 */
 }
 
 .datecontent {
@@ -80,14 +95,14 @@
 }
 
 .locationinput {
-  margin-right: 20px;
+  margin-right: 10px;
   text-align: center;
 }
 
 .button-search {
   margin-left: 10px;
   color: red;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 
@@ -107,6 +122,6 @@
   .flowerinput,
   .varietyinput,
   .locationinput {
-    width: calc(100px + 0.5vw); /* 최소 크기 + 화면 너비 */
+    width: calc(100px + 1vw); /* 최소 크기 + 화면 너비 */
   }
 }
