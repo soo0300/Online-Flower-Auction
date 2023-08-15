@@ -71,10 +71,10 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             border: 1px solid #ccc;
-            padding: 8px;
+            padding: 2px;
             border-radius: 4px;
             background-color: white;
-            font-size: 14px;
+            font-size: 11px;
             color: #333;
             cursor: pointer;
         }
@@ -155,6 +155,11 @@
             text-align: center;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
+        }
+
+        .btnn{
+            width: 100px;
+            height: 30px;
         }
 
         .btn-bd-primary {
@@ -484,15 +489,15 @@
 
                     <tr th:each="auction : ${auctions}">
                         <td style="display:none" th:text="${auction.auctionId}">1</td>
-                        <td th:switch="${auction.code}">
+                        <td class="vertical-center"  th:switch="${auction.code}">
                             <span th:case="1">절화</span>
                             <span th:case="2">관엽</span>
                             <span th:case="3">난</span>
 
                         </td>
-                        <td th:text="${auction.startTime}">23. 9. 13. 오전 11:00</td>
-                        <td th:text="${auction.createdDate}">23. 9. 20. 오전 5:00</td>
-                        <td>입장</td>
+                        <td  class="vertical-center" th:text="${auction.startTime}">23. 9. 13. 오전 11:00</td>
+                        <td  class="vertical-center" th:text="${auction.createdDate}">23. 9. 20. 오전 5:00</td>
+                        <td class="vertical-center" >입장</td>
                         <td>
                             <label class="custom-select-label">
                                 <select name="status" class="custom-select"
@@ -507,7 +512,7 @@
                             </label>
                         </td>
                         <td>
-                            <a class="custom-link"
+                            <a
                                th:href="@{/admin-service/intranet/articles/{auctionId}(auctionId=${auction.auctionId})}">
                                 <span class="link-text">관리</span>
                             </a>
@@ -565,7 +570,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="addAuctionButton">등록</button>
+                    <button type="button" class="btnn" id="addAuctionButton">등록</button>
                 </div>
             </div>
         </div>
@@ -615,7 +620,7 @@
         };
 
         callApi(uri, 'post', params)
-        location.href = "/admin-service/"
+        window.location.reload();
         $('#addAuctionButton').modal('hide');
     });
 
