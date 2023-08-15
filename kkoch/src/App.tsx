@@ -26,10 +26,13 @@ function App() {
     const checkLoginStatus = () => {
       const loginTime = secureLocalStorage.getItem('loginTime');
       
-      console.log(loginTime);
-
+      const nowDate = new Date();
+      const logTime = new Date(String(loginTime));
+      const diffMSec = nowDate.getTime() - logTime.getTime();
+      const diffHour = diffMSec / (60 * 60 * 1000);
+      console.log(diffMSec, diffHour)
       // 3시간 자동 로그인 시간이 지나면 자동 로그아웃
-      if (loginTime && Date.now() - Number(loginTime) < 3*60*60*1000) {
+      if (loginTime && diffHour < 5) {
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
@@ -60,7 +63,7 @@ function App() {
   return (
     <div className="app">
       <BrowserRouter>
-        <Navbar isTop={isTop} showNavbar={showNavbar}/>
+        <Navbar isTop={isTop}/>
         {/* 라우팅 정보 */}
         <Routes>
           <Route path={"/"} element={<MainPage />}/>
