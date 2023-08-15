@@ -71,6 +71,6 @@ public class ReservationQueryRepository {
             .from(reservation)
             .where(reservation.plantId.eq(plantId))
             .orderBy(reservation.price.desc(), reservation.createdDate.asc())
-            .fetchOne();
+            .fetchFirst();
     }
 }

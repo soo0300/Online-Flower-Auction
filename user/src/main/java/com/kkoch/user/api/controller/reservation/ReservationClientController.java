@@ -4,21 +4,19 @@ import com.kkoch.user.api.controller.reservation.response.ReservationForAuctionR
 import com.kkoch.user.api.service.reservation.ReservationQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user-service/reservations")
+@RequestMapping("/client/reservation")
 @Slf4j
 public class ReservationClientController {
 
     private final ReservationQueryService reservationQueryService;
 
-    @GetMapping
-    public ReservationForAuctionResponse getReservationForAuction(@RequestParam Long plantId) {
+    @GetMapping("/{plantId}")
+    public ReservationForAuctionResponse getReservationForAuction(@PathVariable Long plantId) {
+        log.info("<컨트롤러 호출> ReservationClientController#getReservationForAuction = {}", plantId);
         return reservationQueryService.getReservation(plantId);
     }
 }

@@ -184,10 +184,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
             log.info("auctionId = {}", auctionId);
 
             List<AuctionArticlesResponse> responses = adminServiceClient.getAuctionArticlesForAuction(auctionId).getData();
+            for (AuctionArticlesResponse response : responses) {
+                log.info("for response = {}", response);
+            }
             log.info("response size = {}", responses.size());
 
             redisService.insertList(responses);
             AuctionArticlesResponse nextArticle = redisService.getNextArticle();
+            log.info("first data = {}", nextArticle);
             queue.add(nextArticle);
 
             String data = nextArticle.toJson("start");
@@ -202,6 +206,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             sendMessageAll(data);
 
             AuctionArticlesResponse auctionArticlesResponse = queue.pollFirst();
+            log.info("AuctionArticlesResponse={}", auctionArticlesResponse);
             Long plantId = auctionArticlesResponse.getPlantId();
             ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(plantId);
             admin.sendMessage(new TextMessage(response.toJson()));
