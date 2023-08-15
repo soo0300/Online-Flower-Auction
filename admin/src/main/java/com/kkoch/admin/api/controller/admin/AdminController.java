@@ -68,7 +68,7 @@ public class AdminController {
         AddAdminDto dto = request.toAddAdminDto();
         Long adminId = adminService.addAdmin(dto);
         log.info("admin={}", adminId);
-        return "redirect:/admins";
+        return "redirect:/admin-service/intranet/admins";
     }
 
     @GetMapping("/members")
