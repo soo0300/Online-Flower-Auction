@@ -52,7 +52,7 @@ public class TradeControllerDocsTest extends RestDocsSupport {
     @Test
     void addTrade() throws Exception {
         AddTradeRequest request = AddTradeRequest.builder()
-                .memberToken(UUID.randomUUID().toString())
+                .memberKey(UUID.randomUUID().toString())
                 .auctionArticleId(1L)
                 .price(3000)
                 .build();
