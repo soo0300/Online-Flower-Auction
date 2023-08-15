@@ -4,6 +4,7 @@ import TableFilter from './TableFilter';
 import axios from 'axios';
 import FilterValues from './TableInterface';
 import columns from './TableColumns';
+import './FlowerTable.css';
 
 const TestComponent = (props) => {
 
@@ -49,8 +50,8 @@ const TestComponent = (props) => {
     setIsLoading(true);
     axios({
       method: "get",
-      url: `https://i9c204.p.ssafy.io/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
-      // url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
+      // url: `https://i9c204.p.ssafy.io/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
+      url: `/api/api/admin-service/auction-articles/api?startDateTime=${formatDate(weekagoDate)}&endDateTime=${formatDate(todayDate)}&code=${codeData}`
     })
     .then((res) => {
       const dataWithId = res.data.data.content.map((item, index) => ({
@@ -100,7 +101,7 @@ const TestComponent = (props) => {
         <div className='table-title'>
           실시간 거래 현황
           <span className='table-units'>
-            단위: 원 | 기간: 1주일 단위
+            단위: 원
           </span>
         </div>
       </div>
@@ -120,6 +121,7 @@ const TestComponent = (props) => {
                 }
               }}
               disableColumnMenu
+              sx={{ overflow: 'hidden' }}
             />
           </div>
         )}

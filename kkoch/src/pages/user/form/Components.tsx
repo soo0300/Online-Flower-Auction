@@ -33,7 +33,7 @@ export const Container = styled.div`
   overflow: hidden;
   width: 1300px;
   height: 700px;
-  top: 5px;
+  top: 10px;
   margin: auto;
 `;
 
@@ -80,9 +80,9 @@ export const Form = styled.form`
 
 export const Title = styled.h1`
   color: #5E0000;
-  font-size: 50px;
+  font-size: 40px;
   font-weight: 700;
-  margin: 0;
+  margin-top: 15px;
 `;
 
 export const Input = styled.input`
@@ -110,10 +110,18 @@ export const Button = styled.button`
   &:focus {
     outline: none;
   }
+  /* 버튼에 호버 스타일 추가 */
+  &:hover {
+    background-color: #5E0000; /* 배경 색상 변경 */
+    color: #ffffff; /* 글자 색상 변경 */
+  }
 `;
 
 export const GhostButton = styled(Button)`
   border-color: #5E0000;
+  width: 35%;
+  margin: auto;
+  background-color: white;
 `;
 
 export const Anchor = styled.a`
@@ -188,4 +196,15 @@ export const Paragraph = styled.p`
   line-height: 20px;
   letter-spacing: 0.5px;
   margin: 20px 0 30px;
+`;
+
+export const Box = styled.div`
+  border-radius: 50px;
+  width: 80%;
+  height: 25%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  background-color: #eee;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 `;

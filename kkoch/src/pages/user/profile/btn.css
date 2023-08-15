@@ -1,5 +1,5 @@
-.btn {
-  background-color: #FFCD5B;
+.changePwbtn {
+  background-color: #FFC132;
   color: black;
   border: none;
   padding: 8px 16px;
@@ -12,6 +12,6 @@
 }
 
 /* 버튼에 호버 효과 추가 (선택사항) */
-.btn:hover {
+.changePwbtn:hover {
   background-color: #F25477;
 }

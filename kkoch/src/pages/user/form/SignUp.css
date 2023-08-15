@@ -34,3 +34,13 @@
   padding: 12px 45px;
   letter-spacing: 1px;
 }
+
+.signup_button:hover:not(:disabled) {
+  background-color: #5E0000;
+  color: white;
+}
+
+.signup_button:disabled {
+  background-color: #dadada;
+  color: #5E0000;
+}

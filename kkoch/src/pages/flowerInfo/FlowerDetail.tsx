@@ -45,8 +45,8 @@ const FlowerDetail = () => {
 
   const response = () => {
     axios({
-      // url: '/api/api/admin-service/stats',
-      url: 'https://i9c204.p.ssafy.io/api/admin-service/stats',
+      url: '/api/api/admin-service/stats',
+      // url: 'https://i9c204.p.ssafy.io/api/admin-service/stats',
       method: 'get',
       params: {
         type: flowerData.type,
@@ -77,7 +77,6 @@ const FlowerDetail = () => {
 
       // console.log("!!!!", formatDate(new Date(rawData[0].createdDate)))
       // console.log("오늘데이터", todayList)
-
       
       setSeries([
         { 
@@ -88,7 +87,7 @@ const FlowerDetail = () => {
         { 
           name: "상급",
           data: dataByGrade["ADVANCED"] ? dataByGrade["ADVANCED"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
-          color: "#ffd1da",
+          color: "#CBC3D2",
         },
         { 
           name: "특급",
@@ -96,6 +95,8 @@ const FlowerDetail = () => {
           color: "#ffdbaa",
         },
       ]);
+      
+      console.log("가져올때 시리즈", series)
     })
     .catch(err => {
       console.log(err)
@@ -107,7 +108,7 @@ const FlowerDetail = () => {
   }, [])
 
   return (
-    <div className='gap-24 bg-gray-20 pt-3 pr-100 md:h-full md:pb-0'>
+    <div className='gap-24 bg-gray-20 pt-3 pl-10 pr-10 md:h-full md:pb-0'>
       <div className="detail-title">
         {flowerData.type}
         <span className='detail-subtitle'>
