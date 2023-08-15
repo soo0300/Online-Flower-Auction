@@ -148,8 +148,8 @@ const SignUp = () => {
 
     axios({
 			method: "post",
-			url: "https://i9c204.p.ssafy.io/api/user-service/join", // 프록시 경로인 /api를 사용
-			// url: "/api/api/user-service/join", // 프록시 경로인 /api를 사용
+			// url: "https://i9c204.p.ssafy.io/api/user-service/join", // 프록시 경로인 /api를 사용
+			url: "/api/api/user-service/join", // 프록시 경로인 /api를 사용
 			headers: {
 				"Content-Type": "application/json"
 			},
