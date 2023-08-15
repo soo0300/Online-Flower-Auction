@@ -44,7 +44,7 @@ public class AdminController {
         LoginDto dto = request.toLoginDto();
         LoginAdmin loginAdmin = adminQueryService.loginAdmin(dto);
         session.setAttribute("loginAdmin", loginAdmin);
-        return "redirect:/";
+        return "index";
     }
 
     @GetMapping("/logout")

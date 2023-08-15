@@ -202,7 +202,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             sendMessageAll(data);
 
             AuctionArticlesResponse auctionArticlesResponse = queue.pollFirst();
-            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(auctionArticlesResponse.getPlantId());
+            Long plantId = auctionArticlesResponse.getPlantId();
+            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(plantId);
             admin.sendMessage(new TextMessage(response.toJson()));
         }
 
@@ -216,7 +217,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             sendMessageAll(data);
 
             AuctionArticlesResponse auctionArticlesResponse = queue.pollFirst();
-            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(auctionArticlesResponse.getPlantId());
+            Long plantId = auctionArticlesResponse.getPlantId();
+            ReservationForAuctionResponse response = userServiceClient.getReservationForAuction(plantId);
             admin.sendMessage(new TextMessage(response.toJson()));
         }
 

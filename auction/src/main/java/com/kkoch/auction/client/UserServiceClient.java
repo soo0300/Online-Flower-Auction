@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
 
-    @GetMapping("/reservations")
-    ReservationForAuctionResponse getReservationForAuction(@RequestParam Long plantId);
+    @GetMapping("/user-service/reservations")
+    ReservationForAuctionResponse getReservationForAuction(@RequestParam("plantId") Long plantId);
 }
