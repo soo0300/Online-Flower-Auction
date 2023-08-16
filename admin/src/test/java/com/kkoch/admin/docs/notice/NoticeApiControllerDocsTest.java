@@ -174,7 +174,7 @@ public class NoticeApiControllerDocsTest extends RestDocsSupport {
         return NoticeResponse.builder()
             .title(title)
             .content(content)
-            .createdDate(createdDate)
+//        (createdDate)
             .build();
     }
 }

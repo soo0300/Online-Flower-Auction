@@ -40,10 +40,10 @@ public class RedisService {
 
     public AuctionArticlesResponse getNextArticle() {
         String serialize = redisTemplate.opsForList().leftPop(AUCTION_LIST);
-        log.info("꺼낸 직렬화 된 스트링 = {}", serialize);
+//        log.info("꺼낸 직렬화 된 스트링 = {}", serialize);
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
         byte[] decode = Base64.getDecoder().decode(serialize);
-        log.info("디코딩 된 byte[] = {}", decode);
+//        log.info("디코딩 된 byte[] = {}", decode);
         AuctionArticlesResponse article = serializer.deserialize(decode, AuctionArticlesResponse.class);
 //        Object deserialize = serializer.deserialize(serialize.getBytes());
 //        AuctionArticlesResponse article = null;

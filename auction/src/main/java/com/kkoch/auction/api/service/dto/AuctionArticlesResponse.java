@@ -46,6 +46,7 @@ public class AuctionArticlesResponse implements Serializable {
         return String.format("{" +
                 "\"auctionArticleId\":%d," +
                 "\"auctionNumber\":\"%s\"," +
+                "\"plantId\":%d," +
                 "\"code\":\"%s\"," +
                 "\"type\":\"%s\"," +
                 "\"name\":\"%s\"," +
@@ -57,6 +58,7 @@ public class AuctionArticlesResponse implements Serializable {
                 "\"command\":\"%s\"" +
                 "}", this.auctionArticleId,
             this.auctionNumber,
+            this.plantId,
             this.code,
             this.type,
             this.name,

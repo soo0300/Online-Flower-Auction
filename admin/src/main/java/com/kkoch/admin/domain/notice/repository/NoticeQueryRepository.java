@@ -46,8 +46,7 @@ public class NoticeQueryRepository {
                 .from(notice)
                 .where(
                         notice.active.isTrue(),
-                        eqTitle(cond.getTitle()),
-                        eqContent(cond.getContent())
+                        eqTitle(cond.getTitle()).or(eqContent(cond.getContent()))
                 )
                 .orderBy(notice.createdDate.desc())
                 .limit(pageable.getPageSize())
@@ -63,7 +62,7 @@ public class NoticeQueryRepository {
                         notice.id,
                         notice.title,
                         notice.content,
-                        notice.createdDate
+                        notice.active
                 ))
                 .from(notice)
                 .where(notice.id.in(ids))
@@ -77,8 +76,8 @@ public class NoticeQueryRepository {
                 .from(notice)
                 .where(
                         notice.active.isTrue(),
-                        eqTitle(cond.getTitle()),
-                        eqContent(cond.getContent())
+                        eqTitle(cond.getTitle()).or(eqContent(cond.getContent()))
+
                 )
                 .fetch()
                 .size();
@@ -90,7 +89,7 @@ public class NoticeQueryRepository {
                         notice.id,
                         notice.title,
                         notice.content,
-                        notice.createdDate
+                        notice.active
                 ))
                 .from(notice)
                 .where(notice.id.eq(noticeId))

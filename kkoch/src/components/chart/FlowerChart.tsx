@@ -151,11 +151,12 @@ const FlowerChart = ({ flowerSeries }) => {
     },
 
     yaxis: {
-      tickAmount: 6,
+      tickAmount: 10,
       labels: {
         formatter: (value) => {
+          // Math.ceil(Math.max(...yValues) / 100) * 100 + 1000
           // 숫자를 3자리 구분기호와 함께 단위를 붙여서 반환
-          return '￦'+ formatNumberCommas(value);
+          return '￦'+ formatNumberCommas(Math.round(value / 10) * 10);
         },
         style: {
           fontWeight: 700,
@@ -182,7 +183,7 @@ const FlowerChart = ({ flowerSeries }) => {
       position: "top",
       fontSize: '20px',
       offsetX: 0,
-      offsetY: -5,
+      offsetY: 0,
       floating: true,
       itemMargin: {
         horizontal: 20,

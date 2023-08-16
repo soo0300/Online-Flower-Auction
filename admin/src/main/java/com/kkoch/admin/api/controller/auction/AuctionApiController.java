@@ -31,14 +31,6 @@ public class AuctionApiController {
     private final AuctionService auctionService;
     private final AuctionQueryService auctionQueryService;
 
-    /**
-     * 로그인을 한 관계자만 경매 일정을 등록할 수 있다.
-     *
-     * @throws IllegalArgumentException <pre>
-     *                                                                       현재 시간 + 1시간 이전의 일정이 등록되는 경우<br/>
-     *                                                                       구분코드가 범위(1 ~ 4)를 벗어나는 경우
-     *                                                                   </pre>
-     */
     @PostMapping
     public ApiResponse<AuctionTitleResponse> addAuction(
             @Valid @RequestBody AddAuctionRequest request,
@@ -62,15 +54,8 @@ public class AuctionApiController {
         return ApiResponse.ok(openAuction);
     }
 
-//    @GetMapping
-//    public ApiResponse<List<AuctionResponse>> getAuctions() {
-//        log.info("<모든 경매 일정 조회> Controller");
-//        List<AuctionResponse> auctionSchedule = auctionQueryService.getAuctionSchedule();
-//        return ApiResponse.ok(auctionSchedule);
-//    }
-
     @PatchMapping("/{auctionId}/{status}")
-    public ApiResponse<AuctionTitleResponse> setAuctionStatus(
+    public ApiResponse<Long> setAuctionStatus(
             @PathVariable Long auctionId,
             @PathVariable Status status
     ) {
@@ -78,7 +63,7 @@ public class AuctionApiController {
         AuctionTitleResponse response = auctionService.setStatus(auctionId, status);
 
         log.debug("[경매 일정 상태 변경] 경매방 제목 = {}", response.getTitle());
-        return ApiResponse.ok(response);
+        return ApiResponse.ok(auctionId);
     }
 
     @PatchMapping("/{auctionId}")

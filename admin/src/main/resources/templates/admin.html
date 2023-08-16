@@ -426,29 +426,31 @@
                     </tr>
                     </thead>
                     <tbody class="text-center">
+                    <tbody class="text-center">
                     <tr th:each="admin, adminStat : ${admins}">
-                        <td th:text="${adminStat.count}">3</td>
-                        <td th:text="${admin.adminId}" id="herePk">1</td>
-                        <td th:text="${admin.loginId}">lyt1228</td>
-                        <td th:text="${admin.loginPw}" id="herePw">lsdsjgkj!</td>
-                        <td th:text="${admin.name}">임우택</td>
-                        <td th:text="${admin.tel}" id="hereTel">010-1111-1111</td>
-                        <td th:text="${admin.position}">00</td>
-                        <td th:text="${admin.createdDate}">2023.01.01</td>
-                        <td id="hereActive">
+                        <td class="vertical-center" th:text="${adminStat.count}">3</td>
+                        <td class="vertical-center" th:text="${admin.adminId}" id="herePk">1</td>
+                        <td class="vertical-center" th:text="${admin.loginId}">lyt1228</td>
+                        <td class="vertical-center" th:text="${admin.loginPw}" id="herePw">lsdsjgkj!</td>
+                        <td class="vertical-center" th:text="${admin.name}">임우택</td>
+                        <td class="vertical-center" th:text="${admin.tel}" id="hereTel">010-1111-1111</td>
+                        <td class="vertical-center" th:text="${admin.position}">00</td>
+                        <td class="vertical-center" th:text="${admin.createdDate}">2023.01.01</td>
+                        <td class="vertical-center" id="hereActive">
                             <span th:if="${admin.active}" style="font-weight: bold; color: red;">활성화</span>
                             <span th:unless="${admin.active}" style="font-weight: bold; color: blue;">비활성화</span>
                         </td>
-                        <td>
+                        <td class="vertical-center">
                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#editModal">수정
                             </button>
                         </td>
-                        <td>
+                        <td class="vertical-center">
                             <button class="btn btn-danger btn-sm deleteButton">삭제</button>
                         </td>
                     </tr>
                     </tbody>
+
                 </table>
             </div>
         </main>
@@ -536,10 +538,6 @@
 
             adminTelDisplay = savedTelInput.value;
             adminPwDisplay = savedPwInput.value;
-            console.log("adminPw" + adminPwDisplay.textContent);
-
-            console.log("in" + findId);
-
 
             const params = {
                 tel: adminTelDisplay,
@@ -550,6 +548,8 @@
                 const response = callApi(`/admin-service/admins/${findId}`, 'patch', params);
                 console.log('API 호출 결과:', response);
                 // 성공적으로 처리된 경우에 대한 로직 추가
+
+                window.location.reload();
             } catch (error) {
                 console.error('API 호출 에러:', error);
                 // 에러 처리 로직 추가
@@ -603,7 +603,7 @@
                         aria-label="Close"
                 ></button>
             </div>
-            <form class="modal-body" th:action="@{/admins/add}" method="post" th:object="${form}">
+            <form class="modal-body" th:action="@{/admin-service/intranet/admins/add}" method="post" th:object="${form}">
                 <div class="mb-3">
                     <label for="loginId" class="form-label"
                     >아이디</label

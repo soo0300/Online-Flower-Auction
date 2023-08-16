@@ -442,17 +442,16 @@
                     </thead>
                     <tbody class="text-center">
                     <tr th:each="article : ${articles}">
-                        <td style="display:none" th:text="${article.auctionArticleId}"></td>
-                        <td th:text="${article.auctionNumber}"></td>
-                        <td th:text="${article.code}"></td>
-                        <td th:text="${article.type}"></td>
-                        <td th:text="${article.name}"></td>
-                        <td th:text="${article.count}"></td>
-                        <td th:text="${article.startPrice}"></td>
-                        <td th:text="${article.grade}"></td>
-                        <td th:text="${article.region}"></td>
-                        <td th:text="${article.shipper}"></td>
-
+                        <td style="display:none;" th:text="${article.auctionArticleId}"></td>
+                        <td class="vertical-center" th:text="${article.auctionNumber}"></td>
+                        <td class="vertical-center" th:text="${article.code}"></td>
+                        <td class="vertical-center" th:text="${article.type}"></td>
+                        <td class="vertical-center" th:text="${article.name}"></td>
+                        <td class="vertical-center" th:text="${article.count}"></td>
+                        <td class="vertical-center" th:text="${article.startPrice}"></td>
+                        <td class="vertical-center" th:text="${article.grade}"></td>
+                        <td class="vertical-center" th:text="${article.region}"></td>
+                        <td class="vertical-center" th:text="${article.shipper}"></td>
                     </tr>
                     </tbody>
                 </table>
@@ -639,6 +638,7 @@
             ;
 
             callApi(uri, 'post', params)
+            window.location.reload();
 
             $('#addArticleModal').modal('hide');
 
