@@ -7,6 +7,7 @@ import com.kkoch.auction.api.controller.response.EventResultResponse;
 import com.kkoch.auction.api.service.RedisService;
 import com.kkoch.auction.client.AdminServiceClient;
 import com.kkoch.auction.api.service.dto.AuctionArticlesResponse;
+import com.kkoch.auction.client.UserServiceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class EventController {
 
     private final RedisService redisService;
     private final AdminServiceClient adminServiceClient;
+    private final UserServiceClient userServiceClient;
 
     @PostMapping("/{auctionId}")
     public ApiResponse<AuctionArticlesResponse> getFirstArticle(@PathVariable Long auctionId) throws IOException {
@@ -82,6 +84,10 @@ public class EventController {
             AddTradeRequest addTradeRequest = generateAddTradeRequest(participant);
             ApiResponse<Long> addTradeResponse = adminServiceClient.addTrade(addTradeRequest);
             String winnerPrice = redisService.getWinnerPrice(getPriceKey(auctionArticleId), participant.getMemberKey());
+            //예약 삭제
+            if (participant.getReservationId() > 0) {
+                userServiceClient.removeReservation(participant.getReservationId());
+            }
             return ApiResponse.ok(EventResultResponse.success(participant, String.valueOf(memberNumber), winnerPrice));
         }
         String winnerKey = redisService.getWinnerKey(auctionArticleId);

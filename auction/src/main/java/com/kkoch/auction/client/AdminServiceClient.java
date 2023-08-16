@@ -4,14 +4,9 @@ import com.kkoch.auction.api.ApiResponse;
 import com.kkoch.auction.api.controller.request.AddTradeRequest;
 import com.kkoch.auction.api.service.dto.AuctionArticlesResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.openfeign.SpringQueryMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @FeignClient(name = "admin-service")
 public interface AdminServiceClient {
@@ -21,4 +16,7 @@ public interface AdminServiceClient {
 
     @PostMapping("/admin-service/trades")
     ApiResponse<Long> addTrade(@RequestBody AddTradeRequest request);
+
+    @PatchMapping("/admin-service/auctions/{auctionId}/{status}")
+    ApiResponse<Long> setAuctionStatus(@PathVariable Long auctionId, @PathVariable String status);
 }

@@ -40,4 +40,8 @@ public class ReservationService {
 
         return AddReservationResponse.of(savedReservation);
     }
+
+    public void remove(Long reservationId) {
+        reservationRepository.deleteById(reservationId);
+    }
 }

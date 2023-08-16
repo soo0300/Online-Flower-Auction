@@ -229,6 +229,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
         //close
         if (command.equals("close")) {
+            String data = getDataForJson(json, "auctionId");
+            log.info("auctionId = {}", data);
+
+            Long auctionId = Long.parseLong(data);
+            log.info("auctionId = {}", auctionId);
+
+            adminServiceClient.setAuctionStatus(auctionId, "CLOSE");
             log.info("close web socket");
         }
     }
