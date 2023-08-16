@@ -22,7 +22,7 @@ class AdminServiceTest extends IntegrationTestSupport {
     @Autowired
     private AdminRepository adminRepository;
 
-    @DisplayName("관계자 더미데이터로 서비스를 통해 관계자 등록 후 리포지토리로 확인하기.")
+    @DisplayName("[관계자 등록]")
     @Test
     public void addAdminTest() {
         // given
@@ -42,7 +42,7 @@ class AdminServiceTest extends IntegrationTestSupport {
         Assertions.assertThat(admin).isPresent();
     }
 
-    @DisplayName("관계자 정보에서 비밀번호와 전화번호만 변경할 수 있다.")
+    @DisplayName("[관계자 비밀번호와 전화번호 변경]")
     @Test
     public void setAdminTest() {
         //given
@@ -62,7 +62,7 @@ class AdminServiceTest extends IntegrationTestSupport {
 
     }
 
-    @DisplayName("등록된 관계자를 삭제하면 비활성화 한다.")
+    @DisplayName("[관계자 삭제]")
     @Test
     public void removeAdmin() {
         // given

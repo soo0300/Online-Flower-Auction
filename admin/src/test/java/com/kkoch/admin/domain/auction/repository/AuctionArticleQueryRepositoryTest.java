@@ -200,7 +200,6 @@ class AuctionArticleQueryRepositoryTest extends IntegrationTestSupport {
         return tradeRepository.save(trade);
     }
 
-    // TODO: 2023-07-31 코드 합치기
     private Category insertCategory(String name) {
         Category category = Category.builder()
                 .name(name)
