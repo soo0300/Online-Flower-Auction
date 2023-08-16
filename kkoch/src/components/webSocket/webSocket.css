@@ -177,3 +177,9 @@
   width: 130px;
   height: 40px;
 }
+
+.disabled {
+  background-color: #ffdddd;
+  color: #aa0000;
+  cursor: not-allowed;
+}

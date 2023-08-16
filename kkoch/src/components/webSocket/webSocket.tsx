@@ -26,6 +26,7 @@ interface auctionInfo {
 }
 
 const WebSocketComponent = () => {
+  const [showFailureAlert, setShowFailureAlert] = useState(false);
   // 소켓 활성화 여부
   const [socket, setSocket] = useState<WebSocket | null>(null);
   // 낙찰 정보
@@ -77,9 +78,21 @@ const WebSocketComponent = () => {
 
   // 입찰하기 버튼 클릭하면 입찰자 정보 소켓전송
   const handleBiddingButtonClick = () => {
-    if (showSuccessModal) {
+    // 모달 창이 이미 열려있으면 바로 종료
+    if (showSuccessModal || currentPrice === -1 || currentPrice === finalPrice) {
       return;
     }
+
+    // 현재가가 종료가랑 똑같거나 0보다 작으면 이미 -1이 되어 집계 중이면 바로 종료
+    // if (currentPrice <= 0 || currentPrice === finalPrice) {
+    //   if (currentPrice === -1) {
+    //     setShowFailureAlert(true);
+    //     setTimeout(() => {
+    //       setShowFailureAlert(false);
+    //     }, 3000); // 3초 후 알림창 닫기
+    //   }
+    //   return;
+    // }
     setIsBiddingActive(false); // 입찰 프로세스를 비활성화로 설정
 
     // 그래프 멈추는 변수 소켓 전송
@@ -103,7 +116,10 @@ const WebSocketComponent = () => {
         data: {
           "memberKey": memberToken,
           "auctionArticleId": auctionNowInfo.auctionArticleId,
-          "price": roundedCurrentPrice || 0
+          "price": roundedCurrentPrice || 0,
+          "reservationId": -1,
+
+          
         }
       }).then((res) => {
         const bidder = res.data.data
@@ -200,6 +216,8 @@ const WebSocketComponent = () => {
         if (!bidderInfo) {
           console.log('11111111111111111')
           setBidderInfo(message);
+          setIsBiddingActive(false);
+          setCurrentPrice(-1);
           console.log("낙찰자정보업데이트", message, bidderInfo)
         }
         console.log("메시지오자마자 낙찰자정보", bidderInfo);
@@ -415,7 +433,13 @@ const WebSocketComponent = () => {
           <button className='normal-button'>금일 경매 목록</button>
         </div> */}
         <div>
-          <button className='bidding-button' onClick={handleBiddingButtonClick}>
+          <button 
+            // className='bidding-button' 
+            // onClick={handleBiddingButtonClick}
+            className={`bidding-button ${showSuccessModal || currentPrice === -1 || currentPrice === finalPrice ? 'disabled' : ''}`}
+            onClick={handleBiddingButtonClick}
+            disabled={showSuccessModal || currentPrice === -1 || currentPrice === finalPrice}
+          >
             입찰하기
           </button>
         </div>
