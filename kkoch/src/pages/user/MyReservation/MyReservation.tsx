@@ -41,7 +41,7 @@ const MyReservation = () => {
         col4: item.grade,
         col5: item.count,
         col6: `${item.price} 원`,
-        col7: "낙찰 성공",
+        col7: "낙찰 대기",
       }))
       
       setRows(formattedData);

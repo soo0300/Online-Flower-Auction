@@ -118,8 +118,6 @@ const WebSocketComponent = () => {
           "auctionArticleId": auctionNowInfo.auctionArticleId,
           "price": roundedCurrentPrice || 0,
           "reservationId": -1,
-
-          
         }
       }).then((res) => {
         const bidder = res.data.data

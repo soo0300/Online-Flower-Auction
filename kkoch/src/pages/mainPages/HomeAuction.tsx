@@ -43,7 +43,7 @@ const HomeAuction = () => {
             <div className="relative">
               <div className="before:absolute before:-top-20 before:-left-20 before:z-[-1] md:before:content-backgroundImage">
                 <p className="fontFamily-montserrat font-extrabold text-5xl">
-                  실시간 꽃 경매 시스템
+                  실시간 화훼 경매 시스템
                 </p>
               </div>
             </div>

@@ -19,7 +19,7 @@ const HomeAuction = () => {
             visible: { opacity: 1, x: 0 },
           }}
         >
-          <h1 className="fontFamily-montserrat font-extrabold text-5xl">실시간 꽃 정보</h1>
+          <h1 className="fontFamily-montserrat font-extrabold text-5xl">실시간 화훼 정보</h1>
           <p className="my-5 text-sm">
             실시간 화훼 경매 현황과 시세를 확인하여 
 						낙찰 가격을 정해보세요. 
