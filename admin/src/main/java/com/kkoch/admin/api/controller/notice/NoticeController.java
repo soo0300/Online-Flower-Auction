@@ -40,7 +40,7 @@ public class NoticeController {
         log.info("<공지 글 작성> Controller");
         AddNoticeDto dto = form.toAddNoticeDto();
         Long noticeId = noticeService.addNotice(loginAdmin.getId(), dto);
-        return "redirect:/";
+        return "redirect:/admin-service/intranet/notice";
     }
 
     @PostMapping("/{noticeId}/edit")
@@ -48,13 +48,13 @@ public class NoticeController {
         log.info("<공지 글 수정> Controller");
         SetNoticeDto dto = form.toSetNoticeDto();
         Long id = noticeService.setNotice(noticeId, dto);
-        return "redirect:/";
+        return "redirect:/notice";
     }
 
     @PostMapping("/{noticeId}/remove")
     public String removeNotice(@PathVariable Long noticeId) {
         log.info("<공지 글 삭제> Controller");
         Long id = noticeService.removeNotice(noticeId);
-        return "redirect:/";
+        return "redirect:/admin-service/intranet/notice";
     }
 }
