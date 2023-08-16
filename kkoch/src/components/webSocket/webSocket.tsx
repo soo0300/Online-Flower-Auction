@@ -103,7 +103,8 @@ const WebSocketComponent = () => {
         data: {
           "memberKey": memberToken,
           "auctionArticleId": auctionNowInfo.auctionArticleId,
-          "price": roundedCurrentPrice || 0
+          "price": roundedCurrentPrice || 0,
+          "reservationId": -1,
         }
       }).then((res) => {
         const bidder = res.data.data

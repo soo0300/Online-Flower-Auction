@@ -7,6 +7,26 @@ import Clock from '@/components/Clock/Clock';
 
 import "./openSessoin.css";
 
+interface BidderInfo {
+  memberToken: string;
+  auctionArticleId: number;
+  bidPrice: number;
+  message: string;
+  winnerNumber: number;
+}
+
+interface auctionInfo {
+  auctionArticleId: number;
+  code: string; // 카테고리
+  name: string; // 품목
+  type: string; // 품종
+  count: number; //단수
+  shipper: string; //출하자
+  region: string; //지역
+  grade: string; //등급
+  startPrice: number; //시작가
+}
+
 export default function OpenSession() {
   // const socketRef = useRef(new WebSocket('wss://i9c204.p.ssafy.io/ws/')); // useRef로 WebSocket 인스턴스 생성
   const [socket, setSocket] = useState(null); // WebSocket 상태 추가
@@ -18,6 +38,32 @@ export default function OpenSession() {
   const [subscribers, setSubscribers] = useState([]);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
   const [auctionStart, setAuctoinStart] = useState(false);
+  // const [reservMemKey, setReservMemKey] = useState('');
+  // const [reservId, setReservId] = useState(0);
+  // const [reservPrice, setReservPrice] = useState(0);
+  const reservMemKey = useRef('');
+  const reservId = useRef(0);
+  const reservPrice = useRef(0);
+
+  // 경매 정보
+  // 경매 전체 목록
+  const [auctionInfos, setAuctionInfos] = useState([]);
+  // 현재 경매 물품
+  const [auctionNowInfo, setAuctionNowInfo] = useState<auctionInfo>();
+  // 다음 경매 물품
+  const [auctionNextInfo, setAuctionNextInfo] = useState<auctionInfo>();
+  // 경매 시작가
+  const [startPrice, setStartPrice] = useState(0);
+  // 경매 종료가
+  const [finalPrice, setFinalPrice] = useState(0);
+  // 예약자 낙찰 정보
+  const [bidderInfo, setBidderInfo] = useState<BidderInfo>();
+  // 경매 현재가 변동
+  const animationFrameRef = useRef(null);
+  // 경매 시작됐는지 체크
+  const [isBiddingActive, setIsBiddingActive] = useState(false);
+  // 경매 현재가
+  const [currentPrice, setCurrentPrice] = useState(startPrice);
 
   let curSessionId = null;
 
@@ -55,6 +101,129 @@ export default function OpenSession() {
     }
   }, [mainStreamManager]);
 
+  // 예약자 낙찰 함수
+  const sendReservBid = () => {
+    console.log("sendReservBid 들어오나?")
+    // memberInfo 갱신 후 JSON 변환 후 전송
+    axios({
+      method: "post",
+      // url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
+      url: "/api/api/auction-service/auctions/participant",
+      data: {
+        "memberKey": reservMemKey.current,
+        "auctionArticleId": auctionNowInfo.auctionArticleId,
+        "price": reservPrice.current,
+        "reservationId" : reservId.current,
+      }
+    }).then((res) => {
+      console.log(res)
+      const bidder = res.data.data
+      // console.log("데이터포스트", res)
+      // console.log('낙찰후 현재가', currentPrice)
+      // console.log("낙찰버튼 누른 놈", bidder)
+      const winnerInfo = {
+        message: "success",
+        winnerNumber: bidder.winnerNumber,
+        auctionArticleId: bidder.auctionArticleId,
+        bidPrice: bidder.bidPrice,
+        role: "client"
+      }
+      socket.send(JSON.stringify(winnerInfo));
+    })
+    .catch(err => console.log(err))
+  }
+
+  // 현재 경매품 목록 함수
+  const getNowList = (auctionNowInfo) => {
+    if (auctionNowInfo) {
+      // 시작가 갱신
+      setStartPrice(auctionNowInfo?.startPrice);
+      // 현재가 갱신
+      setFinalPrice(auctionNowInfo?.startPrice / 2);
+      
+      // 시작가 변경 후 현재가 갱신
+      setCurrentPrice(auctionNowInfo?.startPrice);
+      setIsBiddingActive(true);
+    }
+  };
+  
+  // 경매 물품이 하나씩 갱신되면 실행
+  useEffect(() => {
+    if (auctionNowInfo) {
+      getNowList(auctionNowInfo)
+    }
+  }, [auctionNowInfo])
+
+  useEffect(() => {
+    console.log("너 계속 실행되지?")
+    if (startPrice !== 0 && currentPrice !== -1 && isBiddingActive) {
+      const totalTime = 10000; // 10초
+      const startTime = Date.now(); // 시작 시간 저장
+      const decreaseAmount = (startPrice - finalPrice) / totalTime; // 감소량 계산
+
+      const animatePrice = () => {
+        console.log("너 계속 실행되지?")
+        if (!isBiddingActive) {
+          setCurrentPrice(-1);
+          console.log("", currentPrice)
+          return;
+        }
+        const currentTime = Date.now(); // 현재 시간 구하기
+        const elapsedTime = currentTime - startTime; // 경과 시간 계산
+    
+        // 경과 시간에 따라 현재가 감소시키기
+        const newPrice = startPrice - decreaseAmount * elapsedTime;
+        console.log("자라라라라라떨어지는중")
+        console.log(newPrice);
+        console.log("reservPrice", reservPrice.current);
+        
+        // 최소값 제한
+        setCurrentPrice(Math.max(newPrice, finalPrice));
+        
+        
+        // 예약자 있으면 종료
+        if (newPrice <= reservPrice.current) {
+          console.log("여기 멈추ㅝ야해")
+          sendReservBid()
+          setCurrentPrice(-1);
+          setIsBiddingActive(false);
+          
+        }
+    
+        // 애니메이션이 끝나지 않았으면 다음 프레임에 애니메이션 함수 호출
+        if (elapsedTime < totalTime && isBiddingActive) {
+          animationFrameRef.current = requestAnimationFrame(animatePrice);
+        } 
+        else if (!isBiddingActive) {
+          setCurrentPrice(-1); // 클릭한 시점의 현재 가격을 집계중으로 바꾸기 위해 -1로 셋팅
+          // console.log("1111111111111111111111", auctionInfos);
+          // auctionInfos.shift();
+          // setAuctionNowInfo(auctionInfos[0]);
+          // setAuctionNextInfo(auctionInfos[1]);
+          setIsBiddingActive(false);
+        } 
+        // else if (isBiddingActive && auctionNextInfo) {
+        else if (elapsedTime >= totalTime) {
+          // console.log("마지막", auctionNextInfo)
+          // auctionInfos.shift();
+          // setAuctionNowInfo(auctionInfos[0]);
+          // setAuctionNextInfo(auctionInfos[1]);
+          setIsBiddingActive(false);
+        }
+      };
+      
+      // 애니메이션 시작
+      animationFrameRef.current = requestAnimationFrame(animatePrice);
+      
+      return () => {
+        // 컴포넌트가 언마운트될 때 애니메이션 정리
+        cancelAnimationFrame(animationFrameRef.current);
+      };
+    }
+  },[isBiddingActive, startPrice])
+
+
+
   // 다음 경매 넘기기 핸들링
   const handleNextAuction = () => {
     socket.send(
@@ -63,6 +232,7 @@ export default function OpenSession() {
         command: "next"
       })
     )
+    console.log("---------------------------------------2번------------------------------------------")
   };
   
   // 경매 시작
@@ -75,24 +245,25 @@ export default function OpenSession() {
     .then((res) => {
       console.log(res.data.data.auctionId)
       socket.send(JSON.stringify({auctionId: res.data.data.auctionId.toString(), role:"admin", command:"start"}))
+      console.log("---------------------------------------1번------------------------------------------")
       setAuctoinStart(true);
     })
     .catch(err => console.log(err))
   }
-
-  // useEffect(() => {
-  //   socket.addEventLisnter("message", (e) => {
-  //     console.log(e.data)
-  //   })
-  // }, [socket])
-
-
+  
+  
+  const divideArticle = (articles) => {
+    setAuctionNowInfo(articles[0]);
+    setAuctionNextInfo(articles[1]);
+  }
+  
+  
   // 로그 찍기
   const appendToVideoLog = (text) => {
     const now = new Date();
     const currentTime = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
     // const logText = `${currentTime}: ${text}`;
-
+    
     if (videoLog.current) {
       videoLog.current.value += `[${currentTime}] - ` + text + '\n';
     }
@@ -100,7 +271,7 @@ export default function OpenSession() {
 
   // 세션 열기
   const joinSession = useCallback(() => {
-
+    
     // 웹 소캣도 연결
     // const socket = socketRef.current;
     const newSocket = new WebSocket('wss://i9c204.p.ssafy.io/ws/');
@@ -119,20 +290,40 @@ export default function OpenSession() {
         command: "open",
       }));
     });
-
+    
     // 소캣 실시간 통신
     newSocket.addEventListener('message', (e) => {
       const message = JSON.parse(e.data);
       
       console.log(message);
-
+      console.log("---------------------------------------3번------------------------------------------")
+      
       if(message?.message === "success") {
         console.log("비딩 성공")
         console.log(message.message)
         appendToVideoLog(`${message.auctionArticleId}번 경매품: ${message.winnerNumber}번 경매자 ${message.bidPrice}원 낙찰!!`)
+        setIsBiddingActive(false)
+        setCurrentPrice(-1)
+      }else if (message?.memberKey) {
+        reservMemKey.current = message.memberKey;
+        reservId.current = message.reservationId;
+        reservPrice.current = message.price;
+        // setReservId(message.reservationId);
+        // setReservPrice(message.price);
+        console.log("================================reservmem")
+        console.log(reservMemKey)
+      }else if (message?.command === "start") {
+        console.log("시작가 설정")
+        auctionInfos.push(message);
+        divideArticle(auctionInfos);
+      }else if (message?.command === "next") {
+        setBidderInfo(null);
+        auctionInfos.push(message);
+        divideArticle(auctionInfos);
+        auctionInfos.shift();
       }
     });
-
+    
     
     setSocket(newSocket);
     
@@ -147,6 +338,8 @@ export default function OpenSession() {
         appendToVideoLog(`${name} 번 경매자가 입장 하였습니다.`);
       }
       setSubscribers((subscribers) => [...subscribers, subscriber]);
+
+      console.log("한명 입장")
     });
     
     mySession.on('streamDestroyed', (event) => {
@@ -157,6 +350,7 @@ export default function OpenSession() {
         appendToVideoLog(`${name} 번 경매자가 퇴장 하였습니다.`);
       }
       deleteSubscriber(event.stream.streamManager);
+      console.log("한명 퇴장")
     });
 
     mySession.on('exception', (exception) => {
@@ -313,12 +507,12 @@ export default function OpenSession() {
   };
 
   return (
-    <div className="container h-[100%]">
+    <div className="container h-[100%] admin">
         {session === undefined ? (
           <div>
             <div id="join-dialog" className="container jumbotron vertical-center">
-              <h1 className='my-6 text-center'>양재 경매방 생성하기 </h1>
-              <hr />
+              <h1 className='my-8 text-center'>양재 경매방 생성하기 </h1>
+              <hr/>
               <Clock />
               <div className='border-2 border-[#5E0000] rounded-lg w-[70%] my-[50px] mx-auto'>
                 <form className="form-group p-6" onSubmit={joinSession}>
@@ -354,16 +548,17 @@ export default function OpenSession() {
         ) : null}
 
         {session !== undefined ? (
-          <div className='mt-3'>
+          <div className='my-10'>
             <div className='flex justify-between items-center'>
-              <h1 id="session-title">{mySessionId}</h1>
-              <input
-                className="btn btn-large btn-danger"
+              <h1 id="session-title" className='font-bold'>방 key: {mySessionId}</h1>
+              <button
+                className="btn btn-large btn-danger h-[30%] w-[15%] text-xl"
                 type="button"
                 id="buttonLeaveSession"
                 onClick={leaveSession}
-                value="경매 종료"
-              />
+              >
+                경매종료
+              </button>
               {/* <input
                 className="btn btn-large btn-success"
                 type="button"
@@ -377,7 +572,6 @@ export default function OpenSession() {
             {mainStreamManager !== undefined ? (
               <div id="main-video" className="col-md-6" onClick={()=> removeMainStreamManager()}>
                 <UserVideoComponent streamManager={mainStreamManager} />
-
               </div>
             ) : null}
 
@@ -400,6 +594,7 @@ export default function OpenSession() {
                   ref={videoLog}
                   disabled
                 >
+                
                   
                 </textarea>  
                 {auctionStart ? (

@@ -24,8 +24,8 @@ const MyReservation = () => {
   function getRows() {
     axios({
       method: 'get',
-      url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
-      // url: `/api/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
+      // url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
+      url: `/api/api/user-service/${secureLocalStorage.getItem('memberkey')}/reservations?pageNum=0`,
       headers: {
         Authorization: `Bearer ${secureLocalStorage.getItem("token")}`
       }
@@ -41,7 +41,7 @@ const MyReservation = () => {
         col4: item.grade,
         col5: item.count,
         col6: `${item.price} 원`,
-        col7: "낙찰 성공",
+        col7: "낙찰 대기",
       }))
       
       setRows(formattedData);
