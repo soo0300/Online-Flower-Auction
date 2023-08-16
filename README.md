@@ -23,7 +23,6 @@
 - **[🔎 Back-end 저장소(회원 서버)](./user)**
 - **[🔎 Back-end 저장소(경매 서버)](./auction)**
 
-
 ## 주요 기능
 
 | 기능        | 내용                                                                                                           |
@@ -64,9 +63,9 @@
 
 ### DevOps
 
-| <img src="https://www.nginx.com/wp-content/uploads/2020/05/NGINX-product-icon.svg"  alt="HTML5" width="100px" height="100px" /> | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/300px-Amazon_Web_Services_Logo.svg.png"  alt="HTML5" width="100px" height="100px" /> | <img src="https://i.namu.wiki/i/8wUfxyvz88Q6e5I_vuHYJdnVV_z3o7jbjV2WCjhTzZxWijV1v5rpU-f8vm4o-hYmtx_utsw4g8VhMvPjecTBo-bGGCjZhVKGBJsiXCs04pU188gmdcTsPUFlYk7YXXk-ktCwai5NfK6BadDTgm-NlQ.webp"  alt="HTML5" width="100px" height="100px" /> |
-|:-------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-|                                                              NGINX                                                              |                                                                                        aws EC2                                                                                        |                                                                                                                  Docker                                                                                                                   |
+| <img src="https://www.nginx.com/wp-content/uploads/2020/05/NGINX-product-icon.svg"  alt="HTML5" width="100px" height="100px" /> | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/300px-Amazon_Web_Services_Logo.svg.png"  alt="HTML5" width="100px" height="100px" /> | <img src="https://i.namu.wiki/i/8wUfxyvz88Q6e5I_vuHYJdnVV_z3o7jbjV2WCjhTzZxWijV1v5rpU-f8vm4o-hYmtx_utsw4g8VhMvPjecTBo-bGGCjZhVKGBJsiXCs04pU188gmdcTsPUFlYk7YXXk-ktCwai5NfK6BadDTgm-NlQ.webp"  alt="HTML5" width="100px" height="100px" /> | <img src="https://canada1.discourse-cdn.com/free1/uploads/openvidu/original/1X/ee7880b148202978d80991820064f9c39ada3530.png"  alt="openVidu" width="100px" height="100px" /> |
+|:-------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                              NGINX                                                              |                                                                                        aws EC2                                                                                        |                                                                                                                  Docker                                                                                                                   |                                                                                   openVidu                                                                                   |
 
 오픈비두
 
