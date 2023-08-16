@@ -15,10 +15,13 @@ public class EventParticipant {
     private String auctionArticleId;
     @NotNull
     private Integer price;
+    @NotNull
+    private Long reservationId;
 
-    public EventParticipant(String memberKey, Long auctionArticleId, Integer price) {
+    public EventParticipant(String memberKey, String auctionArticleId, Integer price, Long reservationId) {
         this.memberKey = memberKey;
-        this.auctionArticleId = String.valueOf(auctionArticleId);
+        this.auctionArticleId = auctionArticleId;
         this.price = price;
+        this.reservationId = reservationId;
     }
 }
