@@ -26,8 +26,13 @@ const FlowerDetail = () => {
   console.log("오늘날짜요", formatDate(new Date()))
 
   const [series, setSeries] = useState([]);
-  const [todayList, setTodayList] = useState([]);
+  const [todayList, setTodayList] = useState({
+    priceMin: null,
+    priceMax: null,
+    priceAvg: null
+  });
 
+  console.log("오늘오느롱늘", todayList)
   const response = () => {
     axios({
       url: '/api/api/admin-service/stats',
@@ -48,17 +53,19 @@ const FlowerDetail = () => {
       // rawData를 순회하며 grade별로 데이터를 분류
       rawData.forEach(item => {
         const { grade } = item;
-        console.log(item)
+        // console.log(formatDate(new Date(item.createdDate)), formatDate(new Date()))
         
         if (formatDate(new Date(item.createdDate)) === formatDate(new Date()) && item.grade === flowerData.grade) {
           setTodayList(item);
           setLoading(false);
-          // console.log("11111", todayList)
+          console.log("11111", todayList)
         }
         if (!dataByGrade[grade]) {
           dataByGrade[grade] = [];
         }
         dataByGrade[grade].push(item);
+        // 해당날짜의 가격 data가 없으면
+        setLoading(false);
       });
 
       // console.log("!!!!", formatDate(new Date(rawData[0].createdDate)))
@@ -103,7 +110,9 @@ const FlowerDetail = () => {
       </div>
       <div>
         {loading ? (
-          <div>Loading...</div>
+          <div>
+            {/* Loading... */}
+          </div>
         ) : (
           <>
             <FlowerPrice todayList={todayList} />
