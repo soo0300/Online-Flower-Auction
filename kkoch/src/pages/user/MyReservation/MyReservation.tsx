@@ -75,7 +75,6 @@ const MyReservation = () => {
             }
           />
         </div>
-
       </MDBCardBody>
     </MDBCard>
   )

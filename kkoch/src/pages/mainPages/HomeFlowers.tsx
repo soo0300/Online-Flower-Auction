@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import HomeFlowerChart from "@/assets/HomeFlowerChart.png"
+import HomeFlowerImg from "@/assets/HomeFlowerImg.png"
+// import HomeFlowerImg2 from "@/assets/HomeFlowerImg2.png"
 import ActionButton from "@/components/buttons/ActionButton";
 import "./HomeFlowers.css";
 
@@ -37,10 +38,18 @@ const HomeAuction = () => {
             visible: { opacity: 1, x: 0 },
           }}
         >
-					<img
-						alt="HomeFlowerChart"
-						src={HomeFlowerChart}
-					/>
+            <img
+              alt="HomeFlowerChart"
+              src={HomeFlowerImg}
+              className="w-[1000px]"
+            />
+          {/* <div className="flex justify-center">
+            <img
+              alt="HomeFlowerChart"
+              src={HomeFlowerImg1}
+            />
+
+          </div> */}
 				</motion.div>
 			</motion.div>
     </section>

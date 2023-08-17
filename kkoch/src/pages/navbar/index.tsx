@@ -171,7 +171,7 @@ const Navbar = ({isTop} : Props) => {
                             getNotification()
                           }}
                         >
-                          <BellAlertIcon className="h-10 w-10 text-blue-500"/>
+                          <BellAlertIcon className="h-10 w-10 text-red-500"/>
                         </button>
                         <button className="flex justify-between items-center" 
                                 onClick={() => {
@@ -179,7 +179,7 @@ const Navbar = ({isTop} : Props) => {
                                   setDropdownOpen(!isDropdownOpen);
                                 }}
                         >
-                          <UserCircleIcon  className="h-10 w-10 text-blue-500"/>
+                          <UserCircleIcon  className="h-10 w-10 text-red-500"/>
                           <span className="text-xl">{username}님</span>
                         </button>
                       </div>

@@ -28,7 +28,6 @@ interface auctionInfo {
 }
 
 export default function OpenSession() {
-  // const socketRef = useRef(new WebSocket('wss://i9c204.p.ssafy.io/ws/')); // useRef로 WebSocket 인스턴스 생성
   const [socket, setSocket] = useState(null); // WebSocket 상태 추가
   const [mySessionId, setMySessionId] = useState('YangJae1')
   const [myUserName, setMyUserName] = useState(`관리자${Math.floor(Math.random() * 100)}`)
@@ -38,9 +37,6 @@ export default function OpenSession() {
   const [subscribers, setSubscribers] = useState([]);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
   const [auctionStart, setAuctoinStart] = useState(false);
-  // const [reservMemKey, setReservMemKey] = useState('');
-  // const [reservId, setReservId] = useState(0);
-  // const [reservPrice, setReservPrice] = useState(0);
   const reservMemKey = useRef('');
   const reservId = useRef(0);
   const reservPrice = useRef(0);
@@ -118,9 +114,6 @@ export default function OpenSession() {
     }).then((res) => {
       console.log(res)
       const bidder = res.data.data
-      // console.log("데이터포스트", res)
-      // console.log('낙찰후 현재가', currentPrice)
-      // console.log("낙찰버튼 누른 놈", bidder)
       const winnerInfo = {
         message: "success",
         winnerNumber: bidder.winnerNumber,
@@ -196,18 +189,9 @@ export default function OpenSession() {
         } 
         else if (!isBiddingActive) {
           setCurrentPrice(-1); // 클릭한 시점의 현재 가격을 집계중으로 바꾸기 위해 -1로 셋팅
-          // console.log("1111111111111111111111", auctionInfos);
-          // auctionInfos.shift();
-          // setAuctionNowInfo(auctionInfos[0]);
-          // setAuctionNextInfo(auctionInfos[1]);
           setIsBiddingActive(false);
         } 
-        // else if (isBiddingActive && auctionNextInfo) {
         else if (elapsedTime >= totalTime) {
-          // console.log("마지막", auctionNextInfo)
-          // auctionInfos.shift();
-          // setAuctionNowInfo(auctionInfos[0]);
-          // setAuctionNextInfo(auctionInfos[1]);
           setIsBiddingActive(false);
         }
       };
@@ -237,6 +221,7 @@ export default function OpenSession() {
   
   // 경매 시작
   const handleStartAuction = () => {
+
     axios({
       method: 'get',
       url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
@@ -308,14 +293,13 @@ export default function OpenSession() {
         reservMemKey.current = message.memberKey;
         reservId.current = message.reservationId;
         reservPrice.current = message.price;
-        // setReservId(message.reservationId);
-        // setReservPrice(message.price);
         console.log("================================reservmem")
         console.log(reservMemKey)
       }else if (message?.command === "start") {
         console.log("시작가 설정")
         auctionInfos.push(message);
         divideArticle(auctionInfos);
+        appendToVideoLog(`경매중....`)
       }else if (message?.command === "next") {
         setBidderInfo(null);
         auctionInfos.push(message);
@@ -410,21 +394,6 @@ export default function OpenSession() {
       // 모든 구독자(subscribers)를 퇴장시킴
       subscribers.forEach(sub => sub.stream.dispose());
       
-      // axios({
-      //   method: "DELETE",
-      //   url: `https://i9c204.p.ssafy.io:8443/api/sessions/${session}`,
-      //   headers: {
-      //     "Authorization": 'Basic ' + btoa('OPENVIDUAPP:1q2w3e4r'),
-      //     "Content-Type": "application/x-www-form-urlencoded",
-      //   }
-      // })
-      // .then(res => {
-      //   console.log(res)
-      // })
-      // .catch(err => {
-      //   console.log(err)
-      // })
-      
       session.disconnect();
 
       alert("경매가 종료 되었습니다.")
@@ -465,21 +434,6 @@ export default function OpenSession() {
     };
   }, [leaveSession]);
 
-    /**
-     * --------------------------------------------
-     * GETTING A TOKEN FROM YOUR APPLICATION SERVER
-     * --------------------------------------------
-     * The methods below request the creation of a Session and a Token to
-     * your application server. This keeps your OpenVidu deployment secure.
-     *
-     * In this sample code, there is no user control at all. Anybody could
-     * access your application server endpoints! In a real production
-     * environment, your application server must identify the user to allow
-     * access to the endpoints.
-     *
-     * Visit https://docs.openvidu.io/en/stable/application-server to learn
-     * more about the integration of OpenVidu in your application server.
-     */
   const getToken = useCallback(async () => {
     return createSession(mySessionId).then(sessionId =>
       createToken(sessionId),
@@ -507,9 +461,9 @@ export default function OpenSession() {
   };
 
   return (
-    <div className="container h-[100%] admin">
+    <div className="max-h-7xl admin">
         {session === undefined ? (
-          <div>
+          <div className='container'>
             <div id="join-dialog" className="container jumbotron vertical-center">
               <h1 className='my-8 text-center'>양재 경매방 생성하기 </h1>
               <hr/>
@@ -548,7 +502,7 @@ export default function OpenSession() {
         ) : null}
 
         {session !== undefined ? (
-          <div className='my-10'>
+          <div className='container my-10'>
             <div className='flex justify-between items-center'>
               <h1 id="session-title" className='font-bold'>방 key: {mySessionId}</h1>
               <button
