@@ -7,7 +7,7 @@ import UserVideoComponent from './UserVideoComponent';
 import WebSocketComponent from '@/components/webSocket/webSocket';
 import './AuctoinLiveSession.css';
 import AuctionWaiting from './AuctionWaitingRoom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const AuctionWaitingRoom: React.FC = () => {
   const location = useLocation();
@@ -22,13 +22,17 @@ const AuctionWaitingRoom: React.FC = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [publisher, setPublisher] = useState(undefined);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
-  const [token, setToken] = useState(''); // openVidu 세션 요청에 필요한 토큰
+  // const [token, setToken] = useState(''); // openVidu 세션 요청에 필요한 토큰
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
   const OV = useRef(new OpenVidu());
 
   console.log(sessionId);
   const subscriberContainer = useRef<HTMLDivElement | null>(null);
-  const cameraNotify= () => toast.error('카메라를 켜주세요!');
+  const cameraNotify= () => toast.error('카메라를 켜주세요!', {
+    position:"top-center", // 알람 위치 지정
+    autoClose:2000, // 자동 off 시간
+    theme:"light"
+  });
 
   useEffect(() => {
     setMySessionId(sessionId);
@@ -268,13 +272,6 @@ const AuctionWaitingRoom: React.FC = () => {
         <button className='normal-button'>금일 경매 목록</button>
         </div>
       </div> */}
-      <ToastContainer
-        position="top-center" // 알람 위치 지정
-        autoClose={2000} // 자동 off 시간
-        closeOnClick // 클릭으로 알람 닫기
-        theme="light"
-        limit={1} // 알람 개수 제한
-      />
     </div> 
   )
 }

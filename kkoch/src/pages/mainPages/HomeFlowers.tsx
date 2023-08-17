@@ -21,8 +21,7 @@ const HomeAuction = () => {
         >
           <h1 className="fontFamily-montserrat font-extrabold text-5xl">실시간 꽃 정보</h1>
           <p className="my-5 text-sm">
-            실시간 화훼 경매 현황과 시세를 확인하여 
-						낙찰 가격을 정해보세요. 
+            실시간 화훼 경매 현황과 시세를 확인하여 입찰 가격을 정해보세요.
           </p>
           <ActionButton link={"flowers"} msg={"데이터 확인하러 가기"} />
         </motion.div>

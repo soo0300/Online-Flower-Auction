@@ -10,6 +10,7 @@ import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 import "./index.css"
 import { RootState } from "@/reducer/store";
+import { ToastContainer } from "react-toastify";
 // import ActionButton from "@/shared/ActionButton";
 
 type Props = {
@@ -257,6 +258,7 @@ const Navbar = ({isTop} : Props) => {
           ))}
         </div>
       )}
+      <ToastContainer limit={1}/>
     </nav>
   )
 }
