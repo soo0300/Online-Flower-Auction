@@ -430,12 +430,11 @@ const WebSocketComponent = () => {
         <div>
           <button className='normal-button'>금일 경매 목록</button>
         </div> */}
-        <div>
+        <div onClick={handleBiddingButtonClick}>
           <button 
             // className='bidding-button' 
             // onClick={handleBiddingButtonClick}
             className={`bidding-button ${showSuccessModal || currentPrice === -1 || currentPrice === finalPrice ? 'disabled' : ''}`}
-            onClick={handleBiddingButtonClick}
             disabled={showSuccessModal || currentPrice === -1 || currentPrice === finalPrice}
           >
             입 찰 하 기
