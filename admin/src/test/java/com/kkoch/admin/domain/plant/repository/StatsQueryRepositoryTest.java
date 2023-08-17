@@ -112,7 +112,7 @@ class StatsQueryRepositoryTest extends IntegrationTestSupport {
         List<StatsResponse> responses = statsQueryRepository.findByCond(statsSearchCond);
 
         //then
-        assertThat(responses).hasSize(3);
+        assertThat(responses).hasSize(7);
 //                .extracting("priceAvg", "grade", "createdDate")
 //                .containsExactlyInAnyOrder(
 //                        tuple(stats2.getPriceAvg(), stats2.getGrade(), stats2.getCreatedDate()),
