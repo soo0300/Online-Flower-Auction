@@ -66,6 +66,7 @@ const FlowerDetail = () => {
         dataByGrade[grade].push(item);
         // 해당날짜의 가격 data가 없으면
         setLoading(false);
+        // console.log("데이터바이그레이드", dataByGrade)
       });
 
       // console.log("!!!!", formatDate(new Date(rawData[0].createdDate)))
@@ -74,17 +75,17 @@ const FlowerDetail = () => {
       setSeries([
         { 
           name: "보통",
-          data: dataByGrade["NORMAL"] ? dataByGrade["NORMAL"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
+          data: dataByGrade["보통"] ? dataByGrade["보통"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
           color: "#ffdbaa",
         },
         { 
           name: "상급",
-          data: dataByGrade["ADVANCED"] ? dataByGrade["ADVANCED"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
+          data: dataByGrade["상급"] ? dataByGrade["상급"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
           color: "#CBC3D2",
         },
         { 
           name: "특급",
-          data: dataByGrade["SUPER"] ? dataByGrade["SUPER"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
+          data: dataByGrade["특급"] ? dataByGrade["특급"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
           color: "#fba1b7",
         },
       ]);

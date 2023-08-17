@@ -148,13 +148,14 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
           region: filter.location
         }
       })
-      .then(() => {
+      .then((res) => {
         // const responseData = res.data.data.content;
 
         // const filter = responseData;
         // console.log('여기서 필터보냄', filter)
         // console.log(responseData);
         onFilterChange(filter);
+        console.log("데이터 주세요", res.data)
         // 검색 결과 처리 또는 상태 업데이트 등을 수행
       })
       .catch(err => {
