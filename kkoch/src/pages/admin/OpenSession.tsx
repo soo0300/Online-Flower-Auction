@@ -210,6 +210,8 @@ export default function OpenSession() {
 
   // 다음 경매 넘기기 핸들링
   const handleNextAuction = () => {
+    appendToVideoLog(`경매중....`)
+
     socket.send(
       JSON.stringify({
         role: "admin",
@@ -221,11 +223,12 @@ export default function OpenSession() {
   
   // 경매 시작
   const handleStartAuction = () => {
+    appendToVideoLog(`경매중....`)
 
     axios({
       method: 'get',
-      url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
-      // url: '/api/api/admin-service/auctions/api'
+      // url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
+      url: '/api/api/admin-service/auctions/api'
     })
     .then((res) => {
       console.log(res.data.data.auctionId)
@@ -299,7 +302,6 @@ export default function OpenSession() {
         console.log("시작가 설정")
         auctionInfos.push(message);
         divideArticle(auctionInfos);
-        appendToVideoLog(`경매중....`)
       }else if (message?.command === "next") {
         setBidderInfo(null);
         auctionInfos.push(message);
