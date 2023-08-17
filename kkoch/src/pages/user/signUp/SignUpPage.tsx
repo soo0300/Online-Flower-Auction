@@ -1,9 +1,9 @@
-import SignUp from "./SignUp"
+// import SignUp from "./SignUp"
 
-function SignUpPage() {
-  return (
-    <SignUp />
-  )
-}
+// function SignUpPage() {
+//   return (
+//     <SignUp />
+//   )
+// }
 
-export default SignUpPage
+// export default SignUpPage

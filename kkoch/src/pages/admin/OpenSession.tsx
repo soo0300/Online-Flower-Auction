@@ -107,8 +107,8 @@ export default function OpenSession() {
     // memberInfo 갱신 후 JSON 변환 후 전송
     axios({
       method: "post",
-      // url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
-      url: "/api/api/auction-service/auctions/participant",
+      url: "https://i9c204.p.ssafy.io/api/auction-service/auctions/participant",
+      // url: "/api/api/auction-service/auctions/participant",
       data: {
         "memberKey": reservMemKey.current,
         "auctionArticleId": auctionNowInfo.auctionArticleId,
@@ -239,8 +239,8 @@ export default function OpenSession() {
   const handleStartAuction = () => {
     axios({
       method: 'get',
-      // url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
-      url: '/api/api/admin-service/auctions/api'
+      url: 'https://i9c204.p.ssafy.io/api/admin-service/auctions/api'
+      // url: '/api/api/admin-service/auctions/api'
     })
     .then((res) => {
       console.log(res.data.data.auctionId)

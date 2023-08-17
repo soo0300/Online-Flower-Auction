@@ -47,7 +47,8 @@ const Navbar = ({isTop} : Props) => {
     if (isLoggedIn) {
       axios({
         method: "get",
-        url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}`,
+        // url: `/api/api/user-service/${secureLocalStorage.getItem("memberkey")}`,
+        url: `https://i9c204.p.ssafy.io/api/user-service/${secureLocalStorage.getItem("memberkey")}`,
         headers: {
           Authorization: `Bearer ${secureLocalStorage.getItem("token")}`,
         },
