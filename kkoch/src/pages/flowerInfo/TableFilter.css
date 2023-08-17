@@ -60,6 +60,7 @@
   margin-right: 10px;
   font-weight: 700;
   color: black;
+  font-size: 20px;
 }
 
 .datepicker {
@@ -70,6 +71,7 @@
   font-weight: 700;
   color: black;
   margin-right: 10px;
+  font-size: 20px;
 }
 
 .varietyinput {
@@ -80,6 +82,7 @@
   font-weight: 700;
   color: black;
   margin: 0 10px;
+  font-size: 20px;
 }
 
 .flowerinput {
@@ -92,6 +95,7 @@
   font-weight: 700;
   color: black;
   margin-right: 10px;
+  font-size: 20px;
 }
 
 .locationinput {
@@ -102,7 +106,11 @@
 .button-search {
   margin-left: 10px;
   color: red;
-  margin-right: 10px;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 

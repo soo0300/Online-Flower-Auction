@@ -161,7 +161,7 @@ const WebSocketComponent = () => {
           // auctionInfos.shift();
           // divideArticle(auctionNowInfo);
         }
-      }, 5000);
+      }, 3000);
     }
   }
 
@@ -332,7 +332,7 @@ const WebSocketComponent = () => {
 
 
   return (
-    <div>
+    <div className='websocket-container' >
       <div className='auction-border'>
         <div className='auction-status'  >
           경매중
@@ -438,7 +438,7 @@ const WebSocketComponent = () => {
             onClick={handleBiddingButtonClick}
             disabled={showSuccessModal || currentPrice === -1 || currentPrice === finalPrice}
           >
-            입찰하기
+            입 찰 하 기
           </button>
         </div>
       </div>

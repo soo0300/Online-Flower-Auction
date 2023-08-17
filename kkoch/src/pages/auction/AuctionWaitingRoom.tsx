@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { OpenVidu, Session } from 'openvidu-browser';
-import CameraOff from '@/assets/cameraOff.png';
 import axios from 'axios';
 // import Video from '../buyer/VideoRoom';
-import { Link } from 'react-router-dom';
 
 
 const AuctionWaiting: React.FC = () => {
@@ -130,19 +128,6 @@ const AuctionWaiting: React.FC = () => {
       });
     }
   }, [publisher])
-
-  // 카메라 상태를 토글하는 함수
-  const toggleCamera = () => {
-    if (publisher) {
-      console.log('카메라상태', isCameraOn)
-      if (isCameraOn) {
-        publisher.publishVideo(false); // 카메라 끄기
-      } else {
-        publisher.publishVideo(true); // 카메라 켜기
-      }
-      setIsCameraOn((prev) => !prev); // isCameraOn 상태를 반전시킴
-    }
-  };
 
   return (
     <div>

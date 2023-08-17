@@ -6,6 +6,7 @@ import { login } from '@/reducer/store/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Logo from "@/assets/logo.png";
 import { RootState } from '@/reducer/store';
+import { toast } from 'react-toastify';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -21,6 +22,13 @@ const Login = () => {
 	const [ emailValid, setEmailValid ] = useState(emailFromRedux ? true : false);
 	const [ passwordValid, setPasswordValid ] = useState(false);
 	const [ notAllow, setNotAllow ] = useState(true);
+	const checkLogin = () => {
+		toast.error("아이디, 비밀번호를 확인해주세요", {
+			position: "top-center",
+			hideProgressBar: true,
+			autoClose: 2000
+		})
+	}
 
 	const dispatch = useDispatch();
 
@@ -95,7 +103,8 @@ const Login = () => {
 		})
 		.catch((err) => {
 			console.log(err);
-			alert("아이디와 비밀번호를 다시 확인해주세요")
+			// alert("아이디와 비밀번호를 다시 확인해주세요")
+			checkLogin();
 		});
 	}
 

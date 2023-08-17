@@ -122,7 +122,7 @@ const FlowerChart = ({ flowerSeries }) => {
 
     stroke: {
       // 선 스타일 설정
-      colors: ['#fba1b7', '#CBC3D2', '#ffdbaa'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
+      colors: ['#ffdbaa', '#CBC3D2', '#fba1b7'], // 데이터 배열에 대한 선 색상 (0번 인덱스는 검정색, 1번 인덱스는 빨간색)
       curve: 'smooth', // 곡선형 그래프로 설정
       width: [2, 2, 2], // 데이터 배열에 대한 선 굵기 (0번 인덱스는 2px, 1번 인덱스는 2px)
     },
@@ -133,7 +133,7 @@ const FlowerChart = ({ flowerSeries }) => {
 
     markers: {
       size: 2,
-      colors: ['#e5869d', '#ffadc4', '#ffae70']
+      colors: ['orange', 'purple', 'red']
     },
 
     xaxis: {

@@ -9,6 +9,7 @@ const FlowerDetail = () => {
   const location = useLocation();
   const flowerData = location.state?.flowerData;
   const [loading, setLoading] = useState(true);
+  console.log("가져온 꽃", flowerData)
 
 
   const formatDate = (timestamp) => {
@@ -22,23 +23,7 @@ const FlowerDetail = () => {
     return `${year}-${month}-${day}`;
   };
 
-  // const getSearchDay = (selection) => {
-  //   switch (selection) {
-  //     case 'one-week':
-  //       return 7;
-  //     case 'one_month':
-  //       return 30;
-  //     case 'six_months':
-  //       return 180;
-  //     case 'one_year':
-  //       return 365;
-  //     default:
-  //       return 7; // 기본값은 1주일로 설정
-  //   }
-  // };
-
-  // const series = flowerSeries;
-  // const [selection, setSelection] = useState('one-week');
+  console.log("오늘날짜요", formatDate(new Date()))
 
   const [series, setSeries] = useState([]);
   const [todayList, setTodayList] = useState([]);
@@ -63,8 +48,9 @@ const FlowerDetail = () => {
       // rawData를 순회하며 grade별로 데이터를 분류
       rawData.forEach(item => {
         const { grade } = item;
+        console.log(item)
         
-        if (formatDate(new Date(item.createdDate)) === "2023-8-7" && item.grade === "SUPER") {
+        if (formatDate(new Date(item.createdDate)) === formatDate(new Date()) && item.grade === flowerData.grade) {
           setTodayList(item);
           setLoading(false);
           // console.log("11111", todayList)
@@ -82,7 +68,7 @@ const FlowerDetail = () => {
         { 
           name: "보통",
           data: dataByGrade["NORMAL"] ? dataByGrade["NORMAL"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
-          color: "#fba1b7",
+          color: "#ffdbaa",
         },
         { 
           name: "상급",
@@ -92,7 +78,7 @@ const FlowerDetail = () => {
         { 
           name: "특급",
           data: dataByGrade["SUPER"] ? dataByGrade["SUPER"].map(item => [new Date(item.createdDate).getTime(), item.priceAvg]) : [],
-          color: "#ffdbaa",
+          color: "#fba1b7",
         },
       ]);
       

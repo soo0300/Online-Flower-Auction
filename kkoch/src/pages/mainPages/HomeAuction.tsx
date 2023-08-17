@@ -49,7 +49,7 @@ const HomeAuction = () => {
             </div>
             
             <p className="mt-8 text-sm">
-              소개
+              이제는 어디서든 실시간으로 화훼 경매에 참여해보세요
             </p>
           </motion.div>
 

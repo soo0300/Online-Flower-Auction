@@ -7,6 +7,7 @@ import UserVideoComponent from './UserVideoComponent';
 import WebSocketComponent from '@/components/webSocket/webSocket';
 import './AuctoinLiveSession.css';
 import AuctionWaiting from './AuctionWaitingRoom';
+import { toast } from 'react-toastify';
 
 const AuctionWaitingRoom: React.FC = () => {
   const location = useLocation();
@@ -21,12 +22,17 @@ const AuctionWaitingRoom: React.FC = () => {
   const [subscribers, setSubscribers] = useState([]);
   const [publisher, setPublisher] = useState(undefined);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(null);
-  const [token, setToken] = useState(''); // openVidu 세션 요청에 필요한 토큰
+  // const [token, setToken] = useState(''); // openVidu 세션 요청에 필요한 토큰
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false);
   const OV = useRef(new OpenVidu());
-  
+
   console.log(sessionId);
   const subscriberContainer = useRef<HTMLDivElement | null>(null);
+  const cameraNotify= () => toast.error('카메라를 켜주세요!', {
+    position:"top-center", // 알람 위치 지정
+    autoClose:2000, // 자동 off 시간
+    theme:"light"
+  });
 
   useEffect(() => {
     setMySessionId(sessionId);
@@ -204,13 +210,15 @@ const AuctionWaitingRoom: React.FC = () => {
           ))}
           <div className='button-container'>
             <button className='camera-button' onClick={toggleCamera}>{isCameraOn ? '카메라 끄기' : '카메라 켜기'}</button>
-            <button className='join-button' onClick={() => {
+            <button className={`join-button ${isCameraOn ? 'join-button-green' : 'join-button-red'}`} onClick={() => {
               if (!isCameraOn) {
-                alert('카메라를 먼저 켜주세요.');
+                // alert('카메라를 먼저 켜주세요.');
+                // return;
+                cameraNotify();
                 return;
               }
-                joinSession();
-              }}
+              joinSession();
+            }}
             >
               입장하기
             </button>
@@ -237,31 +245,31 @@ const AuctionWaitingRoom: React.FC = () => {
           <hr />
 
           <div className='flex justify-between'>
-            <div id="video-container" className="col-md-6">
+            <div id="video-container" className="col-md-6" >
               {subscribers.map((sub, i) => (
                 JSON.parse(sub.stream.connection.data).clientData && (
-                  <div key={sub.id} className="stream-container col-md-6 col-xs-6">
+                  <div key={sub.id} className="stream-container">
                     <UserVideoComponent streamManager={sub} />
                   </div>
                 )
-              ))}
+                ))}
             </div>
-            <WebSocketComponent />
+              <WebSocketComponent />
           </div>
         </div>
       ) : null}
       {/* <div className='button-container'>
         <div>
-          <button className='normal-button'>마이크 켜기</button>
+        <button className='normal-button'>마이크 켜기</button>
         </div>
         <div>
-          <button className='normal-button'>비디오 켜기</button>
+        <button className='normal-button'>비디오 켜기</button>
         </div>
         <div>
-          <button className='normal-button'>위시리스트 보기</button>
+        <button className='normal-button'>위시리스트 보기</button>
         </div>
         <div>
-          <button className='normal-button'>금일 경매 목록</button>
+        <button className='normal-button'>금일 경매 목록</button>
         </div>
       </div> */}
     </div> 
