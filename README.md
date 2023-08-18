@@ -202,7 +202,7 @@
         </td>
         <td style="min-width: 150px;">
             <a href="https://github.com/soo0300">
-              <img src="/uploads/348a9814b2008c7659d4cf278ff1757b/입사지원사진.jpg" width="180" height="140">
+              <img src="/uploads/348a9814b2008c7659d4cf278ff1757b/입사지원사진.jpg" width="200">
               <br />
               <b>soo0300</b>
             </a> 
