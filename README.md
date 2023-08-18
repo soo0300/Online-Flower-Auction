@@ -106,7 +106,7 @@
 
 ### MockUp
 
-[<img src="./readme_assets/image/mockup.png">](https://www.figma.com/file/tM0ZWDVhY2laCRiY6OwMhO/c204?type=design&node-id=0%3A1&mode=design&t=2jhkzdKds3yUFIqh-1)
+[<img src="./readme_assets/image/MockUp.png">](https://www.figma.com/file/tM0ZWDVhY2laCRiY6OwMhO/c204?type=design&node-id=0%3A1&mode=design&t=2jhkzdKds3yUFIqh-1)
 ※ 이미지 클릭시 Figma 이동
 
 
