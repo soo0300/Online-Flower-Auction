@@ -6,6 +6,10 @@
 
 ---
 
+# 🎬UCC
+[<img src="./readme_assets/image/ucc.png">](https://youtu.be/yVuPLKurLtI)
+※ 이미지 클릭시 UCC youtube 이동
+
 # 🌻서비스 소개
 
 꽃향기는 화훼 경매에 참여하는 도매상들을 위한 실시간 온라인 화훼 경매 서비스 입니다.
@@ -45,7 +49,7 @@
 
 | <img src="./readme_assets/image/websockets.png" alt="Socket.io" width="100px" /> | <img src="https://mui.com/static/logo.png" alt="MUI" width="100px" height="100px" /> | <img src="./readme_assets/image/tailwind.png" alt="Tailwind CSS" width="100px" height="100px" /> |
 |:--------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------:|
-|                                    Socket.io                                     |                                         MUI                                          |                                           Tailwind CSS                                           |
+|                                    WebSocket                                     |                                         MUI                                          |                                           Tailwind CSS                                           |
 
 ### Back-end
 
@@ -98,6 +102,12 @@
 ### ERD
 
 <img src="./readme_assets/image/erd.png">
+
+### MockUp
+
+[<img src="./readme_assets/image/mockup.png">](https://www.figma.com/file/tM0ZWDVhY2laCRiY6OwMhO/c204?type=design&node-id=0%3A1&mode=design&t=2jhkzdKds3yUFIqh-1)
+※ 이미지 클릭시 Figma 이동
+
 
 ## 👨‍👩‍👧‍👦팀 소개
 
