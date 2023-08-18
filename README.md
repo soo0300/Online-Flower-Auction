@@ -111,6 +111,55 @@
 ※ 이미지 클릭시 Figma 이동
 
 
+---
+
+
+# 🌺 꽃향기 주요 서비스
+
+## 🌸 Main
+- 꽃향기 서비스 메인 페이지 소개
+<img src="./readme_assets/image/main1.png" />
+<img src="./readme_assets/image/main2.png" />
+
+## 🥀 Data
+- 화훼 상세 정보 
+- 실시간 낙찰 현황 조회
+- 화훼 별로 차트 제공
+<img src="./readme_assets/image/search1.png" />
+<img src="./readme_assets/image/search2.png" />
+
+## 🌻 Reservation
+- 마이페이지에서 예약등록 및 내역 조회
+- 화훼 낙찰 시세를 보고 예약
+- 단수 제한, 당일 예약 횟수 제한
+<img src="./readme_assets/image/reservation1.png" />
+<img src="./readme_assets/image/reservation2.png" />
+
+## 🌼 Auction
+### 👩‍🏫 관리자 
+- 관리자는 인트라넷을 통해 경매방을 생성
+- 모든 도매업자들을 볼 수 있음
+- 로그를 통해 누가 들어왔는지 나갔는지 또는 입찰했는지 확인 가능
+<figure class="third">
+    <img src="./readme_assets/image/admin1.png" />
+    <img src="./readme_assets/image/admin2.png" />
+    <img src="./readme_assets/image/admin3.png" />
+</figure >
+
+### 👨‍🌾 도매업자 
+- 도매업자는 경매방이 생기면 참여가 가능
+- 카메라를 켜야 입장가능
+- 관리자 화면이 보이고 꽃을 생중계로 볼 수 있음
+- 차트를 통해 가격이 떨어지는 정보, 화훼 정보 확인가능
+<figure class="third">
+    <img src="./readme_assets/image/user1.png" />
+    <img src="./readme_assets/image/user2.png" />
+    <img src="./readme_assets/image/user3.png" />
+</figure >
+
+
+
+
 ## 👨‍👩‍👧‍👦팀 소개
 
 <table align="center">
@@ -179,6 +228,8 @@
         </td>
     </tr>
 </table>
+
+
 
 ## 커밋 컨벤션
 
