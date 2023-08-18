@@ -7,7 +7,8 @@
 ---
 
 # 🎬UCC
-[<img src="./readme_assets/image/ucc.png">](https://youtu.be/yVuPLKurLtI)
+[<img style="width: 70%;" src="./readme_assets/image/ucc.png">](https://youtu.be/yVuPLKurLtI)
+
 ※ 이미지 클릭시 UCC youtube 이동
 
 # 🌻서비스 소개
