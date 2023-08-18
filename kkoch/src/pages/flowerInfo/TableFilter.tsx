@@ -126,7 +126,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
 
   const handleVarietyChange = (selectedOption) => {
     const { name, value } = selectedOption ? selectedOption["value"] : '';
-    setFilter({ ...filter, [name]: value });
+    setFilter({ ...filter, variety: selectedOption.value });
   };
 
   const handleLocationChange = (event: SelectChangeEvent<string>) => {
