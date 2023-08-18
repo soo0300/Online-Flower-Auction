@@ -153,6 +153,12 @@
   <img src="./readme_assets/image/admin2.png" width="33%"/>
   <img src="./readme_assets/image/admin3.png" width="33%"/>
 </p>
+<p align="center">
+- 식물, 카테고리, 경매일정, 경매품 조회, 등록, 수정, 삭제 기능
+  <img src="https://github.com/Team-MukJa/MukJa-FE/assets/107923409/ee0b88b3-b11c-4738-ae55-c4b1e1de8819" width="33%"/>
+  <img src="https://github.com/Team-MukJa/MukJa-FE/assets/107923409/d242cdea-e2a7-4b50-a2ed-8d368154bf0d" width="33%"/>
+  <img src="https://github.com/Team-MukJa/MukJa-FE/assets/107923409/b6434e4b-93c6-406f-9eeb-15988bb1f048" width="33%"/>
+</p>
 
 ### 👨‍🌾 도매업자 
 - 도매업자는 경매방이 생기면 참여가 가능
