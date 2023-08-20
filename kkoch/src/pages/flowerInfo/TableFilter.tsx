@@ -244,7 +244,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
                 onChange={handleLocationChange}
               >
                 <MenuItem value="">전체</MenuItem>
-                <MenuItem value="서울">서울</MenuItem>
+                <MenuItem value="양재">양재</MenuItem>
                 <MenuItem value="광주">광주</MenuItem>
                 <MenuItem value="부산엄궁">부산엄궁</MenuItem>
                 <MenuItem value="음성">음성</MenuItem>
