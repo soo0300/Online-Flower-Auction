@@ -10,9 +10,7 @@
 .tablecontent-inner {
   background-color: #E4B2BD;
   flex-direction: row;
-  /* The inner container takes the full available width */
   align-items: center;
-  /* justify-content: space-between; */
   display: flex;
   height: 60px;
 }
@@ -25,7 +23,7 @@
   align-items: center;
   justify-content: center;
   flex-grow: 1;
-  margin: 0 5px;
+  
 }
 
 .datecontent {
@@ -33,7 +31,7 @@
 }
 
 .datecontent {
-  margin-left: 20px;
+  margin-left: -20px;
   display: flex;
   align-items: center;
   height: 40px;
@@ -44,11 +42,13 @@
 .flowercontent {
   display: flex;
   align-items: center;
+  margin-left: -100px;
 }
 
 .varietycontent {
   display: flex;
-  align-items: center;;
+  align-items: center;
+  margin-left: -30px;
 }
 
 .locationcontent {
