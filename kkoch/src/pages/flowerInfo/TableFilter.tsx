@@ -126,7 +126,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
 
   const handleVarietyChange = (selectedOption) => {
     const { name, value } = selectedOption ? selectedOption["value"] : '';
-    setFilter({ ...filter, [name]: value });
+    setFilter({ ...filter, variety: selectedOption.value });
   };
 
   const handleLocationChange = (event: SelectChangeEvent<string>) => {
@@ -200,7 +200,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
             <FormControl className='flowerinput' variant="outlined" size="small">
               <AsyncSelect
                 id="flower-select"
-                className='flowerinput'
+                className='flowerinput w-[140px] '
                 placeholder=""
                 defaultOptions={flowerOptions} 
                 isClearable={true}
@@ -219,7 +219,7 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
             <FormControl className='varietyinput' variant="outlined" size="small">
               <AsyncSelect
                 id="variety-select"
-                className='varietyinput'
+                className='varietyinput w-[160px]'
                 defaultOptions={varietyOptions}
                 placeholder="" 
                 isClearable={true} 
@@ -238,13 +238,13 @@ const TableFilter = ({ selectedCategory, onFilterChange }: { selectedCategory: s
             <FormControl className='locationinput' variant="outlined" size="small">
               <Select
                 id="location-select"
-                className='locationinput'
+                className='locationinput w-[100px]'
                 name="location"
                 value={filter.location}
                 onChange={handleLocationChange}
               >
                 <MenuItem value="">전체</MenuItem>
-                <MenuItem value="서울">서울</MenuItem>
+                <MenuItem value="양재">양재</MenuItem>
                 <MenuItem value="광주">광주</MenuItem>
                 <MenuItem value="부산엄궁">부산엄궁</MenuItem>
                 <MenuItem value="음성">음성</MenuItem>

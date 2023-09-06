@@ -155,7 +155,7 @@ export default function OpenSession() {
       const decreaseAmount = (startPrice - finalPrice) / totalTime; // 감소량 계산
 
       const animatePrice = () => {
-        console.log("너 계속 실행되지?")
+        // console.log("너 계속 실행되지?")
         if (!isBiddingActive) {
           setCurrentPrice(-1);
           console.log("", currentPrice)
@@ -166,9 +166,9 @@ export default function OpenSession() {
     
         // 경과 시간에 따라 현재가 감소시키기
         const newPrice = startPrice - decreaseAmount * elapsedTime;
-        console.log("자라라라라라떨어지는중")
-        console.log(newPrice);
-        console.log("reservPrice", reservPrice.current);
+        // console.log("자라라라라라떨어지는중")
+        // console.log(newPrice);
+        // console.log("reservPrice", reservPrice.current);
         
         // 최소값 제한
         setCurrentPrice(Math.max(newPrice, finalPrice));
