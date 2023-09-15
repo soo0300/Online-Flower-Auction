@@ -3,5 +3,5 @@ encrypt:
   key-store:
 #    location: file://${user.home}/project/kkoch/keystore/apiEncryptionKey.jks
     location: file:/apiEncryptionKey.jks
-    password: ssafyc204
+    password: 1q2w3e4r!
     alias: apiEncryptionKey
